@@ -19,6 +19,7 @@ import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
 import org.rustygnome.pickelhaube.ui.DialerScreen
 import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
 import org.rustygnome.pickelhaube.ui.ViewCertificateDialog
+import org.rustygnome.pickelhaube.ui.activeBoxIssue
 import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
 import org.rustygnome.pickelhaube.ui.NumberPickerScreen
@@ -108,6 +109,7 @@ class MainActivity : ComponentActivity() {
                     SettingsScreen(
                         profiles = state.profiles,
                         activeProfileId = state.activeProfileId,
+                        activeIssue = state.activeBoxIssue,
                         networkNotice = state.networkNotice,
                         onEditProfile = viewModel::editProfile,
                         onActivateProfile = viewModel::activateProfile,
