@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.tr064.CertificateInfo
 import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
 import org.rustygnome.pickelhaube.ui.DialerScreen
@@ -29,6 +31,11 @@ import org.rustygnome.pickelhaube.ui.theme.PickelhaubeTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: DialerViewModel by viewModels()
+
+    /** Before Android 13: apply the language chosen in the settings (from then on Android does it). */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
