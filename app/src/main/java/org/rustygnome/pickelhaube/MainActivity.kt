@@ -20,6 +20,7 @@ import org.rustygnome.pickelhaube.ui.ViewCertificateDialog
 import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
 import org.rustygnome.pickelhaube.ui.PhonebookScreen
+import org.rustygnome.pickelhaube.ui.RecentsScreen
 import org.rustygnome.pickelhaube.ui.SettingsScreen
 import org.rustygnome.pickelhaube.ui.SecondFactorDialog
 import org.rustygnome.pickelhaube.ui.theme.PickelhaubeTheme
@@ -55,6 +56,21 @@ class MainActivity : ComponentActivity() {
                         askForDeviceContacts = state.askForDeviceContacts,
                         onDeviceContactsAnswer = viewModel::answerDeviceContactsQuestion,
                     )
+                } else if (state.showRecents && !state.showSettings) {
+                    BackHandler { viewModel.closeRecents() }
+                    RecentsScreen(
+                        boxCalls = state.boxCalls,
+                        boxCallsLoaded = state.boxCallsLoaded,
+                        phoneCalls = state.phoneCalls,
+                        callLogEnabled = state.callLogEnabled,
+                        callLogProblem = state.callLogProblem,
+                        busy = state.busy,
+                        onPick = viewModel::pickNumber,
+                        onReload = viewModel::reloadRecents,
+                        onBack = viewModel::closeRecents,
+                        onReloadCallLog = viewModel::loadCallLog,
+                        onDisableCallLog = viewModel::disableCallLog,
+                    )
                 } else if (state.showSettings && state.showConnectionSettings) {
                     val canGoBack = state.settingsSaved
                     BackHandler(enabled = canGoBack) { viewModel.closeConnectionSettings() }
@@ -88,6 +104,10 @@ class MainActivity : ComponentActivity() {
                         onBack = viewModel::closeSettings,
                         deviceContactsEnabled = state.deviceContactsEnabled,
                         onDeviceContactsChange = viewModel::setDeviceContactsEnabled,
+                        callLogEnabled = state.callLogEnabled,
+                        callLogProblem = state.callLogProblem,
+                        onEnableCallLog = viewModel::enableCallLog,
+                        onDisableCallLog = viewModel::disableCallLog,
                     )
                 } else {
                     DialerScreen(
@@ -101,6 +121,7 @@ class MainActivity : ComponentActivity() {
                         onRefresh = viewModel::refreshPhones,
                         onOpenSettings = viewModel::openSettings,
                         onOpenPhonebook = viewModel::openPhonebook,
+                        onOpenRecents = viewModel::openRecents,
                     )
                 }
 
