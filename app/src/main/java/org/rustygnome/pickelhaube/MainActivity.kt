@@ -20,6 +20,7 @@ import org.rustygnome.pickelhaube.ui.DialerScreen
 import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
 import org.rustygnome.pickelhaube.ui.ViewCertificateDialog
 import org.rustygnome.pickelhaube.ui.activeBoxIssue
+import org.rustygnome.pickelhaube.ui.activeProfile
 import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
 import org.rustygnome.pickelhaube.ui.LanguageScreen
@@ -63,7 +64,8 @@ class MainActivity : ComponentActivity() {
                             RecentsTab(
                                 boxCalls = state.boxCalls,
                                 boxCallsLoaded = state.boxCallsLoaded,
-                                boxName = state.profiles.firstOrNull { it.id == state.activeProfileId }?.name,
+                                boxName = state.activeProfile?.name,
+                                boxCallsEnabled = state.activeProfile?.callListEnabled ?: true,
                                 phoneCalls = state.phoneCalls,
                                 callLogEnabled = state.callLogEnabled,
                                 callLogProblem = state.callLogProblem,
@@ -76,6 +78,7 @@ class MainActivity : ComponentActivity() {
                         phonebooks = {
                             PhonebookTab(
                                 routerBooks = state.phonebooks,
+                                routerBooksEnabled = state.activeProfile?.phonebooksEnabled ?: true,
                                 deviceContacts = state.deviceContacts,
                                 deviceContactsEnabled = state.deviceContactsEnabled,
                                 loaded = state.phonebooksLoaded,
@@ -93,6 +96,7 @@ class MainActivity : ComponentActivity() {
                     BackHandler(enabled = canGoBack) { viewModel.closeConnectionSettings() }
                     // A fresh form for every box being edited (or added).
                     key(state.editingProfileId ?: "new") {
+                        val edited = state.profiles.firstOrNull { it.id == state.editingProfileId }
                         ConnectionSettingsScreen(
                             initial = state.config,
                             canGoBack = canGoBack,
@@ -101,6 +105,8 @@ class MainActivity : ComponentActivity() {
                             status = state.status,
                             initialName = state.editingName,
                             isNew = state.editingProfileId == null,
+                            initialPhonebooksEnabled = edited?.phonebooksEnabled ?: true,
+                            initialCallListEnabled = edited?.callListEnabled ?: true,
                             onSave = viewModel::saveSettings,
                             onBack = viewModel::closeConnectionSettings,
                             onDelete = state.editingProfileId?.let { id -> { viewModel.deleteProfile(id) } },
