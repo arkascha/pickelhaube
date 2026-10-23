@@ -22,6 +22,7 @@ import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
 import org.rustygnome.pickelhaube.ui.ViewCertificateDialog
 import org.rustygnome.pickelhaube.ui.activeBoxIssue
 import org.rustygnome.pickelhaube.ui.activeProfile
+import org.rustygnome.pickelhaube.ui.noBoxReachable
 import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
 import org.rustygnome.pickelhaube.ui.LanguageScreen
@@ -149,6 +150,7 @@ class MainActivity : ComponentActivity() {
                         activeProfileId = state.activeProfileId,
                         activeIssue = state.activeBoxIssue,
                         boxesSeen = state.boxesSeen,
+                        noBoxReachable = state.noBoxReachable,
                         networkNotice = state.networkNotice,
                         onEditProfile = viewModel::editProfile,
                         onActivateProfile = viewModel::activateProfile,
