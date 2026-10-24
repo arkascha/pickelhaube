@@ -14,6 +14,7 @@ import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
+import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
 import org.rustygnome.pickelhaube.tr064.BoxInfo
@@ -942,6 +943,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             // Only changes the box setting if needed: a change may require confirmation on the box.
             if (phone != null) dialer.ensureDialPhone(phone)
             dialer.dial(number)
+            settings.lastDialledNumber = number
+            RedialTileService.refresh(getApplication())
             markDialActive()
             phone?.let { uiText(R.string.status_pick_up, FritzDialer.displayName(it), number) }
                 ?: uiText(R.string.status_pick_up_any, number)
