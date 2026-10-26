@@ -1,5 +1,9 @@
 package org.rustygnome.pickelhaube.ui
 
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +55,10 @@ fun NumberPickerScreen(
     phonebooks: @Composable () -> Unit,
     speedDials: @Composable () -> Unit,
 ) {
+    // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it
+    // itself, so fields further down can be scrolled to (and are, when tapped).
     Scaffold(
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.union(WindowInsets.ime),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.picker_title)) },

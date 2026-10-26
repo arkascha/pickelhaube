@@ -1,5 +1,9 @@
 package org.rustygnome.pickelhaube.ui
 
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.WindowInsets
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -498,7 +502,10 @@ fun ConnectionSettingsScreen(
         }
     }
 
+    // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it
+    // itself, so fields further down can be scrolled to (and are, when tapped).
     Scaffold(
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.union(WindowInsets.ime),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(if (isNew) R.string.settings_add_box else R.string.connection_title)) },
