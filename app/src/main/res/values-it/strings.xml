@@ -298,10 +298,10 @@
     <string name="connection_speed_dials_hint">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box (da 00 a 99, come si compongono sui suoi portatili con **7). Per usarne una, tocca la prima cifra nel tastierino e tieni premuta la seconda. Funziona anche con le rubriche disattivate.</string>
 
     <!-- quick settings tiles -->
-    <string name="tile_redial">Pickelhaube: ripeti chiamata</string>
+    <string name="tile_redial">Ripeti chiamata</string>
     <string name="tile_redial_none">Nessun numero chiamato</string>
     <string name="tile_no_box">Nessuna FRITZ!Box raggiungibile</string>
-    <string name="tile_deflection">Trasferimento di chiamata</string>
+    <string name="tile_deflection">Trasferimento</string>
     <string name="tile_deflection_switching">Cambio in corso…</string>
     <string name="tile_deflection_failed">Cambio non riuscito</string>
     <string name="tile_deflection_unreadable">Non leggibile</string>
@@ -339,15 +339,15 @@
     <string name="settings_tile_already_added">«%1$s» è già nelle impostazioni rapide.</string>
     <string name="settings_tile_not_added">«%1$s» non è stato aggiunto.</string>
     <string name="settings_tile_failed">Android non è riuscito ad aggiungere «%1$s».</string>
-    <string name="settings_tiles_by_hand">Per aggiungere tu stesso i riquadri «Pickelhaube» e «Pickelhaube: ripeti chiamata»: trascina due volte verso il basso la barra delle notifiche, tocca la matita (Modifica) e trascinali tra i tuoi riquadri.</string>
-    <string name="deflections">Trasferimento di chiamata</string>
+    <string name="settings_tiles_by_hand">Per aggiungere tu stesso i riquadri «Pickelhaube» e «Ripeti chiamata»: trascina due volte verso il basso la barra delle notifiche, tocca la matita (Modifica) e trascinali tra i tuoi riquadri.</string>
+    <string name="deflections">Trasferimento</string>
     <string name="deflections_on">Trasferimento di chiamata: attivo</string>
     <string name="deflections_off">Trasferimento di chiamata: disattivato</string>
     <string name="deflections_hint">I trasferimenti di chiamata configurati sulla FRITZ!Box «%1$s», da attivare e disattivare. Si configurano e modificano solo sulla FRITZ!Box stessa (Telefonia › Gestione chiamate › Trasferimento di chiamata).</string>
     <string name="deflections_loading">Lettura dei trasferimenti di chiamata…</string>
     <string name="deflections_failed">Impossibile leggere i trasferimenti di chiamata. Tocca Ricarica per riprovare.</string>
     <string name="deflections_none">Su questa FRITZ!Box non è configurato alcun trasferimento di chiamata.</string>
-    <string name="deflections_tile_hint">Il riquadro «Trasferimento di chiamata» delle impostazioni rapide attiva o disattiva quello selezionato.</string>
+    <string name="deflections_tile_hint">Il riquadro «Trasferimento» delle impostazioni rapide attiva o disattiva quello selezionato.</string>
     <string name="deflection_all">Tutte le chiamate</string>
     <string name="deflection_from">Chiamate da %1$s</string>
     <string name="deflection_to">Chiamate verso %1$s</string>

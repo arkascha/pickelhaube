@@ -264,9 +264,9 @@ private suspend fun TileService.reachableBox(settings: SettingsRepository): BoxP
 
 /** The tiles Pickelhaube offers, for adding them from the settings. */
 enum class PickelhaubeTile(val service: Class<out TileService>, val label: Int, val icon: Int) {
-    DIALER(DialerTileService::class.java, R.string.app_name, R.drawable.ic_tile_dialer),
-    REDIAL(RedialTileService::class.java, R.string.tile_redial, R.drawable.ic_tile_redial),
-    DEFLECTION(DeflectionTileService::class.java, R.string.tile_deflection, R.drawable.ic_tile_deflection),
+    DIALER(DialerTileService::class.java, R.string.app_name, R.drawable.ic_tile_pickelhaube),
+    REDIAL(RedialTileService::class.java, R.string.tile_redial, R.drawable.ic_tile_pickelhaube),
+    DEFLECTION(DeflectionTileService::class.java, R.string.tile_deflection, R.drawable.ic_tile_pickelhaube),
 }
 
 /*

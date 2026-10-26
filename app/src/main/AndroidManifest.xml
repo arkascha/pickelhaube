@@ -44,7 +44,7 @@
         <service
             android:name=".tile.DialerTileService"
             android:exported="true"
-            android:icon="@drawable/ic_tile_dialer"
+            android:icon="@drawable/ic_tile_pickelhaube"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
@@ -54,7 +54,7 @@
         <service
             android:name=".tile.RedialTileService"
             android:exported="true"
-            android:icon="@drawable/ic_tile_redial"
+            android:icon="@drawable/ic_tile_pickelhaube"
             android:label="@string/tile_redial"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
@@ -64,7 +64,7 @@
         <service
             android:name=".tile.DeflectionTileService"
             android:exported="true"
-            android:icon="@drawable/ic_tile_deflection"
+            android:icon="@drawable/ic_tile_pickelhaube"
             android:label="@string/tile_deflection"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>

@@ -254,7 +254,8 @@ uses *trust on first use* with certificate pinning:
 
 ### Quick settings tiles
 
-Three tiles can be added to the quick settings. From Android 13 on, **Settings › Quick settings tiles**
+Three tiles can be added to the quick settings, all with the Pickelhaube logo – their names say what
+each does. From Android 13 on, **Settings › Quick settings tiles**
 has a button for each, and Android asks whether to add it. A tile already there is listed as such
 instead – Android cannot be asked, so each tile notes when it is added or removed (and when it is shown); otherwise (or if that fails) pull down the
 shade twice, tap the pencil and drag them into your tiles – apps' tiles are usually at the very end:
@@ -262,7 +263,7 @@ shade twice, tap the pencil and drag them into your tiles – apps' tiles are us
 - **Pickelhaube** opens the dialer. It is highlighted while a FRITZ!Box is reachable from the current
   network – looked for each time the shade is pulled down, as the app does –, and from Android 10 on
   its subtitle names it, or says *No FRITZ!Box reachable*.
-- **Pickelhaube redial** opens the dialer with the number dialled last already entered, shown as its subtitle.
+- **Redial** opens the dialer with the number dialled last already entered, shown as its subtitle.
   It does not dial by itself – a tap in the shade is easily made by accident – so the green button
   still has to be pressed. The tile is greyed out until something was dialled; like **Pickelhaube**, it
   is highlighted while a FRITZ!Box is reachable.
@@ -298,7 +299,7 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/BoxUsers.kt` | The box' users, offered for the user name (`LANConfigSecurity` `X_AVM-DE_GetUserList`) |
 | `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
-| `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Pickelhaube redial" and "Call forwarding" |
+| `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |

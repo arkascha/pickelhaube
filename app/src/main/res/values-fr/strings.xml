@@ -298,7 +298,7 @@
     <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses combinés avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
 
     <!-- quick settings tiles -->
-    <string name="tile_redial">Pickelhaube : rappel</string>
+    <string name="tile_redial">Rappel</string>
     <string name="tile_redial_none">Aucun numéro composé</string>
     <string name="tile_no_box">Aucune FRITZ!Box accessible</string>
     <string name="tile_deflection">Renvoi d’appel</string>
@@ -339,7 +339,7 @@
     <string name="settings_tile_already_added">« %1$s » est déjà dans les réglages rapides.</string>
     <string name="settings_tile_not_added">« %1$s » n’a pas été ajouté.</string>
     <string name="settings_tile_failed">Android n’a pas pu ajouter « %1$s ».</string>
-    <string name="settings_tiles_by_hand">Pour ajouter vous-même les vignettes « Pickelhaube » et « Pickelhaube : rappel » : faites glisser deux fois le volet des notifications vers le bas, touchez le crayon (Modifier) et faites-les glisser parmi vos vignettes.</string>
+    <string name="settings_tiles_by_hand">Pour ajouter vous-même les vignettes « Pickelhaube » et « Rappel » : faites glisser deux fois le volet des notifications vers le bas, touchez le crayon (Modifier) et faites-les glisser parmi vos vignettes.</string>
     <string name="deflections">Renvoi d’appel</string>
     <string name="deflections_on">Renvoi d’appel : activé</string>
     <string name="deflections_off">Renvoi d’appel : désactivé</string>
