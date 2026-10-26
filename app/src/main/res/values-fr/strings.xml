@@ -42,6 +42,7 @@
     <string name="phonebook_search">Rechercher un nom ou un numéro</string>
     <string name="phonebook_clear_search">Effacer la recherche</string>
     <string name="phonebook_chip">%1$s (%2$d)</string>
+    <string name="phonebook_all">Tous les répertoires</string>
     <string name="phonebook_loading">Chargement des répertoires…</string>
     <string name="phonebook_load_failed">Impossible de charger les répertoires. Touchez Recharger pour réessayer.</string>
     <string name="phonebook_empty">Les répertoires sont vides.</string>

@@ -100,7 +100,8 @@ at the top refreshes both.
 The **Phone books** tab shows the phone books stored on the
 FRITZ!Box (TR-064 `X_AVM-DE_OnTel`: `GetPhonebookList`, `GetPhonebook`, then the XML export).
 Online phone books configured on the box (e.g. CardDAV) are synced into it and should appear as well.
-Search by name or number, filter by phone book, and tap a number to put it into the dialer.
+Search by name or number, choose above the list whether all phone books are shown or just one of
+them, and tap a number to put it into the dialer.
 The books are loaded once per app start; the reload button at the top fetches them again.
 Whether a box' phone books are used is set per FritzBox, on its connection page
 (**Settings › FritzBox connections › <box> › Phone books**, on by default).

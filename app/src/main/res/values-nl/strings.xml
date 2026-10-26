@@ -42,6 +42,7 @@
     <string name="phonebook_search">Naam of nummer zoeken</string>
     <string name="phonebook_clear_search">Zoekopdracht wissen</string>
     <string name="phonebook_chip">%1$s (%2$d)</string>
+    <string name="phonebook_all">Alle telefoonboeken</string>
     <string name="phonebook_loading">Telefoonboeken laden…</string>
     <string name="phonebook_load_failed">De telefoonboeken konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="phonebook_empty">De telefoonboeken zijn leeg.</string>

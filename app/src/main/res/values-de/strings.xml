@@ -42,6 +42,7 @@
     <string name="phonebook_search">Name oder Nummer suchen</string>
     <string name="phonebook_clear_search">Suche löschen</string>
     <string name="phonebook_chip">%1$s (%2$d)</string>
+    <string name="phonebook_all">Alle Telefonbücher</string>
     <string name="phonebook_loading">Telefonbücher werden geladen …</string>
     <string name="phonebook_load_failed">Die Telefonbücher konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="phonebook_empty">Die Telefonbücher sind leer.</string>

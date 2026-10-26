@@ -1,5 +1,10 @@
 package org.rustygnome.pickelhaube.ui
 
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.icons.filled.ArrowDropDown
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,7 +30,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -113,8 +116,8 @@ fun PhonebookTab(
     onDeviceContactsAnswer: (DeviceContactsAnswer) -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
-    // Names of the phone books that are filtered *out*; empty = show all.
-    var hidden by rememberSaveable { mutableStateOf(listOf<String>()) }
+    // The phone book shown alone, by name; null: all of them.
+    var shownBook by rememberSaveable { mutableStateOf<String?>(null) }
     // Name and number long-pressed to become a speed dial: choosing its slot.
     var speedDialFor by remember { mutableStateOf<Pair<String, String>?>(null) }
     speedDialFor?.let { (name, number) ->
@@ -206,10 +209,12 @@ fun PhonebookTab(
     val phonebooks = routerBooks + listOfNotNull(deviceContacts?.takeIf { useDeviceContacts })
 
     val countryIso = remember { deviceCountryIso(context) }
-    val filtered = remember(phonebooks, query, hidden, dialingCodes) {
+    // The phone book chosen to be shown alone, as long as it is there; null: all of them.
+    val onlyBook = shownBook?.takeIf { name -> phonebooks.any { it.name == name } }
+    val filtered = remember(phonebooks, query, onlyBook, dialingCodes) {
         val key = { number: String -> numberKey(number, countryIso, dialingCodes) }
         // FRITZ!Box books come first, so their entries win over duplicates from "This phone".
-        val visible = phonebooks.filter { it.name !in hidden }.flatMap { it.contacts }
+        val visible = phonebooks.filter { onlyBook == null || it.name == onlyBook }.flatMap { it.contacts }
         dedupeNumbers(visible, key)
             .filter { it.matches(query, key) }
             // Locale-aware: "Ärzte" sorts with A, not after Z.
@@ -251,23 +256,10 @@ fun PhonebookTab(
             )
         }
 
-        // One chip per phone book, only when there is more than one.
-        if (phonebooks.size > 1) {
-            LazyRow(
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                items(phonebooks, key = { it.id }) { book ->
-                    val selected = book.name !in hidden
-                    FilterChip(
-                        selected = selected,
-                        onClick = {
-                            hidden = if (selected) hidden + book.name else hidden - book.name
-                        },
-                        label = { Text(stringResource(R.string.phonebook_chip, bookLabel(book.name), book.contacts.size)) },
-                    )
-                }
-            }
+        // Which phone book to show – all, or one of them –, only when there is more than one with entries.
+        val choices = phonebooks.filter { it.contacts.isNotEmpty() }
+        if (choices.size > 1) {
+            PhonebookChoice(choices, onlyBook, onChoose = { shownBook = it })
         }
 
         when {
@@ -326,6 +318,41 @@ fun PhonebookTab(
                         val index = jumpIndex(letters, letter)
                         if (index >= 0) scope.launch { listState.scrollToItem(index) }
                     },
+                )
+            }
+        }
+    }
+}
+
+/** A button naming the phone book shown (or all); it opens the list to choose: all, or just one. */
+@Composable
+private fun PhonebookChoice(books: List<Phonebook>, shown: String?, onChoose: (String?) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    val all = stringResource(R.string.phonebook_chip, stringResource(R.string.phonebook_all), books.sumOf { it.contacts.size })
+    Box(Modifier.padding(horizontal = 16.dp)) {
+        OutlinedButton(onClick = { open = true }) {
+            Text(
+                books.firstOrNull { it.name == shown }
+                    ?.let { stringResource(R.string.phonebook_chip, bookLabel(it.name), it.contacts.size) } ?: all,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            DropdownMenuItem(
+                text = { Text(all, fontWeight = if (shown == null) FontWeight.Bold else null) },
+                onClick = { open = false; onChoose(null) },
+            )
+            books.forEach { book ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            stringResource(R.string.phonebook_chip, bookLabel(book.name), book.contacts.size),
+                            fontWeight = if (book.name == shown) FontWeight.Bold else null,
+                        )
+                    },
+                    onClick = { open = false; onChoose(book.name) },
                 )
             }
         }
