@@ -17,7 +17,8 @@
     <string name="open_settings">Instellingen openen</string>
     <string name="settings">Instellingen</string>
     <string name="this_phone">Deze telefoon</string>
-    <string name="fritzbox">FritzBox</string>
+    <string name="fritzbox">FRITZ!Box</string>
+    <string name="trademark_notice">Pickelhaube is een onafhankelijk project en heeft geen banden met FRITZ! GmbH (voorheen AVM). FRITZ! en FRITZ!Box zijn merken van FRITZ! GmbH.</string>
     <string name="phone_books">Telefoonboeken</string>
 
     <!-- dialer -->
@@ -64,7 +65,7 @@
     <string name="recents_load_failed">De gesprekkenlijst kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_empty">Nog geen recente gesprekken.</string>
     <string name="recents_none_enabled">Er is geen gesprekkenlijst ingeschakeld. Je kunt deze in de instellingen inschakelen.</string>
-    <string name="recents_box_load_failed">De gesprekkenlijst van de FritzBox kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
+    <string name="recents_box_load_failed">De gesprekkenlijst van de FRITZ!Box kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_recorded_by_box">Vastgelegd door %1$s</string>
     <string name="recents_recorded_by_phone">Vastgelegd door deze telefoon</string>
     <string name="recents_dialled">Gebeld</string>
@@ -72,12 +73,12 @@
     <string name="recents_missed">Gemist</string>
 
     <!-- settings overview -->
-    <string name="settings_connections">FritzBox-verbindingen</string>
-    <string name="settings_connections_hint">De FritzBox van het netwerk waarin de telefoon zich bevindt, wordt automatisch gebruikt. Alleen als daar geen ervan wordt gevonden, kun je er zelf een kiezen.</string>
+    <string name="settings_connections">FRITZ!Box-verbindingen</string>
+    <string name="settings_connections_hint">De FRITZ!Box van het netwerk waarin de telefoon zich bevindt, wordt automatisch gebruikt. Alleen als daar geen ervan wordt gevonden, kun je er zelf een kiezen.</string>
     <string name="settings_box_here">Bereikbaar</string>
     <string name="settings_box_not_here">Niet bereikbaar</string>
     <string name="settings_box_never_recognised">Nog niet herkend – pas na een verbinding ermee</string>
-    <string name="settings_add_box">FritzBox toevoegen</string>
+    <string name="settings_add_box">FRITZ!Box toevoegen</string>
     <string name="settings_in_use">In gebruik</string>
     <string name="settings_in_use_not_found">In gebruik, maar niet gevonden in het huidige netwerk</string>
     <string name="settings_in_use_not_working">In gebruik, maar werkt niet: het laatste verzoek is mislukt</string>
@@ -96,21 +97,21 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">FritzBox-verbinding</string>
+    <string name="connection_title">FRITZ!Box-verbinding</string>
     <string name="connection_name">Naam</string>
     <string name="connection_name_placeholder">standaard: de eigen naam van de box</string>
     <string name="connection_host">Host (bijv. fritz.box of 192.168.178.1)</string>
     <string name="connection_https">HTTPS gebruiken</string>
     <string name="connection_https_hint">Versleutelde verbinding (poort %1$d). Het zelfondertekende certificaat van de box moet één keer worden bevestigd.</string>
     <string name="connection_port">TR-064-poort</string>
-    <string name="connection_port_from_box">De HTTPS-poort die deze FritzBox heeft gemeld</string>
+    <string name="connection_port_from_box">De HTTPS-poort die deze FRITZ!Box heeft gemeld</string>
     <string name="connection_user">FRITZ!Box-gebruikersnaam</string>
     <string name="connection_user_last">Laatst aangemeld</string>
     <string name="connection_password">Wachtwoord</string>
     <string name="connection_phonebooks">Telefoonboeken</string>
-    <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FritzBox, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FritzBox gelezen en niet op de telefoon opgeslagen.</string>
+    <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FRITZ!Box, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FRITZ!Box gelezen en niet op de telefoon opgeslagen.</string>
     <string name="connection_call_list">Gesprekkenlijst</string>
-    <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FritzBox.</string>
+    <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s heeft dit recht op de box niet, daarom kan de gesprekkenlijst niet worden gelezen.</string>
     <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig. Als je alleen met een wachtwoord inlogt, gebruik dan de automatisch aangemaakte gebruikersnaam onder Systeem › FRITZ!Box-gebruikers.</string>
     <string name="connection_connecting">Verbinden…</string>
@@ -123,7 +124,7 @@
     <string name="connection_box_area_code">Netnummer: %1$s</string>
     <string name="connection_rights_title">Rechten van gebruiker ‘%1$s’</string>
     <string name="connection_rights_title_short">Rechten van ‘%1$s’</string>
-    <string name="connection_rights_hint">Wat deze gebruiker op de FritzBox mag, zoals de box het meldt. Te wijzigen op de box onder Systeem › FRITZ!Box-gebruikers.</string>
+    <string name="connection_rights_hint">Wat deze gebruiker op de FRITZ!Box mag, zoals de box het meldt. Te wijzigen op de box onder Systeem › FRITZ!Box-gebruikers.</string>
     <string name="right_box_admin">FRITZ!Box-instellingen</string>
     <string name="right_phone">Spraakberichten, faxberichten, FRITZ!App Fon en gesprekkenlijst</string>
     <string name="right_home_auto">Smart Home</string>
@@ -135,7 +136,7 @@
     <string name="connection_trusted_cert">Vertrouwd HTTPS-certificaat</string>
     <string name="connection_no_cert">Geen. Bij een verbinding via HTTPS word je gevraagd het certificaat van de router te bevestigen.</string>
     <string name="connection_cert_trusted">Bevestigd. Via HTTPS maakt de app alleen verbinding met de box die precies dit certificaat toont.</string>
-    <string name="connection_delete_box">Deze FritzBox verwijderen</string>
+    <string name="connection_delete_box">Deze FRITZ!Box verwijderen</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Het certificaat is gewijzigd!</string>
@@ -178,8 +179,8 @@
     <string name="error_empty_user">(leeg)</string>
     <string name="error_not_confirmed_title">Niet bevestigd</string>
     <string name="error_not_confirmed">De FRITZ!Box heeft de bevestiging niet op tijd ontvangen. Tik op Opnieuw en bevestig op de box (druk op de knop, of bel de getoonde code op een aangesloten telefoon).</string>
-    <string name="error_other_box_title">Andere FritzBox</string>
-    <string name="error_other_box">De FritzBox op %1$s is niet “%2$s”: het serienummer wijkt af van het opgeslagen nummer. Is de box vervangen, verwijder deze verbinding dan en voeg hem opnieuw toe.</string>
+    <string name="error_other_box_title">Andere FRITZ!Box</string>
+    <string name="error_other_box">De FRITZ!Box op %1$s is niet “%2$s”: het serienummer wijkt af van het opgeslagen nummer. Is de box vervangen, verwijder deze verbinding dan en voeg hem opnieuw toe.</string>
     <string name="error_confirmation_blocked_title">Bevestiging geblokkeerd</string>
     <string name="error_confirmation_blocked">De FRITZ!Box blokkeert momenteel bevestigingen (te veel pogingen). Wacht een paar minuten en probeer het opnieuw.</string>
     <string name="error_confirmation_busy_title">Bevestiging al bezig</string>
@@ -243,17 +244,17 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s in dit netwerk is niet ingesteld</string>
-    <string name="notice_unknown_box_generic">Een FritzBox in dit netwerk is niet ingesteld</string>
-    <string name="notice_no_known_box">Geen van je FritzBoxen bereikbaar</string>
+    <string name="notice_unknown_box_generic">Een FRITZ!Box in dit netwerk is niet ingesteld</string>
+    <string name="notice_no_known_box">Geen van je FRITZ!Boxen bereikbaar</string>
     <string name="call_log_denied">Android heeft Pickelhaube niet toegestaan de gesprekkenlijst te lezen.</string>
     <string name="call_log_failed">De gesprekkenlijst van de telefoon kon niet worden gelezen (%1$s). Dit werkt alleen als Pickelhaube niet via Google Play is geïnstalleerd.</string>
     <string name="call_log_failed_plain">De gesprekkenlijst van de telefoon kon niet worden gelezen. Dit werkt alleen als Pickelhaube niet via Google Play is geïnstalleerd.</string>
     <string name="speed_dial">Snelkiezen</string>
     <string name="speed_dial_none_enabled">Er zijn geen snelkeuzes ingeschakeld. Je kunt ze in de instellingen inschakelen.</string>
-    <string name="speed_dial_phone_help">De snelkeuzes 1 tot 9 zijn op deze telefoon opgeslagen en werken met elke FritzBox. Houd in het kiesscherm het cijfer ingedrukt. Tik op een vrije om het nummer uit de telefoonboeken te kiezen; houd een ingestelde ingedrukt om die te wijzigen of te verwijderen.</string>
-    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FritzBox zijn ingesteld, zoals ze op de handsets met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
-    <string name="speed_dial_box_failed">De snelkeuzes van de FritzBox konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
-    <string name="speed_dial_box_none">In de telefoonboeken van deze FritzBox zijn geen snelkeuzes ingesteld.</string>
+    <string name="speed_dial_phone_help">De snelkeuzes 1 tot 9 zijn op deze telefoon opgeslagen en werken met elke FRITZ!Box. Houd in het kiesscherm het cijfer ingedrukt. Tik op een vrije om het nummer uit de telefoonboeken te kiezen; houd een ingestelde ingedrukt om die te wijzigen of te verwijderen.</string>
+    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld, zoals ze op de handsets met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
+    <string name="speed_dial_box_failed">De snelkeuzes van de FRITZ!Box konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
+    <string name="speed_dial_box_none">In de telefoonboeken van deze FRITZ!Box zijn geen snelkeuzes ingesteld.</string>
     <string name="speed_dial_free">Niet ingesteld</string>
     <string name="speed_dial_change_or_remove">Wijzigen of verwijderen</string>
     <string name="speed_dial_set_up">Instellen</string>
@@ -262,40 +263,40 @@
     <string name="speed_dial_choose_number">Tik op het nummer voor snelkeuze %1$s.</string>
     <string name="speed_dial_for">Snelkeuze voor %1$s</string>
     <string name="speed_dial_make">Als snelkeuze instellen</string>
-    <string name="speed_dial_make_box">Als snelkeuze van de FritzBox instellen</string>
-    <string name="speed_dial_box_for">Snelkeuze van de FritzBox voor %1$s</string>
-    <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FritzBox. Nieuwe vermelding in:</string>
-    <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FritzBox niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FritzBox.</string>
-    <string name="copy_delete">Kopie op FritzBox verwijderen</string>
-    <string name="copy_delete_text">‘%1$s’ staat in telefoonboek ‘%2$s’ van de FritzBox als kopie van een contact uit het online telefoonboek ‘%3$s’ – bijv. voor een snelkeuze. Deze vermelding verwijderen? Het contact blijft in het online telefoonboek; een snelkeuze van de vermelding verdwijnt mee.</string>
-    <string name="status_deleting_copy">Kopie van ‘%1$s’ op de FritzBox wordt verwijderd…</string>
-    <string name="status_copy_deleted">Kopie van ‘%1$s’ op de FritzBox verwijderd.</string>
-    <string name="speed_dial_box_add">Nieuwe snelkeuze van de FritzBox</string>
-    <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FritzBox.</string>
-    <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FritzBox.</string>
-    <string name="status_setting_speed_dial">Snelkeuze %1$s wordt op de FritzBox ingesteld…</string>
-    <string name="status_speed_dial_set">Snelkeuze %1$s van de FritzBox: %2$s</string>
-    <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FritzBox verwijderd…</string>
-    <string name="status_speed_dial_removed">Snelkeuze %1$s van de FritzBox verwijderd.</string>
+    <string name="speed_dial_make_box">Als snelkeuze van de FRITZ!Box instellen</string>
+    <string name="speed_dial_box_for">Snelkeuze van de FRITZ!Box voor %1$s</string>
+    <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FRITZ!Box. Nieuwe vermelding in:</string>
+    <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FRITZ!Box niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FRITZ!Box.</string>
+    <string name="copy_delete">Kopie op FRITZ!Box verwijderen</string>
+    <string name="copy_delete_text">‘%1$s’ staat in telefoonboek ‘%2$s’ van de FRITZ!Box als kopie van een contact uit het online telefoonboek ‘%3$s’ – bijv. voor een snelkeuze. Deze vermelding verwijderen? Het contact blijft in het online telefoonboek; een snelkeuze van de vermelding verdwijnt mee.</string>
+    <string name="status_deleting_copy">Kopie van ‘%1$s’ op de FRITZ!Box wordt verwijderd…</string>
+    <string name="status_copy_deleted">Kopie van ‘%1$s’ op de FRITZ!Box verwijderd.</string>
+    <string name="speed_dial_box_add">Nieuwe snelkeuze van de FRITZ!Box</string>
+    <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FRITZ!Box.</string>
+    <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FRITZ!Box.</string>
+    <string name="status_setting_speed_dial">Snelkeuze %1$s wordt op de FRITZ!Box ingesteld…</string>
+    <string name="status_speed_dial_set">Snelkeuze %1$s van de FRITZ!Box: %2$s</string>
+    <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FRITZ!Box verwijderd…</string>
+    <string name="status_speed_dial_removed">Snelkeuze %1$s van de FRITZ!Box verwijderd.</string>
     <string name="contact_to_phone">Overnemen in de contacten</string>
-    <string name="contact_to_box">Doorgeven aan de FritzBox</string>
-    <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FritzBox ‘%2$s’:</string>
+    <string name="contact_to_box">Doorgeven aan de FRITZ!Box</string>
+    <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FRITZ!Box ‘%2$s’:</string>
     <string name="hand_over_duplicate">Het nummer %1$s staat er al, bij ‘%2$s’.</string>
     <string name="hand_over">Doorgeven</string>
-    <string name="status_handing_over">‘%1$s’ wordt doorgegeven aan de FritzBox…</string>
+    <string name="status_handing_over">‘%1$s’ wordt doorgegeven aan de FRITZ!Box…</string>
     <string name="status_handed_over">‘%1$s’ staat nu in telefoonboek ‘%2$s’.</string>
     <string name="no_contacts_app">Geen contacten-app op deze telefoon gevonden.</string>
     <string name="number_actions">Meer acties</string>
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Snelkeuzes van deze telefoon</string>
-    <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FritzBox werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
+    <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
     <string name="connection_speed_dials">Snelkeuzes</string>
-    <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FritzBox zijn ingesteld (00 tot 99, zoals ze op de handsets met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
+    <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld (00 tot 99, zoals ze op de handsets met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Pickelhaube opnieuw kiezen</string>
     <string name="tile_redial_none">Nog niets gekozen</string>
-    <string name="tile_no_box">Geen FritzBox bereikbaar</string>
+    <string name="tile_no_box">Geen FRITZ!Box bereikbaar</string>
     <string name="tile_deflection">Doorschakeling</string>
     <string name="tile_deflection_switching">Bezig met schakelen…</string>
     <string name="tile_deflection_failed">Schakelen mislukt</string>
@@ -311,10 +312,10 @@
     <string name="deflections">Doorschakeling</string>
     <string name="deflections_on">Doorschakeling – aan</string>
     <string name="deflections_off">Doorschakeling – uit</string>
-    <string name="deflections_hint">De doorschakelingen die op de FritzBox ‘%1$s’ zijn ingesteld, om aan en uit te zetten. Instellen en wijzigen kan alleen op de FritzBox zelf (Telefonie › Oproepbeheer › Doorschakeling).</string>
+    <string name="deflections_hint">De doorschakelingen die op de FRITZ!Box ‘%1$s’ zijn ingesteld, om aan en uit te zetten. Instellen en wijzigen kan alleen op de FRITZ!Box zelf (Telefonie › Oproepbeheer › Doorschakeling).</string>
     <string name="deflections_loading">Doorschakelingen worden gelezen…</string>
     <string name="deflections_failed">De doorschakelingen konden niet worden gelezen. Tik op opnieuw laden om het nog eens te proberen.</string>
-    <string name="deflections_none">Op deze FritzBox is geen doorschakeling ingesteld.</string>
+    <string name="deflections_none">Op deze FRITZ!Box is geen doorschakeling ingesteld.</string>
     <string name="deflections_tile_hint">De tegel ‘Doorschakeling’ in de snelle instellingen schakelt de gemarkeerde.</string>
     <string name="deflection_all">Alle oproepen</string>
     <string name="deflection_from">Oproepen van %1$s</string>

@@ -17,7 +17,8 @@
     <string name="open_settings">Einstellungen öffnen</string>
     <string name="settings">Einstellungen</string>
     <string name="this_phone">Dieses Telefon</string>
-    <string name="fritzbox">FritzBox</string>
+    <string name="fritzbox">FRITZ!Box</string>
+    <string name="trademark_notice">Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (ehemals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH.</string>
     <string name="phone_books">Telefonbücher</string>
 
     <!-- dialer -->
@@ -64,7 +65,7 @@
     <string name="recents_load_failed">Die Anrufliste konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_empty">Noch keine Anrufe.</string>
     <string name="recents_none_enabled">Keine Anrufliste eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
-    <string name="recents_box_load_failed">Die Anrufliste der FritzBox konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
+    <string name="recents_box_load_failed">Die Anrufliste der FRITZ!Box konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_recorded_by_box">Aufgezeichnet von %1$s</string>
     <string name="recents_recorded_by_phone">Aufgezeichnet von diesem Telefon</string>
     <string name="recents_dialled">Gewählt</string>
@@ -72,12 +73,12 @@
     <string name="recents_missed">Verpasst</string>
 
     <!-- settings overview -->
-    <string name="settings_connections">FritzBox-Verbindungen</string>
-    <string name="settings_connections_hint">Die FritzBox des Netzwerks, in dem das Telefon ist, wird automatisch verwendet. Nur wenn dort keine davon gefunden wird, kannst du selbst eine wählen.</string>
+    <string name="settings_connections">FRITZ!Box-Verbindungen</string>
+    <string name="settings_connections_hint">Die FRITZ!Box des Netzwerks, in dem das Telefon ist, wird automatisch verwendet. Nur wenn dort keine davon gefunden wird, kannst du selbst eine wählen.</string>
     <string name="settings_box_here">Erreichbar</string>
     <string name="settings_box_not_here">Nicht erreichbar</string>
     <string name="settings_box_never_recognised">Noch nicht erkannt – erst nach einer Verbindung zu ihr</string>
-    <string name="settings_add_box">FritzBox hinzufügen</string>
+    <string name="settings_add_box">FRITZ!Box hinzufügen</string>
     <string name="settings_in_use">In Verwendung</string>
     <string name="settings_in_use_not_found">In Verwendung, aber im aktuellen Netzwerk nicht gefunden</string>
     <string name="settings_in_use_not_working">In Verwendung, aber nicht funktionsfähig: die letzte Anfrage ist fehlgeschlagen</string>
@@ -96,21 +97,21 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">FritzBox-Verbindung</string>
+    <string name="connection_title">FRITZ!Box-Verbindung</string>
     <string name="connection_name">Name</string>
     <string name="connection_name_placeholder">Standard: der eigene Name der Box</string>
     <string name="connection_host">Host (z. B. fritz.box oder 192.168.178.1)</string>
     <string name="connection_https">HTTPS verwenden</string>
     <string name="connection_https_hint">Verschlüsselte Verbindung (Port %1$d). Das selbstsignierte Zertifikat der Box muss einmal bestätigt werden.</string>
     <string name="connection_port">TR-064-Port</string>
-    <string name="connection_port_from_box">Der HTTPS-Port, den diese FritzBox gemeldet hat</string>
+    <string name="connection_port_from_box">Der HTTPS-Port, den diese FRITZ!Box gemeldet hat</string>
     <string name="connection_user">FRITZ!Box-Benutzername</string>
     <string name="connection_user_last">Zuletzt angemeldet</string>
     <string name="connection_password">Kennwort</string>
     <string name="connection_phonebooks">Telefonbücher</string>
-    <string name="connection_phonebooks_hint">Zeigt die in den Telefonbüchern dieser FritzBox gespeicherten Kontakte, einschließlich dort eingebundener Online-Telefonbücher (z. B. CardDAV). Sie werden bei Bedarf von der Box gelesen und nicht auf dem Telefon gespeichert.</string>
+    <string name="connection_phonebooks_hint">Zeigt die in den Telefonbüchern dieser FRITZ!Box gespeicherten Kontakte, einschließlich dort eingebundener Online-Telefonbücher (z. B. CardDAV). Sie werden bei Bedarf von der Box gelesen und nicht auf dem Telefon gespeichert.</string>
     <string name="connection_call_list">Anrufliste</string>
-    <string name="connection_call_list_hint">Die zuletzt gewählten, angenommenen und verpassten Nummern aus der Anrufliste dieser FritzBox. Benötigt die Berechtigung „Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste“.</string>
+    <string name="connection_call_list_hint">Die zuletzt gewählten, angenommenen und verpassten Nummern aus der Anrufliste dieser FRITZ!Box. Benötigt die Berechtigung „Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste“.</string>
     <string name="connection_call_list_no_right">%1$s hat diese Berechtigung auf der Box nicht, die Anrufliste kann daher nicht gelesen werden.</string>
     <string name="connection_help">Auf der Box „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und die „Wählhilfe“ (Telefonie › Anrufe › Wählhilfe) aktivieren. Der Benutzer braucht die Berechtigung für Telefonie. Wenn du dich nur mit Kennwort anmeldest, verwende den automatisch erzeugten Benutzernamen unter System › FRITZ!Box-Benutzer.</string>
     <string name="connection_connecting">Verbinde …</string>
@@ -123,7 +124,7 @@
     <string name="connection_box_area_code">Ortsvorwahl: %1$s</string>
     <string name="connection_rights_title">Rechte des Nutzers „%1$s“</string>
     <string name="connection_rights_title_short">Rechte von „%1$s“</string>
-    <string name="connection_rights_hint">Was dieser Nutzer auf der FritzBox darf, wie die Box es meldet. Ändern lässt es sich auf der Box unter System › FRITZ!Box-Benutzer.</string>
+    <string name="connection_rights_hint">Was dieser Nutzer auf der FRITZ!Box darf, wie die Box es meldet. Ändern lässt es sich auf der Box unter System › FRITZ!Box-Benutzer.</string>
     <string name="right_box_admin">FRITZ!Box Einstellungen</string>
     <string name="right_phone">Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste</string>
     <string name="right_home_auto">Smart Home</string>
@@ -135,7 +136,7 @@
     <string name="connection_trusted_cert">Vertrautes HTTPS-Zertifikat</string>
     <string name="connection_no_cert">Keines. Bei einer Verbindung über HTTPS wirst du gebeten, das Zertifikat des Routers zu bestätigen.</string>
     <string name="connection_cert_trusted">Bestätigt. Die App verbindet sich per HTTPS nur mit der Box, die genau dieses Zertifikat vorweist.</string>
-    <string name="connection_delete_box">Diese FritzBox löschen</string>
+    <string name="connection_delete_box">Diese FRITZ!Box löschen</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Das Zertifikat hat sich geändert!</string>
@@ -178,8 +179,8 @@
     <string name="error_empty_user">(leer)</string>
     <string name="error_not_confirmed_title">Nicht bestätigt</string>
     <string name="error_not_confirmed">Die FRITZ!Box hat die Bestätigung nicht rechtzeitig erhalten. Tippe auf Wiederholen und bestätige an der Box (Taste drücken oder den angezeigten Code an einem angeschlossenen Telefon wählen).</string>
-    <string name="error_other_box_title">Andere FritzBox</string>
-    <string name="error_other_box">Die FritzBox unter %1$s ist nicht „%2$s“: ihre Seriennummer weicht von der gespeicherten ab. Wurde die Box ausgetauscht, lösche diese Verbindung und lege sie neu an.</string>
+    <string name="error_other_box_title">Andere FRITZ!Box</string>
+    <string name="error_other_box">Die FRITZ!Box unter %1$s ist nicht „%2$s“: ihre Seriennummer weicht von der gespeicherten ab. Wurde die Box ausgetauscht, lösche diese Verbindung und lege sie neu an.</string>
     <string name="error_confirmation_blocked_title">Bestätigung gesperrt</string>
     <string name="error_confirmation_blocked">Die FRITZ!Box sperrt derzeit Bestätigungen (zu viele Versuche). Warte ein paar Minuten und versuche es erneut.</string>
     <string name="error_confirmation_busy_title">Bestätigung läuft bereits</string>
@@ -243,17 +244,17 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s in diesem Netzwerk ist nicht eingerichtet</string>
-    <string name="notice_unknown_box_generic">Eine FritzBox in diesem Netzwerk ist nicht eingerichtet</string>
-    <string name="notice_no_known_box">Keine deiner FritzBoxen erreichbar</string>
+    <string name="notice_unknown_box_generic">Eine FRITZ!Box in diesem Netzwerk ist nicht eingerichtet</string>
+    <string name="notice_no_known_box">Keine deiner FRITZ!Boxen erreichbar</string>
     <string name="call_log_denied">Android hat Pickelhaube nicht erlaubt, die Anrufliste zu lesen.</string>
     <string name="call_log_failed">Die Anrufliste des Telefons konnte nicht gelesen werden (%1$s). Das funktioniert nur, wenn Pickelhaube nicht aus Google Play installiert wurde.</string>
     <string name="call_log_failed_plain">Die Anrufliste des Telefons konnte nicht gelesen werden. Das funktioniert nur, wenn Pickelhaube nicht aus Google Play installiert wurde.</string>
     <string name="speed_dial">Kurzwahl</string>
     <string name="speed_dial_none_enabled">Keine Kurzwahlen eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
-    <string name="speed_dial_phone_help">Die Kurzwahlen 1 bis 9 sind auf diesem Telefon gespeichert und gelten mit jeder FritzBox. Im Wählfeld die Ziffer lange drücken. Eine freie antippen, um ihre Nummer aus den Telefonbüchern zu wählen; eine belegte lange drücken, um sie zu ändern oder zu entfernen.</string>
-    <string name="speed_dial_box_help">Die in den Telefonbüchern dieser FritzBox eingerichteten Kurzwahlen, wie an ihren Mobilteilen mit **7 gewählt. Im Wählfeld die erste Ziffer antippen und die zweite lange drücken – oder **7 und die Nummer eingeben. Unten legst du eine neue an; ein langer Druck auf eine ändert oder entfernt sie.</string>
-    <string name="speed_dial_box_failed">Die Kurzwahlen der FritzBox konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
-    <string name="speed_dial_box_none">In den Telefonbüchern dieser FritzBox sind keine Kurzwahlen eingerichtet.</string>
+    <string name="speed_dial_phone_help">Die Kurzwahlen 1 bis 9 sind auf diesem Telefon gespeichert und gelten mit jeder FRITZ!Box. Im Wählfeld die Ziffer lange drücken. Eine freie antippen, um ihre Nummer aus den Telefonbüchern zu wählen; eine belegte lange drücken, um sie zu ändern oder zu entfernen.</string>
+    <string name="speed_dial_box_help">Die in den Telefonbüchern dieser FRITZ!Box eingerichteten Kurzwahlen, wie an ihren Mobilteilen mit **7 gewählt. Im Wählfeld die erste Ziffer antippen und die zweite lange drücken – oder **7 und die Nummer eingeben. Unten legst du eine neue an; ein langer Druck auf eine ändert oder entfernt sie.</string>
+    <string name="speed_dial_box_failed">Die Kurzwahlen der FRITZ!Box konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
+    <string name="speed_dial_box_none">In den Telefonbüchern dieser FRITZ!Box sind keine Kurzwahlen eingerichtet.</string>
     <string name="speed_dial_free">Nicht belegt</string>
     <string name="speed_dial_change_or_remove">Ändern oder entfernen</string>
     <string name="speed_dial_set_up">Einrichten</string>
@@ -262,40 +263,40 @@
     <string name="speed_dial_choose_number">Tippe auf die Nummer für Kurzwahl %1$s.</string>
     <string name="speed_dial_for">Kurzwahl für %1$s</string>
     <string name="speed_dial_make">Als Kurzwahl festlegen</string>
-    <string name="speed_dial_make_box">Als FritzBox-Kurzwahl festlegen</string>
-    <string name="speed_dial_box_for">FritzBox-Kurzwahl für %1$s</string>
-    <string name="speed_dial_box_new_entry">Die Nummer steht noch in keinem Telefonbuch der FritzBox. Neuer Eintrag in:</string>
-    <string name="speed_dial_box_online">„%1$s“ steht nur im Online-Telefonbuch „%2$s“, das die FritzBox nicht ändern kann. Für die Kurzwahl bekommt der Kontakt einen Eintrag in einem eigenen Telefonbuch der FritzBox.</string>
-    <string name="copy_delete">Kopie auf FritzBox löschen</string>
-    <string name="copy_delete_text">„%1$s“ steht im Telefonbuch „%2$s“ der FritzBox als Kopie eines Kontakts aus dem Online-Telefonbuch „%3$s“ – etwa für eine Kurzwahl. Diesen Eintrag löschen? Im Online-Telefonbuch bleibt der Kontakt erhalten; eine Kurzwahl des Eintrags entfällt.</string>
-    <string name="status_deleting_copy">Lösche die Kopie von „%1$s“ auf der FritzBox…</string>
-    <string name="status_copy_deleted">Kopie von „%1$s“ auf der FritzBox gelöscht.</string>
-    <string name="speed_dial_box_add">Neue FritzBox-Kurzwahl</string>
-    <string name="speed_dial_choose_number_box">Tippe auf die Nummer für die FritzBox-Kurzwahl %1$s.</string>
-    <string name="speed_dial_choose_number_box_new">Tippe auf die Nummer für eine neue FritzBox-Kurzwahl.</string>
-    <string name="status_setting_speed_dial">Richte Kurzwahl %1$s auf der FritzBox ein…</string>
-    <string name="status_speed_dial_set">FritzBox-Kurzwahl %1$s: %2$s</string>
-    <string name="status_removing_speed_dial">Entferne Kurzwahl %1$s von der FritzBox…</string>
-    <string name="status_speed_dial_removed">Kurzwahl %1$s von der FritzBox entfernt.</string>
+    <string name="speed_dial_make_box">Als FRITZ!Box-Kurzwahl festlegen</string>
+    <string name="speed_dial_box_for">FRITZ!Box-Kurzwahl für %1$s</string>
+    <string name="speed_dial_box_new_entry">Die Nummer steht noch in keinem Telefonbuch der FRITZ!Box. Neuer Eintrag in:</string>
+    <string name="speed_dial_box_online">„%1$s“ steht nur im Online-Telefonbuch „%2$s“, das die FRITZ!Box nicht ändern kann. Für die Kurzwahl bekommt der Kontakt einen Eintrag in einem eigenen Telefonbuch der FRITZ!Box.</string>
+    <string name="copy_delete">Kopie auf FRITZ!Box löschen</string>
+    <string name="copy_delete_text">„%1$s“ steht im Telefonbuch „%2$s“ der FRITZ!Box als Kopie eines Kontakts aus dem Online-Telefonbuch „%3$s“ – etwa für eine Kurzwahl. Diesen Eintrag löschen? Im Online-Telefonbuch bleibt der Kontakt erhalten; eine Kurzwahl des Eintrags entfällt.</string>
+    <string name="status_deleting_copy">Lösche die Kopie von „%1$s“ auf der FRITZ!Box…</string>
+    <string name="status_copy_deleted">Kopie von „%1$s“ auf der FRITZ!Box gelöscht.</string>
+    <string name="speed_dial_box_add">Neue FRITZ!Box-Kurzwahl</string>
+    <string name="speed_dial_choose_number_box">Tippe auf die Nummer für die FRITZ!Box-Kurzwahl %1$s.</string>
+    <string name="speed_dial_choose_number_box_new">Tippe auf die Nummer für eine neue FRITZ!Box-Kurzwahl.</string>
+    <string name="status_setting_speed_dial">Richte Kurzwahl %1$s auf der FRITZ!Box ein…</string>
+    <string name="status_speed_dial_set">FRITZ!Box-Kurzwahl %1$s: %2$s</string>
+    <string name="status_removing_speed_dial">Entferne Kurzwahl %1$s von der FRITZ!Box…</string>
+    <string name="status_speed_dial_removed">Kurzwahl %1$s von der FRITZ!Box entfernt.</string>
     <string name="contact_to_phone">In die Kontakte übernehmen</string>
-    <string name="contact_to_box">An die FritzBox übergeben</string>
-    <string name="hand_over_text">„%1$s“ kommt in dieses Telefonbuch der FritzBox „%2$s“:</string>
+    <string name="contact_to_box">An die FRITZ!Box übergeben</string>
+    <string name="hand_over_text">„%1$s“ kommt in dieses Telefonbuch der FRITZ!Box „%2$s“:</string>
     <string name="hand_over_duplicate">Die Nummer %1$s steht dort schon, bei „%2$s“.</string>
     <string name="hand_over">Übergeben</string>
-    <string name="status_handing_over">Übergebe „%1$s“ an die FritzBox…</string>
+    <string name="status_handing_over">Übergebe „%1$s“ an die FRITZ!Box…</string>
     <string name="status_handed_over">„%1$s“ steht jetzt im Telefonbuch „%2$s“.</string>
     <string name="no_contacts_app">Auf diesem Telefon ist keine Kontakte-App vorhanden.</string>
     <string name="number_actions">Weitere Aktionen</string>
     <string name="dialer_speed_dial_label">Kurzwahl %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Kurzwahlen dieses Telefons</string>
-    <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FritzBox. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>
+    <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FRITZ!Box. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>
     <string name="connection_speed_dials">Kurzwahlen</string>
-    <string name="connection_speed_dials_hint">Die in den Telefonbüchern dieser FritzBox eingerichteten Kurzwahlen (00 bis 99, wie an ihren Mobilteilen mit **7 gewählt). Zum Verwenden im Wählfeld die erste Ziffer antippen und die zweite lange drücken. Funktioniert auch, wenn die Telefonbücher ausgeschaltet sind.</string>
+    <string name="connection_speed_dials_hint">Die in den Telefonbüchern dieser FRITZ!Box eingerichteten Kurzwahlen (00 bis 99, wie an ihren Mobilteilen mit **7 gewählt). Zum Verwenden im Wählfeld die erste Ziffer antippen und die zweite lange drücken. Funktioniert auch, wenn die Telefonbücher ausgeschaltet sind.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Pickelhaube-Wahlwiederholung</string>
     <string name="tile_redial_none">Noch nichts gewählt</string>
-    <string name="tile_no_box">Keine FritzBox erreichbar</string>
+    <string name="tile_no_box">Keine FRITZ!Box erreichbar</string>
     <string name="tile_deflection">Rufumleitung</string>
     <string name="tile_deflection_switching">Schalte…</string>
     <string name="tile_deflection_failed">Schalten fehlgeschlagen</string>
@@ -311,10 +312,10 @@
     <string name="deflections">Rufumleitung</string>
     <string name="deflections_on">Rufumleitung – eingeschaltet</string>
     <string name="deflections_off">Rufumleitung – ausgeschaltet</string>
-    <string name="deflections_hint">Die auf der FritzBox „%1$s“ eingerichteten Rufumleitungen, zum Ein- und Ausschalten. Einrichten und ändern lassen sie sich nur auf der Box selbst (Telefonie › Rufbehandlung › Rufumleitung).</string>
+    <string name="deflections_hint">Die auf der FRITZ!Box „%1$s“ eingerichteten Rufumleitungen, zum Ein- und Ausschalten. Einrichten und ändern lassen sie sich nur auf der Box selbst (Telefonie › Rufbehandlung › Rufumleitung).</string>
     <string name="deflections_loading">Lese die Rufumleitungen…</string>
     <string name="deflections_failed">Die Rufumleitungen konnten nicht gelesen werden. Zum erneuten Versuch auf Neu laden tippen.</string>
-    <string name="deflections_none">Auf dieser FritzBox ist keine Rufumleitung eingerichtet.</string>
+    <string name="deflections_none">Auf dieser FRITZ!Box ist keine Rufumleitung eingerichtet.</string>
     <string name="deflections_tile_hint">Die Kachel „Rufumleitung“ in den Schnelleinstellungen schaltet die markierte.</string>
     <string name="deflection_all">Alle Anrufe</string>
     <string name="deflection_from">Anrufe von %1$s</string>

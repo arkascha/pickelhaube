@@ -19,7 +19,8 @@
     <string name="open_settings">Open settings</string>
     <string name="settings">Settings</string>
     <string name="this_phone">This phone</string>
-    <string name="fritzbox">FritzBox</string>
+    <string name="fritzbox">FRITZ!Box</string>
+    <string name="trademark_notice">Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH.</string>
     <string name="phone_books">Phone books</string>
 
     <!-- dialer -->
@@ -66,7 +67,7 @@
     <string name="recents_load_failed">The call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_empty">No recent calls yet.</string>
     <string name="recents_none_enabled">No call list is switched on. You can switch one on in the settings.</string>
-    <string name="recents_box_load_failed">The FritzBox call list could not be loaded. Tap reload to try again.</string>
+    <string name="recents_box_load_failed">The FRITZ!Box call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_recorded_by_box">Recorded by %1$s</string>
     <string name="recents_recorded_by_phone">Recorded by this phone</string>
     <string name="recents_dialled">Dialled</string>
@@ -74,12 +75,12 @@
     <string name="recents_missed">Missed</string>
 
     <!-- settings overview -->
-    <string name="settings_connections">FritzBox connections</string>
-    <string name="settings_connections_hint">The FritzBox of the network the phone is in is used automatically. Only if none of them is found there can you choose one by hand.</string>
+    <string name="settings_connections">FRITZ!Box connections</string>
+    <string name="settings_connections_hint">The FRITZ!Box of the network the phone is in is used automatically. Only if none of them is found there can you choose one by hand.</string>
     <string name="settings_box_here">Reachable</string>
     <string name="settings_box_not_here">Not reachable</string>
     <string name="settings_box_never_recognised">Not recognised yet – once connected to it</string>
-    <string name="settings_add_box">Add FritzBox</string>
+    <string name="settings_add_box">Add FRITZ!Box</string>
     <string name="settings_in_use">In use</string>
     <string name="settings_in_use_not_found">In use, but not found in the current network</string>
     <string name="settings_in_use_not_working">In use, but not working: the last request to it failed</string>
@@ -98,21 +99,21 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">FritzBox connection</string>
+    <string name="connection_title">FRITZ!Box connection</string>
     <string name="connection_name">Name</string>
     <string name="connection_name_placeholder">default: the box’s own name</string>
     <string name="connection_host">Host (e.g. fritz.box or 192.168.178.1)</string>
     <string name="connection_https">Use HTTPS</string>
     <string name="connection_https_hint">Encrypted connection (port %1$d). The box’s self-signed certificate must be confirmed once.</string>
     <string name="connection_port">TR-064 port</string>
-    <string name="connection_port_from_box">The HTTPS port this FritzBox reported</string>
+    <string name="connection_port_from_box">The HTTPS port this FRITZ!Box reported</string>
     <string name="connection_user">FRITZ!Box user name</string>
     <string name="connection_user_last">Logged in last</string>
     <string name="connection_password">Password</string>
     <string name="connection_phonebooks">Phone books</string>
-    <string name="connection_phonebooks_hint">Shows the contacts stored in this FritzBox’s phone books, including online phone books synced into it (e.g. CardDAV). They are read from the box when needed and not stored on the phone.</string>
+    <string name="connection_phonebooks_hint">Shows the contacts stored in this FRITZ!Box’s phone books, including online phone books synced into it (e.g. CardDAV). They are read from the box when needed and not stored on the phone.</string>
     <string name="connection_call_list">Call list</string>
-    <string name="connection_call_list_hint">The numbers recently dialled, received and missed, from this FritzBox’s call list. Needs the permission “Voice messages, fax messages, FRITZ!App Fon and call list”.</string>
+    <string name="connection_call_list_hint">The numbers recently dialled, received and missed, from this FRITZ!Box’s call list. Needs the permission “Voice messages, fax messages, FRITZ!App Fon and call list”.</string>
     <string name="connection_call_list_no_right">%1$s does not have this permission on the box, so the call list cannot be read.</string>
     <string name="connection_help">On the box, enable “Allow access for applications” (Home Network › Network › Network Settings) and “Dial help” (Telephony › Calls › Dial Help). The user needs telephony permission. If you log in with password only, use the auto-generated user name shown under System › FRITZ!Box Users.</string>
     <string name="connection_connecting">Connecting…</string>
@@ -125,7 +126,7 @@
     <string name="connection_box_area_code">Area code: %1$s</string>
     <string name="connection_rights_title">Permissions of the user “%1$s”</string>
     <string name="connection_rights_title_short">Permissions of “%1$s”</string>
-    <string name="connection_rights_hint">What this user may do on the FritzBox, as the box reports it. Changed on the box under System › FRITZ!Box Users.</string>
+    <string name="connection_rights_hint">What this user may do on the FRITZ!Box, as the box reports it. Changed on the box under System › FRITZ!Box Users.</string>
     <string name="right_box_admin">FRITZ!Box settings</string>
     <string name="right_phone">Voice messages, fax messages, FRITZ!App Fon and call list</string>
     <string name="right_home_auto">Smart Home</string>
@@ -137,7 +138,7 @@
     <string name="connection_trusted_cert">Trusted HTTPS certificate</string>
     <string name="connection_no_cert">None. When connecting via HTTPS you will be asked to confirm the router’s certificate.</string>
     <string name="connection_cert_trusted">Confirmed. Via HTTPS the app only connects to the box that presents exactly this certificate.</string>
-    <string name="connection_delete_box">Delete this FritzBox</string>
+    <string name="connection_delete_box">Delete this FRITZ!Box</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Certificate has changed!</string>
@@ -180,8 +181,8 @@
     <string name="error_empty_user">(empty)</string>
     <string name="error_not_confirmed_title">Not confirmed</string>
     <string name="error_not_confirmed">The FRITZ!Box did not receive the confirmation in time. Tap Retry and confirm on the box (press its button, or dial the shown code on a connected phone).</string>
-    <string name="error_other_box_title">Different FritzBox</string>
-    <string name="error_other_box">The FritzBox at %1$s is not “%2$s”: its serial number differs from the stored one. If the box was replaced, delete this connection and add it again.</string>
+    <string name="error_other_box_title">Different FRITZ!Box</string>
+    <string name="error_other_box">The FRITZ!Box at %1$s is not “%2$s”: its serial number differs from the stored one. If the box was replaced, delete this connection and add it again.</string>
     <string name="error_confirmation_blocked_title">Confirmation blocked</string>
     <string name="error_confirmation_blocked">The FRITZ!Box currently blocks confirmations (too many attempts). Wait a few minutes and try again.</string>
     <string name="error_confirmation_busy_title">Confirmation busy</string>
@@ -245,17 +246,17 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s in this network is not configured</string>
-    <string name="notice_unknown_box_generic">A FritzBox in this network is not configured</string>
-    <string name="notice_no_known_box">None of your FritzBoxes reachable</string>
+    <string name="notice_unknown_box_generic">A FRITZ!Box in this network is not configured</string>
+    <string name="notice_no_known_box">None of your FRITZ!Boxes reachable</string>
     <string name="call_log_denied">Android did not allow Pickelhaube to read the call log.</string>
     <string name="call_log_failed">The phone’s call log could not be read (%1$s). This only works when Pickelhaube was not installed from Google Play.</string>
     <string name="call_log_failed_plain">The phone’s call log could not be read. This only works when Pickelhaube was not installed from Google Play.</string>
     <string name="speed_dial">Speed dial</string>
     <string name="speed_dial_none_enabled">No speed dials are switched on. You can switch them on in the settings.</string>
-    <string name="speed_dial_phone_help">Speed dials 1 to 9 stored on this phone; they work with every FritzBox. In the dialer, long-press the digit. Tap a free one to choose its number from the phone books, long-press a set one to change or remove it.</string>
-    <string name="speed_dial_box_help">The speed dials set up in this FritzBox’s phone books, as dialled on its handsets with **7. In the dialer, tap the first digit and long-press the second – or enter **7 and the number. Below, set up a new one; long-press one to change or remove it.</string>
-    <string name="speed_dial_box_failed">The speed dials of the FritzBox could not be loaded. Tap reload to try again.</string>
-    <string name="speed_dial_box_none">No speed dials are set up in the phone books of this FritzBox.</string>
+    <string name="speed_dial_phone_help">Speed dials 1 to 9 stored on this phone; they work with every FRITZ!Box. In the dialer, long-press the digit. Tap a free one to choose its number from the phone books, long-press a set one to change or remove it.</string>
+    <string name="speed_dial_box_help">The speed dials set up in this FRITZ!Box’s phone books, as dialled on its handsets with **7. In the dialer, tap the first digit and long-press the second – or enter **7 and the number. Below, set up a new one; long-press one to change or remove it.</string>
+    <string name="speed_dial_box_failed">The speed dials of the FRITZ!Box could not be loaded. Tap reload to try again.</string>
+    <string name="speed_dial_box_none">No speed dials are set up in the phone books of this FRITZ!Box.</string>
     <string name="speed_dial_free">Not set</string>
     <string name="speed_dial_change_or_remove">Change or remove</string>
     <string name="speed_dial_set_up">Set up</string>
@@ -264,40 +265,40 @@
     <string name="speed_dial_choose_number">Tap the number for speed dial %1$s.</string>
     <string name="speed_dial_for">Speed dial for %1$s</string>
     <string name="speed_dial_make">Make speed dial</string>
-    <string name="speed_dial_make_box">Make FritzBox speed dial</string>
-    <string name="speed_dial_box_for">FritzBox speed dial for %1$s</string>
-    <string name="speed_dial_box_new_entry">The number is in none of the FritzBox’s phone books yet. New entry in:</string>
-    <string name="speed_dial_box_online">“%1$s” is only in the online phone book “%2$s”, which the FritzBox cannot change. For the speed dial, it gets an entry in one of the FritzBox’s own phone books.</string>
-    <string name="copy_delete">Delete copy on the FritzBox</string>
-    <string name="copy_delete_text">“%1$s” is in the FritzBox phone book “%2$s” as a copy of a contact from the online phone book “%3$s” – e.g. for a speed dial. Delete this entry? The contact stays in the online phone book; a speed dial of the entry goes with it.</string>
-    <string name="status_deleting_copy">Deleting the copy of “%1$s” on the FritzBox…</string>
-    <string name="status_copy_deleted">Copy of “%1$s” on the FritzBox deleted.</string>
-    <string name="speed_dial_box_add">New FritzBox speed dial</string>
-    <string name="speed_dial_choose_number_box">Tap the number for FritzBox speed dial %1$s.</string>
-    <string name="speed_dial_choose_number_box_new">Tap the number for a new FritzBox speed dial.</string>
-    <string name="status_setting_speed_dial">Setting up speed dial %1$s on the FritzBox…</string>
-    <string name="status_speed_dial_set">FritzBox speed dial %1$s: %2$s</string>
-    <string name="status_removing_speed_dial">Removing speed dial %1$s from the FritzBox…</string>
-    <string name="status_speed_dial_removed">Speed dial %1$s removed from the FritzBox.</string>
+    <string name="speed_dial_make_box">Make FRITZ!Box speed dial</string>
+    <string name="speed_dial_box_for">FRITZ!Box speed dial for %1$s</string>
+    <string name="speed_dial_box_new_entry">The number is in none of the FRITZ!Box’s phone books yet. New entry in:</string>
+    <string name="speed_dial_box_online">“%1$s” is only in the online phone book “%2$s”, which the FRITZ!Box cannot change. For the speed dial, it gets an entry in one of the FRITZ!Box’s own phone books.</string>
+    <string name="copy_delete">Delete copy on the FRITZ!Box</string>
+    <string name="copy_delete_text">“%1$s” is in the FRITZ!Box phone book “%2$s” as a copy of a contact from the online phone book “%3$s” – e.g. for a speed dial. Delete this entry? The contact stays in the online phone book; a speed dial of the entry goes with it.</string>
+    <string name="status_deleting_copy">Deleting the copy of “%1$s” on the FRITZ!Box…</string>
+    <string name="status_copy_deleted">Copy of “%1$s” on the FRITZ!Box deleted.</string>
+    <string name="speed_dial_box_add">New FRITZ!Box speed dial</string>
+    <string name="speed_dial_choose_number_box">Tap the number for FRITZ!Box speed dial %1$s.</string>
+    <string name="speed_dial_choose_number_box_new">Tap the number for a new FRITZ!Box speed dial.</string>
+    <string name="status_setting_speed_dial">Setting up speed dial %1$s on the FRITZ!Box…</string>
+    <string name="status_speed_dial_set">FRITZ!Box speed dial %1$s: %2$s</string>
+    <string name="status_removing_speed_dial">Removing speed dial %1$s from the FRITZ!Box…</string>
+    <string name="status_speed_dial_removed">Speed dial %1$s removed from the FRITZ!Box.</string>
     <string name="contact_to_phone">Add to this phone’s contacts</string>
-    <string name="contact_to_box">Hand over to the FritzBox</string>
-    <string name="hand_over_text">“%1$s” goes into this phone book of the FritzBox “%2$s”:</string>
+    <string name="contact_to_box">Hand over to the FRITZ!Box</string>
+    <string name="hand_over_text">“%1$s” goes into this phone book of the FRITZ!Box “%2$s”:</string>
     <string name="hand_over_duplicate">The number %1$s is already there, with “%2$s”.</string>
     <string name="hand_over">Hand over</string>
-    <string name="status_handing_over">Handing “%1$s” over to the FritzBox…</string>
+    <string name="status_handing_over">Handing “%1$s” over to the FRITZ!Box…</string>
     <string name="status_handed_over">“%1$s” is now in the phone book “%2$s”.</string>
     <string name="no_contacts_app">No contacts app found on this phone.</string>
     <string name="number_actions">More actions</string>
     <string name="dialer_speed_dial_label">Speed dial %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">This phone’s speed dials</string>
-    <string name="settings_phone_speed_dials_hint">Speed dials 1 to 9, chosen from the phone books and stored on this phone, so they work with every FritzBox. To use one, long-press its digit in the dialer.</string>
+    <string name="settings_phone_speed_dials_hint">Speed dials 1 to 9, chosen from the phone books and stored on this phone, so they work with every FRITZ!Box. To use one, long-press its digit in the dialer.</string>
     <string name="connection_speed_dials">Speed dials</string>
-    <string name="connection_speed_dials_hint">The speed dials set up in this FritzBox’s phone books (00 to 99, as dialled on its handsets with **7). To use one, tap the first digit in the dialer and long-press the second. Also works with the phone books switched off.</string>
+    <string name="connection_speed_dials_hint">The speed dials set up in this FRITZ!Box’s phone books (00 to 99, as dialled on its handsets with **7). To use one, tap the first digit in the dialer and long-press the second. Also works with the phone books switched off.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Pickelhaube redial</string>
     <string name="tile_redial_none">Nothing dialled yet</string>
-    <string name="tile_no_box">No FritzBox reachable</string>
+    <string name="tile_no_box">No FRITZ!Box reachable</string>
     <string name="tile_deflection">Call forwarding</string>
     <string name="tile_deflection_switching">Switching…</string>
     <string name="tile_deflection_failed">Switching failed</string>
@@ -313,10 +314,10 @@
     <string name="deflections">Call forwarding</string>
     <string name="deflections_on">Call forwarding – on</string>
     <string name="deflections_off">Call forwarding – off</string>
-    <string name="deflections_hint">The call forwardings set up on the FritzBox “%1$s”, to switch on and off. They are set up and changed only on the box itself (Telephony › Call Handling › Call Forwarding).</string>
+    <string name="deflections_hint">The call forwardings set up on the FRITZ!Box “%1$s”, to switch on and off. They are set up and changed only on the box itself (Telephony › Call Handling › Call Forwarding).</string>
     <string name="deflections_loading">Reading the call forwardings…</string>
     <string name="deflections_failed">The call forwardings could not be read. Tap reload to try again.</string>
-    <string name="deflections_none">No call forwarding is set up on this FritzBox.</string>
+    <string name="deflections_none">No call forwarding is set up on this FRITZ!Box.</string>
     <string name="deflections_tile_hint">The quick settings tile “Call forwarding” switches the one marked.</string>
     <string name="deflection_all">All calls</string>
     <string name="deflection_from">Calls from %1$s</string>

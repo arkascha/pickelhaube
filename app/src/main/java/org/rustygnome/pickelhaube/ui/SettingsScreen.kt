@@ -243,6 +243,14 @@ fun SettingsScreen(
                 Text(stringResource(R.string.settings_tiles), style = MaterialTheme.typography.titleSmall)
                 TilesSetting()
             }
+
+            HorizontalDivider()
+            Text(
+                stringResource(R.string.trademark_notice),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(16.dp),
+            )
         }
     }
 }

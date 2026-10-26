@@ -47,11 +47,11 @@ arguments (long ones shortened), the HTTP status and the box' error code, and th
 selectable and with **Copy**, for a message to whoever looks into it. Credentials are no arguments,
 so they never appear there; numbers can.
 
-### Several FritzBoxes
+### Several FRITZ!Boxes
 
-**Settings › FritzBox connections** holds any number of boxes (e.g. home and office), each with its
+**Settings › FRITZ!Box connections** holds any number of boxes (e.g. home and office), each with its
 own name, host, port, HTTPS, user, password, use of its phone books and call list, and trusted
-certificate. **Add FritzBox** adds one; tap an entry to edit (or delete) it. Each entry says whether the
+certificate. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
 box is *reachable* (it answered the last detection: in this network, or at its configured host),
 *not reachable* or *not recognised yet* (its device id is not known yet, see below). The box in use is
 chosen automatically and marked with a check mark, and shown under the app name on the dialer. The mark
@@ -81,13 +81,13 @@ may not use the function and where to check the permissions.
 
 The box of the current network is selected automatically – at start, whenever the phone's network
 changes and when the app comes back to the foreground; if none of the boxes is found, it tries once more
-a few seconds later (right after a network change the box often does not answer yet). Every FritzBox
+a few seconds later (right after a network change the box often does not answer yet). Every FRITZ!Box
 publishes a public device description (`http://<box>:49000/tr64desc.xml`) with a unique device id
 (UDN); Pickelhaube records it when a connection is saved, or – for a connection saved while away – on the
 first successful login to it, and asks the network's gateway, `fritz.box` and the configured hosts for
 it. The box of the network itself (gateway, `fritz.box`) wins; a box answering only at its configured
 host (through a VPN, or at its MyFRITZ address) is used only when the network has none of the boxes.
-If a FritzBox answers that is not configured, the dialer says so.
+If a FRITZ!Box answers that is not configured, the dialer says so.
 
 The device description needs no login and can be imitated. So after switching, Pickelhaube also compares
 the box' serial number (`DeviceInfo` `GetInfo`, see above) with the stored one, and refuses a box whose
@@ -107,8 +107,8 @@ Online phone books configured on the box (e.g. CardDAV) are synced into it and s
 Search by name or number, choose above the list whether all phone books are shown or just one of
 them, and tap a number to put it into the dialer.
 The books are loaded once per app start; the reload button at the top fetches them again.
-Whether a box' phone books are used is set per FritzBox, on its connection page
-(**Settings › FritzBox connections › <box> › Phone books**, on by default).
+Whether a box' phone books are used is set per FRITZ!Box, on its connection page
+(**Settings › FRITZ!Box connections › <box> › Phone books**, on by default).
 
 Optionally, the contacts stored on the phone itself appear as an additional book **This phone**
 (all Android accounts, e.g. Google or CardDAV via DAVx⁵). This is off by default. When the **Phone books**
@@ -125,11 +125,11 @@ A long press on a number – in **Phone books** or in **Recent** – opens a men
 - **Add to this phone's contacts** (for the box' contacts and recent calls): the phone's contacts app
   opens with a new contact filled in – name and numbers with their kind (home, mobile, work, fax,
   other) – to be saved there, in the account chosen there. Pickelhaube needs no permission for this.
-- **Hand over to the FritzBox** (for the phone's own contacts and recent calls, while the box in use
+- **Hand over to the FRITZ!Box** (for the phone's own contacts and recent calls, while the box in use
   is reachable and its phone books are loaded): asks into which phone book of the box, says if one of
   the numbers is already in it, and adds the contact with all its numbers as a new entry (TR-064
   `X_AVM-DE_OnTel` `SetPhonebookEntryUID`). Kinds the box does not know become *other*.
-- **Make speed dial** and **Make FritzBox speed dial** (see below).
+- **Make speed dial** and **Make FRITZ!Box speed dial** (see below).
 
 Each is a one-off copy of a single contact, not a synchronisation.
 
@@ -141,10 +141,10 @@ received, missed) and an icon for where it was recorded. Rejected calls and call
 withheld number are left out. The list is read anew every time the picker is opened (or with the
 reload button), from two sources:
 
-- **FritzBox** (router icon with the box' name from the settings) – the dialled, received and missed calls in the box' call list (TR-064 `X_AVM-DE_OnTel` `GetCallList`),
+- **FRITZ!Box** (router icon with the box' name from the settings) – the dialled, received and missed calls in the box' call list (TR-064 `X_AVM-DE_OnTel` `GetCallList`),
   i.e. Pickelhaube's dial-help calls as well as the calls of the handsets themselves. The FRITZ!Box user
   needs the permission *Voice messages, fax messages, FRITZ!App Fon and call list* for this.
-  Whether it is used is set per FritzBox, on its connection page (**Settings › FritzBox connections ›
+  Whether it is used is set per FRITZ!Box, on its connection page (**Settings › FRITZ!Box connections ›
   <box> › Call list**, on by default) – e.g. for a box whose user lacks that permission.
 - **This phone** (phone icon; optional, off by default) – the dialled, received and missed calls of the phone's own telephony app,
   read from the Android call log (`READ_CALL_LOG`, used for nothing else). Pickelhaube's calls run on
@@ -172,27 +172,27 @@ phone's country is used instead, without area code.
 
 Speed dials come from two sources that never collide, each of which can be switched off:
 
-- **This phone** – speed dials **1 to 9**, stored on the phone and valid with every FritzBox (name
+- **This phone** – speed dials **1 to 9**, stored on the phone and valid with every FRITZ!Box (name
   and number are kept as a copy). Long-press the digit in the dialer to use one; digits with a speed
   dial have a small dot. Set them up in the picker's **Speed dial** tab (tap a free slot, then the
   number in the phone books; long-press a set one to change or remove it), or long-press a number in
   the **Phone books** tab and choose **Make speed dial**. Switch: **Settings › Speed dial › This phone's speed dials** (on by default).
-- **FritzBox** – the two-digit speed dials (**00 to 99**) set up in the phone books of the box in use
+- **FRITZ!Box** – the two-digit speed dials (**00 to 99**) set up in the phone books of the box in use
   (the `quickdial` attribute of its phone book export), the same ones its handsets dial with `**7`.
   So they depend on where you are. Tap the first digit and long-press the second, or enter `**7` and
   the number – Pickelhaube dials the number it stands for. Switch: on each box' connection page,
   **Speed dials** (on by default, independent of **Phone books**). The box' phone books are read in
   the background after connecting, so these work right away.
-  While the box is reachable they can be changed as well: **New FritzBox speed dial** at the end of the
+  While the box is reachable they can be changed as well: **New FRITZ!Box speed dial** at the end of the
   list (then tap the number in the phone books and choose a free slot), a long press on one to change or
-  remove it, or **Make FritzBox speed dial** in the menu of a long-pressed number (phone books, recent
+  remove it, or **Make FRITZ!Box speed dial** in the menu of a long-pressed number (phone books, recent
   calls). The speed dial goes to the box' entry that has the number (TR-064 `GetPhonebookEntryUID`, the
   `quickdial` attribute set, `SetPhonebookEntryUID`, the rest of the entry unchanged); a number in none
   of its phone books gets a new entry, in the phone book chosen then. A slot used before is freed there.
   Online phone books the box syncs from a provider (Google, CardDAV, …; `owner` 240 and up in the
   export) cannot be changed through the box: a number only there gets an entry with the speed dial in
   one of the box' own phone books – the dialog says so. They are not offered for handing over either.
-  Such a copy can be deleted again (**Delete copy on the FritzBox** in the menu of its speed dial or of its number
+  Such a copy can be deleted again (**Delete copy on the FRITZ!Box** in the menu of its speed dial or of its number
   in **Phone books**, TR-064 `DeletePhonebookEntryUID`). Pickelhaube does not remember which entries it
   made: an entry counts as a copy when one of the box' online phone books has a contact of the same name
   with all of its numbers. Other entries of the box cannot be deleted from the app.
@@ -259,14 +259,14 @@ has a button for each, and Android asks whether to add it. A tile already there 
 instead – Android cannot be asked, so each tile notes when it is added or removed (and when it is shown); otherwise (or if that fails) pull down the
 shade twice, tap the pencil and drag them into your tiles – apps' tiles are usually at the very end:
 
-- **Pickelhaube** opens the dialer. It is highlighted while a FritzBox is reachable from the current
+- **Pickelhaube** opens the dialer. It is highlighted while a FRITZ!Box is reachable from the current
   network – looked for each time the shade is pulled down, as the app does –, and from Android 10 on
-  its subtitle names it, or says *No FritzBox reachable*.
+  its subtitle names it, or says *No FRITZ!Box reachable*.
 - **Pickelhaube redial** opens the dialer with the number dialled last already entered, shown as its subtitle.
   It does not dial by itself – a tap in the shade is easily made by accident – so the green button
   still has to be pressed. The tile is greyed out until something was dialled; like **Pickelhaube**, it
-  is highlighted while a FritzBox is reachable.
-- **Call forwarding** switches a call forwarding of the FritzBox reachable from the current network
+  is highlighted while a FRITZ!Box is reachable.
+- **Call forwarding** switches a call forwarding of the FRITZ!Box reachable from the current network
   (see *Call forwarding* above).
 
 On a locked phone, they do what they do only once the phone is unlocked.
@@ -283,15 +283,15 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/CertificateTrust.kt` | Pinning trust manager, certificate details, "untrusted certificate" exception |
 | `tr064/FritzDialer.kt` | `X_VoIP` actions: `X_AVM-DE_GetPhonePort`, `X_AVM-DE_DialGetConfig`, `X_AVM-DE_DialSetConfig`, `X_AVM-DE_DialNumber`, `X_AVM-DE_DialHangup`; device details (`DeviceInfo` `GetInfo`) |
 | `tr064/BoxUsers.kt` | The box' users, offered for the user name (`LANConfigSecurity` `X_AVM-DE_GetUserList`) |
-| `tr064/BoxDiscovery.kt` | Recognises the FritzBox of the current network (gateway, `tr64desc.xml` device id) |
+| `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Pickelhaube redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |
 | `data/AppLanguage.kt` | UI language: system or chosen (per-app language on Android 13+, own handling before) |
-| `data/BoxRecognition.kt` | Which configured FritzBox is reachable from the current network (app and tile) |
-| `data/SettingsRepository.kt` | FritzBox connections (passwords encrypted via Android Keystore) and options |
+| `data/BoxRecognition.kt` | Which configured FRITZ!Box is reachable from the current network (app and tile) |
+| `data/SettingsRepository.kt` | FRITZ!Box connections (passwords encrypted via Android Keystore) and options |
 | `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
@@ -303,3 +303,9 @@ the call list's date format, the device details, the user list, the user's permi
 - Plain HTTP (port 49000) remains the default; even there the password never travels in clear text
   (digest auth). HTTPS additionally encrypts the numbers you dial and protects against spoofed routers.
 - Works only while the phone is in the home network (or via VPN to it).
+
+## Trademarks
+
+Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
+FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH; they are used here only to say which
+routers the app works with.

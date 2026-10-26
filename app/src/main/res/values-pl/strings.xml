@@ -17,7 +17,8 @@
     <string name="open_settings">Otwórz ustawienia</string>
     <string name="settings">Ustawienia</string>
     <string name="this_phone">Ten telefon</string>
-    <string name="fritzbox">FritzBox</string>
+    <string name="fritzbox">FRITZ!Box</string>
+    <string name="trademark_notice">Pickelhaube to niezależny projekt, niezwiązany z FRITZ! GmbH (dawniej AVM). FRITZ! i FRITZ!Box są znakami towarowymi FRITZ! GmbH.</string>
     <string name="phone_books">Książki telefoniczne</string>
 
     <!-- dialer -->
@@ -64,7 +65,7 @@
     <string name="recents_load_failed">Nie udało się wczytać listy połączeń. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_empty">Brak ostatnich połączeń.</string>
     <string name="recents_none_enabled">Żadna lista połączeń nie jest włączona. Możesz ją włączyć w ustawieniach.</string>
-    <string name="recents_box_load_failed">Nie udało się wczytać listy połączeń FritzBox. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
+    <string name="recents_box_load_failed">Nie udało się wczytać listy połączeń FRITZ!Box. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_recorded_by_box">Zarejestrowane przez %1$s</string>
     <string name="recents_recorded_by_phone">Zarejestrowane przez ten telefon</string>
     <string name="recents_dialled">Wychodzące</string>
@@ -72,12 +73,12 @@
     <string name="recents_missed">Nieodebrane</string>
 
     <!-- settings overview -->
-    <string name="settings_connections">Połączenia z FritzBox</string>
-    <string name="settings_connections_hint">FritzBox sieci, w której jest telefon, jest używany automatycznie. Tylko gdy nie znaleziono tam żadnego z nich, możesz wybrać go samodzielnie.</string>
+    <string name="settings_connections">Połączenia z FRITZ!Box</string>
+    <string name="settings_connections_hint">FRITZ!Box sieci, w której jest telefon, jest używany automatycznie. Tylko gdy nie znaleziono tam żadnego z nich, możesz wybrać go samodzielnie.</string>
     <string name="settings_box_here">Osiągalny</string>
     <string name="settings_box_not_here">Nieosiągalny</string>
     <string name="settings_box_never_recognised">Jeszcze nie rozpoznany – dopiero po połączeniu z nim</string>
-    <string name="settings_add_box">Dodaj FritzBox</string>
+    <string name="settings_add_box">Dodaj FRITZ!Box</string>
     <string name="settings_in_use">W użyciu</string>
     <string name="settings_in_use_not_found">W użyciu, ale nie znaleziono go w bieżącej sieci</string>
     <string name="settings_in_use_not_working">W użyciu, ale nie działa: ostatnie żądanie się nie powiodło</string>
@@ -96,21 +97,21 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">Połączenie z FritzBox</string>
+    <string name="connection_title">Połączenie z FRITZ!Box</string>
     <string name="connection_name">Nazwa</string>
     <string name="connection_name_placeholder">domyślnie: własna nazwa urządzenia</string>
     <string name="connection_host">Host (np. fritz.box lub 192.168.178.1)</string>
     <string name="connection_https">Używaj HTTPS</string>
     <string name="connection_https_hint">Połączenie szyfrowane (port %1$d). Certyfikat urządzenia z podpisem własnym trzeba raz potwierdzić.</string>
     <string name="connection_port">Port TR-064</string>
-    <string name="connection_port_from_box">Port HTTPS zgłoszony przez ten FritzBox</string>
+    <string name="connection_port_from_box">Port HTTPS zgłoszony przez ten FRITZ!Box</string>
     <string name="connection_user">Nazwa użytkownika FRITZ!Box</string>
     <string name="connection_user_last">Ostatnio zalogowany</string>
     <string name="connection_password">Hasło</string>
     <string name="connection_phonebooks">Książki telefoniczne</string>
-    <string name="connection_phonebooks_hint">Pokazuje kontakty zapisane w książkach telefonicznych tego FritzBox, w tym zsynchronizowane z nim książki online (np. CardDAV). Są odczytywane z FritzBox w razie potrzeby i nie są zapisywane na telefonie.</string>
+    <string name="connection_phonebooks_hint">Pokazuje kontakty zapisane w książkach telefonicznych tego FRITZ!Box, w tym zsynchronizowane z nim książki online (np. CardDAV). Są odczytywane z FRITZ!Box w razie potrzeby i nie są zapisywane na telefonie.</string>
     <string name="connection_call_list">Lista połączeń</string>
-    <string name="connection_call_list_hint">Ostatnio wybierane, odebrane i nieodebrane numery z listy połączeń tego FritzBox.</string>
+    <string name="connection_call_list_hint">Ostatnio wybierane, odebrane i nieodebrane numery z listy połączeń tego FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s nie ma tego uprawnienia na routerze, dlatego nie można odczytać listy połączeń.</string>
     <string name="connection_help">Na urządzeniu włącz „Zezwalaj na dostęp aplikacji” (Sieć domowa › Sieć › Ustawienia sieci) oraz „Pomoc przy wybieraniu” (Telefonia › Połączenia › Pomoc przy wybieraniu). Użytkownik potrzebuje uprawnienia do telefonii. Jeśli logujesz się tylko hasłem, użyj automatycznie utworzonej nazwy użytkownika podanej w System › Użytkownicy FRITZ!Box.</string>
     <string name="connection_connecting">Łączenie…</string>
@@ -123,7 +124,7 @@
     <string name="connection_box_area_code">Numer kierunkowy: %1$s</string>
     <string name="connection_rights_title">Uprawnienia użytkownika „%1$s”</string>
     <string name="connection_rights_title_short">Uprawnienia „%1$s”</string>
-    <string name="connection_rights_hint">Co ten użytkownik może robić na FritzBoxie, według routera. Można to zmienić na routerze w System › Użytkownicy FRITZ!Box.</string>
+    <string name="connection_rights_hint">Co ten użytkownik może robić na FRITZ!Boxie, według routera. Można to zmienić na routerze w System › Użytkownicy FRITZ!Box.</string>
     <string name="right_box_admin">Ustawienia FRITZ!Box</string>
     <string name="right_phone">Wiadomości głosowe, faksy, FRITZ!App Fon i lista połączeń</string>
     <string name="right_home_auto">Smart Home</string>
@@ -135,7 +136,7 @@
     <string name="connection_trusted_cert">Zaufany certyfikat HTTPS</string>
     <string name="connection_no_cert">Brak. Przy połączeniu przez HTTPS zostaniesz poproszony o potwierdzenie certyfikatu routera.</string>
     <string name="connection_cert_trusted">Potwierdzony. Przez HTTPS aplikacja łączy się tylko z routerem, który przedstawi dokładnie ten certyfikat.</string>
-    <string name="connection_delete_box">Usuń ten FritzBox</string>
+    <string name="connection_delete_box">Usuń ten FRITZ!Box</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Certyfikat się zmienił!</string>
@@ -178,8 +179,8 @@
     <string name="error_empty_user">(pusta)</string>
     <string name="error_not_confirmed_title">Nie potwierdzono</string>
     <string name="error_not_confirmed">FRITZ!Box nie otrzymał potwierdzenia na czas. Dotknij Ponów i potwierdź na urządzeniu (naciśnij jego przycisk lub wybierz pokazany kod na podłączonym telefonie).</string>
-    <string name="error_other_box_title">Inny FritzBox</string>
-    <string name="error_other_box">FritzBox pod adresem %1$s to nie „%2$s”: jego numer seryjny różni się od zapisanego. Jeśli router został wymieniony, usuń to połączenie i dodaj je ponownie.</string>
+    <string name="error_other_box_title">Inny FRITZ!Box</string>
+    <string name="error_other_box">FRITZ!Box pod adresem %1$s to nie „%2$s”: jego numer seryjny różni się od zapisanego. Jeśli router został wymieniony, usuń to połączenie i dodaj je ponownie.</string>
     <string name="error_confirmation_blocked_title">Potwierdzanie zablokowane</string>
     <string name="error_confirmation_blocked">FRITZ!Box obecnie blokuje potwierdzenia (zbyt wiele prób). Odczekaj kilka minut i spróbuj ponownie.</string>
     <string name="error_confirmation_busy_title">Potwierdzanie w toku</string>
@@ -251,17 +252,17 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s w tej sieci nie jest skonfigurowany</string>
-    <string name="notice_unknown_box_generic">FritzBox w tej sieci nie jest skonfigurowany</string>
-    <string name="notice_no_known_box">Żaden z twoich FritzBoxów nie jest osiągalny</string>
+    <string name="notice_unknown_box_generic">FRITZ!Box w tej sieci nie jest skonfigurowany</string>
+    <string name="notice_no_known_box">Żaden z twoich FRITZ!Boxów nie jest osiągalny</string>
     <string name="call_log_denied">Android nie pozwolił Pickelhaube odczytać rejestru połączeń.</string>
     <string name="call_log_failed">Nie udało się odczytać rejestru połączeń telefonu (%1$s). Działa to tylko wtedy, gdy Pickelhaube nie został zainstalowany z Google Play.</string>
     <string name="call_log_failed_plain">Nie udało się odczytać rejestru połączeń telefonu. Działa to tylko wtedy, gdy Pickelhaube nie został zainstalowany z Google Play.</string>
     <string name="speed_dial">Szybkie wybieranie</string>
     <string name="speed_dial_none_enabled">Żadne szybkie wybieranie nie jest włączone. Możesz je włączyć w ustawieniach.</string>
-    <string name="speed_dial_phone_help">Szybkie wybieranie 1–9 jest zapisane na tym telefonie i działa z każdym FritzBox. Na klawiaturze przytrzymaj cyfrę. Dotknij wolnego miejsca, aby wybrać numer z książek telefonicznych; przytrzymaj zajęte, aby je zmienić lub usunąć.</string>
-    <string name="speed_dial_box_help">Szybkie wybieranie ustawione w książkach telefonicznych tego FritzBox, wybierane na jego słuchawkach przez **7. Na klawiaturze dotknij pierwszej cyfry i przytrzymaj drugą – albo wpisz **7 i numer. Na dole dodasz nowe; długie naciśnięcie zmienia je lub usuwa.</string>
-    <string name="speed_dial_box_failed">Nie udało się wczytać szybkiego wybierania z FritzBox. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
-    <string name="speed_dial_box_none">W książkach telefonicznych tego FritzBox nie ustawiono szybkiego wybierania.</string>
+    <string name="speed_dial_phone_help">Szybkie wybieranie 1–9 jest zapisane na tym telefonie i działa z każdym FRITZ!Box. Na klawiaturze przytrzymaj cyfrę. Dotknij wolnego miejsca, aby wybrać numer z książek telefonicznych; przytrzymaj zajęte, aby je zmienić lub usunąć.</string>
+    <string name="speed_dial_box_help">Szybkie wybieranie ustawione w książkach telefonicznych tego FRITZ!Box, wybierane na jego słuchawkach przez **7. Na klawiaturze dotknij pierwszej cyfry i przytrzymaj drugą – albo wpisz **7 i numer. Na dole dodasz nowe; długie naciśnięcie zmienia je lub usuwa.</string>
+    <string name="speed_dial_box_failed">Nie udało się wczytać szybkiego wybierania z FRITZ!Box. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
+    <string name="speed_dial_box_none">W książkach telefonicznych tego FRITZ!Box nie ustawiono szybkiego wybierania.</string>
     <string name="speed_dial_free">Wolne</string>
     <string name="speed_dial_change_or_remove">Zmień lub usuń</string>
     <string name="speed_dial_set_up">Ustaw</string>
@@ -270,40 +271,40 @@
     <string name="speed_dial_choose_number">Dotknij numeru dla szybkiego wybierania %1$s.</string>
     <string name="speed_dial_for">Szybkie wybieranie: %1$s</string>
     <string name="speed_dial_make">Ustaw jako szybkie wybieranie</string>
-    <string name="speed_dial_make_box">Ustaw jako szybkie wybieranie FritzBox</string>
-    <string name="speed_dial_box_for">Szybkie wybieranie FritzBox dla %1$s</string>
-    <string name="speed_dial_box_new_entry">Numeru nie ma jeszcze w żadnej książce telefonicznej FritzBox. Nowy wpis w:</string>
-    <string name="speed_dial_box_online">„%1$s” jest tylko w książce online „%2$s”, której FritzBox nie może zmienić. Do szybkiego wybierania zostanie utworzony wpis we własnej książce telefonicznej FritzBox.</string>
-    <string name="copy_delete">Usuń kopię na FritzBox</string>
-    <string name="copy_delete_text">„%1$s” jest w książce „%2$s” FritzBox jako kopia kontaktu z książki online „%3$s” – np. dla szybkiego wybierania. Usunąć ten wpis? Kontakt pozostaje w książce online; szybkie wybieranie wpisu zostanie usunięte.</string>
-    <string name="status_deleting_copy">Usuwanie kopii „%1$s” na FritzBox…</string>
-    <string name="status_copy_deleted">Usunięto kopię „%1$s” na FritzBox.</string>
-    <string name="speed_dial_box_add">Nowe szybkie wybieranie FritzBox</string>
-    <string name="speed_dial_choose_number_box">Dotknij numeru dla szybkiego wybierania %1$s FritzBox.</string>
-    <string name="speed_dial_choose_number_box_new">Dotknij numeru dla nowego szybkiego wybierania FritzBox.</string>
-    <string name="status_setting_speed_dial">Ustawianie szybkiego wybierania %1$s na FritzBox…</string>
-    <string name="status_speed_dial_set">Szybkie wybieranie %1$s FritzBox: %2$s</string>
-    <string name="status_removing_speed_dial">Usuwanie szybkiego wybierania %1$s z FritzBox…</string>
-    <string name="status_speed_dial_removed">Usunięto szybkie wybieranie %1$s z FritzBox.</string>
+    <string name="speed_dial_make_box">Ustaw jako szybkie wybieranie FRITZ!Box</string>
+    <string name="speed_dial_box_for">Szybkie wybieranie FRITZ!Box dla %1$s</string>
+    <string name="speed_dial_box_new_entry">Numeru nie ma jeszcze w żadnej książce telefonicznej FRITZ!Box. Nowy wpis w:</string>
+    <string name="speed_dial_box_online">„%1$s” jest tylko w książce online „%2$s”, której FRITZ!Box nie może zmienić. Do szybkiego wybierania zostanie utworzony wpis we własnej książce telefonicznej FRITZ!Box.</string>
+    <string name="copy_delete">Usuń kopię na FRITZ!Box</string>
+    <string name="copy_delete_text">„%1$s” jest w książce „%2$s” FRITZ!Box jako kopia kontaktu z książki online „%3$s” – np. dla szybkiego wybierania. Usunąć ten wpis? Kontakt pozostaje w książce online; szybkie wybieranie wpisu zostanie usunięte.</string>
+    <string name="status_deleting_copy">Usuwanie kopii „%1$s” na FRITZ!Box…</string>
+    <string name="status_copy_deleted">Usunięto kopię „%1$s” na FRITZ!Box.</string>
+    <string name="speed_dial_box_add">Nowe szybkie wybieranie FRITZ!Box</string>
+    <string name="speed_dial_choose_number_box">Dotknij numeru dla szybkiego wybierania %1$s FRITZ!Box.</string>
+    <string name="speed_dial_choose_number_box_new">Dotknij numeru dla nowego szybkiego wybierania FRITZ!Box.</string>
+    <string name="status_setting_speed_dial">Ustawianie szybkiego wybierania %1$s na FRITZ!Box…</string>
+    <string name="status_speed_dial_set">Szybkie wybieranie %1$s FRITZ!Box: %2$s</string>
+    <string name="status_removing_speed_dial">Usuwanie szybkiego wybierania %1$s z FRITZ!Box…</string>
+    <string name="status_speed_dial_removed">Usunięto szybkie wybieranie %1$s z FRITZ!Box.</string>
     <string name="contact_to_phone">Dodaj do kontaktów telefonu</string>
-    <string name="contact_to_box">Przekaż do FritzBox</string>
-    <string name="hand_over_text">„%1$s” trafi do tej książki telefonicznej FritzBox „%2$s”:</string>
+    <string name="contact_to_box">Przekaż do FRITZ!Box</string>
+    <string name="hand_over_text">„%1$s” trafi do tej książki telefonicznej FRITZ!Box „%2$s”:</string>
     <string name="hand_over_duplicate">Numer %1$s już tam jest, przy „%2$s”.</string>
     <string name="hand_over">Przekaż</string>
-    <string name="status_handing_over">Przekazywanie „%1$s” do FritzBox…</string>
+    <string name="status_handing_over">Przekazywanie „%1$s” do FRITZ!Box…</string>
     <string name="status_handed_over">„%1$s” jest teraz w książce telefonicznej „%2$s”.</string>
     <string name="no_contacts_app">Na tym telefonie nie ma aplikacji kontaktów.</string>
     <string name="number_actions">Więcej działań</string>
     <string name="dialer_speed_dial_label">Szybkie wybieranie %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Szybkie wybieranie tego telefonu</string>
-    <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FritzBox. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>
+    <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FRITZ!Box. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>
     <string name="connection_speed_dials">Szybkie wybieranie</string>
-    <string name="connection_speed_dials_hint">Szybkie wybieranie ustawione w książkach telefonicznych tego FritzBox (00–99, wybierane na jego słuchawkach przez **7). Aby go użyć, dotknij pierwszej cyfry na klawiaturze i przytrzymaj drugą. Działa także przy wyłączonych książkach telefonicznych.</string>
+    <string name="connection_speed_dials_hint">Szybkie wybieranie ustawione w książkach telefonicznych tego FRITZ!Box (00–99, wybierane na jego słuchawkach przez **7). Aby go użyć, dotknij pierwszej cyfry na klawiaturze i przytrzymaj drugą. Działa także przy wyłączonych książkach telefonicznych.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Pickelhaube: ponowne wybieranie</string>
     <string name="tile_redial_none">Jeszcze nic nie wybrano</string>
-    <string name="tile_no_box">Żaden FritzBox nie jest osiągalny</string>
+    <string name="tile_no_box">Żaden FRITZ!Box nie jest osiągalny</string>
     <string name="tile_deflection">Przekierowanie połączeń</string>
     <string name="tile_deflection_switching">Przełączanie…</string>
     <string name="tile_deflection_failed">Nie udało się przełączyć</string>
@@ -319,10 +320,10 @@
     <string name="deflections">Przekierowanie połączeń</string>
     <string name="deflections_on">Przekierowanie połączeń – włączone</string>
     <string name="deflections_off">Przekierowanie połączeń – wyłączone</string>
-    <string name="deflections_hint">Przekierowania połączeń ustawione na FritzBox „%1$s”, do włączania i wyłączania. Ustawia się je i zmienia tylko na samym FritzBox (Telefonia › Obsługa połączeń › Przekierowanie połączeń).</string>
+    <string name="deflections_hint">Przekierowania połączeń ustawione na FRITZ!Box „%1$s”, do włączania i wyłączania. Ustawia się je i zmienia tylko na samym FRITZ!Box (Telefonia › Obsługa połączeń › Przekierowanie połączeń).</string>
     <string name="deflections_loading">Odczytywanie przekierowań…</string>
     <string name="deflections_failed">Nie udało się odczytać przekierowań. Dotknij „Odśwież”, aby spróbować ponownie.</string>
-    <string name="deflections_none">Na tym FritzBox nie ustawiono żadnego przekierowania.</string>
+    <string name="deflections_none">Na tym FRITZ!Box nie ustawiono żadnego przekierowania.</string>
     <string name="deflections_tile_hint">Kafelek „Przekierowanie połączeń” w szybkich ustawieniach przełącza zaznaczone.</string>
     <string name="deflection_all">Wszystkie połączenia</string>
     <string name="deflection_from">Połączenia od %1$s</string>
