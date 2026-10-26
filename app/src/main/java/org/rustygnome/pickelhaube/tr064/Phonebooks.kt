@@ -49,6 +49,12 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
         return Phonebook(id, name, parseContacts(xml, name))
     }
 
+    /** Adds [contact] with its numbers as a new entry to phone book [id] (`SetPhonebookEntryUID`). */
+    @Throws(IOException::class)
+    fun add(id: Int, contact: PhonebookContact) {
+        call("SetPhonebookEntryUID", mapOf("NewPhonebookID" to id.toString(), "NewPhonebookEntryData" to entryXml(contact)))
+    }
+
     private fun call(action: String, args: Map<String, String> = emptyMap()) =
         client.call(SERVICE_TYPE, CONTROL_URL, action, args)
 
@@ -111,6 +117,29 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
             }
             return contacts.sortedBy { it.name.lowercase() }
         }
+
+        /**
+         * A new phone book entry as the box takes it: `<contact><category>0</category><person>
+         * <realName>…</realName></person><telephony><number type="home" prio="1" id="0">…</number>…`,
+         * the first number the preferred one.
+         */
+        internal fun entryXml(contact: PhonebookContact): String = buildString {
+            append("<?xml version=\"1.0\" encoding=\"utf-8\"?><contact><category>0</category><person><realName>")
+            append(Tr064Client.escapeXml(contact.name))
+            append("</realName></person><telephony nid=\"").append(contact.numbers.size).append("\">")
+            contact.numbers.forEachIndexed { i, n ->
+                append("<number type=\"").append(boxNumberType(n.type))
+                append("\" prio=\"").append(if (i == 0) 1 else 0).append("\" id=\"").append(i).append("\">")
+                append(Tr064Client.escapeXml(n.number)).append("</number>")
+            }
+            append("</telephony></contact>")
+        }
+
+        /** The box' type of a number: its own tags are kept, anything else (e.g. a custom label) is "other". */
+        private fun boxNumberType(type: String): String =
+            type.lowercase().takeIf { it in BOX_NUMBER_TYPES } ?: "other"
+
+        private val BOX_NUMBER_TYPES = setOf("home", "mobile", "work", "fax_work", "intern", "memo", "other")
 
         /** The `quickdial` attribute as a two-digit speed dial ("5" → "05"); null if none is set. */
         fun speedDialSlot(raw: String?): String? =

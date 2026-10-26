@@ -261,6 +261,15 @@
     <string name="speed_dial_choose_number">Tap the number for speed dial %1$s.</string>
     <string name="speed_dial_for">Speed dial for %1$s</string>
     <string name="speed_dial_make">Make speed dial</string>
+    <string name="contact_to_phone">Add to this phone’s contacts</string>
+    <string name="contact_to_box">Hand over to the FritzBox</string>
+    <string name="hand_over_text">“%1$s” goes into this phone book of the FritzBox “%2$s”:</string>
+    <string name="hand_over_duplicate">The number %1$s is already there, with “%2$s”.</string>
+    <string name="hand_over">Hand over</string>
+    <string name="status_handing_over">Handing “%1$s” over to the FritzBox…</string>
+    <string name="status_handed_over">“%1$s” is now in the phone book “%2$s”.</string>
+    <string name="no_contacts_app">No contacts app found on this phone.</string>
+    <string name="number_actions">More actions</string>
     <string name="dialer_speed_dial_label">Speed dial %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">This phone’s speed dials</string>
     <string name="settings_phone_speed_dials_hint">Speed dials 1 to 9, chosen from the phone books and stored on this phone, so they work with every FritzBox. To use one, long-press its digit in the dialer.</string>

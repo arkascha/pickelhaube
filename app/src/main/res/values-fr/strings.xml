@@ -263,6 +263,15 @@
     <string name="speed_dial_choose_number">Touchez le numéro pour le numéro abrégé %1$s.</string>
     <string name="speed_dial_for">Numéro abrégé pour %1$s</string>
     <string name="speed_dial_make">Définir comme numéro abrégé</string>
+    <string name="contact_to_phone">Ajouter aux contacts du téléphone</string>
+    <string name="contact_to_box">Transmettre à la FritzBox</string>
+    <string name="hand_over_text">« %1$s » sera ajouté à ce répertoire de la FritzBox « %2$s » :</string>
+    <string name="hand_over_duplicate">Le numéro %1$s y figure déjà, chez « %2$s ».</string>
+    <string name="hand_over">Transmettre</string>
+    <string name="status_handing_over">Transmission de « %1$s » à la FritzBox…</string>
+    <string name="status_handed_over">« %1$s » figure maintenant dans le répertoire « %2$s ».</string>
+    <string name="no_contacts_app">Aucune application de contacts sur ce téléphone.</string>
+    <string name="number_actions">Plus d’actions</string>
     <string name="dialer_speed_dial_label">Numéro abrégé %1$s : %2$s</string>
     <string name="settings_phone_speed_dials">Numéros abrégés de ce téléphone</string>
     <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FritzBox. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>

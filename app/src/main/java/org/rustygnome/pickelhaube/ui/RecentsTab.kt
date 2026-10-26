@@ -4,7 +4,9 @@ import android.icu.text.DisplayContext
 import android.icu.text.RelativeDateTimeFormatter
 import android.icu.util.ULocale
 import android.text.format.DateFormat
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,9 +28,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -40,7 +47,9 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.tr064.DialingCodes
+import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
+import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -52,7 +61,8 @@ import java.util.Locale
 /**
  * The number picker's "Recent" tab: the numbers dialled, received or missed last, from the
  * FRITZ!Box' call list (if used for the box in use) and – optionally, switched on in the settings – from the phone's own call
- * log. Each number appears once, at its latest call. Tapping one puts it into the dialer.
+ * log. Each number appears once, at its latest call. Tapping one puts it into the dialer; a long
+ * press opens a menu to take it over into this phone's contacts or hand it over to the box.
  */
 @Composable
 fun RecentsTab(
@@ -73,12 +83,32 @@ fun RecentsTab(
     callLogProblem: UiText?,
     busy: Boolean,
     onPick: (String) -> Unit,
+    /** The phone books of the box in use a number can be handed over to (empty = none, e.g. not reachable). */
+    boxBooks: List<Phonebook>,
+    /** Hands a number (with its name, if known) over to a phone book of the box. */
+    onHandOver: (Phonebook, PhonebookContact) -> Unit,
     /** Re-reads the phone's call log (when coming back to the app, a call may have been made). */
     onReloadCallLog: () -> Unit,
     onDisableCallLog: () -> Unit,
 ) {
     val context = LocalContext.current
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { onReloadCallLog() }
+
+    // Number (as a contact) being handed over to the box: choosing the phone book.
+    var handOverFor by remember { mutableStateOf<PhonebookContact?>(null) }
+    handOverFor?.takeIf { boxBooks.isNotEmpty() }?.let { contact ->
+        HandOverDialog(
+            contact = contact,
+            books = boxBooks,
+            boxName = boxName,
+            dialingCodes = dialingCodes,
+            onHandOver = { book ->
+                handOverFor = null
+                onHandOver(book, contact)
+            },
+            onDismiss = { handOverFor = null },
+        )
+    }
 
     val countryIso = remember { deviceCountryIso(context) }
     val calls = remember(boxCalls, boxCallsEnabled, phoneCalls, callLogEnabled, dialingCodes, contacts) {
@@ -115,9 +145,16 @@ fun RecentsTab(
                 }
                 val now = remember(calls) { System.currentTimeMillis() }
                 val times = rememberRelativeTimes()
+                val toBox = stringResource(R.string.contact_to_box)
+                val toPhone = stringResource(R.string.contact_to_phone)
                 LazyColumn(Modifier.fillMaxSize()) {
                     items(calls) { call ->
-                        RecentRow(call, times.format(call.time, now), boxName, onPick)
+                        val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
+                        val actions = listOfNotNull(
+                            NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
+                            if (boxBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                        )
+                        RecentRow(call, times.format(call.time, now), boxName, onPick, actions)
                         HorizontalDivider()
                     }
                 }
@@ -132,54 +169,74 @@ fun RecentsTab(
  * router icon, or a phone icon). The icons have a fixed size and sit at the right edge, so the times
  * of all rows end at the same position – a right-aligned column.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun RecentRow(call: RecentCall, time: String, boxName: String?, onPick: (String) -> Unit) {
-    ListItem(
-        headlineContent = { Text(call.name ?: call.number, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        supportingContent = call.name?.let { { Text(call.number, maxLines = 1) } },
-        trailingContent = {
-            Column(horizontalAlignment = Alignment.End) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        time,
-                        // Tabular figures: digits of equal width, so the times line up neatly.
-                        style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.End,
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    DirectionIcon(call.direction)
-                }
-                Spacer(Modifier.height(2.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (call.source == RecentCall.Source.FRITZBOX) {
+private fun RecentRow(
+    call: RecentCall,
+    time: String,
+    boxName: String?,
+    onPick: (String) -> Unit,
+    /** What a long press offers to do with the number. */
+    actions: List<NumberAction>,
+) {
+    val haptics = LocalHapticFeedback.current
+    var menu by remember { mutableStateOf(false) }
+    Box {
+        ListItem(
+            headlineContent = { Text(call.name ?: call.number, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            supportingContent = call.name?.let { { Text(call.number, maxLines = 1) } },
+            trailingContent = {
+                Column(horizontalAlignment = Alignment.End) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            boxName ?: stringResource(R.string.fritzbox),
-                            style = MaterialTheme.typography.labelSmall,
+                            time,
+                            // Tabular figures: digits of equal width, so the times line up neatly.
+                            style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.widthIn(max = 96.dp),
+                            textAlign = TextAlign.End,
                         )
                         Spacer(Modifier.width(8.dp))
+                        DirectionIcon(call.direction)
                     }
-                    Icon(
-                        when (call.source) {
-                            RecentCall.Source.FRITZBOX -> RouterIcon
-                            RecentCall.Source.PHONE -> SmartphoneIcon
-                        },
-                        contentDescription = when (call.source) {
-                            RecentCall.Source.FRITZBOX -> stringResource(R.string.recents_recorded_by_box, boxName ?: stringResource(R.string.fritzbox))
-                            RecentCall.Source.PHONE -> stringResource(R.string.recents_recorded_by_phone)
-                        },
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(ICON_SIZE),
-                    )
+                    Spacer(Modifier.height(2.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (call.source == RecentCall.Source.FRITZBOX) {
+                            Text(
+                                boxName ?: stringResource(R.string.fritzbox),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.widthIn(max = 96.dp),
+                            )
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Icon(
+                            when (call.source) {
+                                RecentCall.Source.FRITZBOX -> RouterIcon
+                                RecentCall.Source.PHONE -> SmartphoneIcon
+                            },
+                            contentDescription = when (call.source) {
+                                RecentCall.Source.FRITZBOX -> stringResource(R.string.recents_recorded_by_box, boxName ?: stringResource(R.string.fritzbox))
+                                RecentCall.Source.PHONE -> stringResource(R.string.recents_recorded_by_phone)
+                            },
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(ICON_SIZE),
+                        )
+                    }
                 }
-            }
-        },
-        modifier = Modifier.clickable { onPick(call.number) },
-    )
+            },
+            modifier = Modifier.combinedClickable(
+                onClick = { onPick(call.number) },
+                onLongClickLabel = stringResource(R.string.number_actions),
+                onLongClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    menu = true
+                },
+            ),
+        )
+        NumberActionsMenu(expanded = menu, actions = actions, onDismiss = { menu = false })
+    }
 }
 
 /** Arrow for how the call went: dialled (up), received (down, green), missed (red). */

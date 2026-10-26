@@ -263,6 +263,15 @@
     <string name="speed_dial_choose_number">Toca el número para la marcación rápida %1$s.</string>
     <string name="speed_dial_for">Marcación rápida para %1$s</string>
     <string name="speed_dial_make">Usar como marcación rápida</string>
+    <string name="contact_to_phone">Añadir a los contactos del teléfono</string>
+    <string name="contact_to_box">Pasar a la FritzBox</string>
+    <string name="hand_over_text">«%1$s» se guardará en esta agenda de la FritzBox «%2$s»:</string>
+    <string name="hand_over_duplicate">El número %1$s ya está ahí, en «%2$s».</string>
+    <string name="hand_over">Pasar</string>
+    <string name="status_handing_over">Pasando «%1$s» a la FritzBox…</string>
+    <string name="status_handed_over">«%1$s» ya está en la agenda «%2$s».</string>
+    <string name="no_contacts_app">No hay ninguna app de contactos en este teléfono.</string>
+    <string name="number_actions">Más acciones</string>
     <string name="dialer_speed_dial_label">Marcación rápida %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Marcaciones rápidas de este teléfono</string>
     <string name="settings_phone_speed_dials_hint">Marcaciones rápidas 1 a 9, elegidas de las agendas y guardadas en este teléfono, por lo que funcionan con cualquier FritzBox. Para usar una, mantén pulsada su cifra en el teclado.</string>

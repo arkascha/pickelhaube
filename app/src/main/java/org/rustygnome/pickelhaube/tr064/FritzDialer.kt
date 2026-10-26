@@ -112,6 +112,10 @@ class FritzDialer(
     @Throws(IOException::class)
     fun loadPhonebooks(): List<Phonebook> = FritzPhonebooks(config, authToken).loadAll()
 
+    /** Adds [contact] as a new entry to the box' phone book [bookId] (see [FritzPhonebooks.add]). */
+    @Throws(IOException::class)
+    fun addToPhonebook(bookId: Int, contact: PhonebookContact) = FritzPhonebooks(config, authToken).add(bookId, contact)
+
     /** The latest dialled, received and missed calls from the box' call list (see [FritzCallList]). */
     @Throws(IOException::class)
     fun loadRecentCalls(): List<RecentCall> = FritzCallList(config, authToken).load()

@@ -259,6 +259,15 @@
     <string name="speed_dial_choose_number">Tik op het nummer voor snelkeuze %1$s.</string>
     <string name="speed_dial_for">Snelkeuze voor %1$s</string>
     <string name="speed_dial_make">Als snelkeuze instellen</string>
+    <string name="contact_to_phone">Overnemen in de contacten</string>
+    <string name="contact_to_box">Doorgeven aan de FritzBox</string>
+    <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FritzBox ‘%2$s’:</string>
+    <string name="hand_over_duplicate">Het nummer %1$s staat er al, bij ‘%2$s’.</string>
+    <string name="hand_over">Doorgeven</string>
+    <string name="status_handing_over">‘%1$s’ wordt doorgegeven aan de FritzBox…</string>
+    <string name="status_handed_over">‘%1$s’ staat nu in telefoonboek ‘%2$s’.</string>
+    <string name="no_contacts_app">Geen contacten-app op deze telefoon gevonden.</string>
+    <string name="number_actions">Meer acties</string>
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Snelkeuzes van deze telefoon</string>
     <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FritzBox werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>

@@ -113,6 +113,21 @@ the phone books are opened) or **Don't ask again**. It can always be switched in
 **Settings › Phone books › Include this phone's contacts**; switching it off there also stops the
 question. The permission itself can be revoked in the Android app settings.
 
+### Taking over and handing over contacts
+
+A long press on a number – in **Phone books** or in **Recent** – opens a menu:
+
+- **Add to this phone's contacts** (for the box' contacts and recent calls): the phone's contacts app
+  opens with a new contact filled in – name and numbers with their kind (home, mobile, work, fax,
+  other) – to be saved there, in the account chosen there. Pickelhaube needs no permission for this.
+- **Hand over to the FritzBox** (for the phone's own contacts and recent calls, while the box in use
+  is reachable and its phone books are loaded): asks into which phone book of the box, says if one of
+  the numbers is already in it, and adds the contact with all its numbers as a new entry (TR-064
+  `X_AVM-DE_OnTel` `SetPhonebookEntryUID`). Kinds the box does not know become *other*.
+- **Make speed dial** (see below).
+
+Each is a one-off copy of a single contact, not a synchronisation.
+
 ### Recent calls
 
 The **Recent** tab lists the numbers recently dialled, received or missed, newest first, each number
@@ -156,7 +171,7 @@ Speed dials come from two sources that never collide, each of which can be switc
   and number are kept as a copy). Long-press the digit in the dialer to use one; digits with a speed
   dial have a small dot. Set them up in the picker's **Speed dial** tab (tap a free slot, then the
   number in the phone books; long-press a set one to change or remove it), or long-press a number in
-  the **Phone books** tab. Switch: **Settings › Speed dial › This phone's speed dials** (on by default).
+  the **Phone books** tab and choose **Make speed dial**. Switch: **Settings › Speed dial › This phone's speed dials** (on by default).
 - **FritzBox** – the two-digit speed dials (**00 to 99**) set up in the phone books of the box in use
   (the `quickdial` attribute of its phone book export), the same ones its handsets dial with `**7`.
   So they depend on where you are. Tap the first digit and long-press the second, or enter `**7` and

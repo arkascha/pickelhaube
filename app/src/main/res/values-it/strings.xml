@@ -263,6 +263,15 @@
     <string name="speed_dial_choose_number">Tocca il numero per la selezione rapida %1$s.</string>
     <string name="speed_dial_for">Selezione rapida per %1$s</string>
     <string name="speed_dial_make">Imposta come selezione rapida</string>
+    <string name="contact_to_phone">Aggiungi ai contatti del telefono</string>
+    <string name="contact_to_box">Passa alla FritzBox</string>
+    <string name="hand_over_text">«%1$s» va in questa rubrica della FritzBox «%2$s»:</string>
+    <string name="hand_over_duplicate">Il numero %1$s c’è già, presso «%2$s».</string>
+    <string name="hand_over">Passa</string>
+    <string name="status_handing_over">Passaggio di «%1$s» alla FritzBox…</string>
+    <string name="status_handed_over">«%1$s» è ora nella rubrica «%2$s».</string>
+    <string name="no_contacts_app">Nessuna app dei contatti su questo telefono.</string>
+    <string name="number_actions">Altre azioni</string>
     <string name="dialer_speed_dial_label">Selezione rapida %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Selezioni rapide di questo telefono</string>
     <string name="settings_phone_speed_dials_hint">Selezioni rapide da 1 a 9, scelte dalle rubriche e salvate su questo telefono, quindi funzionano con ogni FritzBox. Per usarne una, tieni premuta la sua cifra nel tastierino.</string>

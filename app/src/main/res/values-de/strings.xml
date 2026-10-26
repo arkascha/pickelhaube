@@ -258,7 +258,16 @@
     <string name="speed_dial_remove">Entfernen</string>
     <string name="speed_dial_choose_number">Tippe auf die Nummer für Kurzwahl %1$s.</string>
     <string name="speed_dial_for">Kurzwahl für %1$s</string>
-    <string name="speed_dial_make">Als Kurzwahl</string>
+    <string name="speed_dial_make">Als Kurzwahl festlegen</string>
+    <string name="contact_to_phone">In die Kontakte übernehmen</string>
+    <string name="contact_to_box">An die FritzBox übergeben</string>
+    <string name="hand_over_text">„%1$s“ kommt in dieses Telefonbuch der FritzBox „%2$s“:</string>
+    <string name="hand_over_duplicate">Die Nummer %1$s steht dort schon, bei „%2$s“.</string>
+    <string name="hand_over">Übergeben</string>
+    <string name="status_handing_over">Übergebe „%1$s“ an die FritzBox…</string>
+    <string name="status_handed_over">„%1$s“ steht jetzt im Telefonbuch „%2$s“.</string>
+    <string name="no_contacts_app">Auf diesem Telefon ist keine Kontakte-App vorhanden.</string>
+    <string name="number_actions">Weitere Aktionen</string>
     <string name="dialer_speed_dial_label">Kurzwahl %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Kurzwahlen dieses Telefons</string>
     <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FritzBox. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>

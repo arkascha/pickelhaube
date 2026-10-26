@@ -267,6 +267,15 @@
     <string name="speed_dial_choose_number">Dotknij numeru dla szybkiego wybierania %1$s.</string>
     <string name="speed_dial_for">Szybkie wybieranie: %1$s</string>
     <string name="speed_dial_make">Ustaw jako szybkie wybieranie</string>
+    <string name="contact_to_phone">Dodaj do kontaktów telefonu</string>
+    <string name="contact_to_box">Przekaż do FritzBox</string>
+    <string name="hand_over_text">„%1$s” trafi do tej książki telefonicznej FritzBox „%2$s”:</string>
+    <string name="hand_over_duplicate">Numer %1$s już tam jest, przy „%2$s”.</string>
+    <string name="hand_over">Przekaż</string>
+    <string name="status_handing_over">Przekazywanie „%1$s” do FritzBox…</string>
+    <string name="status_handed_over">„%1$s” jest teraz w książce telefonicznej „%2$s”.</string>
+    <string name="no_contacts_app">Na tym telefonie nie ma aplikacji kontaktów.</string>
+    <string name="number_actions">Więcej działań</string>
     <string name="dialer_speed_dial_label">Szybkie wybieranie %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Szybkie wybieranie tego telefonu</string>
     <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FritzBox. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>

@@ -69,7 +69,8 @@ import java.text.Collator
  * The number picker's "Phone books" tab: searchable list of all contacts from the box' phone
  * books (if used for the box in use) and optionally the phone's own. Tapping a number puts it into
  * the dialer – or, while a speed dial is being set up, makes it that speed dial. A long press on a
- * number makes it one of this phone's speed dials.
+ * number opens a menu: make it one of this phone's speed dials, take a contact of the box over into
+ * this phone's contacts, or hand one of this phone's over to the box.
  */
 @Composable
 fun PhonebookTab(
@@ -91,6 +92,12 @@ fun PhonebookTab(
     onSetSpeedDial: (String, String, String) -> Unit,
     /** Setting up this phone's speed dial with this slot: the next tapped number becomes it. */
     assigningSpeedDial: String?,
+    /** The phone books of the box in use a contact can be handed over to (empty = none, e.g. not reachable). */
+    boxBooks: List<Phonebook>,
+    /** Name of the box in use, as in the settings. */
+    boxName: String?,
+    /** Hands a contact over to a phone book of the box. */
+    onHandOver: (Phonebook, PhonebookContact) -> Unit,
     onCancelAssigning: () -> Unit,
     /** Called when the feature is on and access is (or became) granted: (re)load the contacts. */
     onDeviceContactsAllowed: () -> Unit,
@@ -117,8 +124,24 @@ fun PhonebookTab(
         )
     }
 
-    // --- the phone's own contacts: optional, switched on in the settings ---
     val context = LocalContext.current
+    // Contact of this phone being handed over to the box: choosing the phone book.
+    var handOverFor by remember { mutableStateOf<PhonebookContact?>(null) }
+    handOverFor?.takeIf { boxBooks.isNotEmpty() }?.let { contact ->
+        HandOverDialog(
+            contact = contact,
+            books = boxBooks,
+            boxName = boxName,
+            dialingCodes = dialingCodes,
+            onHandOver = { book ->
+                handOverFor = null
+                onHandOver(book, contact)
+            },
+            onDismiss = { handOverFor = null },
+        )
+    }
+
+    // --- the phone's own contacts: optional, switched on in the settings ---
     var contactsAllowed by remember { mutableStateOf(DeviceContacts.hasPermission(context)) }
     // Re-check when coming back, e.g. from the system app settings.
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -231,11 +254,21 @@ fun PhonebookTab(
                         .fillMaxHeight(),
                 ) {
                     items(filtered) { contact ->
+                        val fromPhone = contact.book == DeviceContacts.BOOK_NAME
+                        val makeSpeedDial = stringResource(R.string.speed_dial_make)
+                        val toBox = stringResource(R.string.contact_to_box)
+                        val toPhone = stringResource(R.string.contact_to_phone)
                         ContactRow(
                             contact,
                             showBook = phonebooks.size > 1,
                             onPick = { number -> onPick(contact.name, number) },
-                            onLongPress = phoneSpeedDials?.let { { number -> speedDialFor = contact.name to number } },
+                            actions = { number ->
+                                listOfNotNull(
+                                    phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact.name to number } },
+                                    if (fromPhone && boxBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                                    if (!fromPhone) NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) } else null,
+                                )
+                            },
                         )
                         HorizontalDivider()
                     }
@@ -371,15 +404,15 @@ private fun SpeedDialSlotDialog(
     )
 }
 
-/** Name, then one tappable line per number; a long press makes the number a speed dial. */
+/** Name, then one tappable line per number; a long press opens the menu of the number's [actions]. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ContactRow(
     contact: PhonebookContact,
     showBook: Boolean,
     onPick: (String) -> Unit,
-    /** Null when this phone's speed dials are switched off. */
-    onLongPress: ((String) -> Unit)?,
+    /** What can be done with a number (none: no long press). */
+    actions: (String) -> List<NumberAction>,
 ) {
     val haptics = LocalHapticFeedback.current
     Column(Modifier.padding(vertical = 8.dp)) {
@@ -402,34 +435,39 @@ private fun ContactRow(
             }
         }
         contact.numbers.forEach { n ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .combinedClickable(
-                        onClick = { onPick(n.number) },
-                        onLongClickLabel = onLongPress?.let { stringResource(R.string.speed_dial_make) },
-                        onLongClick = onLongPress?.let {
-                            {
-                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                it(n.number)
-                            }
-                        },
+            val numberActions = actions(n.number)
+            var menu by remember { mutableStateOf(false) }
+            Box {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .combinedClickable(
+                            onClick = { onPick(n.number) },
+                            onLongClickLabel = stringResource(R.string.number_actions).takeIf { numberActions.isNotEmpty() },
+                            onLongClick = if (numberActions.isEmpty()) null else {
+                                {
+                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    menu = true
+                                }
+                            },
+                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                ) {
+                    Icon(
+                        Icons.Default.Call,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
                     )
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-            ) {
-                Icon(
-                    Icons.Default.Call,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-                Spacer(Modifier.width(12.dp))
-                Text(n.number, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                Text(
-                    numberTypeLabel(n.type),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                    Spacer(Modifier.width(12.dp))
+                    Text(n.number, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    Text(
+                        numberTypeLabel(n.type),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                NumberActionsMenu(expanded = menu, actions = numberActions, onDismiss = { menu = false })
             }
         }
     }
@@ -452,8 +490,8 @@ private fun bookLabel(name: String): String =
     if (name == DeviceContacts.BOOK_NAME) stringResource(R.string.this_phone) else name
 
 /**
- * Label of a number's type. The box tags them "home", "mobile", …; the phone's own contacts
- * already bring Android's label in the system language, which is shown as it is.
+ * Label of a number's type. The box tags them "home", "mobile", …, and so do the phone's own
+ * contacts for these kinds; for others they bring Android's label, which is shown as it is.
  */
 @Composable
 private fun numberTypeLabel(type: String): String = when (type.lowercase()) {

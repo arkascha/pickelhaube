@@ -55,6 +55,8 @@ class MainActivity : ComponentActivity() {
                     LanguageScreen(onBack = viewModel::closeLanguage)
                 } else if (state.showPicker && !state.showSettings) {
                     val routerBooksEnabled = state.activeProfile?.phonebooksEnabled ?: true
+                    // The box' phone books a contact can be handed over to: only while it is there.
+                    val boxBooks = if (state.phonebooksLoaded && !state.noBoxReachable) state.phonebooks else emptyList()
                     // While setting up a speed dial, "back" only cancels that.
                     BackHandler {
                         if (state.assigningSpeedDial != null) viewModel.cancelAssigningSpeedDial() else viewModel.closePicker()
@@ -82,6 +84,8 @@ class MainActivity : ComponentActivity() {
                                 callLogProblem = state.callLogProblem,
                                 busy = state.busy,
                                 onPick = viewModel::pickNumber,
+                                boxBooks = boxBooks,
+                                onHandOver = viewModel::handOverToBox,
                                 onReloadCallLog = viewModel::loadCallLog,
                                 onDisableCallLog = viewModel::disableCallLog,
                             )
@@ -101,6 +105,9 @@ class MainActivity : ComponentActivity() {
                                 onSetSpeedDial = viewModel::setPhoneSpeedDial,
                                 assigningSpeedDial = state.assigningSpeedDial,
                                 onCancelAssigning = viewModel::cancelAssigningSpeedDial,
+                                boxBooks = boxBooks,
+                                boxName = state.activeProfile?.name,
+                                onHandOver = viewModel::handOverToBox,
                                 onDeviceContactsAllowed = viewModel::loadDeviceContacts,
                                 onDisableDeviceContacts = { viewModel.setDeviceContactsEnabled(false) },
                                 askForDeviceContacts = state.askForDeviceContacts,

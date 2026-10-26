@@ -26,6 +26,7 @@ import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.Phonebook
+import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.RecentCall
 import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
@@ -732,6 +733,15 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             UiText.Plural(R.plurals.status_contacts_loaded, books.sumOf { it.contacts.size })
         }
     }
+
+    /** Hands [contact] over to the box' phone book [book] as a new entry, then reads the phone books anew. */
+    fun handOverToBox(book: Phonebook, contact: PhonebookContact) =
+        runOnBox(uiText(R.string.status_handing_over, contact.name)) { dialer ->
+            dialer.addToPhonebook(book.id, contact)
+            val books = dialer.loadPhonebooks()
+            _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+            uiText(R.string.status_handed_over, contact.name, book.name)
+        }
 
     /** Answer to the "include this phone's contacts?" question on the picker's phone book tab. */
     fun answerDeviceContactsQuestion(answer: DeviceContactsAnswer) {

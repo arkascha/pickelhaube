@@ -1,10 +1,12 @@
 package org.rustygnome.pickelhaube.data
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.provider.Settings
 import androidx.core.content.ContextCompat
@@ -58,8 +60,10 @@ object DeviceContacts {
                 if (number.isEmpty()) continue
                 val id = c.getLong(idCol)
                 val name = c.getString(nameCol)?.trim().orEmpty()
-                val label = Phone.getTypeLabel(context.resources, c.getInt(typeCol), c.getString(labelCol))
-                    .toString()
+                // The kinds the box knows by its tags, so both are labelled alike; others by Android's label.
+                val androidType = c.getInt(typeCol)
+                val label = BOX_TYPES[androidType]
+                    ?: Phone.getTypeLabel(context.resources, androidType, c.getString(labelCol)).toString()
                 val entry = byContact.getOrPut(id) { Entry(name, mutableListOf()) }
                 // The same number is often stored twice (e.g. synced from two accounts).
                 val digits = number.filter { it.isDigit() || it == '+' }
@@ -74,4 +78,36 @@ object DeviceContacts {
         }.sortedBy { it.name.lowercase() }
         return Phonebook(BOOK_ID, BOOK_NAME, contacts)
     }
+
+    /**
+     * Opens the contacts app with a new contact filled in from [contact] – name and numbers with
+     * their kind –, to be saved there (in the account chosen there). Needs no permission.
+     */
+    fun insertIntent(contact: PhonebookContact): Intent {
+        val rows = ArrayList(
+            contact.numbers.map { n ->
+                ContentValues().apply {
+                    put(ContactsContract.Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)
+                    put(Phone.NUMBER, n.number)
+                    put(Phone.TYPE, ANDROID_TYPES[n.type.lowercase()] ?: Phone.TYPE_OTHER)
+                }
+            },
+        )
+        return Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI).apply {
+            // A contact without a name is shown by its number: then leave the name to fill in.
+            if (contact.numbers.none { it.number == contact.name }) putExtra(ContactsContract.Intents.Insert.NAME, contact.name)
+            putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, rows)
+        }
+    }
+
+    /** Android's kinds of numbers as the box tags them. */
+    private val BOX_TYPES = mapOf(
+        Phone.TYPE_HOME to "home",
+        Phone.TYPE_MOBILE to "mobile",
+        Phone.TYPE_WORK to "work",
+        Phone.TYPE_FAX_WORK to "fax_work",
+        Phone.TYPE_OTHER to "other",
+    )
+
+    private val ANDROID_TYPES = BOX_TYPES.entries.associate { (android, box) -> box to android } + ("fax" to Phone.TYPE_FAX_WORK)
 }
