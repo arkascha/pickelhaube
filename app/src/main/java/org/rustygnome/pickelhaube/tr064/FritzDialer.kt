@@ -82,12 +82,24 @@ class FritzDialer(
         BoxInfo.from(client.call(DEVICE_INFO_SERVICE_TYPE, DEVICE_INFO_CONTROL_URL, "GetInfo"))
 
     /**
-     * The box' country and area code (`GetVoIPCommonCountryCode`, `GetVoIPCommonAreaCode`), for
+     * The box' country and area code (`X_AVM-DE_GetVoIPCommonCountryCode`, `X_AVM-DE_GetVoIPCommonAreaCode`,
+     * on a box without them the standard `GetVoIPCommonCountryCode`, `GetVoIPCommonAreaCode`), for
      * comparing numbers written in different ways; null if the box has no country code set.
      */
     @Throws(IOException::class)
-    fun dialingCodes(): DialingCodes? =
-        DialingCodes.from(call("GetVoIPCommonCountryCode"), call("GetVoIPCommonAreaCode"))
+    fun dialingCodes(): DialingCodes? = DialingCodes.from(
+        callOr("X_AVM-DE_GetVoIPCommonCountryCode", "GetVoIPCommonCountryCode"),
+        callOr("X_AVM-DE_GetVoIPCommonAreaCode", "GetVoIPCommonAreaCode"),
+    )
+
+    /** [action], or – if the box does not know it – [fallback]. */
+    private fun callOr(action: String, fallback: String): Map<String, String> = try {
+        call(action)
+    } catch (_: Tr064Exception) {
+        call(fallback)
+    } catch (_: HttpStatusException) {
+        call(fallback)
+    }
 
     /** The logged-in user's rights (`LANConfigSecurity` `X_AVM-DE_GetCurrentUser`). */
     @Throws(IOException::class)
@@ -178,13 +190,20 @@ data class DialingCodes(
     val nationalPrefix: String = "0",
 ) {
     companion object {
-        /** From the answers of `GetVoIPCommonCountryCode` and `GetVoIPCommonAreaCode`; null without country code. */
+        /**
+         * From the answers of `X_AVM-DE_GetVoIPCommonCountryCode` and `…AreaCode`, or of the standard
+         * `GetVoIPCommonCountryCode` and `…AreaCode` (without prefixes: the usual "00" and "0" are
+         * assumed, and taken off the codes should they be part of them); null without country code.
+         */
         fun from(country: Map<String, String>, area: Map<String, String>): DialingCodes? {
-            val countryCode = country["NewX_AVM-DE_LKZ"].digitsOrNull() ?: return null
+            val countryCode = (country["NewX_AVM-DE_LKZ"] ?: country["NewVoIPCountryCode"])
+                // A country code never starts with 0: leading zeros are the international prefix.
+                ?.filter(Char::isDigit)?.trimStart('0')?.takeIf { it.isNotEmpty() } ?: return null
             return DialingCodes(
                 countryCode = countryCode,
                 internationalPrefix = country["NewX_AVM-DE_LKZPrefix"].digitsOrNull() ?: "00",
-                areaCode = area["NewX_AVM-DE_OKZ"].digitsOrNull(),
+                areaCode = area["NewX_AVM-DE_OKZ"].digitsOrNull()
+                    ?: area["NewVoIPAreaCode"].digitsOrNull()?.removePrefix("0")?.takeIf { it.isNotEmpty() },
                 // Present but empty is meaningful (no national prefix); missing means the usual "0".
                 nationalPrefix = area["NewX_AVM-DE_OKZPrefix"]?.filter(Char::isDigit) ?: "0",
             )

@@ -53,6 +53,15 @@ class NumberKeyTest {
         assertEquals(null, DialingCodes.from(mapOf("NewX_AVM-DE_LKZ" to ""), emptyMap()))
         assertEquals(DialingCodes("49"), DialingCodes.from(mapOf("NewX_AVM-DE_LKZ" to "49"), emptyMap()))
         assertEquals("", DialingCodes.from(mapOf("NewX_AVM-DE_LKZ" to "39"), mapOf("NewX_AVM-DE_OKZPrefix" to ""))?.nationalPrefix)
+        // The standard actions of a box without AVM's: codes only, possibly with their prefixes.
+        assertEquals(
+            DialingCodes("49", "00", "30", "0"),
+            DialingCodes.from(mapOf("NewVoIPCountryCode" to "49"), mapOf("NewVoIPAreaCode" to "30")),
+        )
+        assertEquals(
+            DialingCodes("49", "00", "30", "0"),
+            DialingCodes.from(mapOf("NewVoIPCountryCode" to "0049"), mapOf("NewVoIPAreaCode" to "030")),
+        )
     }
 
     @Test

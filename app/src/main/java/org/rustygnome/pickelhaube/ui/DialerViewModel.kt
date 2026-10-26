@@ -413,8 +413,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 config = _state.value.config,
                 deviceId = identity?.udn ?: previous?.deviceId,
                 model = info?.model ?: identity?.modelName ?: previous?.model,
-                softwareVersion = info?.softwareVersion ?: previous?.softwareVersion,
-                serialNumber = info?.serialNumber ?: previous?.serialNumber,
+                // Without the rights for GetInfo, the public device description tells them as well.
+                softwareVersion = info?.softwareVersion ?: identity?.softwareVersion ?: previous?.softwareVersion,
+                serialNumber = info?.serialNumber ?: identity?.serialNumber ?: previous?.serialNumber,
                 dialingCodes = codes ?: previous?.dialingCodes,
                 // Rights read before belong to the user of then.
                 userRights = rights ?: previous?.userRights?.takeIf { previous.config.username == config.username },
@@ -883,17 +884,23 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun verifyAndLearn(dialer: FritzDialer, profile: BoxProfile) {
         val info = readBoxInfo(dialer)
         val serial = info?.serialNumber
-        if (serial != null && profile.serialNumber != null && !serial.equals(profile.serialNumber, ignoreCase = true)) {
+        if (serial != null && profile.serialNumber != null && !sameSerial(serial, profile.serialNumber)) {
             throw OtherBoxException(profile.config.host, profile.name)
         }
-        info?.let { settings.updateBoxInfo(profile.id, it) }
+        // Without the rights for GetInfo, the public device description tells the details as well.
+        val identity = if (info == null || profile.deviceId == null) BoxDiscovery.identify(profile.config.host) else null
+        (info ?: identity?.info)?.let { settings.updateBoxInfo(profile.id, it) }
         readDialingCodes(dialer)?.let { settings.updateDialingCodes(profile.id, it) }
         readUserRights(dialer)?.let { settings.updateUserRights(profile.id, it) }
         if (profile.deviceId == null) {
-            BoxDiscovery.identify(profile.config.host)?.let { settings.updateDeviceId(profile.id, it.udn, it.modelName) }
+            identity?.let { settings.updateDeviceId(profile.id, it.udn, it.modelName) }
         }
         _state.update { it.copy(profiles = settings.profiles()) }
     }
+
+    /** Serial numbers (MAC addresses) alike, with or without separators. */
+    private fun sameSerial(a: String, b: String) =
+        a.filter(Char::isLetterOrDigit).equals(b.filter(Char::isLetterOrDigit), ignoreCase = true)
 
     /** Model, FRITZ!OS version and serial number: optional, so a failure (e.g. missing rights) is ignored. */
     private fun readBoxInfo(dialer: FritzDialer): BoxInfo? = runCatching { dialer.deviceInfo() }.getOrNull()

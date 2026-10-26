@@ -63,7 +63,8 @@ The connection page also shows the box' **device details** – model, FRITZ!OS v
 (TR-064 `DeviceInfo` `GetInfo`) – right under its address, to tell boxes apart (hidden while another
 address is entered). They are read when the connection is saved and
 again whenever the phones are loaded, so they stay current after a FRITZ!OS update. Reading them is
-optional: if the box' user lacks the rights for it, they are simply missing. What AVM calls the serial
+optional: if the box' user lacks the rights for it, they are taken from the box' public device description
+(`tr64desc.xml`) instead, which tells them as well. What AVM calls the serial
 number is in fact the box' MAC address, not the number on its label.
 
 Further down, the connection page lists the **permissions** of the configured user as the box reports
@@ -138,7 +139,8 @@ reload button), from two sources:
 
 The same number is often written in different ways: `+49 30 123456`, `0049 30 123456`, `030 123456`
 or – dialled locally – just `123456`. Pickelhaube reads the country and area code set on the box in use
-(TR-064 `X_VoIP` `GetVoIPCommonCountryCode` and `GetVoIPCommonAreaCode`, shown with the device details on
+(TR-064 `X_VoIP` `X_AVM-DE_GetVoIPCommonCountryCode` and `X_AVM-DE_GetVoIPCommonAreaCode` – on a box
+without them the standard `GetVoIPCommonCountryCode` and `GetVoIPCommonAreaCode` –, shown with the device details on
 its connection page) and compares numbers in their international form by the box' rules, so a local
 number counts as one in the box' area. This is used to list each number only once (in **Recent** and
 across the phone books), to give calls without a name the name from the phone books in use, and when

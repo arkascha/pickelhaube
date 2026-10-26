@@ -23,7 +23,14 @@ data class BoxIdentity(
     val modelName: String?,
     /** The host the box answered on. */
     val host: String,
-)
+    /** Raw FRITZ!OS version, e.g. "256.08.25" (see [BoxInfo.softwareVersion]). */
+    val softwareVersion: String? = null,
+    /** The box' MAC address without separators, e.g. "487F80226DA8" (see [BoxInfo.serialNumber]). */
+    val serialNumber: String? = null,
+) {
+    /** The device details as the description tells them – for anyone, without login or rights. */
+    val info: BoxInfo get() = BoxInfo(modelName, softwareVersion, serialNumber)
+}
 
 /**
  * Finds out which FritzBox is reachable in the current network.
@@ -77,7 +84,7 @@ object BoxDiscovery {
             ?.gateway?.hostAddress
     }
 
-    /** Takes the root device's values: the first UDN / friendlyName / modelName in the file. */
+    /** Takes the root device's values: the first UDN / friendlyName / modelName / … in the file. */
     internal fun parse(xml: String, host: String): BoxIdentity? {
         val parser = XmlPullParserFactory.newInstance().newPullParser()
         parser.setInput(StringReader(xml))
@@ -96,10 +103,15 @@ object BoxDiscovery {
             parser.next()
         }
         val udn = values["UDN"] ?: return null
-        return BoxIdentity(udn, values["friendlyName"], values["modelName"], host)
+        return BoxIdentity(
+            udn, values["friendlyName"], values["modelName"], host,
+            // The version is the system version's "Display"; the serial number a MAC with colons.
+            softwareVersion = values["Display"],
+            serialNumber = values["serialNumber"]?.filter(Char::isLetterOrDigit)?.uppercase()?.takeIf { it.isNotEmpty() },
+        )
     }
 
-    private val WANTED = setOf("UDN", "friendlyName", "modelName")
+    private val WANTED = setOf("UDN", "friendlyName", "modelName", "Display", "serialNumber")
 
     private fun hostForUrl(host: String) = if (':' in host && !host.startsWith("[")) "[$host]" else host
 }
