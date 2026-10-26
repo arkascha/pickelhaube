@@ -61,7 +61,7 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
 
     @Throws(IOException::class)
     fun load(id: Int): Phonebook {
-        val info = call("GetPhonebook", mapOf("NewPhonebookId" to id.toString()))
+        val info = call("GetPhonebook", mapOf("NewPhonebookID" to id.toString()))
         val name = info["NewPhonebookName"].orEmpty().ifBlank { "Phone book ${id + 1}" }
         val url = info["NewPhonebookURL"].orEmpty()
         if (url.isBlank()) return Phonebook(id, name, emptyList())
