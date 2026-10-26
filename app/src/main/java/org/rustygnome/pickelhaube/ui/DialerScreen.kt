@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -79,6 +80,8 @@ fun DialerScreen(
     onRefresh: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPicker: () -> Unit,
+    /** Opens the call forwarding of the box in use. */
+    onOpenDeflections: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -103,6 +106,27 @@ fun DialerScreen(
                     }
                 },
                 actions = {
+                    // Call forwarding: only for a reachable box that has some set up. While one is on, the
+                    // button is filled (a badge would sit right on the icon's arrow); while none is, greyed
+                    // out like a disabled one – but it still opens the page.
+                    val deflections = state.deflections?.takeIf { it.isNotEmpty() && !state.noBoxReachable }
+                    if (deflections != null) {
+                        val on = deflections.any { it.enabled }
+                        val description = stringResource(if (on) R.string.deflections_on else R.string.deflections_off)
+                        if (on) {
+                            FilledTonalIconButton(onClick = onOpenDeflections) {
+                                Icon(PhoneForwardedIcon, contentDescription = description)
+                            }
+                        } else {
+                            IconButton(onClick = onOpenDeflections) {
+                                Icon(
+                                    PhoneForwardedIcon,
+                                    contentDescription = description,
+                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                                )
+                            }
+                        }
+                    }
                     IconButton(onClick = onOpenSettings) {
                         Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
                     }

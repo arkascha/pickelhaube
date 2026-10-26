@@ -196,6 +196,17 @@ Speed dials come from two sources that never collide, each of which can be switc
 After a speed dial the number field's label says which one it is and whose number. The **Speed
 dial** tab lists both kinds, so you can pick one without knowing its number.
 
+### Call forwarding
+
+The forwarding symbol in the dialer's top bar (next to the settings) opens the call forwardings set up on
+the box in use (TR-064
+`X_AVM-DE_OnTel` `GetDeflections`): which calls (all, to one of the own numbers, from a number, without
+caller ID, …), where to and when (immediately, delayed, when busy, ringing in parallel, …), each with a
+switch (`SetDeflectionEnable`). TR-064 only lets them be switched on and off: set them up and change them
+on the box (Telephony › Call Handling › Call Forwarding). The symbol sits on a filled circle while one of
+them is switched on, and is greyed out while none is. It is there only while the box in use is reachable and has some set up: they are read
+in the background after connecting – quietly, so a box whose user may not read them just shows none.
+
 ### Language
 
 Pickelhaube is available in English, German, Dutch, French, Italian, Spanish and Polish.

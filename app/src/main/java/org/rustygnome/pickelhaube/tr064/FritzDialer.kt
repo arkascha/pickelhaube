@@ -125,6 +125,14 @@ class FritzDialer(
     fun setSpeedDial(bookId: Int, uid: String, slot: String, number: String?) =
         FritzPhonebooks(config, authToken).setSpeedDial(bookId, uid, slot, number)
 
+    /** The call deflections set up on the box (see [FritzDeflections]). */
+    @Throws(IOException::class)
+    fun loadDeflections(): List<CallDeflection> = FritzDeflections(config, authToken).load()
+
+    /** Switches call deflection [id] on or off. */
+    @Throws(IOException::class)
+    fun setDeflectionEnabled(id: Int, enabled: Boolean) = FritzDeflections(config, authToken).setEnabled(id, enabled)
+
     /** The latest dialled, received and missed calls from the box' call list (see [FritzCallList]). */
     @Throws(IOException::class)
     fun loadRecentCalls(): List<RecentCall> = FritzCallList(config, authToken).load()

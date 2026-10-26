@@ -19,6 +19,7 @@ import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
 import org.rustygnome.pickelhaube.tr064.BoxInfo
+import org.rustygnome.pickelhaube.tr064.CallDeflection
 import org.rustygnome.pickelhaube.tr064.BoxUser
 import org.rustygnome.pickelhaube.tr064.BoxUsers
 import org.rustygnome.pickelhaube.tr064.CertificateInfo
@@ -116,6 +117,10 @@ data class UiState(
     val viewedCertificate: CertificateInfo? = null,
     /** The language screen is open. */
     val showLanguage: Boolean = false,
+    /** The call deflections screen is open. */
+    val showDeflections: Boolean = false,
+    /** The call deflections of the box in use, as last read (null: not read, or reading failed). */
+    val deflections: List<CallDeflection>? = null,
     /** The number picker (tabs "Recent", "Speed dial" and "Phone books") is open. */
     val showPicker: Boolean = false,
     val pickerTab: PickerTab = PickerTab.RECENT,
@@ -452,6 +457,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     phonebooksLoaded = false,
                     boxCalls = emptyList(),
                     boxCallsLoaded = false,
+                    deflections = null,
                     showSettings = it.settingsSaved,
                     showConnectionSettings = false,
                     settingsSaved = true,
@@ -460,6 +466,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             message
         }
         preloadBoxSpeedDials()
+        preloadDeflections()
     }
 
     /** Switches to another configured FritzBox (manually, or after automatic recognition). */
@@ -479,6 +486,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phonebooksLoaded = false,
                 boxCalls = emptyList(),
                 boxCallsLoaded = false,
+                deflections = null,
                 networkNotice = null,
             )
         }
@@ -501,7 +509,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         when {
             remaining.isEmpty() -> {
-                _state.update { it.copy(phones = emptyList(), selectedPhone = null, config = FritzConfig()) }
+                _state.update { it.copy(phones = emptyList(), selectedPhone = null, config = FritzConfig(), deflections = null) }
                 addProfile()
             }
             wasActive -> activateProfile(remaining.first().id)
@@ -692,6 +700,45 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun openLanguage() = _state.update { it.copy(showLanguage = true) }
 
     fun closeLanguage() = _state.update { it.copy(showLanguage = false) }
+
+    // --- call deflections -------------------------------------------------------------
+
+    /** Opens the call deflections of the box in use, read anew. */
+    fun openDeflections() {
+        _state.update { it.copy(showDeflections = true) }
+        loadDeflections()
+    }
+
+    /**
+     * Reads the call deflections of the box in use in the background, so the dialer can show whether
+     * one is switched on. Quietly: a box whose user may not read them just shows none.
+     */
+    private fun preloadDeflections() = runWhenIdle("deflections") {
+        if (_state.value.noBoxReachable || _state.value.deflections != null) return@runWhenIdle
+        val config = _state.value.config
+        viewModelScope.launch {
+            val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadDeflections() }.getOrNull() }
+            // Unless the box in use changed meanwhile.
+            if (deflections != null && _state.value.config == config) _state.update { it.copy(deflections = deflections) }
+        }
+    }
+
+    fun closeDeflections() = _state.update { it.copy(showDeflections = false) }
+
+    fun loadDeflections() = runOnBox(uiText(R.string.status_loading_deflections)) { dialer ->
+        val deflections = dialer.loadDeflections()
+        _state.update { it.copy(deflections = deflections) }
+        uiText(R.string.status_deflections_loaded)
+    }
+
+    /** Switches call deflection [id] on or off on the box, then reads them anew to show what the box did. */
+    fun setDeflectionEnabled(id: Int, enabled: Boolean) =
+        runOnBox(uiText(if (enabled) R.string.status_deflection_on else R.string.status_deflection_off)) { dialer ->
+            dialer.setDeflectionEnabled(id, enabled)
+            val deflections = dialer.loadDeflections()
+            _state.update { it.copy(deflections = deflections) }
+            uiText(if (enabled) R.string.status_deflection_on_done else R.string.status_deflection_off_done)
+        }
 
     /** The picker's reload button: recent calls and phone books. */
     fun reloadPicker() {
@@ -962,6 +1009,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             loadPhones(dialer)
         }
         preloadBoxSpeedDials()
+        preloadDeflections()
     }
 
     /**

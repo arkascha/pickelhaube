@@ -28,6 +28,7 @@ import org.rustygnome.pickelhaube.ui.activeProfile
 import org.rustygnome.pickelhaube.ui.noBoxReachable
 import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
+import org.rustygnome.pickelhaube.ui.DeflectionsScreen
 import org.rustygnome.pickelhaube.ui.LanguageScreen
 import org.rustygnome.pickelhaube.ui.NumberPickerScreen
 import org.rustygnome.pickelhaube.ui.PhonebookTab
@@ -54,7 +55,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             PickelhaubeTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                if (state.showLanguage && state.showSettings) {
+                if (state.showDeflections) {
+                    BackHandler { viewModel.closeDeflections() }
+                    DeflectionsScreen(
+                        boxName = state.activeProfile?.name,
+                        deflections = state.deflections,
+                        busy = state.busy,
+                        onToggle = { deflection, enabled -> viewModel.setDeflectionEnabled(deflection.id, enabled) },
+                        onReload = viewModel::loadDeflections,
+                        onBack = viewModel::closeDeflections,
+                    )
+                } else if (state.showLanguage && state.showSettings) {
                     BackHandler { viewModel.closeLanguage() }
                     LanguageScreen(onBack = viewModel::closeLanguage)
                 } else if (state.showPicker && !state.showSettings) {
@@ -223,6 +234,7 @@ class MainActivity : ComponentActivity() {
                         onRefresh = viewModel::refreshPhones,
                         onOpenSettings = viewModel::openSettings,
                         onOpenPicker = viewModel::openPicker,
+                        onOpenDeflections = viewModel::openDeflections,
                     )
                 }
 
