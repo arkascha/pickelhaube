@@ -483,11 +483,11 @@ fun ConnectionSettingsScreen(
     }
     // The port the box reported for the entered host, if any.
     val boxHttpsPort = securityPort?.takeIf { it.host == host.trim() }?.port
-    // Taken over unless the user chose a port of their own (anything but the usual ones).
+    // Taken over unless the user chose a port of their own (anything but none or the usual ones).
     var suggestedPort by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(boxHttpsPort, useHttps) {
         val reported = boxHttpsPort?.toString() ?: return@LaunchedEffect
-        if (useHttps && port in setOf(FritzConfig.HTTP_PORT.toString(), FritzConfig.HTTPS_PORT.toString(), suggestedPort)) {
+        if (useHttps && port in setOf("", FritzConfig.HTTP_PORT.toString(), FritzConfig.HTTPS_PORT.toString(), suggestedPort)) {
             port = reported
             suggestedPort = reported
         }
@@ -541,9 +541,9 @@ fun ConnectionSettingsScreen(
                     onCheckedChange = { checked ->
                         useHttps = checked
                         // Swap the port along with the protocol unless the user chose a custom one.
-                        if (checked && port == FritzConfig.HTTP_PORT.toString()) {
+                        if (checked && port in setOf("", FritzConfig.HTTP_PORT.toString())) {
                             port = (boxHttpsPort ?: FritzConfig.HTTPS_PORT).toString()
-                        } else if (!checked && port in setOf(FritzConfig.HTTPS_PORT.toString(), suggestedPort)) {
+                        } else if (!checked && port in setOf("", FritzConfig.HTTPS_PORT.toString(), suggestedPort)) {
                             port = FritzConfig.HTTP_PORT.toString()
                         }
                     },
