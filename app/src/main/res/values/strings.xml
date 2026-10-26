@@ -191,6 +191,8 @@
     <string name="error_not_authorized_right">User “%1$s” is logged in but lacks the permission “%2$s”. Grant it under System › FRITZ!Box Users.</string>
     <string name="error_no_dial_help_title">Dial help not available</string>
     <string name="error_no_dial_help">The router does not offer this function via TR-064 (outdated firmware?).</string>
+    <string name="error_technical_details">Technical details</string>
+    <string name="copy">Copy</string>
     <string name="error_router_title">Router error</string>
     <string name="error_router_code_title">Router error %1$s</string>
     <string name="error_router_busy_title">Router busy</string>

@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">L’utilisateur « %1$s » est connecté mais n’a pas le droit « %2$s ». Accordez-le sous Système › Utilisateurs FRITZ!Box.</string>
     <string name="error_no_dial_help_title">Aide à la numérotation indisponible</string>
     <string name="error_no_dial_help">Le routeur ne propose pas cette fonction via TR-064 (FRITZ!OS obsolète ?).</string>
+    <string name="error_technical_details">Détails techniques</string>
+    <string name="copy">Copier</string>
     <string name="error_router_title">Erreur du routeur</string>
     <string name="error_router_code_title">Erreur du routeur %1$s</string>
     <string name="error_router_busy_title">Routeur occupé</string>

@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">Der Benutzer „%1$s“ ist angemeldet, ihm fehlt aber die Berechtigung „%2$s“. Erteile sie unter System › FRITZ!Box-Benutzer.</string>
     <string name="error_no_dial_help_title">Wählhilfe nicht verfügbar</string>
     <string name="error_no_dial_help">Der Router bietet diese Funktion nicht über TR-064 an (veraltetes FRITZ!OS?).</string>
+    <string name="error_technical_details">Technische Details</string>
+    <string name="copy">Kopieren</string>
     <string name="error_router_title">Router-Fehler</string>
     <string name="error_router_code_title">Router-Fehler %1$s</string>
     <string name="error_router_busy_title">Router beschäftigt</string>

@@ -4,6 +4,7 @@ import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.tr064.AuthenticationException
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.HttpStatusException
+import org.rustygnome.pickelhaube.tr064.Tr064Call
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
 import org.rustygnome.pickelhaube.tr064.UserRights
 import java.net.ConnectException
@@ -21,13 +22,51 @@ data class BoxError(
     val title: UiText,
     val detail: UiText,
     val settingsRelated: Boolean,
+    /** The request to the box that failed, and its answer – shown on request; null when not known. */
+    val technical: TechnicalDetails? = null,
 )
+
+/** The failed request to the box ([call]) and what came back ([answer]), for the error's technical details. */
+data class TechnicalDetails(val call: Tr064Call, val answer: String)
+
+/**
+ * The technical details of a failed request to the box as plain text, the same in
+ * every language – to be read, or copied into a message. Long arguments (a phone book entry) are
+ * shortened.
+ */
+fun TechnicalDetails.asText(): String = buildString {
+    // "urn:dslforum-org:service:X_AVM-DE_OnTel:1" → "X_AVM-DE_OnTel:1"
+    appendLine("${call.service.substringAfter("service:")} · ${call.action}")
+    call.arguments.forEach { (name, value) ->
+        val shown = if (value.length > MAX_ARGUMENT) value.take(MAX_ARGUMENT) + "… (${value.length})" else value
+        appendLine("  $name = $shown")
+    }
+    appendLine(answer)
+    append(call.target)
+}
+
+private const val MAX_ARGUMENT = 120
 
 /**
  * Turns technical exceptions into messages that say what is wrong and what to check. [rights]: what
  * the box says the user may do, if known – to name the missing right when the box refuses.
  */
-fun describeError(e: Throwable, config: FritzConfig, rights: UserRights? = null): BoxError {
+fun describeError(e: Throwable, config: FritzConfig, rights: UserRights? = null): BoxError =
+    describeCause(e, config, rights).copy(
+        technical = e.suppressed.filterIsInstance<Tr064Call>().firstOrNull()?.let { TechnicalDetails(it, answerOf(e, it)) },
+    )
+
+/** What came back for a failed [call]: the HTTP status, and the box' error code or what went wrong. */
+private fun answerOf(e: Throwable, call: Tr064Call): String = listOfNotNull(
+    call.status?.let { "HTTP $it" },
+    when (e) {
+        is Tr064Exception -> "UPnP ${e.errorCode ?: "?"} ${e.errorDescription.orEmpty()}".trim()
+        is AuthenticationException, is HttpStatusException -> null
+        else -> "${e.javaClass.simpleName}: ${e.message.orEmpty()}"
+    },
+).joinToString(" · ").ifEmpty { e.javaClass.simpleName }
+
+private fun describeCause(e: Throwable, config: FritzConfig, rights: UserRights?): BoxError {
     val target = "${config.host}:${config.port}"
     return when (e) {
         is AuthenticationException -> BoxError(

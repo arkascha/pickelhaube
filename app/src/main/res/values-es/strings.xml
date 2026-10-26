@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">El usuario «%1$s» ha iniciado sesión, pero le falta el permiso «%2$s». Concédeselo en Sistema › Usuarios de FRITZ!Box.</string>
     <string name="error_no_dial_help_title">Ayuda de marcación no disponible</string>
     <string name="error_no_dial_help">El router no ofrece esta función por TR-064 (¿FRITZ!OS obsoleto?).</string>
+    <string name="error_technical_details">Detalles técnicos</string>
+    <string name="copy">Copiar</string>
     <string name="error_router_title">Error del router</string>
     <string name="error_router_code_title">Error del router %1$s</string>
     <string name="error_router_busy_title">Router ocupado</string>

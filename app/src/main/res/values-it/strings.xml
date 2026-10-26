@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">L’utente «%1$s» ha effettuato l’accesso ma non ha l’autorizzazione «%2$s». Concedila in Sistema › Utenti FRITZ!Box.</string>
     <string name="error_no_dial_help_title">Aiuto alla selezione non disponibile</string>
     <string name="error_no_dial_help">Il router non offre questa funzione tramite TR-064 (FRITZ!OS obsoleto?).</string>
+    <string name="error_technical_details">Dettagli tecnici</string>
+    <string name="copy">Copia</string>
     <string name="error_router_title">Errore del router</string>
     <string name="error_router_code_title">Errore del router %1$s</string>
     <string name="error_router_busy_title">Router occupato</string>

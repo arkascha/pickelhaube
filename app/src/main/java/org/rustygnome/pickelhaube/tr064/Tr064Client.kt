@@ -59,6 +59,20 @@ class Tr064Exception(
 }
 
 /**
+ * A request to the box that failed, attached to its exception (as a suppressed one, so the
+ * exception keeps its type): where it went, which [action] of which [service] with which
+ * [arguments], and the HTTP [status] of the answer, if one came. For the technical details of an
+ * error message – it holds nothing secret: the credentials are no arguments.
+ */
+class Tr064Call(
+    val target: String,
+    val service: String,
+    val action: String,
+    val arguments: Map<String, String>,
+    val status: Int?,
+) : Throwable("$action at $target", null, false, false)
+
+/**
  * Very small generic TR-064 SOAP client.
  *
  * TR-064 is plain SOAP 1.1 over HTTP(S) with digest authentication.
@@ -112,36 +126,45 @@ class Tr064Client(
         action: String,
         arguments: Map<String, String> = emptyMap(),
     ): Map<String, String> {
-        val envelope = buildEnvelope(serviceType, action, arguments, authToken)
-        val request = Request.Builder()
-            .url(config.baseUrl + controlUrl)
-            .header("SOAPACTION", "\"$serviceType#$action\"")
-            .post(envelope.toRequestBody(XML))
-            .build()
+        // The HTTP status of the answer, for the details of a failure.
+        var status: Int? = null
+        try {
+            val envelope = buildEnvelope(serviceType, action, arguments, authToken)
+            val request = Request.Builder()
+                .url(config.baseUrl + controlUrl)
+                .header("SOAPACTION", "\"$serviceType#$action\"")
+                .post(envelope.toRequestBody(XML))
+                .build()
 
-        val call = http.newCall(request)
-        val executed = try {
-            call.execute()
-        } catch (e: SSLException) {
-            val chain = trustManager?.rejectedChain
-            if (chain != null) {
-                throw UntrustedCertificateException(
-                    certificate = CertificateInfo.from(chain.first()),
-                    previouslyTrusted = pinnedDer != null,
-                )
+            val call = http.newCall(request)
+            val executed = try {
+                call.execute()
+            } catch (e: SSLException) {
+                val chain = trustManager?.rejectedChain
+                if (chain != null) {
+                    throw UntrustedCertificateException(
+                        certificate = CertificateInfo.from(chain.first()),
+                        previouslyTrusted = pinnedDer != null,
+                    )
+                }
+                throw e
             }
+
+            executed.use { response ->
+                status = response.code
+                val body = response.body?.string().orEmpty()
+                if (response.code == 401) throw AuthenticationException()
+                if (!response.isSuccessful) {
+                    val fault = parseFault(body)
+                    if (fault != null) throw fault
+                    throw HttpStatusException(response.code)
+                }
+                return parseResponseArguments(body, "${action}Response")
+            }
+        } catch (e: IOException) {
+            // Which request it was: shown with the error on request (see [Tr064Call]).
+            e.addSuppressed(Tr064Call(config.baseUrl, serviceType, action, arguments, status))
             throw e
-        }
-
-        executed.use { response ->
-            val body = response.body?.string().orEmpty()
-            if (response.code == 401) throw AuthenticationException()
-            if (!response.isSuccessful) {
-                val fault = parseFault(body)
-                if (fault != null) throw fault
-                throw HttpStatusException(response.code)
-            }
-            return parseResponseArguments(body, "${action}Response")
         }
     }
 
@@ -159,20 +182,28 @@ class Tr064Client(
             .host(base.host)
             .port(base.port)
             .build()
-        val call = http.newCall(Request.Builder().url(target).get().build())
-        val response = try {
-            call.execute()
-        } catch (e: SSLException) {
-            val chain = trustManager?.rejectedChain
-            if (chain != null) {
-                throw UntrustedCertificateException(CertificateInfo.from(chain.first()), pinnedDer != null)
+        var status: Int? = null
+        try {
+            val call = http.newCall(Request.Builder().url(target).get().build())
+            val response = try {
+                call.execute()
+            } catch (e: SSLException) {
+                val chain = trustManager?.rejectedChain
+                if (chain != null) {
+                    throw UntrustedCertificateException(CertificateInfo.from(chain.first()), pinnedDer != null)
+                }
+                throw e
             }
+            response.use {
+                status = it.code
+                if (it.code == 401) throw AuthenticationException()
+                if (!it.isSuccessful) throw HttpStatusException(it.code)
+                return it.body?.string().orEmpty()
+            }
+        } catch (e: IOException) {
+            // The path only: the query holds the session id.
+            e.addSuppressed(Tr064Call(config.baseUrl, "download", "GET", mapOf("path" to target.encodedPath), status))
             throw e
-        }
-        response.use {
-            if (it.code == 401) throw AuthenticationException()
-            if (!it.isSuccessful) throw HttpStatusException(it.code)
-            return it.body?.string().orEmpty()
         }
     }
 

@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">Użytkownik „%1$s” jest zalogowany, ale brakuje mu uprawnienia „%2$s”. Nadaj je w System › Użytkownicy FRITZ!Box.</string>
     <string name="error_no_dial_help_title">Pomoc przy wybieraniu niedostępna</string>
     <string name="error_no_dial_help">Router nie oferuje tej funkcji przez TR-064 (przestarzały FRITZ!OS?).</string>
+    <string name="error_technical_details">Szczegóły techniczne</string>
+    <string name="copy">Kopiuj</string>
     <string name="error_router_title">Błąd routera</string>
     <string name="error_router_code_title">Błąd routera %1$s</string>
     <string name="error_router_busy_title">Router zajęty</string>

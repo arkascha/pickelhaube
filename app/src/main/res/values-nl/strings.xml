@@ -189,6 +189,8 @@
     <string name="error_not_authorized_right">Gebruiker ‘%1$s’ is ingelogd, maar mist het recht ‘%2$s’. Verleen het onder Systeem › FRITZ!Box-gebruikers.</string>
     <string name="error_no_dial_help_title">Kieshulp niet beschikbaar</string>
     <string name="error_no_dial_help">De router biedt deze functie niet via TR-064 aan (verouderd FRITZ!OS?).</string>
+    <string name="error_technical_details">Technische details</string>
+    <string name="copy">Kopiëren</string>
     <string name="error_router_title">Routerfout</string>
     <string name="error_router_code_title">Routerfout %1$s</string>
     <string name="error_router_busy_title">Router bezet</string>

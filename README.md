@@ -41,7 +41,11 @@ dependencies on first sync. If it offers an AGP / dependency upgrade, accepting 
 Otherwise the settings stay open and an error dialog explains the problem (wrong user name or password,
 missing telephony permission, router not found or not reachable, wrong port / HTTPS setting, router
 temporarily blocking logins). Errors during normal use appear in the same dialog on top of the dialer,
-with **Retry** and, when the cause is likely in the settings, **Open settings**.
+with **Retry** and, when the cause is likely in the settings, **Open settings**. When a request to
+the box failed, **Technical details** unfolds which one it was – TR-064 service and action, its
+arguments (long ones shortened), the HTTP status and the box' error code, and the box' address –
+selectable and with **Copy**, for a message to whoever looks into it. Credentials are no arguments,
+so they never appear there; numbers can.
 
 ### Several FritzBoxes
 
