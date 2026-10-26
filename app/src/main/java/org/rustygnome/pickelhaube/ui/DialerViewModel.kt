@@ -343,6 +343,22 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 securityPort = null,
             )
         }
+        refreshUserRights(profile)
+    }
+
+    private var rightsJob: Job? = null
+
+    /**
+     * Asks the box again what [profile]'s user may do, so the connection page shows the rights as
+     * they are now – they may have been changed on the box since they were last read.
+     */
+    private fun refreshUserRights(profile: BoxProfile) {
+        rightsJob?.cancel()
+        rightsJob = viewModelScope.launch {
+            val rights = withContext(Dispatchers.IO) { readUserRights(FritzDialer(profile.config)) } ?: return@launch
+            settings.updateUserRights(profile.id, rights)
+            _state.update { it.copy(profiles = settings.profiles()) }
+        }
     }
 
     private var usersJob: Job? = null
@@ -1061,8 +1077,17 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** Country and area code: only for comparing numbers, so a failure is ignored as well. */
     private fun readDialingCodes(dialer: FritzDialer): DialingCodes? = runCatching { dialer.dialingCodes() }.getOrNull()
 
-    /** The user's rights: for explaining refusals, so a failure is ignored as well. */
-    private fun readUserRights(dialer: FritzDialer): UserRights? = runCatching { dialer.userRights() }.getOrNull()
+    /**
+     * The user's rights: for explaining refusals, so a failure is ignored as well – except a refusal
+     * to tell them, which makes the ones read before unknown: none (not shown) instead of outdated.
+     */
+    private fun readUserRights(dialer: FritzDialer): UserRights? = try {
+        dialer.userRights()
+    } catch (e: Tr064Exception) {
+        if (e.errorCode == Tr064Exception.NOT_AUTHORIZED) UserRights(null, emptyMap()) else null
+    } catch (_: Exception) {
+        null
+    }
 
     /**
      * Box requests that came in while another one was running (one per [runWhenIdle] key, so
@@ -1188,6 +1213,14 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     val rights = if (error is Tr064Exception && error.errorCode == Tr064Exception.NOT_AUTHORIZED) {
                         withContext(Dispatchers.IO) { readUserRights(FritzDialer(config)) }
                     } else null
+                    // They have changed, apparently: keep them for the connection page as well.
+                    if (rights != null && !verifyingSettings) {
+                        settings.activeProfile()?.takeIf { it.config.host == config.host && it.config.username == config.username }
+                            ?.let { profile ->
+                                settings.updateUserRights(profile.id, rights)
+                                _state.update { it.copy(profiles = settings.profiles()) }
+                            }
+                    }
                     _state.update {
                         it.copy(
                             busy = false,
