@@ -263,6 +263,10 @@
     <string name="speed_dial_box_for">FritzBox-Kurzwahl für %1$s</string>
     <string name="speed_dial_box_new_entry">Die Nummer steht noch in keinem Telefonbuch der FritzBox. Neuer Eintrag in:</string>
     <string name="speed_dial_box_online">„%1$s“ steht nur im Online-Telefonbuch „%2$s“, das die FritzBox nicht ändern kann. Für die Kurzwahl bekommt der Kontakt einen Eintrag in einem eigenen Telefonbuch der FritzBox.</string>
+    <string name="copy_delete">Kopie auf FritzBox löschen</string>
+    <string name="copy_delete_text">„%1$s“ steht im Telefonbuch „%2$s“ der FritzBox als Kopie eines Kontakts aus dem Online-Telefonbuch „%3$s“ – etwa für eine Kurzwahl. Diesen Eintrag löschen? Im Online-Telefonbuch bleibt der Kontakt erhalten; eine Kurzwahl des Eintrags entfällt.</string>
+    <string name="status_deleting_copy">Lösche die Kopie von „%1$s“ auf der FritzBox…</string>
+    <string name="status_copy_deleted">Kopie von „%1$s“ auf der FritzBox gelöscht.</string>
     <string name="speed_dial_box_add">Neue FritzBox-Kurzwahl</string>
     <string name="speed_dial_choose_number_box">Tippe auf die Nummer für die FritzBox-Kurzwahl %1$s.</string>
     <string name="speed_dial_choose_number_box_new">Tippe auf die Nummer für eine neue FritzBox-Kurzwahl.</string>

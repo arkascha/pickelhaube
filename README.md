@@ -187,6 +187,10 @@ Speed dials come from two sources that never collide, each of which can be switc
   Online phone books the box syncs from a provider (Google, CardDAV, …; `owner` 240 and up in the
   export) cannot be changed through the box: a number only there gets an entry with the speed dial in
   one of the box' own phone books – the dialog says so. They are not offered for handing over either.
+  Such a copy can be deleted again (**Delete copy on the FritzBox** in the menu of its speed dial or of its number
+  in **Phone books**, TR-064 `DeletePhonebookEntryUID`). Pickelhaube does not remember which entries it
+  made: an entry counts as a copy when one of the box' online phone books has a contact of the same name
+  with all of its numbers. Other entries of the box cannot be deleted from the app.
 
 After a speed dial the number field's label says which one it is and whose number. The **Speed
 dial** tab lists both kinds, so you can pick one without knowing its number.

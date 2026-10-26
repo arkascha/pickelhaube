@@ -267,6 +267,10 @@
     <string name="speed_dial_box_for">Selezione rapida della FritzBox per %1$s</string>
     <string name="speed_dial_box_new_entry">Il numero non è ancora in nessuna rubrica della FritzBox. Nuova voce in:</string>
     <string name="speed_dial_box_online">«%1$s» è solo nella rubrica online «%2$s», che la FritzBox non può modificare. Per la selezione rapida viene creata una voce in una rubrica propria della FritzBox.</string>
+    <string name="copy_delete">Elimina copia sulla FritzBox</string>
+    <string name="copy_delete_text">«%1$s» è nella rubrica «%2$s» della FritzBox come copia di un contatto della rubrica online «%3$s», ad es. per una selezione rapida. Eliminare questa voce? Il contatto resta nella rubrica online; un’eventuale selezione rapida della voce viene rimossa.</string>
+    <string name="status_deleting_copy">Eliminazione della copia di «%1$s» sulla FritzBox…</string>
+    <string name="status_copy_deleted">Copia di «%1$s» sulla FritzBox eliminata.</string>
     <string name="speed_dial_box_add">Nuova selezione rapida della FritzBox</string>
     <string name="speed_dial_choose_number_box">Tocca il numero per la selezione rapida %1$s della FritzBox.</string>
     <string name="speed_dial_choose_number_box_new">Tocca il numero per una nuova selezione rapida della FritzBox.</string>

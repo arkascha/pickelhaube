@@ -119,3 +119,17 @@ fun HandOverDialog(
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }
+
+/** Asks whether to delete [copy], an entry of the box that copies a contact of an online phone book. */
+@Composable
+fun DeleteCopyDialog(copy: OnlineCopy, onDelete: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.copy_delete)) },
+        text = { Text(stringResource(R.string.copy_delete_text, copy.entry.name, copy.entry.book, copy.onlineBook)) },
+        confirmButton = {
+            TextButton(onClick = onDelete) { Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}

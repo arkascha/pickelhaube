@@ -1,5 +1,9 @@
 package org.rustygnome.pickelhaube
 
+import org.rustygnome.pickelhaube.ui.onlineCopies
+import org.rustygnome.pickelhaube.ui.numberKey
+import org.rustygnome.pickelhaube.ui.deviceCountryIso
+import androidx.compose.ui.platform.LocalContext
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -61,6 +65,13 @@ class MainActivity : ComponentActivity() {
                     val boxSpeedDials = remember(state.phonebooks) { SpeedDials.fromPhonebooks(state.phonebooks) }
                     // The box' speed dials as far as they can be set up now.
                     val editableBoxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled && boxBooks.any { !it.online } }
+                    // Entries the box' own phone books have as copies of online contacts: they may be deleted.
+                    val context = LocalContext.current
+                    val dialingCodes = state.activeProfile?.dialingCodes
+                    val onlineCopies = remember(boxBooks, dialingCodes) {
+                        val countryIso = deviceCountryIso(context)
+                        onlineCopies(boxBooks) { numberKey(it, countryIso, dialingCodes) }
+                    }
                     // While setting up a speed dial, "back" only cancels that.
                     BackHandler {
                         if (state.assigningSpeedDial != null) viewModel.cancelAssigningSpeedDial() else viewModel.closePicker()
@@ -114,6 +125,8 @@ class MainActivity : ComponentActivity() {
                                 assigningSpeedDial = state.assigningSpeedDial,
                                 boxSpeedDials = editableBoxSpeedDials,
                                 onSetBoxSpeedDial = viewModel::setBoxSpeedDial,
+                                onlineCopies = onlineCopies,
+                                onDeleteCopy = viewModel::deleteOnlineCopy,
                                 onCancelAssigning = viewModel::cancelAssigningSpeedDial,
                                 boxBooks = boxBooks,
                                 boxName = state.activeProfile?.name,
@@ -137,6 +150,8 @@ class MainActivity : ComponentActivity() {
                                 boxEditable = editableBoxSpeedDials != null,
                                 onAssignBox = viewModel::startAssigningBoxSpeedDial,
                                 onRemoveBox = viewModel::removeBoxSpeedDial,
+                                onlineCopies = onlineCopies,
+                                onDeleteCopy = viewModel::deleteOnlineCopy,
                             )
                         },
                     )

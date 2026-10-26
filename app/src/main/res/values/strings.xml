@@ -265,6 +265,10 @@
     <string name="speed_dial_box_for">FritzBox speed dial for %1$s</string>
     <string name="speed_dial_box_new_entry">The number is in none of the FritzBox’s phone books yet. New entry in:</string>
     <string name="speed_dial_box_online">“%1$s” is only in the online phone book “%2$s”, which the FritzBox cannot change. For the speed dial, it gets an entry in one of the FritzBox’s own phone books.</string>
+    <string name="copy_delete">Delete copy on the FritzBox</string>
+    <string name="copy_delete_text">“%1$s” is in the FritzBox phone book “%2$s” as a copy of a contact from the online phone book “%3$s” – e.g. for a speed dial. Delete this entry? The contact stays in the online phone book; a speed dial of the entry goes with it.</string>
+    <string name="status_deleting_copy">Deleting the copy of “%1$s” on the FritzBox…</string>
+    <string name="status_copy_deleted">Copy of “%1$s” on the FritzBox deleted.</string>
     <string name="speed_dial_box_add">New FritzBox speed dial</string>
     <string name="speed_dial_choose_number_box">Tap the number for FritzBox speed dial %1$s.</string>
     <string name="speed_dial_choose_number_box_new">Tap the number for a new FritzBox speed dial.</string>

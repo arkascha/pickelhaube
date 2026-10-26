@@ -89,6 +89,12 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
         )
     }
 
+    /** Deletes entry [uid] from phone book [id] (`DeletePhonebookEntryUID`). */
+    @Throws(IOException::class)
+    fun delete(id: Int, uid: String) {
+        call("DeletePhonebookEntryUID", mapOf("NewPhonebookID" to id.toString(), "NewPhonebookEntryUniqueID" to uid))
+    }
+
     private fun call(action: String, args: Map<String, String> = emptyMap()) =
         client.call(SERVICE_TYPE, CONTROL_URL, action, args)
 

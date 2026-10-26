@@ -840,6 +840,14 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    /** Deletes [copy], an entry copying a contact of an online phone book, from the box; then reads the phone books anew. */
+    fun deleteOnlineCopy(copy: OnlineCopy) = runOnBox(uiText(R.string.status_deleting_copy, copy.entry.name)) { dialer ->
+        dialer.deletePhonebookEntry(copy.entry.bookId!!, copy.entry.uid!!)
+        val books = dialer.loadPhonebooks()
+        _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+        uiText(R.string.status_copy_deleted, copy.entry.name)
+    }
+
     /** Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books anew. */
     fun removeBoxSpeedDial(slot: String) = runOnBox(uiText(R.string.status_removing_speed_dial, slot)) { dialer ->
         _state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }

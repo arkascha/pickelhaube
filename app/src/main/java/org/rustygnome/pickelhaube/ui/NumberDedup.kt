@@ -4,6 +4,7 @@ import android.content.Context
 import android.telephony.PhoneNumberUtils
 import android.telephony.TelephonyManager
 import org.rustygnome.pickelhaube.tr064.DialingCodes
+import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.RecentCall
 import java.util.Locale
@@ -103,4 +104,29 @@ fun numberMatches(number: String, query: String, key: (String) -> String): Boole
     val searched = key(query.trim())
     // Only a query that becomes an international number says more than its digits.
     return searched.startsWith('+') && key(number).startsWith(searched)
+}
+
+/** An [entry] of one of the box' own phone books that copies a contact of the online phone book [onlineBook]. */
+data class OnlineCopy(val entry: PhonebookContact, val onlineBook: String)
+
+/**
+ * The entries of the box' own phone books that are copies of a contact in one of its online phone
+ * books – as Pickelhaube makes them for a speed dial: the same name, and every number also one of
+ * that contact's (compared via [key]). Not the entries the box itself shows in every phone book
+ * (internal numbers like "**9", with the same unique id and name in the online ones).
+ */
+fun onlineCopies(books: List<Phonebook>, key: (String) -> String): List<OnlineCopy> {
+    val online = books.filter { it.online }
+    // Per name, the online contacts' numbers and their books.
+    val byName = online.flatMap { book -> book.contacts.map { it to book.name } }
+        .groupBy({ it.first.name.trim() }, { (contact, book) -> contact.numbers.map { key(it.number) }.toSet() to book })
+    val shownEverywhere = online.flatMap { book -> book.contacts.map { it.uid to it.name.trim() } }.toSet()
+    return books.filterNot { it.online }.flatMap { it.contacts }
+        .filter { it.bookId != null && it.uid != null && (it.uid to it.name.trim()) !in shownEverywhere }
+        .filter { entry -> entry.numbers.none { it.type == "intern" } }
+        .mapNotNull { entry ->
+            val keys = entry.numbers.map { key(it.number) }
+            byName[entry.name.trim()]?.firstOrNull { (numbers, _) -> numbers.containsAll(keys) }
+                ?.let { (_, book) -> OnlineCopy(entry, book) }
+        }
 }

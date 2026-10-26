@@ -94,6 +94,9 @@ fun PhonebookTab(
     boxSpeedDials: List<SpeedDial>?,
     /** Makes a number the box' speed dial: slot, name, number, type, phone book of a new entry. */
     onSetBoxSpeedDial: (String, String, String, String, Int?) -> Unit,
+    /** Entries of the box' own phone books that copy a contact of an online one: these may be deleted. */
+    onlineCopies: List<OnlineCopy>,
+    onDeleteCopy: (OnlineCopy) -> Unit,
     /** The phone books of the box in use, online ones included (empty = none, e.g. not reachable). */
     boxBooks: List<Phonebook>,
     /** Name of the box in use, as in the settings. */
@@ -139,6 +142,18 @@ fun PhonebookTab(
             dialingCodes = dialingCodes,
             onSet = onSetBoxSpeedDial,
             onDismiss = { boxSpeedDialFor = null },
+        )
+    }
+    // A copy of an online contact about to be deleted: asking first.
+    var deleteCopy by remember { mutableStateOf<OnlineCopy?>(null) }
+    deleteCopy?.let { copy ->
+        DeleteCopyDialog(
+            copy = copy,
+            onDelete = {
+                deleteCopy = null
+                onDeleteCopy(copy)
+            },
+            onDismiss = { deleteCopy = null },
         )
     }
     // Contact of this phone being handed over to the box: choosing the phone book.
@@ -275,6 +290,8 @@ fun PhonebookTab(
                         val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                         val toBox = stringResource(R.string.contact_to_box)
                         val toPhone = stringResource(R.string.contact_to_phone)
+                        val deleteCopyLabel = stringResource(R.string.copy_delete)
+                        val copy = onlineCopies.firstOrNull { it.entry.bookId == contact.bookId && it.entry.uid == contact.uid }
                         ContactRow(
                             contact,
                             showBook = phonebooks.size > 1,
@@ -296,6 +313,7 @@ fun PhonebookTab(
                                     } else null,
                                     if (fromPhone && localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
                                     if (!fromPhone) NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) } else null,
+                                    copy?.let { NumberAction(deleteCopyLabel) { deleteCopy = it } },
                                 )
                             },
                         )

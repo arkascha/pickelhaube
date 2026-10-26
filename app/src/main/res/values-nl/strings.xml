@@ -263,6 +263,10 @@
     <string name="speed_dial_box_for">Snelkeuze van de FritzBox voor %1$s</string>
     <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FritzBox. Nieuwe vermelding in:</string>
     <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FritzBox niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FritzBox.</string>
+    <string name="copy_delete">Kopie op FritzBox verwijderen</string>
+    <string name="copy_delete_text">‘%1$s’ staat in telefoonboek ‘%2$s’ van de FritzBox als kopie van een contact uit het online telefoonboek ‘%3$s’ – bijv. voor een snelkeuze. Deze vermelding verwijderen? Het contact blijft in het online telefoonboek; een snelkeuze van de vermelding verdwijnt mee.</string>
+    <string name="status_deleting_copy">Kopie van ‘%1$s’ op de FritzBox wordt verwijderd…</string>
+    <string name="status_copy_deleted">Kopie van ‘%1$s’ op de FritzBox verwijderd.</string>
     <string name="speed_dial_box_add">Nieuwe snelkeuze van de FritzBox</string>
     <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FritzBox.</string>
     <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FritzBox.</string>

@@ -62,7 +62,22 @@ fun SpeedDialTab(
     /** Choose a number from the phone books for the box' speed dial slot (null: a new one). */
     onAssignBox: (String?) -> Unit,
     onRemoveBox: (String) -> Unit,
+    /** Entries of the box' own phone books that copy a contact of an online one: these may be deleted. */
+    onlineCopies: List<OnlineCopy>,
+    onDeleteCopy: (OnlineCopy) -> Unit,
 ) {
+    // A copy of an online contact about to be deleted: asking first.
+    var deleteCopy by remember { mutableStateOf<OnlineCopy?>(null) }
+    deleteCopy?.let { copy ->
+        DeleteCopyDialog(
+            copy = copy,
+            onDelete = {
+                deleteCopy = null
+                onDeleteCopy(copy)
+            },
+            onDismiss = { deleteCopy = null },
+        )
+    }
     if (phoneSpeedDials == null && boxSpeedDials == null) {
         Message(stringResource(R.string.speed_dial_none_enabled))
         return
@@ -98,12 +113,14 @@ fun SpeedDialTab(
                 boxSpeedDials.isEmpty() && !boxLoaded -> item { Message(stringResource(R.string.speed_dial_box_failed)) }
                 boxSpeedDials.isEmpty() -> item { Message(stringResource(R.string.speed_dial_box_none)) }
                 else -> items(boxSpeedDials, key = { "box-${it.slot}" }) { speedDial ->
+                    val copy = onlineCopies.firstOrNull { c -> c.entry.numbers.any { it.speedDial == speedDial.slot } }
                     BoxSlotRow(
                         speedDial = speedDial,
                         editable = boxEditable,
                         onPick = onPick,
                         onChange = { onAssignBox(speedDial.slot) },
                         onRemove = { onRemoveBox(speedDial.slot) },
+                        onDeleteCopy = copy?.let { { deleteCopy = it } },
                     )
                     HorizontalDivider()
                 }
@@ -154,6 +171,8 @@ private fun BoxSlotRow(
     onPick: (SpeedDial) -> Unit,
     onChange: () -> Unit,
     onRemove: () -> Unit,
+    /** Deletes the entry, a copy of an online contact; null when it is none. */
+    onDeleteCopy: (() -> Unit)?,
 ) {
     var menu by remember { mutableStateOf(false) }
     val haptics = LocalHapticFeedback.current
@@ -173,13 +192,19 @@ private fun BoxSlotRow(
                 } else null,
             ),
         )
-        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onChange, onRemove = onRemove)
+        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onChange, onRemove = onRemove, onDeleteCopy = onDeleteCopy)
     }
 }
 
-/** Change or remove a speed dial. */
+/** Change or remove a speed dial – and for a box entry copying an online contact, delete that entry. */
 @Composable
-private fun SlotMenu(expanded: Boolean, onDismiss: () -> Unit, onChange: () -> Unit, onRemove: () -> Unit) {
+private fun SlotMenu(
+    expanded: Boolean,
+    onDismiss: () -> Unit,
+    onChange: () -> Unit,
+    onRemove: () -> Unit,
+    onDeleteCopy: (() -> Unit)? = null,
+) {
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
         DropdownMenuItem(
             text = { Text(stringResource(R.string.speed_dial_change)) },
@@ -189,6 +214,12 @@ private fun SlotMenu(expanded: Boolean, onDismiss: () -> Unit, onChange: () -> U
             text = { Text(stringResource(R.string.speed_dial_remove), color = MaterialTheme.colorScheme.error) },
             onClick = { onDismiss(); onRemove() },
         )
+        onDeleteCopy?.let {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.copy_delete), color = MaterialTheme.colorScheme.error) },
+                onClick = { onDismiss(); it() },
+            )
+        }
     }
 }
 
