@@ -143,17 +143,9 @@ class SettingsRepository(context: Context) {
     /** This phone's speed dials: name and number are stored as copies, so they work everywhere. */
     var phoneSpeedDials: List<SpeedDial>
         get() = runCatching {
-            val array = JSONArray(prefs.getString(KEY_PHONE_SPEED_DIALS, null) ?: return emptyList())
-            (0 until array.length()).map { i ->
-                val o = array.getJSONObject(i)
-                SpeedDial(o.getString("slot"), o.optString("name"), o.getString("number"))
-            }.sortedBy { it.slot }
+            speedDialsFromJson(JSONArray(prefs.getString(KEY_PHONE_SPEED_DIALS, null) ?: return emptyList()))
         }.getOrDefault(emptyList())
-        set(value) {
-            val array = JSONArray()
-            value.forEach { array.put(JSONObject().put("slot", it.slot).put("name", it.name).put("number", it.number)) }
-            prefs.edit { putString(KEY_PHONE_SPEED_DIALS, array.toString()) }
-        }
+        set(value) = prefs.edit { putString(KEY_PHONE_SPEED_DIALS, value.toJson().toString()) }
 
     /** The number dialled last (with any box), for the "Redial" tile; null before the first call. */
     var lastDialledNumber: String?
@@ -173,6 +165,48 @@ class SettingsRepository(context: Context) {
 
     fun setTileDeflection(profileId: String, id: Int) = prefs.edit { putInt(KEY_TILE_DEFLECTION + profileId, id) }
 
+    // --- export and import ------------------------------------------------------------
+
+    /** Everything to take to another installation: the connections (with passwords) and the options. */
+    fun backup(language: String?): SettingsBackup {
+        val profiles = profiles()
+        return SettingsBackup(
+            profiles = profiles,
+            activeProfileId = activeProfileId,
+            options = AppOptions(
+                deviceContactsEnabled = deviceContactsEnabled,
+                callLogEnabled = callLogEnabled,
+                phoneSpeedDialsEnabled = phoneSpeedDialsEnabled,
+                phoneSpeedDials = phoneSpeedDials,
+                tileDeflections = profiles.mapNotNull { p -> tileDeflection(p.id)?.let { p.id to it } }.toMap(),
+                language = language,
+            ),
+        )
+    }
+
+    /**
+     * Replaces the connections and options by [backup] (all but the language, which needs the
+     * activity). A connection imported without its password keeps the one stored for it here, if any.
+     */
+    fun restore(backup: SettingsBackup) {
+        val known = profiles().associateBy { it.id }
+        writeProfiles(
+            backup.profiles.map { p ->
+                val password = p.config.password.ifEmpty { known[p.id]?.config?.password.orEmpty() }
+                p.copy(config = p.config.copy(password = password))
+            },
+        )
+        prefs.edit {
+            if (backup.activeProfileId != null) putString(KEY_ACTIVE, backup.activeProfileId) else remove(KEY_ACTIVE)
+            prefs.all.keys.filter { it.startsWith(KEY_TILE_DEFLECTION) }.forEach { remove(it) }
+            backup.options.tileDeflections.forEach { (id, deflection) -> putInt(KEY_TILE_DEFLECTION + id, deflection) }
+        }
+        deviceContactsEnabled = backup.options.deviceContactsEnabled
+        callLogEnabled = backup.options.callLogEnabled
+        phoneSpeedDialsEnabled = backup.options.phoneSpeedDialsEnabled
+        phoneSpeedDials = backup.options.phoneSpeedDials
+    }
+
     // --- storage ----------------------------------------------------------------------
 
     private fun writeProfiles(list: List<BoxProfile>) {
@@ -181,77 +215,11 @@ class SettingsRepository(context: Context) {
         prefs.edit { putString(KEY_PROFILES, array.toString()) }
     }
 
-    private fun toJson(p: BoxProfile) = JSONObject().apply {
-        put("id", p.id)
-        put("name", p.name)
-        put("host", p.config.host)
-        put("port", p.config.port)
-        put("user", p.config.username)
-        // The password is stored encrypted with a key from the Android Keystore.
-        put("password", SecretCipher.encrypt(p.config.password))
-        put("https", p.config.useHttps)
-        p.config.trustedCertDer?.let { put("cert", it) }
-        p.deviceId?.let { put("deviceId", it) }
-        p.model?.let { put("model", it) }
-        p.softwareVersion?.let { put("softwareVersion", it) }
-        p.serialNumber?.let { put("serialNumber", it) }
-        p.userRights?.let { r ->
-            put(
-                "userRights",
-                JSONObject().apply {
-                    r.username?.let { put("user", it) }
-                    put("access", JSONObject(r.access))
-                },
-            )
-        }
-        p.dialingCodes?.let { c ->
-            put(
-                "dialingCodes",
-                JSONObject().put("country", c.countryCode).put("international", c.internationalPrefix)
-                    .put("national", c.nationalPrefix).apply { c.areaCode?.let { put("area", it) } },
-            )
-        }
-        put("phonebooks", p.phonebooksEnabled)
-        put("callList", p.callListEnabled)
-        put("speedDials", p.speedDialsEnabled)
-    }
+    // The password is stored encrypted with a key from the Android Keystore.
+    private fun toJson(p: BoxProfile) = p.toJson(storedPassword = SecretCipher.encrypt(p.config.password))
 
-    private fun fromJson(o: JSONObject) = BoxProfile(
-        id = o.getString("id"),
-        name = o.optString("name"),
-        config = FritzConfig(
-            host = o.optString("host", FritzConfig().host),
-            port = o.optInt("port", FritzConfig.HTTP_PORT),
-            username = o.optString("user"),
-            password = o.optString("password").takeIf { it.isNotEmpty() }
-                ?.let(SecretCipher::decrypt).orEmpty(),
-            useHttps = o.optBoolean("https", false),
-            trustedCertDer = o.optString("cert").takeIf { it.isNotEmpty() },
-        ),
-        deviceId = o.optString("deviceId").takeIf { it.isNotEmpty() },
-        model = o.optString("model").takeIf { it.isNotEmpty() },
-        softwareVersion = o.optString("softwareVersion").takeIf { it.isNotEmpty() },
-        serialNumber = o.optString("serialNumber").takeIf { it.isNotEmpty() },
-        userRights = o.optJSONObject("userRights")?.let { r ->
-            val access = r.optJSONObject("access")
-            UserRights(
-                username = r.optString("user").takeIf { it.isNotEmpty() },
-                access = access?.keys()?.asSequence()?.associateWith { access.getString(it) }.orEmpty(),
-            )
-        },
-        dialingCodes = o.optJSONObject("dialingCodes")?.let { c ->
-            DialingCodes(
-                countryCode = c.getString("country"),
-                internationalPrefix = c.optString("international", "00"),
-                areaCode = c.optString("area").takeIf { it.isNotEmpty() },
-                nationalPrefix = c.optString("national", "0"),
-            )
-        },
-        // Connections saved before these options existed keep using both.
-        phonebooksEnabled = o.optBoolean("phonebooks", true),
-        callListEnabled = o.optBoolean("callList", true),
-        speedDialsEnabled = o.optBoolean("speedDials", true),
-    )
+    private fun fromJson(o: JSONObject) =
+        boxProfileFromJson(o, o.optString("password").takeIf { it.isNotEmpty() }?.let(SecretCipher::decrypt).orEmpty())
 
     /** Earlier versions stored a single connection in separate keys: turn it into the first entry. */
     private fun migrateSingleConnection() {
@@ -294,3 +262,88 @@ class SettingsRepository(context: Context) {
         const val LEGACY_CERT = "trusted_cert_der"
     }
 }
+
+/** A connection as JSON; [storedPassword] is the password as stored (encrypted), null to leave it out. */
+internal fun BoxProfile.toJson(storedPassword: String?): JSONObject {
+    val p = this
+    return JSONObject().apply {
+        put("id", p.id)
+        put("name", p.name)
+        put("host", p.config.host)
+        put("port", p.config.port)
+        put("user", p.config.username)
+        storedPassword?.let { put("password", it) }
+        put("https", p.config.useHttps)
+        p.config.trustedCertDer?.let { put("cert", it) }
+        p.deviceId?.let { put("deviceId", it) }
+        p.model?.let { put("model", it) }
+        p.softwareVersion?.let { put("softwareVersion", it) }
+        p.serialNumber?.let { put("serialNumber", it) }
+        p.userRights?.let { r ->
+            put(
+                "userRights",
+                JSONObject().apply {
+                    r.username?.let { put("user", it) }
+                    put("access", JSONObject(r.access))
+                },
+            )
+        }
+        p.dialingCodes?.let { c ->
+            put(
+                "dialingCodes",
+                JSONObject().put("country", c.countryCode).put("international", c.internationalPrefix)
+                    .put("national", c.nationalPrefix).apply { c.areaCode?.let { put("area", it) } },
+            )
+        }
+        put("phonebooks", p.phonebooksEnabled)
+        put("callList", p.callListEnabled)
+        put("speedDials", p.speedDialsEnabled)
+    }
+}
+
+/** A connection from its JSON, with [password] (stored separately, as the caller has it). */
+internal fun boxProfileFromJson(o: JSONObject, password: String) = BoxProfile(
+    id = o.getString("id"),
+    name = o.optString("name"),
+    config = FritzConfig(
+        host = o.optString("host", FritzConfig().host),
+        port = o.optInt("port", FritzConfig.HTTP_PORT),
+        username = o.optString("user"),
+        password = password,
+        useHttps = o.optBoolean("https", false),
+        trustedCertDer = o.optString("cert").takeIf { it.isNotEmpty() },
+    ),
+    deviceId = o.optString("deviceId").takeIf { it.isNotEmpty() },
+    model = o.optString("model").takeIf { it.isNotEmpty() },
+    softwareVersion = o.optString("softwareVersion").takeIf { it.isNotEmpty() },
+    serialNumber = o.optString("serialNumber").takeIf { it.isNotEmpty() },
+    userRights = o.optJSONObject("userRights")?.let { r ->
+        val access = r.optJSONObject("access")
+        UserRights(
+            username = r.optString("user").takeIf { it.isNotEmpty() },
+            access = access?.keys()?.asSequence()?.associateWith { access.getString(it) }.orEmpty(),
+        )
+    },
+    dialingCodes = o.optJSONObject("dialingCodes")?.let { c ->
+        DialingCodes(
+            countryCode = c.getString("country"),
+            internationalPrefix = c.optString("international", "00"),
+            areaCode = c.optString("area").takeIf { it.isNotEmpty() },
+            nationalPrefix = c.optString("national", "0"),
+        )
+    },
+    // Connections saved before these options existed keep using both.
+    phonebooksEnabled = o.optBoolean("phonebooks", true),
+    callListEnabled = o.optBoolean("callList", true),
+    speedDialsEnabled = o.optBoolean("speedDials", true),
+)
+
+internal fun List<SpeedDial>.toJson(): JSONArray = JSONArray().also { array ->
+    forEach { array.put(JSONObject().put("slot", it.slot).put("name", it.name).put("number", it.number)) }
+}
+
+internal fun speedDialsFromJson(array: JSONArray): List<SpeedDial> =
+    (0 until array.length()).map { i ->
+        val o = array.getJSONObject(i)
+        SpeedDial(o.getString("slot"), o.optString("name"), o.getString("number"))
+    }.sortedBy { it.slot }

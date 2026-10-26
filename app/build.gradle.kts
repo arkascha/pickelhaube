@@ -70,4 +70,6 @@ dependencies {
     testImplementation(libs.junit)
     // XmlPullParser implementation for parser tests (Android's own is only a stub on the JVM).
     testImplementation(libs.kxml2)
+    // org.json implementation for the settings file tests (Android's own is only a stub on the JVM).
+    testImplementation(libs.org.json)
 }

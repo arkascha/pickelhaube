@@ -1,6 +1,11 @@
 package org.rustygnome.pickelhaube.ui
 
+import android.Manifest
 import android.app.Application
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import android.net.ConnectivityManager
@@ -12,7 +17,13 @@ import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
+import org.rustygnome.pickelhaube.data.AppLanguage
+import org.rustygnome.pickelhaube.data.InvalidSettingsFileException
+import org.rustygnome.pickelhaube.data.SettingsBackup
+import org.rustygnome.pickelhaube.data.SettingsFile
+import org.rustygnome.pickelhaube.data.SettingsFileInfo
 import org.rustygnome.pickelhaube.data.SettingsRepository
+import org.rustygnome.pickelhaube.data.WrongPassphraseException
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
@@ -155,6 +166,12 @@ data class UiState(
     /** Optional feature, switched in the settings: this phone's own speed dials 1–9. */
     val phoneSpeedDialsEnabled: Boolean = true,
     val phoneSpeedDials: List<SpeedDial> = emptyList(),
+    /** A settings file opened for import, waiting to be confirmed (and unlocked). */
+    val pendingImport: SettingsFileInfo? = null,
+    /** Why the opened settings file could not be imported (e.g. wrong passphrase). */
+    val importError: UiText? = null,
+    /** A settings file is being written or read. */
+    val transferBusy: Boolean = false,
 )
 
 /** The FritzBox in use, if any. */
@@ -208,6 +225,9 @@ class SecondFactorNotConfirmedException : IOException("The action was not confir
 
 /** Second detection after one that found none of the configured boxes. */
 private const val DETECT_RETRY_MILLIS = 4_000L
+
+/** Bigger than any settings file (they take a few kilobytes): such a file is not read. */
+private const val MAX_SETTINGS_FILE = 1_000_000
 
 /** Coming to the foreground detects again only if the last detection is at least this old. */
 private const val DETECT_MIN_INTERVAL_MILLIS = 10_000L
@@ -719,6 +739,136 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun selectPickerTab(tab: PickerTab) = _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
 
     fun openLanguage() = _state.update { it.copy(showLanguage = true) }
+
+    // --- settings export and import ---------------------------------------------------
+
+    /** Writes the settings to [uri]; with [passphrase] the passwords too, encrypted with it. */
+    fun exportSettings(uri: Uri, passphrase: CharArray?) {
+        val app = getApplication<Application>()
+        _state.update { it.copy(transferBusy = true) }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    val text = SettingsFile.write(settings.backup(AppLanguage.current(app)), passphrase)
+                    val out = app.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Not writable: $uri")
+                    out.use { it.write(text.toByteArray(Charsets.UTF_8)) }
+                }
+            }
+            passphrase?.fill('\u0000')
+            _state.update { it.copy(transferBusy = false) }
+            toast(if (result.isSuccess) R.string.settings_exported else R.string.settings_export_failed)
+        }
+    }
+
+    /** The text of the settings file waiting for [importSettings]. */
+    private var importText: String? = null
+
+    /** Opens the settings file at [uri] for import: says what it holds, so the import can be confirmed. */
+    fun openSettingsFile(uri: Uri) {
+        val app = getApplication<Application>()
+        _state.update { it.copy(transferBusy = true) }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    val text = app.contentResolver.openInputStream(uri)?.use { input ->
+                        // A settings file is a few kilobytes; anything far bigger is something else.
+                        val bytes = input.readNBytesCompat(MAX_SETTINGS_FILE + 1)
+                        if (bytes.size > MAX_SETTINGS_FILE) throw InvalidSettingsFileException("Too big")
+                        String(bytes, Charsets.UTF_8)
+                    } ?: throw IOException("Not readable: $uri")
+                    text to SettingsFile.inspect(text)
+                }
+            }
+            val (text, info) = result.getOrNull() ?: (null to null)
+            importText = text
+            _state.update { it.copy(transferBusy = false, pendingImport = info, importError = null) }
+            if (info == null) toast(R.string.settings_file_invalid)
+        }
+    }
+
+    /**
+     * Imports the opened settings file, replacing all connections and options; with [passphrase]
+     * its passwords as well. [onLanguage] then gets the file's language, for the activity to switch.
+     */
+    fun importSettings(passphrase: CharArray?, onLanguage: (String?) -> Unit) {
+        val text = importText ?: return
+        _state.update { it.copy(transferBusy = true, importError = null) }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) { runCatching { SettingsFile.read(text, passphrase) } }
+            passphrase?.fill('\u0000')
+            val backup = result.getOrElse { error ->
+                val message = if (error is WrongPassphraseException) R.string.settings_wrong_passphrase else R.string.settings_file_invalid
+                _state.update { it.copy(transferBusy = false, importError = uiText(message)) }
+                return@launch
+            }
+            importText = null
+            applyImport(backup)
+            _state.update { it.copy(transferBusy = false, pendingImport = null) }
+            toast(R.string.settings_imported)
+            onLanguage(backup.options.language)
+        }
+    }
+
+    fun cancelImport() {
+        importText = null
+        _state.update { it.copy(pendingImport = null, importError = null) }
+    }
+
+    /**
+     * Stores [backup] and starts over with it, as on a fresh start. The phone's contacts and call
+     * log stay off unless Android already grants reading them here.
+     */
+    private fun applyImport(backup: SettingsBackup) {
+        val app = getApplication<Application>()
+        fun granted(permission: String) = ContextCompat.checkSelfPermission(app, permission) == PackageManager.PERMISSION_GRANTED
+        val options = backup.options.copy(
+            deviceContactsEnabled = backup.options.deviceContactsEnabled && granted(Manifest.permission.READ_CONTACTS),
+            callLogEnabled = backup.options.callLogEnabled && granted(Manifest.permission.READ_CALL_LOG),
+        )
+        settings.restore(backup.copy(options = options))
+        _state.update {
+            it.copy(
+                config = settings.activeProfile()?.config ?: FritzConfig(),
+                profiles = settings.profiles(),
+                activeProfileId = settings.activeProfileId,
+                settingsSaved = settings.isConfigured(),
+                // Imported instead of entering the first box: on to the settings with the boxes now there.
+                showConnectionSettings = it.showConnectionSettings && !settings.isConfigured(),
+                editingProfileId = if (settings.isConfigured()) null else it.editingProfileId,
+                activeBoxSeen = null,
+                activeBoxWorking = null,
+                boxesSeen = null,
+                networkNotice = null,
+                phones = emptyList(),
+                selectedPhone = null,
+                phonebooks = emptyList(),
+                phonebooksLoaded = false,
+                boxCalls = emptyList(),
+                boxCallsLoaded = false,
+                deflections = null,
+                deviceContactsEnabled = options.deviceContactsEnabled,
+                deviceContacts = null,
+                callLogEnabled = options.callLogEnabled,
+                phoneCalls = null,
+                callLogProblem = null,
+                phoneSpeedDialsEnabled = options.phoneSpeedDialsEnabled,
+                phoneSpeedDials = settings.phoneSpeedDials,
+            )
+        }
+        if (options.deviceContactsEnabled) loadDeviceContacts()
+        if (options.callLogEnabled) loadCallLog()
+        DeflectionTileService.refresh(app)
+        RedialTileService.refresh(app)
+        if (settings.isConfigured()) {
+            viewModelScope.launch {
+                val detection = detectBox()
+                if (!detection.switched && !_state.value.noBoxReachable) refreshPhones()
+                detectAgainIfNotFound(detection)
+            }
+        }
+    }
+
+    private fun toast(message: Int) = Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show()
 
     fun closeLanguage() = _state.update { it.copy(showLanguage = false) }
 
@@ -1316,4 +1466,16 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         watchNetwork()
     }
+}
+
+/** Reads up to [limit] bytes (InputStream.readNBytes only exists from Android 13 on). */
+private fun java.io.InputStream.readNBytesCompat(limit: Int): ByteArray {
+    val out = java.io.ByteArrayOutputStream()
+    val buffer = ByteArray(8192)
+    while (out.size() < limit) {
+        val n = read(buffer, 0, minOf(buffer.size, limit - out.size()))
+        if (n < 0) break
+        out.write(buffer, 0, n)
+    }
+    return out.toByteArray()
 }

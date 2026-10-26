@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.WindowInsets
 import android.Manifest
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -78,6 +79,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.BoxProfile
+import org.rustygnome.pickelhaube.data.SettingsFileInfo
 import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.tile.PickelhaubeTile
@@ -126,6 +128,13 @@ fun SettingsScreen(
     onDisableCallLog: () -> Unit,
     phoneSpeedDialsEnabled: Boolean,
     onPhoneSpeedDialsChange: (Boolean) -> Unit,
+    transferBusy: Boolean,
+    pendingImport: SettingsFileInfo?,
+    importError: UiText?,
+    onExportSettings: (Uri, CharArray?) -> Unit,
+    onOpenSettingsFile: (Uri) -> Unit,
+    onImportSettings: (CharArray?) -> Unit,
+    onCancelImport: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -242,6 +251,23 @@ fun SettingsScreen(
             ) {
                 Text(stringResource(R.string.settings_tiles), style = MaterialTheme.typography.titleSmall)
                 TilesSetting()
+            }
+
+            HorizontalDivider()
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(stringResource(R.string.settings_transfer), style = MaterialTheme.typography.titleSmall)
+                SettingsTransferSetting(
+                    busy = transferBusy,
+                    pendingImport = pendingImport,
+                    importError = importError,
+                    onExport = onExportSettings,
+                    onOpenImport = onOpenSettingsFile,
+                    onImport = onImportSettings,
+                    onCancelImport = onCancelImport,
+                )
             }
 
             HorizontalDivider()
@@ -470,6 +496,8 @@ fun ConnectionSettingsScreen(
     onDelete: (() -> Unit)?,
     onShowCertificate: () -> Unit,
     onForgetCertificate: () -> Unit,
+    /** Offered in the top bar instead of entering a connection (no box set up yet); null: not offered. */
+    importOffer: (@Composable () -> Unit)? = null,
 ) {
     var name by remember { mutableStateOf(initialName) }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -524,6 +552,7 @@ fun ConnectionSettingsScreen(
                         }
                     }
                 },
+                actions = { importOffer?.invoke() },
             )
         },
     ) { padding ->

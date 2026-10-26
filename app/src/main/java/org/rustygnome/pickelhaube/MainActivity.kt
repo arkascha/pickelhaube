@@ -33,6 +33,7 @@ import org.rustygnome.pickelhaube.ui.LanguageScreen
 import org.rustygnome.pickelhaube.ui.NumberPickerScreen
 import org.rustygnome.pickelhaube.ui.PhonebookTab
 import org.rustygnome.pickelhaube.ui.RecentsTab
+import org.rustygnome.pickelhaube.ui.SettingsImportOffer
 import org.rustygnome.pickelhaube.ui.SettingsScreen
 import org.rustygnome.pickelhaube.ui.SecondFactorDialog
 import org.rustygnome.pickelhaube.ui.SpeedDialTab
@@ -197,6 +198,19 @@ class MainActivity : ComponentActivity() {
                             onDelete = state.editingProfileId?.let { id -> { viewModel.deleteProfile(id) } },
                             onShowCertificate = viewModel::showTrustedCertificate,
                             onForgetCertificate = viewModel::forgetCertificate,
+                            // Nothing set up yet (e.g. just installed): the settings may come from a file instead.
+                            importOffer = if (state.profiles.isEmpty()) {
+                                {
+                                    SettingsImportOffer(
+                                        busy = state.transferBusy,
+                                        pendingImport = state.pendingImport,
+                                        importError = state.importError,
+                                        onOpenImport = viewModel::openSettingsFile,
+                                        onImport = ::importSettings,
+                                        onCancelImport = viewModel::cancelImport,
+                                    )
+                                }
+                            } else null,
                         )
                     }
                 } else if (state.showSettings) {
@@ -222,6 +236,13 @@ class MainActivity : ComponentActivity() {
                         onDisableCallLog = viewModel::disableCallLog,
                         phoneSpeedDialsEnabled = state.phoneSpeedDialsEnabled,
                         onPhoneSpeedDialsChange = viewModel::setPhoneSpeedDialsEnabled,
+                        transferBusy = state.transferBusy,
+                        pendingImport = state.pendingImport,
+                        importError = state.importError,
+                        onExportSettings = viewModel::exportSettings,
+                        onOpenSettingsFile = viewModel::openSettingsFile,
+                        onImportSettings = ::importSettings,
+                        onCancelImport = viewModel::cancelImport,
                     )
                 } else {
                     DialerScreen(
@@ -282,6 +303,13 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
+    }
+
+    /** Imports the opened settings file; then switches to the file's language, if it is not the one in use. */
+    private fun importSettings(passphrase: CharArray?) {
+        viewModel.importSettings(passphrase) { language ->
+            if (language != AppLanguage.current(this)) AppLanguage.set(this, language)
+        }
     }
 
     /** Pre-fills the number when opened from a tel: link (e.g. tapping a number in Contacts). */

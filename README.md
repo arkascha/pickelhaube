@@ -271,6 +271,19 @@ shade twice, tap the pencil and drag them into your tiles – apps' tiles are us
 
 On a locked phone, they do what they do only once the phone is unlocked.
 
+### Export and import of the settings
+
+*Settings › Back up and transfer* writes all connections and options into a JSON file
+(*Export…*) and reads them back from one (*Import…*) – e.g. for another phone, or for a version
+of the app under a different package name, where the passwords' key in the Android Keystore is not
+available. The passwords go into the file only on request: then encrypted with a passphrase
+(PBKDF2-HMAC-SHA256, AES-256-GCM), which the import asks for. Left empty there, or exported without
+them, a connection keeps the password stored for it already, if any; otherwise it has to be entered
+again. The import replaces all connections and options, after confirming what the file holds; the
+phone's contacts and call log stay off unless Android already grants reading them.
+While no box is set up yet – right after installing – the page for the first connection offers
+the import as well, as *Restore backup…* in its top bar, instead of entering one.
+
 Pickelhaube also registers for `tel:` links, so you can pick it when tapping a number in
 Contacts or a web page; the number is pre-filled.
 
@@ -292,11 +305,12 @@ Contacts or a web page; the number is pre-filled.
 | `data/AppLanguage.kt` | UI language: system or chosen (per-app language on Android 13+, own handling before) |
 | `data/BoxRecognition.kt` | Which configured FRITZ!Box is reachable from the current network (app and tile) |
 | `data/SettingsRepository.kt` | FRITZ!Box connections (passwords encrypted via Android Keystore) and options |
+| `data/SettingsFile.kt` | Settings file for export and import (passwords optionally under a passphrase) |
 | `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising,
-the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers and certificate pinning.
+the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning and the settings file.
 
 ## Notes / ideas
 
