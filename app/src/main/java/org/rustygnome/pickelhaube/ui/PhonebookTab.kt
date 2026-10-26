@@ -4,7 +4,6 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,14 +53,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.text.style.TextOverflow
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SpeedDial
-import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
+import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import kotlinx.coroutines.launch
 import java.text.Collator
 
@@ -90,9 +88,13 @@ fun PhonebookTab(
     phoneSpeedDials: List<SpeedDial>?,
     /** Long press on a number, slot chosen: make it this phone's speed dial (slot, name, number). */
     onSetSpeedDial: (String, String, String) -> Unit,
-    /** Setting up this phone's speed dial with this slot: the next tapped number becomes it. */
-    assigningSpeedDial: String?,
-    /** The phone books of the box in use a contact can be handed over to (empty = none, e.g. not reachable). */
+    /** Setting up a speed dial: the next tapped number becomes it. */
+    assigningSpeedDial: SpeedDialAssignment?,
+    /** The box' speed dials; null when they cannot be set up (switched off, or the box not there). */
+    boxSpeedDials: List<SpeedDial>?,
+    /** Makes a number the box' speed dial: slot, name, number, type, phone book of a new entry. */
+    onSetBoxSpeedDial: (String, String, String, String, Int?) -> Unit,
+    /** The phone books of the box in use, online ones included (empty = none, e.g. not reachable). */
     boxBooks: List<Phonebook>,
     /** Name of the box in use, as in the settings. */
     boxName: String?,
@@ -125,12 +127,26 @@ fun PhonebookTab(
     }
 
     val context = LocalContext.current
+    // The box' own phone books: only these can be changed (not the online ones it syncs).
+    val localBooks = remember(boxBooks) { boxBooks.filterNot { it.online } }
+    // A number to become the box' speed dial: asking for the slot (and phone book) still open.
+    var boxSpeedDialFor by remember { mutableStateOf<BoxSpeedDialRequest?>(null) }
+    boxSpeedDialFor?.takeIf { boxSpeedDials != null && localBooks.isNotEmpty() }?.let { request ->
+        BoxSpeedDialRequestDialog(
+            request = request,
+            boxBooks = boxBooks,
+            taken = boxSpeedDials.orEmpty(),
+            dialingCodes = dialingCodes,
+            onSet = onSetBoxSpeedDial,
+            onDismiss = { boxSpeedDialFor = null },
+        )
+    }
     // Contact of this phone being handed over to the box: choosing the phone book.
     var handOverFor by remember { mutableStateOf<PhonebookContact?>(null) }
-    handOverFor?.takeIf { boxBooks.isNotEmpty() }?.let { contact ->
+    handOverFor?.takeIf { localBooks.isNotEmpty() }?.let { contact ->
         HandOverDialog(
             contact = contact,
-            books = boxBooks,
+            books = localBooks,
             boxName = boxName,
             dialingCodes = dialingCodes,
             onHandOver = { book ->
@@ -209,7 +225,7 @@ fun PhonebookTab(
         )
 
         if (assigningSpeedDial != null) {
-            AssigningCard(slot = assigningSpeedDial, onCancel = onCancelAssigning)
+            AssigningCard(assigningSpeedDial, onCancel = onCancelAssigning)
         }
 
         // Feature is on, but the permission was revoked in Android meanwhile.
@@ -256,16 +272,29 @@ fun PhonebookTab(
                     items(filtered) { contact ->
                         val fromPhone = contact.book == DeviceContacts.BOOK_NAME
                         val makeSpeedDial = stringResource(R.string.speed_dial_make)
+                        val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                         val toBox = stringResource(R.string.contact_to_box)
                         val toPhone = stringResource(R.string.contact_to_phone)
                         ContactRow(
                             contact,
                             showBook = phonebooks.size > 1,
-                            onPick = { number -> onPick(contact.name, number) },
+                            onPick = { n ->
+                                val assignment = assigningSpeedDial
+                                if (assignment is SpeedDialAssignment.Box) {
+                                    boxSpeedDialFor = BoxSpeedDialRequest(contact.name, n.number, n.type, assignment.slot)
+                                } else {
+                                    onPick(contact.name, n.number)
+                                }
+                            },
                             actions = { number ->
                                 listOfNotNull(
-                                    phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact.name to number } },
-                                    if (fromPhone && boxBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                                    phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact.name to number.number } },
+                                    if (boxSpeedDials != null && localBooks.isNotEmpty()) {
+                                        NumberAction(makeBoxSpeedDial) {
+                                            boxSpeedDialFor = BoxSpeedDialRequest(contact.name, number.number, number.type, null)
+                                        }
+                                    } else null,
+                                    if (fromPhone && localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
                                     if (!fromPhone) NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) } else null,
                                 )
                             },
@@ -340,7 +369,7 @@ internal fun Message(text: String) {
 
 /** Says that the next tapped number becomes speed dial [slot], with a way to cancel. */
 @Composable
-private fun AssigningCard(slot: String, onCancel: () -> Unit) {
+private fun AssigningCard(assignment: SpeedDialAssignment, onCancel: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -351,7 +380,11 @@ private fun AssigningCard(slot: String, onCancel: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                stringResource(R.string.speed_dial_choose_number, slot),
+                when (assignment) {
+                    is SpeedDialAssignment.Phone -> stringResource(R.string.speed_dial_choose_number, assignment.slot)
+                    is SpeedDialAssignment.Box -> assignment.slot?.let { stringResource(R.string.speed_dial_choose_number_box, it) }
+                        ?: stringResource(R.string.speed_dial_choose_number_box_new)
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f),
             )
@@ -360,59 +393,15 @@ private fun AssigningCard(slot: String, onCancel: () -> Unit) {
     }
 }
 
-/** Which of this phone's slots a long-pressed number becomes; taken ones show who is there now. */
-@Composable
-private fun SpeedDialSlotDialog(
-    name: String,
-    taken: List<SpeedDial>,
-    onChoose: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.speed_dial_for, name)) },
-        text = {
-            LazyColumn {
-                items(SpeedDials.PHONE_SLOTS) { slot ->
-                    val current = taken.firstOrNull { it.slot == slot }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onChoose(slot) }
-                            .padding(vertical = 10.dp),
-                    ) {
-                        Text(
-                            slot,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.width(32.dp),
-                        )
-                        Text(
-                            current?.name ?: stringResource(R.string.speed_dial_free),
-                            color = if (current == null) MaterialTheme.colorScheme.onSurfaceVariant
-                            else MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
-    )
-}
-
 /** Name, then one tappable line per number; a long press opens the menu of the number's [actions]. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ContactRow(
     contact: PhonebookContact,
     showBook: Boolean,
-    onPick: (String) -> Unit,
+    onPick: (PhonebookNumber) -> Unit,
     /** What can be done with a number (none: no long press). */
-    actions: (String) -> List<NumberAction>,
+    actions: (PhonebookNumber) -> List<NumberAction>,
 ) {
     val haptics = LocalHapticFeedback.current
     Column(Modifier.padding(vertical = 8.dp)) {
@@ -435,7 +424,7 @@ private fun ContactRow(
             }
         }
         contact.numbers.forEach { n ->
-            val numberActions = actions(n.number)
+            val numberActions = actions(n)
             var menu by remember { mutableStateOf(false) }
             Box {
                 Row(
@@ -443,7 +432,7 @@ private fun ContactRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .combinedClickable(
-                            onClick = { onPick(n.number) },
+                            onClick = { onPick(n) },
                             onLongClickLabel = stringResource(R.string.number_actions).takeIf { numberActions.isNotEmpty() },
                             onLongClick = if (numberActions.isEmpty()) null else {
                                 {

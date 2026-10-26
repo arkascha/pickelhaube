@@ -252,7 +252,7 @@
     <string name="speed_dial">Selezione rapida</string>
     <string name="speed_dial_none_enabled">Nessuna selezione rapida attivata. Puoi attivarle nelle impostazioni.</string>
     <string name="speed_dial_phone_help">Le selezioni rapide da 1 a 9 sono salvate su questo telefono e funzionano con ogni FritzBox. Nel tastierino, tieni premuta la cifra. Tocca una libera per sceglierne il numero dalle rubriche; tieni premuta una assegnata per modificarla o rimuoverla.</string>
-    <string name="speed_dial_box_help">Le selezioni rapide impostate nelle rubriche di questa FritzBox, come si compongono sui suoi portatili con **7. Nel tastierino, tocca la prima cifra e tieni premuta la seconda, oppure inserisci **7 e il numero.</string>
+    <string name="speed_dial_box_help">Le selezioni rapide impostate nelle rubriche di questa FritzBox, come si compongono sui suoi portatili con **7. Nel tastierino, tocca la prima cifra e tieni premuta la seconda, oppure inserisci **7 e il numero. In basso puoi crearne una nuova; tieni premuta una per modificarla o rimuoverla.</string>
     <string name="speed_dial_box_failed">Non è stato possibile caricare le selezioni rapide della FritzBox. Tocca Ricarica per riprovare.</string>
     <string name="speed_dial_box_none">Nelle rubriche di questa FritzBox non sono impostate selezioni rapide.</string>
     <string name="speed_dial_free">Libera</string>
@@ -263,6 +263,17 @@
     <string name="speed_dial_choose_number">Tocca il numero per la selezione rapida %1$s.</string>
     <string name="speed_dial_for">Selezione rapida per %1$s</string>
     <string name="speed_dial_make">Imposta come selezione rapida</string>
+    <string name="speed_dial_make_box">Imposta come selezione rapida della FritzBox</string>
+    <string name="speed_dial_box_for">Selezione rapida della FritzBox per %1$s</string>
+    <string name="speed_dial_box_new_entry">Il numero non è ancora in nessuna rubrica della FritzBox. Nuova voce in:</string>
+    <string name="speed_dial_box_online">«%1$s» è solo nella rubrica online «%2$s», che la FritzBox non può modificare. Per la selezione rapida viene creata una voce in una rubrica propria della FritzBox.</string>
+    <string name="speed_dial_box_add">Nuova selezione rapida della FritzBox</string>
+    <string name="speed_dial_choose_number_box">Tocca il numero per la selezione rapida %1$s della FritzBox.</string>
+    <string name="speed_dial_choose_number_box_new">Tocca il numero per una nuova selezione rapida della FritzBox.</string>
+    <string name="status_setting_speed_dial">Impostazione della selezione rapida %1$s sulla FritzBox…</string>
+    <string name="status_speed_dial_set">Selezione rapida %1$s della FritzBox: %2$s</string>
+    <string name="status_removing_speed_dial">Rimozione della selezione rapida %1$s dalla FritzBox…</string>
+    <string name="status_speed_dial_removed">Selezione rapida %1$s rimossa dalla FritzBox.</string>
     <string name="contact_to_phone">Aggiungi ai contatti del telefono</string>
     <string name="contact_to_box">Passa alla FritzBox</string>
     <string name="hand_over_text">«%1$s» va in questa rubrica della FritzBox «%2$s»:</string>

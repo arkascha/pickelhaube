@@ -252,7 +252,7 @@
     <string name="speed_dial">Numéros abrégés</string>
     <string name="speed_dial_none_enabled">Aucun numéro abrégé n’est activé. Vous pouvez les activer dans les paramètres.</string>
     <string name="speed_dial_phone_help">Les numéros abrégés 1 à 9 sont enregistrés sur ce téléphone et fonctionnent avec toutes les FritzBox. Sur le clavier, appuyez longuement sur le chiffre. Touchez un emplacement libre pour choisir son numéro dans les répertoires ; appuyez longuement sur un emplacement occupé pour le modifier ou le supprimer.</string>
-    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FritzBox, tels qu’ils se composent sur ses combinés avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro.</string>
+    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FritzBox, tels qu’ils se composent sur ses combinés avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
     <string name="speed_dial_box_failed">Les numéros abrégés de la FritzBox n’ont pas pu être chargés. Touchez Recharger pour réessayer.</string>
     <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FritzBox.</string>
     <string name="speed_dial_free">Libre</string>
@@ -263,6 +263,17 @@
     <string name="speed_dial_choose_number">Touchez le numéro pour le numéro abrégé %1$s.</string>
     <string name="speed_dial_for">Numéro abrégé pour %1$s</string>
     <string name="speed_dial_make">Définir comme numéro abrégé</string>
+    <string name="speed_dial_make_box">Définir comme numéro abrégé de la FritzBox</string>
+    <string name="speed_dial_box_for">Numéro abrégé de la FritzBox pour %1$s</string>
+    <string name="speed_dial_box_new_entry">Le numéro ne figure encore dans aucun répertoire de la FritzBox. Nouvelle entrée dans :</string>
+    <string name="speed_dial_box_online">« %1$s » ne figure que dans le répertoire en ligne « %2$s », que la FritzBox ne peut pas modifier. Pour le numéro abrégé, une entrée est créée dans un répertoire propre à la FritzBox.</string>
+    <string name="speed_dial_box_add">Nouveau numéro abrégé de la FritzBox</string>
+    <string name="speed_dial_choose_number_box">Touchez le numéro pour le numéro abrégé %1$s de la FritzBox.</string>
+    <string name="speed_dial_choose_number_box_new">Touchez le numéro pour un nouveau numéro abrégé de la FritzBox.</string>
+    <string name="status_setting_speed_dial">Configuration du numéro abrégé %1$s sur la FritzBox…</string>
+    <string name="status_speed_dial_set">Numéro abrégé %1$s de la FritzBox : %2$s</string>
+    <string name="status_removing_speed_dial">Suppression du numéro abrégé %1$s de la FritzBox…</string>
+    <string name="status_speed_dial_removed">Numéro abrégé %1$s supprimé de la FritzBox.</string>
     <string name="contact_to_phone">Ajouter aux contacts du téléphone</string>
     <string name="contact_to_box">Transmettre à la FritzBox</string>
     <string name="hand_over_text">« %1$s » sera ajouté à ce répertoire de la FritzBox « %2$s » :</string>

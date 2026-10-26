@@ -27,6 +27,7 @@ import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
+import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
 import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
@@ -53,6 +54,15 @@ data class CertificatePrompt(
 
 /** The tabs of the number picker, in their order. */
 enum class PickerTab { RECENT, SPEED_DIALS, PHONEBOOKS }
+
+/** What the number tapped next in the phone books becomes. */
+sealed interface SpeedDialAssignment {
+    /** This phone's speed dial [slot] (1–9). */
+    data class Phone(val slot: String) : SpeedDialAssignment
+
+    /** The box' speed dial [slot] (00–99); null: a new one, its slot still to be chosen. */
+    data class Box(val slot: String?) : SpeedDialAssignment
+}
 
 data class UiState(
     val number: String = "",
@@ -109,8 +119,8 @@ data class UiState(
     /** The number picker (tabs "Recent", "Speed dial" and "Phone books") is open. */
     val showPicker: Boolean = false,
     val pickerTab: PickerTab = PickerTab.RECENT,
-    /** Choosing the number for this phone speed dial slot in the phone books tab. */
-    val assigningSpeedDial: String? = null,
+    /** Choosing the number for a speed dial in the phone books tab. */
+    val assigningSpeedDial: SpeedDialAssignment? = null,
     /** Phone books of the box, loaded on first use of the number picker (cached). */
     val phonebooks: List<Phonebook> = emptyList(),
     val phonebooksLoaded: Boolean = false,
@@ -760,17 +770,26 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
     fun pickContactNumber(name: String, number: String) {
-        val slot = _state.value.assigningSpeedDial
-        if (slot == null) return pickNumber(number)
-        setPhoneSpeedDial(slot, name, number)
-        _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
+        when (val assignment = _state.value.assigningSpeedDial) {
+            null -> pickNumber(number)
+            is SpeedDialAssignment.Phone -> {
+                setPhoneSpeedDial(assignment.slot, name, number)
+                _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
+            }
+            // The phone book tab asks what is still open, then calls setBoxSpeedDial.
+            is SpeedDialAssignment.Box -> Unit
+        }
     }
 
     // --- speed dials ------------------------------------------------------------------
 
     /** Opens the phone books to choose the number for this phone's speed dial [slot]. */
     fun startAssigningSpeedDial(slot: String) =
-        _state.update { it.copy(assigningSpeedDial = slot, pickerTab = PickerTab.PHONEBOOKS) }
+        _state.update { it.copy(assigningSpeedDial = SpeedDialAssignment.Phone(slot), pickerTab = PickerTab.PHONEBOOKS) }
+
+    /** Opens the phone books to choose the number for the box' speed dial [slot] (null: a new one). */
+    fun startAssigningBoxSpeedDial(slot: String?) =
+        _state.update { it.copy(assigningSpeedDial = SpeedDialAssignment.Box(slot), pickerTab = PickerTab.PHONEBOOKS) }
 
     fun cancelAssigningSpeedDial() =
         _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
@@ -784,6 +803,58 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun removePhoneSpeedDial(slot: String) {
         settings.phoneSpeedDials = settings.phoneSpeedDials.filterNot { it.slot == slot }
         _state.update { it.copy(phoneSpeedDials = settings.phoneSpeedDials) }
+    }
+
+    /**
+     * Makes [number] the box' speed dial [slot]: in the entry of the box' phone books that has the
+     * number – or, if none of its own (not online) ones has, in a new entry for [name] in phone book
+     * [newEntryBook] (null: the first of its own). Wherever else the slot was used, it is taken away. Then the phone books are read anew.
+     */
+    fun setBoxSpeedDial(slot: String, name: String, number: String, type: String, newEntryBook: Int?) {
+        val assigning = _state.value.assigningSpeedDial is SpeedDialAssignment.Box
+        runOnBox(uiText(R.string.status_setting_speed_dial, slot)) { dialer ->
+            val key = numberKeys()
+            // Only the box' own phone books can be changed, not the online ones it syncs.
+            val localBooks = _state.value.phonebooks.filterNot { it.online }
+            val contacts = localBooks.flatMap { it.contacts }.filter { it.bookId != null && it.uid != null }
+            val target = contacts.firstOrNull { c -> c.numbers.any { key(it.number) == key(number) } }
+            contacts.filter { c -> c != target && c.numbers.any { it.speedDial == slot } }
+                .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
+            if (target != null) {
+                val written = target.numbers.first { key(it.number) == key(number) }.number
+                dialer.setSpeedDial(target.bookId!!, target.uid!!, slot, written)
+            } else {
+                val book = newEntryBook ?: localBooks.first().id
+                dialer.addToPhonebook(book, PhonebookContact(name, listOf(PhonebookNumber(number, type, slot)), ""))
+            }
+            val books = dialer.loadPhonebooks()
+            _state.update {
+                it.copy(
+                    phonebooks = books,
+                    phonebooksLoaded = true,
+                    assigningSpeedDial = if (assigning) null else it.assigningSpeedDial,
+                    pickerTab = if (assigning) PickerTab.SPEED_DIALS else it.pickerTab,
+                )
+            }
+            uiText(R.string.status_speed_dial_set, slot, target?.name ?: name)
+        }
+    }
+
+    /** Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books anew. */
+    fun removeBoxSpeedDial(slot: String) = runOnBox(uiText(R.string.status_removing_speed_dial, slot)) { dialer ->
+        _state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }
+            .filter { c -> c.bookId != null && c.uid != null && c.numbers.any { it.speedDial == slot } }
+            .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
+        val books = dialer.loadPhonebooks()
+        _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+        uiText(R.string.status_speed_dial_removed, slot)
+    }
+
+    /** Compares numbers however they are written, by the rules of the box in use (see [numberKey]). */
+    private fun numberKeys(): (String) -> String {
+        val countryIso = deviceCountryIso(getApplication())
+        val codes = _state.value.activeProfile?.dialingCodes
+        return { numberKey(it, countryIso, codes) }
     }
 
     /** Switches this phone's speed dials on or off; switched off, they are kept, just not used. */

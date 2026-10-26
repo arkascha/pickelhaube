@@ -57,6 +57,10 @@ class MainActivity : ComponentActivity() {
                     val routerBooksEnabled = state.activeProfile?.phonebooksEnabled ?: true
                     // The box' phone books a contact can be handed over to: only while it is there.
                     val boxBooks = if (state.phonebooksLoaded && !state.noBoxReachable) state.phonebooks else emptyList()
+                    val boxSpeedDialsEnabled = state.activeProfile?.speedDialsEnabled ?: true
+                    val boxSpeedDials = remember(state.phonebooks) { SpeedDials.fromPhonebooks(state.phonebooks) }
+                    // The box' speed dials as far as they can be set up now.
+                    val editableBoxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled && boxBooks.any { !it.online } }
                     // While setting up a speed dial, "back" only cancels that.
                     BackHandler {
                         if (state.assigningSpeedDial != null) viewModel.cancelAssigningSpeedDial() else viewModel.closePicker()
@@ -86,6 +90,10 @@ class MainActivity : ComponentActivity() {
                                 onPick = viewModel::pickNumber,
                                 boxBooks = boxBooks,
                                 onHandOver = viewModel::handOverToBox,
+                                phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
+                                onSetSpeedDial = viewModel::setPhoneSpeedDial,
+                                boxSpeedDials = editableBoxSpeedDials,
+                                onSetBoxSpeedDial = viewModel::setBoxSpeedDial,
                                 onReloadCallLog = viewModel::loadCallLog,
                                 onDisableCallLog = viewModel::disableCallLog,
                             )
@@ -104,6 +112,8 @@ class MainActivity : ComponentActivity() {
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
                                 onSetSpeedDial = viewModel::setPhoneSpeedDial,
                                 assigningSpeedDial = state.assigningSpeedDial,
+                                boxSpeedDials = editableBoxSpeedDials,
+                                onSetBoxSpeedDial = viewModel::setBoxSpeedDial,
                                 onCancelAssigning = viewModel::cancelAssigningSpeedDial,
                                 boxBooks = boxBooks,
                                 boxName = state.activeProfile?.name,
@@ -115,16 +125,18 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         speedDials = {
-                            val boxSpeedDials = remember(state.phonebooks) { SpeedDials.fromPhonebooks(state.phonebooks) }
                             SpeedDialTab(
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                boxSpeedDials = boxSpeedDials.takeIf { state.activeProfile?.speedDialsEnabled ?: true },
+                                boxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled },
                                 boxName = state.activeProfile?.name,
                                 boxLoaded = state.phonebooksLoaded,
                                 busy = state.busy,
                                 onPick = viewModel::useSpeedDial,
                                 onAssign = viewModel::startAssigningSpeedDial,
                                 onRemove = viewModel::removePhoneSpeedDial,
+                                boxEditable = editableBoxSpeedDials != null,
+                                onAssignBox = viewModel::startAssigningBoxSpeedDial,
+                                onRemoveBox = viewModel::removeBoxSpeedDial,
                             )
                         },
                     )

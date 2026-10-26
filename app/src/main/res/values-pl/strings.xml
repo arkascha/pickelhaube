@@ -256,7 +256,7 @@
     <string name="speed_dial">Szybkie wybieranie</string>
     <string name="speed_dial_none_enabled">Żadne szybkie wybieranie nie jest włączone. Możesz je włączyć w ustawieniach.</string>
     <string name="speed_dial_phone_help">Szybkie wybieranie 1–9 jest zapisane na tym telefonie i działa z każdym FritzBox. Na klawiaturze przytrzymaj cyfrę. Dotknij wolnego miejsca, aby wybrać numer z książek telefonicznych; przytrzymaj zajęte, aby je zmienić lub usunąć.</string>
-    <string name="speed_dial_box_help">Szybkie wybieranie ustawione w książkach telefonicznych tego FritzBox, wybierane na jego słuchawkach przez **7. Na klawiaturze dotknij pierwszej cyfry i przytrzymaj drugą – albo wpisz **7 i numer.</string>
+    <string name="speed_dial_box_help">Szybkie wybieranie ustawione w książkach telefonicznych tego FritzBox, wybierane na jego słuchawkach przez **7. Na klawiaturze dotknij pierwszej cyfry i przytrzymaj drugą – albo wpisz **7 i numer. Na dole dodasz nowe; długie naciśnięcie zmienia je lub usuwa.</string>
     <string name="speed_dial_box_failed">Nie udało się wczytać szybkiego wybierania z FritzBox. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="speed_dial_box_none">W książkach telefonicznych tego FritzBox nie ustawiono szybkiego wybierania.</string>
     <string name="speed_dial_free">Wolne</string>
@@ -267,6 +267,17 @@
     <string name="speed_dial_choose_number">Dotknij numeru dla szybkiego wybierania %1$s.</string>
     <string name="speed_dial_for">Szybkie wybieranie: %1$s</string>
     <string name="speed_dial_make">Ustaw jako szybkie wybieranie</string>
+    <string name="speed_dial_make_box">Ustaw jako szybkie wybieranie FritzBox</string>
+    <string name="speed_dial_box_for">Szybkie wybieranie FritzBox dla %1$s</string>
+    <string name="speed_dial_box_new_entry">Numeru nie ma jeszcze w żadnej książce telefonicznej FritzBox. Nowy wpis w:</string>
+    <string name="speed_dial_box_online">„%1$s” jest tylko w książce online „%2$s”, której FritzBox nie może zmienić. Do szybkiego wybierania zostanie utworzony wpis we własnej książce telefonicznej FritzBox.</string>
+    <string name="speed_dial_box_add">Nowe szybkie wybieranie FritzBox</string>
+    <string name="speed_dial_choose_number_box">Dotknij numeru dla szybkiego wybierania %1$s FritzBox.</string>
+    <string name="speed_dial_choose_number_box_new">Dotknij numeru dla nowego szybkiego wybierania FritzBox.</string>
+    <string name="status_setting_speed_dial">Ustawianie szybkiego wybierania %1$s na FritzBox…</string>
+    <string name="status_speed_dial_set">Szybkie wybieranie %1$s FritzBox: %2$s</string>
+    <string name="status_removing_speed_dial">Usuwanie szybkiego wybierania %1$s z FritzBox…</string>
+    <string name="status_speed_dial_removed">Usunięto szybkie wybieranie %1$s z FritzBox.</string>
     <string name="contact_to_phone">Dodaj do kontaktów telefonu</string>
     <string name="contact_to_box">Przekaż do FritzBox</string>
     <string name="hand_over_text">„%1$s” trafi do tej książki telefonicznej FritzBox „%2$s”:</string>

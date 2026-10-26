@@ -248,7 +248,7 @@
     <string name="speed_dial">Kurzwahl</string>
     <string name="speed_dial_none_enabled">Keine Kurzwahlen eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
     <string name="speed_dial_phone_help">Die Kurzwahlen 1 bis 9 sind auf diesem Telefon gespeichert und gelten mit jeder FritzBox. Im Wählfeld die Ziffer lange drücken. Eine freie antippen, um ihre Nummer aus den Telefonbüchern zu wählen; eine belegte lange drücken, um sie zu ändern oder zu entfernen.</string>
-    <string name="speed_dial_box_help">Die in den Telefonbüchern dieser FritzBox eingerichteten Kurzwahlen, wie an ihren Mobilteilen mit **7 gewählt. Im Wählfeld die erste Ziffer antippen und die zweite lange drücken – oder **7 und die Nummer eingeben.</string>
+    <string name="speed_dial_box_help">Die in den Telefonbüchern dieser FritzBox eingerichteten Kurzwahlen, wie an ihren Mobilteilen mit **7 gewählt. Im Wählfeld die erste Ziffer antippen und die zweite lange drücken – oder **7 und die Nummer eingeben. Unten legst du eine neue an; ein langer Druck auf eine ändert oder entfernt sie.</string>
     <string name="speed_dial_box_failed">Die Kurzwahlen der FritzBox konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="speed_dial_box_none">In den Telefonbüchern dieser FritzBox sind keine Kurzwahlen eingerichtet.</string>
     <string name="speed_dial_free">Nicht belegt</string>
@@ -259,6 +259,17 @@
     <string name="speed_dial_choose_number">Tippe auf die Nummer für Kurzwahl %1$s.</string>
     <string name="speed_dial_for">Kurzwahl für %1$s</string>
     <string name="speed_dial_make">Als Kurzwahl festlegen</string>
+    <string name="speed_dial_make_box">Als FritzBox-Kurzwahl festlegen</string>
+    <string name="speed_dial_box_for">FritzBox-Kurzwahl für %1$s</string>
+    <string name="speed_dial_box_new_entry">Die Nummer steht noch in keinem Telefonbuch der FritzBox. Neuer Eintrag in:</string>
+    <string name="speed_dial_box_online">„%1$s“ steht nur im Online-Telefonbuch „%2$s“, das die FritzBox nicht ändern kann. Für die Kurzwahl bekommt der Kontakt einen Eintrag in einem eigenen Telefonbuch der FritzBox.</string>
+    <string name="speed_dial_box_add">Neue FritzBox-Kurzwahl</string>
+    <string name="speed_dial_choose_number_box">Tippe auf die Nummer für die FritzBox-Kurzwahl %1$s.</string>
+    <string name="speed_dial_choose_number_box_new">Tippe auf die Nummer für eine neue FritzBox-Kurzwahl.</string>
+    <string name="status_setting_speed_dial">Richte Kurzwahl %1$s auf der FritzBox ein…</string>
+    <string name="status_speed_dial_set">FritzBox-Kurzwahl %1$s: %2$s</string>
+    <string name="status_removing_speed_dial">Entferne Kurzwahl %1$s von der FritzBox…</string>
+    <string name="status_speed_dial_removed">Kurzwahl %1$s von der FritzBox entfernt.</string>
     <string name="contact_to_phone">In die Kontakte übernehmen</string>
     <string name="contact_to_box">An die FritzBox übergeben</string>
     <string name="hand_over_text">„%1$s“ kommt in dieses Telefonbuch der FritzBox „%2$s“:</string>

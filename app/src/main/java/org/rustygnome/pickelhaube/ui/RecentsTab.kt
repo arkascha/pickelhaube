@@ -46,6 +46,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.DeviceContacts
+import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
@@ -62,7 +63,8 @@ import java.util.Locale
  * The number picker's "Recent" tab: the numbers dialled, received or missed last, from the
  * FRITZ!Box' call list (if used for the box in use) and – optionally, switched on in the settings – from the phone's own call
  * log. Each number appears once, at its latest call. Tapping one puts it into the dialer; a long
- * press opens a menu to take it over into this phone's contacts or hand it over to the box.
+ * press opens a menu to take it over into this phone's contacts, hand it over to the box, or make
+ * it a speed dial of this phone or of the box.
  */
 @Composable
 fun RecentsTab(
@@ -83,23 +85,58 @@ fun RecentsTab(
     callLogProblem: UiText?,
     busy: Boolean,
     onPick: (String) -> Unit,
-    /** The phone books of the box in use a number can be handed over to (empty = none, e.g. not reachable). */
+    /** The phone books of the box in use, online ones included (empty = none, e.g. not reachable). */
     boxBooks: List<Phonebook>,
     /** Hands a number (with its name, if known) over to a phone book of the box. */
     onHandOver: (Phonebook, PhonebookContact) -> Unit,
+    /** This phone's speed dials; null when switched off. */
+    phoneSpeedDials: List<SpeedDial>?,
+    /** Makes a number this phone's speed dial: slot, name, number. */
+    onSetSpeedDial: (String, String, String) -> Unit,
+    /** The box' speed dials; null when they cannot be set up (switched off, or the box not there). */
+    boxSpeedDials: List<SpeedDial>?,
+    /** Makes a number the box' speed dial: slot, name, number, type, phone book of a new entry. */
+    onSetBoxSpeedDial: (String, String, String, String, Int?) -> Unit,
     /** Re-reads the phone's call log (when coming back to the app, a call may have been made). */
     onReloadCallLog: () -> Unit,
     onDisableCallLog: () -> Unit,
 ) {
     val context = LocalContext.current
+    // The box' own phone books: only these can be changed (not the online ones it syncs).
+    val localBooks = remember(boxBooks) { boxBooks.filterNot { it.online } }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { onReloadCallLog() }
 
+    // A number to become this phone's speed dial: choosing the slot.
+    var speedDialFor by remember { mutableStateOf<PhonebookContact?>(null) }
+    speedDialFor?.takeIf { phoneSpeedDials != null }?.let { contact ->
+        SpeedDialSlotDialog(
+            name = contact.name,
+            taken = phoneSpeedDials.orEmpty(),
+            onChoose = { slot ->
+                speedDialFor = null
+                onSetSpeedDial(slot, contact.name, contact.numbers.first().number)
+            },
+            onDismiss = { speedDialFor = null },
+        )
+    }
+    // A number to become the box' speed dial: asking for the slot (and phone book).
+    var boxSpeedDialFor by remember { mutableStateOf<BoxSpeedDialRequest?>(null) }
+    boxSpeedDialFor?.takeIf { boxSpeedDials != null && localBooks.isNotEmpty() }?.let { request ->
+        BoxSpeedDialRequestDialog(
+            request = request,
+            boxBooks = boxBooks,
+            taken = boxSpeedDials.orEmpty(),
+            dialingCodes = dialingCodes,
+            onSet = onSetBoxSpeedDial,
+            onDismiss = { boxSpeedDialFor = null },
+        )
+    }
     // Number (as a contact) being handed over to the box: choosing the phone book.
     var handOverFor by remember { mutableStateOf<PhonebookContact?>(null) }
-    handOverFor?.takeIf { boxBooks.isNotEmpty() }?.let { contact ->
+    handOverFor?.takeIf { localBooks.isNotEmpty() }?.let { contact ->
         HandOverDialog(
             contact = contact,
-            books = boxBooks,
+            books = localBooks,
             boxName = boxName,
             dialingCodes = dialingCodes,
             onHandOver = { book ->
@@ -147,12 +184,20 @@ fun RecentsTab(
                 val times = rememberRelativeTimes()
                 val toBox = stringResource(R.string.contact_to_box)
                 val toPhone = stringResource(R.string.contact_to_phone)
+                val makeSpeedDial = stringResource(R.string.speed_dial_make)
+                val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                 LazyColumn(Modifier.fillMaxSize()) {
                     items(calls) { call ->
                         val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
                         val actions = listOfNotNull(
                             NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
-                            if (boxBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                            if (localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                            phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact } },
+                            if (boxSpeedDials != null && localBooks.isNotEmpty()) {
+                                NumberAction(makeBoxSpeedDial) {
+                                    boxSpeedDialFor = BoxSpeedDialRequest(contact.name, call.number, "other", null)
+                                }
+                            } else null,
                         )
                         RecentRow(call, times.format(call.time, now), boxName, onPick, actions)
                         HorizontalDivider()

@@ -124,7 +124,7 @@ A long press on a number – in **Phone books** or in **Recent** – opens a men
   is reachable and its phone books are loaded): asks into which phone book of the box, says if one of
   the numbers is already in it, and adds the contact with all its numbers as a new entry (TR-064
   `X_AVM-DE_OnTel` `SetPhonebookEntryUID`). Kinds the box does not know become *other*.
-- **Make speed dial** (see below).
+- **Make speed dial** and **Make FritzBox speed dial** (see below).
 
 Each is a one-off copy of a single contact, not a synchronisation.
 
@@ -178,6 +178,15 @@ Speed dials come from two sources that never collide, each of which can be switc
   the number – Pickelhaube dials the number it stands for. Switch: on each box' connection page,
   **Speed dials** (on by default, independent of **Phone books**). The box' phone books are read in
   the background after connecting, so these work right away.
+  While the box is reachable they can be changed as well: **New FritzBox speed dial** at the end of the
+  list (then tap the number in the phone books and choose a free slot), a long press on one to change or
+  remove it, or **Make FritzBox speed dial** in the menu of a long-pressed number (phone books, recent
+  calls). The speed dial goes to the box' entry that has the number (TR-064 `GetPhonebookEntryUID`, the
+  `quickdial` attribute set, `SetPhonebookEntryUID`, the rest of the entry unchanged); a number in none
+  of its phone books gets a new entry, in the phone book chosen then. A slot used before is freed there.
+  Online phone books the box syncs from a provider (Google, CardDAV, …; `owner` 240 and up in the
+  export) cannot be changed through the box: a number only there gets an entry with the speed dial in
+  one of the box' own phone books – the dialog says so. They are not offered for handing over either.
 
 After a speed dial the number field's label says which one it is and whose number. The **Speed
 dial** tab lists both kinds, so you can pick one without knowing its number.

@@ -248,7 +248,7 @@
     <string name="speed_dial">Snelkiezen</string>
     <string name="speed_dial_none_enabled">Er zijn geen snelkeuzes ingeschakeld. Je kunt ze in de instellingen inschakelen.</string>
     <string name="speed_dial_phone_help">De snelkeuzes 1 tot 9 zijn op deze telefoon opgeslagen en werken met elke FritzBox. Houd in het kiesscherm het cijfer ingedrukt. Tik op een vrije om het nummer uit de telefoonboeken te kiezen; houd een ingestelde ingedrukt om die te wijzigen of te verwijderen.</string>
-    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FritzBox zijn ingesteld, zoals ze op de handsets met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in.</string>
+    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FritzBox zijn ingesteld, zoals ze op de handsets met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
     <string name="speed_dial_box_failed">De snelkeuzes van de FritzBox konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="speed_dial_box_none">In de telefoonboeken van deze FritzBox zijn geen snelkeuzes ingesteld.</string>
     <string name="speed_dial_free">Niet ingesteld</string>
@@ -259,6 +259,17 @@
     <string name="speed_dial_choose_number">Tik op het nummer voor snelkeuze %1$s.</string>
     <string name="speed_dial_for">Snelkeuze voor %1$s</string>
     <string name="speed_dial_make">Als snelkeuze instellen</string>
+    <string name="speed_dial_make_box">Als snelkeuze van de FritzBox instellen</string>
+    <string name="speed_dial_box_for">Snelkeuze van de FritzBox voor %1$s</string>
+    <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FritzBox. Nieuwe vermelding in:</string>
+    <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FritzBox niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FritzBox.</string>
+    <string name="speed_dial_box_add">Nieuwe snelkeuze van de FritzBox</string>
+    <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FritzBox.</string>
+    <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FritzBox.</string>
+    <string name="status_setting_speed_dial">Snelkeuze %1$s wordt op de FritzBox ingesteld…</string>
+    <string name="status_speed_dial_set">Snelkeuze %1$s van de FritzBox: %2$s</string>
+    <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FritzBox verwijderd…</string>
+    <string name="status_speed_dial_removed">Snelkeuze %1$s van de FritzBox verwijderd.</string>
     <string name="contact_to_phone">Overnemen in de contacten</string>
     <string name="contact_to_box">Doorgeven aan de FritzBox</string>
     <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FritzBox ‘%2$s’:</string>

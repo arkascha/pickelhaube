@@ -39,7 +39,8 @@ import org.rustygnome.pickelhaube.data.SpeedDials
  * The number picker's "Speed dial" tab, in two parts that never collide: this phone's own speed
  * dials 1–9 (valid with every box; free slots can be set up from the phone books, a long press on
  * a set one changes or removes it), and the two-digit ones set up in the phone books of the box in
- * use (read only). Tapping one puts its number into the dialer.
+ * use (while the box is there: a new one from the phone books, a long press on one changes or
+ * removes it). Tapping one puts its number into the dialer.
  */
 @Composable
 fun SpeedDialTab(
@@ -56,6 +57,11 @@ fun SpeedDialTab(
     /** Choose a number from the phone books for this phone's speed dial slot. */
     onAssign: (String) -> Unit,
     onRemove: (String) -> Unit,
+    /** The box' speed dials can be changed now (the box is there and its phone books are read). */
+    boxEditable: Boolean,
+    /** Choose a number from the phone books for the box' speed dial slot (null: a new one). */
+    onAssignBox: (String?) -> Unit,
+    onRemoveBox: (String) -> Unit,
 ) {
     if (phoneSpeedDials == null && boxSpeedDials == null) {
         Message(stringResource(R.string.speed_dial_none_enabled))
@@ -92,11 +98,22 @@ fun SpeedDialTab(
                 boxSpeedDials.isEmpty() && !boxLoaded -> item { Message(stringResource(R.string.speed_dial_box_failed)) }
                 boxSpeedDials.isEmpty() -> item { Message(stringResource(R.string.speed_dial_box_none)) }
                 else -> items(boxSpeedDials, key = { "box-${it.slot}" }) { speedDial ->
+                    BoxSlotRow(
+                        speedDial = speedDial,
+                        editable = boxEditable,
+                        onPick = onPick,
+                        onChange = { onAssignBox(speedDial.slot) },
+                        onRemove = { onRemoveBox(speedDial.slot) },
+                    )
+                    HorizontalDivider()
+                }
+            }
+            if (boxEditable) {
+                item(key = "box-new") {
                     ListItem(
-                        leadingContent = { SlotLabel(speedDial.slot) },
-                        headlineContent = { Text(speedDial.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                        supportingContent = { Text(speedDial.number, maxLines = 1) },
-                        modifier = Modifier.clickable { onPick(speedDial) },
+                        leadingContent = { Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.width(32.dp)) },
+                        headlineContent = { Text(stringResource(R.string.speed_dial_box_add)) },
+                        modifier = Modifier.clickable { onAssignBox(null) },
                     )
                     HorizontalDivider()
                 }
@@ -126,6 +143,53 @@ private fun SlotLabel(slot: String) {
         textAlign = TextAlign.Center,
         modifier = Modifier.width(32.dp),
     )
+}
+
+/** One of the box' speed dials: tap to use; long press – while the box is there – to change or remove. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun BoxSlotRow(
+    speedDial: SpeedDial,
+    editable: Boolean,
+    onPick: (SpeedDial) -> Unit,
+    onChange: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    var menu by remember { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
+    Box {
+        ListItem(
+            leadingContent = { SlotLabel(speedDial.slot) },
+            headlineContent = { Text(speedDial.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            supportingContent = { Text(speedDial.number, maxLines = 1) },
+            modifier = Modifier.combinedClickable(
+                onClick = { onPick(speedDial) },
+                onLongClickLabel = stringResource(R.string.speed_dial_change_or_remove).takeIf { editable },
+                onLongClick = if (editable) {
+                    {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        menu = true
+                    }
+                } else null,
+            ),
+        )
+        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onChange, onRemove = onRemove)
+    }
+}
+
+/** Change or remove a speed dial. */
+@Composable
+private fun SlotMenu(expanded: Boolean, onDismiss: () -> Unit, onChange: () -> Unit, onRemove: () -> Unit) {
+    DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.speed_dial_change)) },
+            onClick = { onDismiss(); onChange() },
+        )
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.speed_dial_remove), color = MaterialTheme.colorScheme.error) },
+            onClick = { onDismiss(); onRemove() },
+        )
+    }
 }
 
 /** One of this phone's slots: tap to use (or, when free, to set up); long press to change or remove. */
@@ -170,15 +234,6 @@ private fun PhoneSlotRow(
                 )
             },
         )
-        DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.speed_dial_change)) },
-                onClick = { menu = false; onAssign() },
-            )
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.speed_dial_remove), color = MaterialTheme.colorScheme.error) },
-                onClick = { menu = false; onRemove() },
-            )
-        }
+        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onAssign, onRemove = onRemove)
     }
 }

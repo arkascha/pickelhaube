@@ -116,6 +116,11 @@ class FritzDialer(
     @Throws(IOException::class)
     fun addToPhonebook(bookId: Int, contact: PhonebookContact) = FritzPhonebooks(config, authToken).add(bookId, contact)
 
+    /** Sets or removes a speed dial in an entry of the box' phone books (see [FritzPhonebooks.setSpeedDial]). */
+    @Throws(IOException::class)
+    fun setSpeedDial(bookId: Int, uid: String, slot: String, number: String?) =
+        FritzPhonebooks(config, authToken).setSpeedDial(bookId, uid, slot, number)
+
     /** The latest dialled, received and missed calls from the box' call list (see [FritzCallList]). */
     @Throws(IOException::class)
     fun loadRecentCalls(): List<RecentCall> = FritzCallList(config, authToken).load()

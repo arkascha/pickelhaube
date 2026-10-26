@@ -252,7 +252,7 @@
     <string name="speed_dial">Marcación rápida</string>
     <string name="speed_dial_none_enabled">No hay marcaciones rápidas activadas. Puedes activarlas en los ajustes.</string>
     <string name="speed_dial_phone_help">Las marcaciones rápidas 1 a 9 se guardan en este teléfono y funcionan con cualquier FritzBox. En el teclado, mantén pulsada la cifra. Toca una libre para elegir su número de las agendas; mantén pulsada una asignada para cambiarla o quitarla.</string>
-    <string name="speed_dial_box_help">Las marcaciones rápidas configuradas en las agendas de esta FritzBox, como se marcan en sus terminales con **7. En el teclado, toca la primera cifra y mantén pulsada la segunda, o introduce **7 y el número.</string>
+    <string name="speed_dial_box_help">Las marcaciones rápidas configuradas en las agendas de esta FritzBox, como se marcan en sus terminales con **7. En el teclado, toca la primera cifra y mantén pulsada la segunda, o introduce **7 y el número. Abajo puedes crear una nueva; mantén pulsada una para cambiarla o quitarla.</string>
     <string name="speed_dial_box_failed">No se pudieron cargar las marcaciones rápidas de la FritzBox. Toca Volver a cargar para intentarlo de nuevo.</string>
     <string name="speed_dial_box_none">No hay marcaciones rápidas configuradas en las agendas de esta FritzBox.</string>
     <string name="speed_dial_free">Libre</string>
@@ -263,6 +263,17 @@
     <string name="speed_dial_choose_number">Toca el número para la marcación rápida %1$s.</string>
     <string name="speed_dial_for">Marcación rápida para %1$s</string>
     <string name="speed_dial_make">Usar como marcación rápida</string>
+    <string name="speed_dial_make_box">Usar como marcación rápida de la FritzBox</string>
+    <string name="speed_dial_box_for">Marcación rápida de la FritzBox para %1$s</string>
+    <string name="speed_dial_box_new_entry">El número aún no está en ninguna agenda de la FritzBox. Nueva entrada en:</string>
+    <string name="speed_dial_box_online">«%1$s» solo está en la agenda en línea «%2$s», que la FritzBox no puede modificar. Para la marcación rápida se crea una entrada en una agenda propia de la FritzBox.</string>
+    <string name="speed_dial_box_add">Nueva marcación rápida de la FritzBox</string>
+    <string name="speed_dial_choose_number_box">Toca el número para la marcación rápida %1$s de la FritzBox.</string>
+    <string name="speed_dial_choose_number_box_new">Toca el número para una nueva marcación rápida de la FritzBox.</string>
+    <string name="status_setting_speed_dial">Configurando la marcación rápida %1$s en la FritzBox…</string>
+    <string name="status_speed_dial_set">Marcación rápida %1$s de la FritzBox: %2$s</string>
+    <string name="status_removing_speed_dial">Quitando la marcación rápida %1$s de la FritzBox…</string>
+    <string name="status_speed_dial_removed">Marcación rápida %1$s quitada de la FritzBox.</string>
     <string name="contact_to_phone">Añadir a los contactos del teléfono</string>
     <string name="contact_to_box">Pasar a la FritzBox</string>
     <string name="hand_over_text">«%1$s» se guardará en esta agenda de la FritzBox «%2$s»:</string>
