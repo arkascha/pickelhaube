@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.Add
@@ -62,9 +63,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -418,8 +420,8 @@ private fun ConfirmDeleteDialog(name: String, onConfirm: () -> Unit, onDismiss: 
 fun ConnectionSettingsScreen(
     initial: FritzConfig,
     canGoBack: Boolean,
-    /** SHA-256 fingerprint of the currently trusted certificate, or null. */
-    trustedFingerprint: String?,
+    /** Whether a certificate of the box has been confirmed (for HTTPS). */
+    hasTrustedCert: Boolean,
     busy: Boolean,
     status: UiText?,
     /** Name of the connection being edited (empty for a new one). */
@@ -530,6 +532,12 @@ fun ConnectionSettingsScreen(
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
             )
+            // What the box at the stored address said about itself – not about one just typed in.
+            if (boxInfo != null && host.trim() == initial.host) {
+                Column(Modifier.padding(start = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    BoxInfoSection(boxInfo, dialingCodes)
+                }
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(R.string.connection_https), style = MaterialTheme.typography.bodyLarge)
@@ -626,10 +634,6 @@ fun ConnectionSettingsScreen(
                 Text(status.asString(), style = MaterialTheme.typography.bodySmall)
             }
 
-            if (boxInfo != null) {
-                HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                BoxInfoSection(boxInfo, dialingCodes)
-            }
             if (userRights != null && userRights.access.isNotEmpty()) {
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
                 UserRightsSection(userRights.username ?: initial.username, userRights)
@@ -637,18 +641,14 @@ fun ConnectionSettingsScreen(
 
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             Text(stringResource(R.string.connection_trusted_cert), style = MaterialTheme.typography.titleSmall)
-            if (trustedFingerprint == null) {
+            if (!hasTrustedCert) {
                 Text(
                     stringResource(R.string.connection_no_cert),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
-                Text(
-                    stringResource(R.string.connection_cert_fingerprint, trustedFingerprint),
-                    style = MaterialTheme.typography.bodySmall,
-                    fontFamily = FontFamily.Monospace,
-                )
+                Text(stringResource(R.string.connection_cert_trusted), style = MaterialTheme.typography.bodySmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = onShowCertificate) { Text(stringResource(R.string.show)) }
                     OutlinedButton(onClick = onForgetCertificate) {
@@ -760,7 +760,20 @@ private fun BoxInfoSection(info: BoxInfo, codes: DialingCodes?) {
 /** What the box said the user may do, area by area, as the box' user settings name them. */
 @Composable
 private fun UserRightsSection(username: String, rights: UserRights) {
-    Text(stringResource(R.string.connection_rights_title, username), style = MaterialTheme.typography.titleSmall)
+    // "Permissions of the user 'x'" if that fits in one line, else the shorter "Permissions of 'x'".
+    BoxWithConstraints {
+        val style = MaterialTheme.typography.titleSmall
+        val title = stringResource(R.string.connection_rights_title, username)
+        val fits = !rememberTextMeasurer()
+            .measure(title, style, maxLines = 1, constraints = Constraints(maxWidth = constraints.maxWidth))
+            .hasVisualOverflow
+        Text(if (fits) title else stringResource(R.string.connection_rights_title_short, username), style = style)
+    }
+    Text(
+        stringResource(R.string.connection_rights_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         rights.access.forEach { (area, access) ->
             val name = when (area) {
@@ -776,12 +789,15 @@ private fun UserRightsSection(username: String, rights: UserRights) {
                 UserRights.READ_WRITE -> stringResource(R.string.access_read_write)
                 else -> access
             }
-            Text(
-                stringResource(R.string.connection_right, name, level),
-                style = MaterialTheme.typography.bodySmall,
-                color = if (access == UserRights.NONE) MaterialTheme.colorScheme.onSurfaceVariant
-                else MaterialTheme.colorScheme.onSurface,
-            )
+            val color = if (access == UserRights.NONE) MaterialTheme.colorScheme.onSurfaceVariant
+            else MaterialTheme.colorScheme.onSurface
+            // Bullet, area (may wrap) and its access level at the end of the line.
+            Row(Modifier.padding(start = 4.dp)) {
+                Text("•", style = MaterialTheme.typography.bodySmall, color = color, modifier = Modifier.width(12.dp))
+                Text(name, style = MaterialTheme.typography.bodySmall, color = color, modifier = Modifier.weight(1f))
+                Spacer(Modifier.width(12.dp))
+                Text(level, style = MaterialTheme.typography.bodySmall, color = color)
+            }
         }
     }
 }

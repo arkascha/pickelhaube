@@ -120,8 +120,9 @@
     <string name="connection_box_serial">Serienummer: %1$s</string>
     <string name="connection_box_country_code">Landnummer: %1$s</string>
     <string name="connection_box_area_code">Netnummer: %1$s</string>
-    <string name="connection_rights_title">Rechten van %1$s</string>
-    <string name="connection_right">%1$s: %2$s</string>
+    <string name="connection_rights_title">Rechten van gebruiker ‘%1$s’</string>
+    <string name="connection_rights_title_short">Rechten van ‘%1$s’</string>
+    <string name="connection_rights_hint">Wat deze gebruiker op de FritzBox mag, zoals de box het meldt. Te wijzigen op de box onder Systeem › FRITZ!Box-gebruikers.</string>
     <string name="right_box_admin">FRITZ!Box-instellingen</string>
     <string name="right_phone">Spraakberichten, faxberichten, FRITZ!App Fon en gesprekkenlijst</string>
     <string name="right_home_auto">Smart Home</string>
@@ -130,9 +131,9 @@
     <string name="access_read">alleen lezen</string>
     <string name="access_read_write">lezen en wijzigen</string>
     <string name="connection_box_info_unknown">Nog niet bekend. Wordt bij de volgende verbinding van de box gelezen – als de gebruiker daarvoor de rechten heeft.</string>
-    <string name="connection_trusted_cert">Vertrouwd certificaat</string>
+    <string name="connection_trusted_cert">Vertrouwd HTTPS-certificaat</string>
     <string name="connection_no_cert">Geen. Bij een verbinding via HTTPS word je gevraagd het certificaat van de router te bevestigen.</string>
-    <string name="connection_cert_fingerprint">SHA-256 %1$s</string>
+    <string name="connection_cert_trusted">Bevestigd. Via HTTPS maakt de app alleen verbinding met de box die precies dit certificaat toont.</string>
     <string name="connection_delete_box">Deze FritzBox verwijderen</string>
 
     <!-- certificates -->

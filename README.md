@@ -60,12 +60,13 @@ its own and disables the dial button (a number can still be entered); the picker
 phone's own contacts and calls, while its reload button still tries the box.
 
 The connection page also shows the box' **device details** – model, FRITZ!OS version and serial number
-(TR-064 `DeviceInfo` `GetInfo`) – to tell boxes apart. They are read when the connection is saved and
+(TR-064 `DeviceInfo` `GetInfo`) – right under its address, to tell boxes apart (hidden while another
+address is entered). They are read when the connection is saved and
 again whenever the phones are loaded, so they stay current after a FRITZ!OS update. Reading them is
 optional: if the box' user lacks the rights for it, they are simply missing. What AVM calls the serial
 number is in fact the box' MAC address, not the number on its label.
 
-Below them, the connection page lists the **permissions** of the configured user as the box reports
+Further down, the connection page lists the **permissions** of the configured user as the box reports
 them (TR-064 `LANConfigSecurity` `X_AVM-DE_GetCurrentUser`), area by area, read alongside the device
 details. They are used in three ways: when a connection is saved for a user without *Voice messages,
 fax messages, FRITZ!App Fon and call list*, its **Call list** switch is turned off (it could only fail),
@@ -197,8 +198,8 @@ uses *trust on first use* with certificate pinning:
   certificate rarely matches the name or IP you use; the pin is the stronger check.
 - If the box ever presents a different certificate (factory reset, renamed box – or an attacker),
   a **Certificate has changed!** warning appears instead of connecting silently.
-- **Settings › Trusted certificate** shows the pinned certificate's fingerprint, with **Show** (full details)
-  and **Forget**.
+- **Settings › Trusted HTTPS certificate** says whether a certificate is pinned, with **Show** (full
+  details, fingerprints included) and **Forget**.
 
 ### Quick settings tiles
 

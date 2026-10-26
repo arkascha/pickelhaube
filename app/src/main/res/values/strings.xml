@@ -122,8 +122,9 @@
     <string name="connection_box_serial">Serial number: %1$s</string>
     <string name="connection_box_country_code">Country code: %1$s</string>
     <string name="connection_box_area_code">Area code: %1$s</string>
-    <string name="connection_rights_title">Permissions of %1$s</string>
-    <string name="connection_right">%1$s: %2$s</string>
+    <string name="connection_rights_title">Permissions of the user “%1$s”</string>
+    <string name="connection_rights_title_short">Permissions of “%1$s”</string>
+    <string name="connection_rights_hint">What this user may do on the FritzBox, as the box reports it. Changed on the box under System › FRITZ!Box Users.</string>
     <string name="right_box_admin">FRITZ!Box settings</string>
     <string name="right_phone">Voice messages, fax messages, FRITZ!App Fon and call list</string>
     <string name="right_home_auto">Smart Home</string>
@@ -132,9 +133,9 @@
     <string name="access_read">read only</string>
     <string name="access_read_write">read and change</string>
     <string name="connection_box_info_unknown">Not known yet. Read from the box on the next connection – unless its user lacks the rights for it.</string>
-    <string name="connection_trusted_cert">Trusted certificate</string>
+    <string name="connection_trusted_cert">Trusted HTTPS certificate</string>
     <string name="connection_no_cert">None. When connecting via HTTPS you will be asked to confirm the router’s certificate.</string>
-    <string name="connection_cert_fingerprint">SHA-256 %1$s</string>
+    <string name="connection_cert_trusted">Confirmed. Via HTTPS the app only connects to the box that presents exactly this certificate.</string>
     <string name="connection_delete_box">Delete this FritzBox</string>
 
     <!-- certificates -->

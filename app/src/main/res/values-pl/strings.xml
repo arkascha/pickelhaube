@@ -120,8 +120,9 @@
     <string name="connection_box_serial">Numer seryjny: %1$s</string>
     <string name="connection_box_country_code">Numer kierunkowy kraju: %1$s</string>
     <string name="connection_box_area_code">Numer kierunkowy: %1$s</string>
-    <string name="connection_rights_title">Uprawnienia użytkownika %1$s</string>
-    <string name="connection_right">%1$s: %2$s</string>
+    <string name="connection_rights_title">Uprawnienia użytkownika „%1$s”</string>
+    <string name="connection_rights_title_short">Uprawnienia „%1$s”</string>
+    <string name="connection_rights_hint">Co ten użytkownik może robić na FritzBoxie, według routera. Można to zmienić na routerze w System › Użytkownicy FRITZ!Box.</string>
     <string name="right_box_admin">Ustawienia FRITZ!Box</string>
     <string name="right_phone">Wiadomości głosowe, faksy, FRITZ!App Fon i lista połączeń</string>
     <string name="right_home_auto">Smart Home</string>
@@ -130,9 +131,9 @@
     <string name="access_read">tylko odczyt</string>
     <string name="access_read_write">odczyt i zmiana</string>
     <string name="connection_box_info_unknown">Jeszcze nieznane. Zostaną odczytane z routera przy następnym połączeniu – o ile jego użytkownik ma do tego uprawnienia.</string>
-    <string name="connection_trusted_cert">Zaufany certyfikat</string>
+    <string name="connection_trusted_cert">Zaufany certyfikat HTTPS</string>
     <string name="connection_no_cert">Brak. Przy połączeniu przez HTTPS zostaniesz poproszony o potwierdzenie certyfikatu routera.</string>
-    <string name="connection_cert_fingerprint">SHA-256 %1$s</string>
+    <string name="connection_cert_trusted">Potwierdzony. Przez HTTPS aplikacja łączy się tylko z routerem, który przedstawi dokładnie ten certyfikat.</string>
     <string name="connection_delete_box">Usuń ten FritzBox</string>
 
     <!-- certificates -->

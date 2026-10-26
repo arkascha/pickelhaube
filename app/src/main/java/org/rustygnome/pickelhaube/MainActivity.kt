@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.SpeedDials
-import org.rustygnome.pickelhaube.tr064.CertificateInfo
 import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
 import org.rustygnome.pickelhaube.ui.DialerScreen
 import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
@@ -51,9 +50,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             PickelhaubeTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                val trustedFingerprint = remember(state.config.trustedCertDer) {
-                    state.config.trustedCertDer?.let(CertificateInfo::fromDerBase64)?.sha256
-                }
                 if (state.showLanguage && state.showSettings) {
                     BackHandler { viewModel.closeLanguage() }
                     LanguageScreen(onBack = viewModel::closeLanguage)
@@ -134,7 +130,7 @@ class MainActivity : ComponentActivity() {
                         ConnectionSettingsScreen(
                             initial = state.config,
                             canGoBack = canGoBack,
-                            trustedFingerprint = trustedFingerprint,
+                            hasTrustedCert = state.config.trustedCertDer != null,
                             busy = state.busy,
                             status = state.status,
                             initialName = state.editingName,
