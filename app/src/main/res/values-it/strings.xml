@@ -298,6 +298,11 @@
     <string name="tile_redial">Pickelhaube: ripeti chiamata</string>
     <string name="tile_redial_none">Nessun numero chiamato</string>
     <string name="tile_no_box">Nessuna FritzBox raggiungibile</string>
+    <string name="tile_deflection">Trasferimento di chiamata</string>
+    <string name="tile_deflection_switching">Cambio in corso…</string>
+    <string name="tile_deflection_failed">Cambio non riuscito</string>
+    <string name="tile_deflection_unreadable">Non leggibile</string>
+    <string name="tile_deflection_none">Nessuno configurato</string>
     <string name="settings_tiles">Riquadri delle impostazioni rapide</string>
     <string name="settings_tile_add">Aggiungi «%1$s»</string>
     <string name="settings_tile_added">«%1$s» è stato aggiunto alle impostazioni rapide.</string>
@@ -312,6 +317,7 @@
     <string name="deflections_loading">Lettura dei trasferimenti di chiamata…</string>
     <string name="deflections_failed">Impossibile leggere i trasferimenti di chiamata. Tocca Ricarica per riprovare.</string>
     <string name="deflections_none">Su questa FritzBox non è configurato alcun trasferimento di chiamata.</string>
+    <string name="deflections_tile_hint">Il riquadro «Trasferimento di chiamata» delle impostazioni rapide attiva o disattiva quello selezionato.</string>
     <string name="deflection_all">Tutte le chiamate</string>
     <string name="deflection_from">Chiamate da %1$s</string>
     <string name="deflection_to">Chiamate verso %1$s</string>

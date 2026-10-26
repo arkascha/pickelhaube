@@ -296,6 +296,11 @@
     <string name="tile_redial">Pickelhaube redial</string>
     <string name="tile_redial_none">Nothing dialled yet</string>
     <string name="tile_no_box">No FritzBox reachable</string>
+    <string name="tile_deflection">Call forwarding</string>
+    <string name="tile_deflection_switching">Switching…</string>
+    <string name="tile_deflection_failed">Switching failed</string>
+    <string name="tile_deflection_unreadable">Cannot be read</string>
+    <string name="tile_deflection_none">None set up</string>
     <string name="settings_tiles">Quick settings tiles</string>
     <string name="settings_tile_add">Add “%1$s”</string>
     <string name="settings_tile_added">“%1$s” was added to the quick settings.</string>
@@ -310,6 +315,7 @@
     <string name="deflections_loading">Reading the call forwardings…</string>
     <string name="deflections_failed">The call forwardings could not be read. Tap reload to try again.</string>
     <string name="deflections_none">No call forwarding is set up on this FritzBox.</string>
+    <string name="deflections_tile_hint">The quick settings tile “Call forwarding” switches the one marked.</string>
     <string name="deflection_all">All calls</string>
     <string name="deflection_from">Calls from %1$s</string>
     <string name="deflection_to">Calls to %1$s</string>

@@ -207,6 +207,11 @@ on the box (Telephony › Call Handling › Call Forwarding). The symbol sits on
 them is switched on, and is greyed out while none is. It is there only while the box in use is reachable and has some set up: they are read
 in the background after connecting – quietly, so a box whose user may not read them just shows none.
 
+The quick settings tile **Call forwarding** switches one of them on and off – on the box reachable from
+the current network: the one marked on that page (a choice offered when there is more than one), else
+the first. It shows whether it is on and where it forwards to, and asks for the phone to be unlocked
+before switching.
+
 ### Language
 
 Pickelhaube is available in English, German, Dutch, French, Italian, Spanish and Polish.
@@ -245,19 +250,22 @@ uses *trust on first use* with certificate pinning:
 
 ### Quick settings tiles
 
-Two tiles can be added to the quick settings. From Android 13 on, **Settings › Quick settings tiles**
+Three tiles can be added to the quick settings. From Android 13 on, **Settings › Quick settings tiles**
 has a button for each, and Android asks whether to add it. A tile already there is listed as such
 instead – Android cannot be asked, so each tile notes when it is added or removed (and when it is shown); otherwise (or if that fails) pull down the
 shade twice, tap the pencil and drag them into your tiles – apps' tiles are usually at the very end:
 
-- **Pickelhaube** opens the dialer; from Android 10 on its subtitle names the FritzBox reachable from
-  the current network – looked for each time the shade is pulled down, as the app does – or says
-  *No FritzBox reachable*.
+- **Pickelhaube** opens the dialer. It is highlighted while a FritzBox is reachable from the current
+  network – looked for each time the shade is pulled down, as the app does –, and from Android 10 on
+  its subtitle names it, or says *No FritzBox reachable*.
 - **Pickelhaube redial** opens the dialer with the number dialled last already entered, shown as its subtitle.
   It does not dial by itself – a tap in the shade is easily made by accident – so the green button
-  still has to be pressed. The tile is greyed out until something was dialled.
+  still has to be pressed. The tile is greyed out until something was dialled; like **Pickelhaube**, it
+  is highlighted while a FritzBox is reachable.
+- **Call forwarding** switches a call forwarding of the FritzBox reachable from the current network
+  (see *Call forwarding* above).
 
-On a locked phone, both open Pickelhaube once the phone is unlocked.
+On a locked phone, they do what they do only once the phone is unlocked.
 
 Pickelhaube also registers for `tel:` links, so you can pick it when tapping a number in
 Contacts or a web page; the number is pre-filled.
@@ -273,7 +281,7 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/BoxUsers.kt` | The box' users, offered for the user name (`LANConfigSecurity` `X_AVM-DE_GetUserList`) |
 | `tr064/BoxDiscovery.kt` | Recognises the FritzBox of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
-| `tile/Tiles.kt` | Quick settings tiles "Pickelhaube" and "Pickelhaube redial" |
+| `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Pickelhaube redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |

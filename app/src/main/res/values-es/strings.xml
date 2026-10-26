@@ -298,6 +298,11 @@
     <string name="tile_redial">Pickelhaube: rellamada</string>
     <string name="tile_redial_none">Aún no se ha marcado nada</string>
     <string name="tile_no_box">Ninguna FritzBox accesible</string>
+    <string name="tile_deflection">Desvío de llamadas</string>
+    <string name="tile_deflection_switching">Cambiando…</string>
+    <string name="tile_deflection_failed">No se pudo cambiar</string>
+    <string name="tile_deflection_unreadable">No se puede leer</string>
+    <string name="tile_deflection_none">Ninguno configurado</string>
     <string name="settings_tiles">Iconos de los ajustes rápidos</string>
     <string name="settings_tile_add">Añadir «%1$s»</string>
     <string name="settings_tile_added">«%1$s» se ha añadido a los ajustes rápidos.</string>
@@ -312,6 +317,7 @@
     <string name="deflections_loading">Leyendo los desvíos de llamadas…</string>
     <string name="deflections_failed">No se pudieron leer los desvíos de llamadas. Toca recargar para volver a intentarlo.</string>
     <string name="deflections_none">No hay ningún desvío de llamadas configurado en esta FritzBox.</string>
+    <string name="deflections_tile_hint">El mosaico «Desvío de llamadas» de los ajustes rápidos cambia el marcado.</string>
     <string name="deflection_all">Todas las llamadas</string>
     <string name="deflection_from">Llamadas de %1$s</string>
     <string name="deflection_to">Llamadas a %1$s</string>

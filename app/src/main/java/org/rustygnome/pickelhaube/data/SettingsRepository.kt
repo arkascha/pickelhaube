@@ -168,6 +168,11 @@ class SettingsRepository(context: Context) {
 
     fun setTileAdded(tile: String, added: Boolean) = prefs.edit { putBoolean(KEY_TILE_ADDED + tile, added) }
 
+    /** The call deflection (its id on the box) the "Call forwarding" tile switches for box [profileId]; null: not chosen. */
+    fun tileDeflection(profileId: String): Int? = prefs.getInt(KEY_TILE_DEFLECTION + profileId, -1).takeIf { it >= 0 }
+
+    fun setTileDeflection(profileId: String, id: Int) = prefs.edit { putInt(KEY_TILE_DEFLECTION + profileId, id) }
+
     // --- storage ----------------------------------------------------------------------
 
     private fun writeProfiles(list: List<BoxProfile>) {
@@ -278,6 +283,7 @@ class SettingsRepository(context: Context) {
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
         const val KEY_LAST_DIALLED = "last_dialled_number"
         const val KEY_TILE_ADDED = "tile_added_"
+        const val KEY_TILE_DEFLECTION = "tile_deflection_"
 
         // single-connection keys of earlier versions (migrated)
         const val LEGACY_HOST = "host"

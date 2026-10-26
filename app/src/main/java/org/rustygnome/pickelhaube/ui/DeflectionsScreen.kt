@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -28,10 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.tr064.CallDeflection
+import org.rustygnome.pickelhaube.tr064.forTile
 
 /**
  * The call deflections set up on the box in use, each with a switch. They can only be switched on
- * and off from here; setting them up is done on the box itself, which the page says.
+ * and off from here; setting them up is done on the box itself, which the page says. With more than
+ * one, a radio button marks the one the quick settings tile switches.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +44,9 @@ fun DeflectionsScreen(
     /** As last read; null while not read (or reading failed). */
     deflections: List<CallDeflection>?,
     busy: Boolean,
+    /** The deflection chosen for the quick settings tile (null: not chosen – then the first). */
+    tileDeflection: Int?,
+    onChooseTile: (CallDeflection) -> Unit,
     onToggle: (CallDeflection, Boolean) -> Unit,
     onReload: () -> Unit,
     onBack: () -> Unit,
@@ -85,25 +91,55 @@ fun DeflectionsScreen(
                 deflections == null && busy -> Message(stringResource(R.string.deflections_loading))
                 deflections == null -> Message(stringResource(R.string.deflections_failed))
                 deflections.isEmpty() -> Message(stringResource(R.string.deflections_none))
-                else -> deflections.forEach { deflection ->
-                    ListItem(
-                        headlineContent = { Text(deflectionCalls(deflection)) },
-                        supportingContent = {
-                            Text("→ ${deflection.toNumber.ifBlank { "–" }} · ${deflectionMode(deflection.mode)}")
-                        },
-                        trailingContent = {
-                            Switch(
-                                checked = deflection.enabled,
-                                onCheckedChange = { onToggle(deflection, it) },
-                                enabled = !busy,
-                            )
-                        },
-                    )
-                    HorizontalDivider()
+                else -> {
+                    val forTile = deflections.forTile(tileDeflection)?.takeIf { deflections.size > 1 }
+                    if (forTile != null) {
+                        Text(
+                            stringResource(R.string.deflections_tile_hint),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 8.dp),
+                        )
+                    }
+                    deflections.forEach { deflection -> DeflectionRow(deflection, forTile, busy, onChooseTile, onToggle) }
                 }
             }
         }
     }
+}
+
+/** One deflection: which calls, where to and when, its switch – and with [forTile] the radio button for the tile. */
+@Composable
+private fun DeflectionRow(
+    deflection: CallDeflection,
+    /** The deflection the tile switches; null when there is no choice (just one). */
+    forTile: CallDeflection?,
+    busy: Boolean,
+    onChooseTile: (CallDeflection) -> Unit,
+    onToggle: (CallDeflection, Boolean) -> Unit,
+) {
+    ListItem(
+        leadingContent = forTile?.let {
+            {
+                RadioButton(
+                    selected = deflection.id == it.id,
+                    onClick = { onChooseTile(deflection) },
+                )
+            }
+        },
+        headlineContent = { Text(deflectionCalls(deflection)) },
+        supportingContent = {
+            Text("→ ${deflection.toNumber.ifBlank { "–" }} · ${deflectionMode(deflection.mode)}")
+        },
+        trailingContent = {
+            Switch(
+                checked = deflection.enabled,
+                onCheckedChange = { onToggle(deflection, it) },
+                enabled = !busy,
+            )
+        },
+    )
+    HorizontalDivider()
 }
 
 /** Which calls a deflection is about, in the words of the box' own settings. */

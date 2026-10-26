@@ -20,6 +20,9 @@ data class CallDeflection(
     val mode: String,
 )
 
+/** The one of [deflections] a single switch (the quick settings tile) is for: [chosen], else the first. */
+fun List<CallDeflection>.forTile(chosen: Int?): CallDeflection? = firstOrNull { it.id == chosen } ?: minByOrNull { it.id }
+
 /**
  * The box' call deflections via the TR-064 X_AVM-DE_OnTel service. They can only be switched on
  * and off this way – set up, changed or deleted only on the box itself.

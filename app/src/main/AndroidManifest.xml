@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Quick settings tiles: open the dialer, and open it with the number dialled last. -->
+        <!-- Quick settings tiles: open the dialer, open it with the number dialled last, and switch a call forwarding. -->
         <service
             android:name=".tile.DialerTileService"
             android:exported="true"
@@ -60,6 +60,20 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
+        </service>
+        <service
+            android:name=".tile.DeflectionTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_deflection"
+            android:label="@string/tile_deflection"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <!-- A switch: on or off, as screen readers say. -->
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
         </service>
     </application>
 </manifest>

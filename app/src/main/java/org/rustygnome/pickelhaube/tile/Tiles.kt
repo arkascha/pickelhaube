@@ -15,18 +15,23 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import org.rustygnome.pickelhaube.MainActivity
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.SettingsRepository
+import org.rustygnome.pickelhaube.tr064.CallDeflection
+import org.rustygnome.pickelhaube.tr064.FritzDialer
+import org.rustygnome.pickelhaube.tr064.forTile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
- * Quick settings tile "Pickelhaube": opens the dialer. Its subtitle (Android 10 and later) names the
- * FritzBox reachable from the current network – looked for each time the shade is pulled down, like
- * the app does – or says that none is.
+ * Quick settings tile "Pickelhaube": opens the dialer. It is active (highlighted) while a FritzBox is
+ * reachable from the current network – looked for each time the shade is pulled down, like the app
+ * does –, and its subtitle (Android 10 and later) names it, or says that none is.
  */
 class DialerTileService : TileService() {
 
@@ -52,12 +57,9 @@ class DialerTileService : TileService() {
         scope?.cancel()
         scope = CoroutineScope(SupervisorJob() + Dispatchers.Main).also {
             it.launch {
-                val recognition = BoxRecognition.recognise(this@DialerTileService, profiles)
-                // As in the app: a connection without device id still counts when its host answered.
-                val box = recognition.match ?: settings.activeProfile()?.takeIf { p ->
-                    p.deviceId == null && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
-                }
+                val box = reachableBox(settings)
                 qsTile?.apply {
+                    state = if (box != null) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
                     subtitle = box?.name ?: getString(R.string.tile_no_box)
                     updateTile()
                 }
@@ -80,9 +82,13 @@ class DialerTileService : TileService() {
 /**
  * Quick settings tile "Redial": opens the dialer with the number dialled last. It does not dial by
  * itself – a tap in the pulled-down shade is easily made by accident – so the green button still
- * has to be pressed. Unavailable until something was dialled.
+ * has to be pressed. Unavailable until something was dialled; like the "Pickelhaube" tile, active
+ * (highlighted) while a FritzBox is reachable from the current network.
  */
 class RedialTileService : TileService() {
+
+    /** Runs the look for the box while the tile is shown. */
+    private var scope: CoroutineScope? = null
 
     override fun onTileAdded() = rememberAdded(PickelhaubeTile.REDIAL, true)
 
@@ -100,6 +106,23 @@ class RedialTileService : TileService() {
             tile.subtitle = number ?: getString(R.string.tile_redial_none)
         }
         tile.updateTile()
+        if (number == null) return
+        scope?.cancel()
+        scope = CoroutineScope(SupervisorJob() + Dispatchers.Main).also {
+            it.launch {
+                val box = reachableBox(SettingsRepository(this@RedialTileService))
+                qsTile?.apply {
+                    state = if (box != null) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+                    updateTile()
+                }
+            }
+        }
+    }
+
+    override fun onStopListening() {
+        scope?.cancel()
+        scope = null
+        super.onStopListening()
     }
 
     override fun onClick() {
@@ -119,10 +142,131 @@ class RedialTileService : TileService() {
     }
 }
 
+/**
+ * Quick settings tile "Call forwarding": switches a call forwarding of the FritzBox reachable from
+ * the current network on and off – the one chosen for it in the app, else the first one set up. It
+ * shows whether it is on, and where it forwards to; unavailable without a box or a forwarding.
+ * Switching asks for the phone to be unlocked first.
+ */
+class DeflectionTileService : TileService() {
+
+    /** Reads the box while the tile is shown. */
+    private var scope: CoroutineScope? = null
+
+    /** Switches – not stopped when the shade closes before the box answered. */
+    private val actions = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    /** The box and the forwarding the tile shows, once read. */
+    private var shown: Pair<BoxProfile, CallDeflection>? = null
+
+    override fun onTileAdded() = rememberAdded(PickelhaubeTile.DEFLECTION, true)
+
+    override fun onTileRemoved() = rememberAdded(PickelhaubeTile.DEFLECTION, false)
+
+    override fun onStartListening() {
+        super.onStartListening()
+        // Shown, so it is there – also when it was added before Pickelhaube kept track.
+        rememberAdded(PickelhaubeTile.DEFLECTION, true)
+        qsTile?.apply {
+            label = getString(PickelhaubeTile.DEFLECTION.label)
+            updateTile()
+        }
+        scope?.cancel()
+        scope = CoroutineScope(SupervisorJob() + Dispatchers.Main).also { it.launch { read() } }
+    }
+
+    override fun onStopListening() {
+        scope?.cancel()
+        scope = null
+        super.onStopListening()
+    }
+
+    override fun onDestroy() {
+        actions.cancel()
+        super.onDestroy()
+    }
+
+    override fun onClick() {
+        super.onClick()
+        val (box, deflection) = shown ?: return
+        val switch = {
+            val on = !deflection.enabled
+            // Shown at once; corrected below if the box did otherwise.
+            show(box, deflection.copy(enabled = on), getString(R.string.tile_deflection_switching))
+            actions.launch {
+                val result = withContext(Dispatchers.IO) {
+                    runCatching { FritzDialer(box.config).setDeflectionEnabled(deflection.id, on) }
+                }
+                if (result.isFailure) {
+                    show(box, deflection, getString(R.string.tile_deflection_failed))
+                } else {
+                    read()
+                }
+            }
+        }
+        // Not from a locked phone: forwarding calls elsewhere is nothing for anyone at hand.
+        if (isLocked) unlockAndRun { switch() } else switch()
+    }
+
+    /** Reads the forwardings of the reachable box and shows the one for the tile. */
+    private suspend fun read() {
+        val settings = SettingsRepository(this)
+        val box = reachableBox(settings) ?: return unavailable(getString(R.string.tile_no_box))
+        val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(box.config).loadDeflections() }.getOrNull() }
+            ?: return unavailable(getString(R.string.tile_deflection_unreadable))
+        val deflection = deflections.forTile(settings.tileDeflection(box.id))
+            ?: return unavailable(getString(R.string.tile_deflection_none))
+        show(box, deflection, null)
+    }
+
+    private fun show(box: BoxProfile, deflection: CallDeflection, note: String?) {
+        shown = box to deflection
+        qsTile?.apply {
+            state = if (deflection.enabled) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                subtitle = note ?: "→ ${deflection.toNumber}"
+            }
+            updateTile()
+        }
+    }
+
+    private fun unavailable(why: String) {
+        shown = null
+        qsTile?.apply {
+            state = Tile.STATE_UNAVAILABLE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) subtitle = why
+            updateTile()
+        }
+    }
+
+    companion object {
+        /** Lets the tile read the forwardings anew, e.g. after one was switched in the app. */
+        fun refresh(context: Context) {
+            runCatching {
+                TileService.requestListeningState(context, ComponentName(context, DeflectionTileService::class.java))
+            }
+        }
+    }
+}
+
+/**
+ * The configured box reachable from the current network, looked for as the app does: by device id,
+ * or – for a connection without one – the box in use when its host answered.
+ */
+private suspend fun TileService.reachableBox(settings: SettingsRepository): BoxProfile? {
+    val profiles = settings.profiles()
+    if (profiles.isEmpty()) return null
+    val recognition = BoxRecognition.recognise(this, profiles)
+    return recognition.match ?: settings.activeProfile()?.takeIf { p ->
+        p.deviceId == null && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
+    }
+}
+
 /** The tiles Pickelhaube offers, for adding them from the settings. */
 enum class PickelhaubeTile(val service: Class<out TileService>, val label: Int, val icon: Int) {
     DIALER(DialerTileService::class.java, R.string.app_name, R.drawable.ic_tile_dialer),
     REDIAL(RedialTileService::class.java, R.string.tile_redial, R.drawable.ic_tile_redial),
+    DEFLECTION(DeflectionTileService::class.java, R.string.tile_deflection, R.drawable.ic_tile_deflection),
 }
 
 /*

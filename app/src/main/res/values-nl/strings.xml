@@ -294,6 +294,11 @@
     <string name="tile_redial">Pickelhaube opnieuw kiezen</string>
     <string name="tile_redial_none">Nog niets gekozen</string>
     <string name="tile_no_box">Geen FritzBox bereikbaar</string>
+    <string name="tile_deflection">Doorschakeling</string>
+    <string name="tile_deflection_switching">Bezig met schakelen…</string>
+    <string name="tile_deflection_failed">Schakelen mislukt</string>
+    <string name="tile_deflection_unreadable">Niet leesbaar</string>
+    <string name="tile_deflection_none">Geen ingesteld</string>
     <string name="settings_tiles">Tegels in de snelle instellingen</string>
     <string name="settings_tile_add">‘%1$s’ toevoegen</string>
     <string name="settings_tile_added">‘%1$s’ is aan de snelle instellingen toegevoegd.</string>
@@ -308,6 +313,7 @@
     <string name="deflections_loading">Doorschakelingen worden gelezen…</string>
     <string name="deflections_failed">De doorschakelingen konden niet worden gelezen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="deflections_none">Op deze FritzBox is geen doorschakeling ingesteld.</string>
+    <string name="deflections_tile_hint">De tegel ‘Doorschakeling’ in de snelle instellingen schakelt de gemarkeerde.</string>
     <string name="deflection_all">Alle oproepen</string>
     <string name="deflection_from">Oproepen van %1$s</string>
     <string name="deflection_to">Oproepen naar %1$s</string>

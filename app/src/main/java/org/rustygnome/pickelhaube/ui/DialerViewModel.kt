@@ -15,6 +15,7 @@ import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
+import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
@@ -121,6 +122,8 @@ data class UiState(
     val showDeflections: Boolean = false,
     /** The call deflections of the box in use, as last read (null: not read, or reading failed). */
     val deflections: List<CallDeflection>? = null,
+    /** The call deflection the quick settings tile switches for the box in use, as chosen (null: not chosen). */
+    val tileDeflection: Int? = null,
     /** The number picker (tabs "Recent", "Speed dial" and "Phone books") is open. */
     val showPicker: Boolean = false,
     val pickerTab: PickerTab = PickerTab.RECENT,
@@ -577,6 +580,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun onForeground() {
         if (!settings.isConfigured()) return
+        // Possibly switched meanwhile – from the quick settings tile, or on the box.
+        if (_state.value.deflections != null) preloadDeflections()
         if (SystemClock.elapsedRealtime() - lastDetection < DETECT_MIN_INTERVAL_MILLIS) return
         if (detectJob?.isActive == true) return
         detectJob = viewModelScope.launch { detectAgainIfNotFound(detectBox()) }
@@ -705,8 +710,18 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Opens the call deflections of the box in use, read anew. */
     fun openDeflections() {
-        _state.update { it.copy(showDeflections = true) }
+        _state.update {
+            it.copy(showDeflections = true, tileDeflection = settings.activeProfileId?.let(settings::tileDeflection))
+        }
         loadDeflections()
+    }
+
+    /** Makes call deflection [id] the one the quick settings tile switches, for the box in use. */
+    fun chooseTileDeflection(id: Int) {
+        val profileId = settings.activeProfileId ?: return
+        settings.setTileDeflection(profileId, id)
+        _state.update { it.copy(tileDeflection = id) }
+        DeflectionTileService.refresh(getApplication())
     }
 
     /**
@@ -714,7 +729,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      * one is switched on. Quietly: a box whose user may not read them just shows none.
      */
     private fun preloadDeflections() = runWhenIdle("deflections") {
-        if (_state.value.noBoxReachable || _state.value.deflections != null) return@runWhenIdle
+        if (_state.value.noBoxReachable) return@runWhenIdle
         val config = _state.value.config
         viewModelScope.launch {
             val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadDeflections() }.getOrNull() }
@@ -737,6 +752,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             dialer.setDeflectionEnabled(id, enabled)
             val deflections = dialer.loadDeflections()
             _state.update { it.copy(deflections = deflections) }
+            DeflectionTileService.refresh(getApplication())
             uiText(if (enabled) R.string.status_deflection_on_done else R.string.status_deflection_off_done)
         }
 

@@ -61,6 +61,8 @@ class MainActivity : ComponentActivity() {
                         boxName = state.activeProfile?.name,
                         deflections = state.deflections,
                         busy = state.busy,
+                        tileDeflection = state.tileDeflection,
+                        onChooseTile = { viewModel.chooseTileDeflection(it.id) },
                         onToggle = { deflection, enabled -> viewModel.setDeflectionEnabled(deflection.id, enabled) },
                         onReload = viewModel::loadDeflections,
                         onBack = viewModel::closeDeflections,

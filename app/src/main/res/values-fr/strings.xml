@@ -298,6 +298,11 @@
     <string name="tile_redial">Pickelhaube : rappel</string>
     <string name="tile_redial_none">Aucun numéro composé</string>
     <string name="tile_no_box">Aucune FritzBox accessible</string>
+    <string name="tile_deflection">Renvoi d’appel</string>
+    <string name="tile_deflection_switching">Changement…</string>
+    <string name="tile_deflection_failed">Échec du changement</string>
+    <string name="tile_deflection_unreadable">Illisible</string>
+    <string name="tile_deflection_none">Aucun configuré</string>
     <string name="settings_tiles">Vignettes des réglages rapides</string>
     <string name="settings_tile_add">Ajouter « %1$s »</string>
     <string name="settings_tile_added">« %1$s » a été ajouté aux réglages rapides.</string>
@@ -312,6 +317,7 @@
     <string name="deflections_loading">Lecture des renvois d’appel…</string>
     <string name="deflections_failed">Impossible de lire les renvois d’appel. Touchez Recharger pour réessayer.</string>
     <string name="deflections_none">Aucun renvoi d’appel n’est configuré sur cette FritzBox.</string>
+    <string name="deflections_tile_hint">La vignette « Renvoi d’appel » des réglages rapides commute celui qui est coché.</string>
     <string name="deflection_all">Tous les appels</string>
     <string name="deflection_from">Appels de %1$s</string>
     <string name="deflection_to">Appels vers %1$s</string>

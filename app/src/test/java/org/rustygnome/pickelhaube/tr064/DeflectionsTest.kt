@@ -21,4 +21,15 @@ class DeflectionsTest {
         )
         assertEquals(emptyList<CallDeflection>(), FritzDeflections.parse(""))
     }
+
+    @Test
+    fun `picks the deflection for the tile`() {
+        val a = CallDeflection(3, true, "fromAll", "", "1", "eBusy")
+        val b = CallDeflection(1, false, "toVoIP", "2", "3", "eImmediately")
+        assertEquals(a, listOf(a, b).forTile(3))
+        // Not chosen, or no longer there: the first one.
+        assertEquals(b, listOf(a, b).forTile(null))
+        assertEquals(b, listOf(a, b).forTile(7))
+        assertEquals(null, emptyList<CallDeflection>().forTile(null))
+    }
 }

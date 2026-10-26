@@ -294,6 +294,11 @@
     <string name="tile_redial">Pickelhaube-Wahlwiederholung</string>
     <string name="tile_redial_none">Noch nichts gewählt</string>
     <string name="tile_no_box">Keine FritzBox erreichbar</string>
+    <string name="tile_deflection">Rufumleitung</string>
+    <string name="tile_deflection_switching">Schalte…</string>
+    <string name="tile_deflection_failed">Schalten fehlgeschlagen</string>
+    <string name="tile_deflection_unreadable">Nicht lesbar</string>
+    <string name="tile_deflection_none">Keine eingerichtet</string>
     <string name="settings_tiles">Kacheln in den Schnelleinstellungen</string>
     <string name="settings_tile_add">„%1$s“ hinzufügen</string>
     <string name="settings_tile_added">„%1$s“ wurde zu den Schnelleinstellungen hinzugefügt.</string>
@@ -308,6 +313,7 @@
     <string name="deflections_loading">Lese die Rufumleitungen…</string>
     <string name="deflections_failed">Die Rufumleitungen konnten nicht gelesen werden. Zum erneuten Versuch auf Neu laden tippen.</string>
     <string name="deflections_none">Auf dieser FritzBox ist keine Rufumleitung eingerichtet.</string>
+    <string name="deflections_tile_hint">Die Kachel „Rufumleitung“ in den Schnelleinstellungen schaltet die markierte.</string>
     <string name="deflection_all">Alle Anrufe</string>
     <string name="deflection_from">Anrufe von %1$s</string>
     <string name="deflection_to">Anrufe an %1$s</string>

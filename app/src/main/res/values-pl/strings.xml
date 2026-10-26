@@ -302,6 +302,11 @@
     <string name="tile_redial">Pickelhaube: ponowne wybieranie</string>
     <string name="tile_redial_none">Jeszcze nic nie wybrano</string>
     <string name="tile_no_box">Żaden FritzBox nie jest osiągalny</string>
+    <string name="tile_deflection">Przekierowanie połączeń</string>
+    <string name="tile_deflection_switching">Przełączanie…</string>
+    <string name="tile_deflection_failed">Nie udało się przełączyć</string>
+    <string name="tile_deflection_unreadable">Nie można odczytać</string>
+    <string name="tile_deflection_none">Brak ustawionych</string>
     <string name="settings_tiles">Kafelki szybkich ustawień</string>
     <string name="settings_tile_add">Dodaj „%1$s”</string>
     <string name="settings_tile_added">„%1$s” dodano do szybkich ustawień.</string>
@@ -316,6 +321,7 @@
     <string name="deflections_loading">Odczytywanie przekierowań…</string>
     <string name="deflections_failed">Nie udało się odczytać przekierowań. Dotknij „Odśwież”, aby spróbować ponownie.</string>
     <string name="deflections_none">Na tym FritzBox nie ustawiono żadnego przekierowania.</string>
+    <string name="deflections_tile_hint">Kafelek „Przekierowanie połączeń” w szybkich ustawieniach przełącza zaznaczone.</string>
     <string name="deflection_all">Wszystkie połączenia</string>
     <string name="deflection_from">Połączenia od %1$s</string>
     <string name="deflection_to">Połączenia na %1$s</string>
