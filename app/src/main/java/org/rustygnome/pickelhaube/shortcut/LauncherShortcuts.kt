@@ -9,13 +9,17 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.AppLanguage
+import org.rustygnome.pickelhaube.data.DeflectionState
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.tr064.CallDeflection
 
 /**
  * The entries of the menu a long press on the app icon opens, in this order: redial the number dialled
- * last, the speed dials, switch the call forwarding, choose a number. All are published at run time –
- * also the fixed ones, since launchers put the ones declared in the manifest before all others.
+ * last, switch the call forwarding, choose a number. All are published at run time – also the fixed
+ * one, since launchers put the ones declared in the manifest before all others.
+ *
+ * Launchers show an entry's long label when it fits in one line, else its short one; so the long
+ * labels are kept short, and the short ones carry what matters most.
  *
  * The dialer's entries go to [ALIAS], an alias of the main activity that other apps cannot start: only
  * an intent sent to it may dial without the green button being pressed.
@@ -28,13 +32,12 @@ object LauncherShortcuts {
     /** Dials the number of the intent's `tel:` data right away. */
     const val ACTION_DIAL_NOW = "org.rustygnome.pickelhaube.action.DIAL_NOW"
 
-    /** Opens the number picker on its speed dial tab. */
-    const val ACTION_SPEED_DIALS = "org.rustygnome.pickelhaube.action.SPEED_DIALS"
-
     /** Opens the number picker. */
     const val ACTION_PICKER = "org.rustygnome.pickelhaube.action.PICKER"
 
     private const val ID_REDIAL = "redial"
+
+    /** An entry of earlier versions, removed again. */
     private const val ID_SPEED_DIALS = "speed_dials"
     private const val ID_DEFLECTION = "deflection"
     private const val ID_PICKER = "picker"
@@ -44,25 +47,18 @@ object LauncherShortcuts {
         val settings = SettingsRepository(context)
         if (!settings.isConfigured()) return
         val texts = AppLanguage.wrap(context)
-        push(
-            context,
-            ShortcutInfoCompat.Builder(context, ID_SPEED_DIALS)
-                .setShortLabel(texts.getString(R.string.speed_dial))
-                .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_speed_dial))
-                .setIntent(aliasIntent(context, ACTION_SPEED_DIALS))
-                .setRank(1)
-                .build(),
-        )
+        runCatching { ShortcutManagerCompat.removeDynamicShortcuts(context, listOf(ID_SPEED_DIALS)) }
         push(
             context,
             ShortcutInfoCompat.Builder(context, ID_PICKER)
                 .setShortLabel(texts.getString(R.string.picker_title))
                 .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_picker))
                 .setIntent(aliasIntent(context, ACTION_PICKER))
-                .setRank(3)
+                .setRank(2)
                 .build(),
         )
         settings.lastDialledNumber?.let { updateRedial(context, it, settings.lastDialledName) }
+        pushDeflection(context, settings.shortcutDeflection)
     }
 
     /** "Redial": dials [number] – the one dialled last – at once; shows [name] as well, if known. */
@@ -81,25 +77,35 @@ object LauncherShortcuts {
     }
 
     /**
-     * "Call forwarding": switches [deflection] – the one the quick settings tile switches as well – on
-     * or off, and says which state it is in. Null: the box has none set up, so the entry goes.
+     * "Call forwarding": [deflection] – the one the quick settings tile switches as well – as just read
+     * from the box, remembered for the next start; null: the box has none set up. The entry stays
+     * either way and switches whatever the box has then (or says why it cannot).
      */
     fun updateDeflection(context: Context, deflection: CallDeflection?) {
-        if (deflection == null) {
-            runCatching { ShortcutManagerCompat.removeDynamicShortcuts(context, listOf(ID_DEFLECTION)) }
-            return
-        }
+        val state = deflection?.let { DeflectionState(it.enabled, it.toNumber) }
+        SettingsRepository(context).shortcutDeflection = state
+        pushDeflection(context, state)
+    }
+
+    /** "Call forwarding" with its [state] – or, not known, just its name. */
+    private fun pushDeflection(context: Context, state: DeflectionState?) {
         val texts = AppLanguage.wrap(context)
-        val on = deflection.enabled
+        val on = state?.enabled == true
+        val label = when (state) {
+            null -> texts.getString(R.string.tile_deflection)
+            else -> texts.getString(if (on) R.string.shortcut_deflection_on else R.string.shortcut_deflection_off)
+        }
         push(
             context,
             ShortcutInfoCompat.Builder(context, ID_DEFLECTION)
-                .setShortLabel(texts.getString(if (on) R.string.shortcut_deflection_on else R.string.shortcut_deflection_off))
+                .setShortLabel(label)
                 .setLongLabel(
-                    texts.getString(
-                        if (on) R.string.shortcut_deflection_on_long else R.string.shortcut_deflection_off_long,
-                        deflection.toNumber,
-                    ),
+                    state?.let {
+                        texts.getString(
+                            if (on) R.string.shortcut_deflection_on_long else R.string.shortcut_deflection_off_long,
+                            it.toNumber,
+                        )
+                    } ?: label,
                 )
                 .setIcon(
                     IconCompat.createWithResource(
@@ -108,7 +114,7 @@ object LauncherShortcuts {
                     ),
                 )
                 .setIntent(Intent(Intent.ACTION_VIEW).setClass(context, DeflectionShortcutActivity::class.java))
-                .setRank(2)
+                .setRank(1)
                 .build(),
         )
     }

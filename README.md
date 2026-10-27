@@ -297,24 +297,25 @@ On a locked phone, they do what they do only once the phone is unlocked.
 
 ### Long press on the app icon
 
-A long press on Pickelhaube's icon in the launcher opens a menu with four entries (Android's app
+A long press on Pickelhaube's icon in the launcher opens a menu with three entries (Android's app
 shortcuts; each can also be dragged onto the home screen on its own):
 
-1. **Redial** – the number dialled last, with the name the phone books gave it then. It **dials right
-   away**, once the app knows which FRITZ!Box is reachable from here; with none reachable, the number
-   just stands in the dialer.
-2. **Speed dial** – the number picker, on its *Speed dial* tab.
-3. **Call forwarding** – switches the call forwarding the quick settings tile switches (see *Call
+1. **Redial** – the number dialled last, with its name from the phone books (taken when it is dialled,
+   or once the phone books are read). It **dials right away**, once the app knows which FRITZ!Box is
+   reachable from here; with none reachable, the number just stands in the dialer.
+2. **Call forwarding** – switches the call forwarding the quick settings tile switches (see *Call
    forwarding* above), on the box reachable from the current network, without opening the app; a short
-   message says how it went. The entry says whether it is on and where it forwards to – as last read,
-   while the box itself is asked before switching. It is there once the forwardings were read, and goes
-   when the box has none set up.
-4. **Choose number** – the number picker.
+   message says how it went, or why it could not switch (no box reachable, none set up, not readable).
+   The entry is always there; it says whether the forwarding is on and where it forwards to, as last
+   read by the app or the tile – the box itself is asked before switching.
+3. **Choose number** – the number picker.
 
-The entries are published when the app starts (so their texts follow the language) and updated with
-each call and each reading of the forwardings. Entries 1, 2 and 4 open the dialer through an activity
-alias that other apps cannot start – only an intent sent there may dial without the green button being
-pressed. An entry reopened from the recent apps is not carried out again.
+Launchers show an entry's long text (e.g. *Erika Muster · 030 1234567*) only when it fits in one line,
+otherwise its short one (*Erika Muster*). The entries are published when the app starts (so their texts
+follow the language) and updated with each call and each reading of the forwardings. Entries 1 and 3
+open the dialer through an activity alias that other apps cannot start – only an intent sent there may
+dial without the green button being pressed. An entry reopened from the recent apps is not carried out
+again.
 
 ### Export and import of the settings
 

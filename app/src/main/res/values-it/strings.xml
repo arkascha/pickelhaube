@@ -388,7 +388,7 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_deflection_on">Deviazione attiva</string>
     <string name="shortcut_deflection_off">Deviazione disattivata</string>
-    <string name="shortcut_deflection_on_long">Deviazione verso %1$s: attiva</string>
-    <string name="shortcut_deflection_off_long">Deviazione verso %1$s: disattivata</string>
+    <string name="shortcut_deflection_on_long">Deviazione attiva → %1$s</string>
+    <string name="shortcut_deflection_off_long">Deviazione disattivata → %1$s</string>
     <string name="shortcut_deflection_unknown">Impossibile leggere la deviazione di chiamata, oppure non ne è configurata nessuna</string>
 </resources>

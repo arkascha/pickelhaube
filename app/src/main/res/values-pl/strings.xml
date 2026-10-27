@@ -394,7 +394,7 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_deflection_on">Przekierowanie wł.</string>
     <string name="shortcut_deflection_off">Przekierowanie wył.</string>
-    <string name="shortcut_deflection_on_long">Przekierowanie na %1$s: włączone</string>
-    <string name="shortcut_deflection_off_long">Przekierowanie na %1$s: wyłączone</string>
+    <string name="shortcut_deflection_on_long">Przekierowanie wł. → %1$s</string>
+    <string name="shortcut_deflection_off_long">Przekierowanie wył. → %1$s</string>
     <string name="shortcut_deflection_unknown">Nie udało się odczytać przekierowania lub żadne nie jest skonfigurowane</string>
 </resources>

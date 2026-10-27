@@ -40,6 +40,9 @@ data class BoxProfile(
     val info: BoxInfo get() = BoxInfo(model, softwareVersion, serialNumber)
 }
 
+/** Whether a call forwarding is switched on, and where it forwards to. */
+data class DeflectionState(val enabled: Boolean, val toNumber: String)
+
 /** Persists the FritzBox connections (passwords encrypted) and the app options. */
 class SettingsRepository(context: Context) {
 
@@ -170,6 +173,14 @@ class SettingsRepository(context: Context) {
         get() = prefs.getString(KEY_LAST_DIALLED_NAME, null)
         set(value) = prefs.edit { if (value != null) putString(KEY_LAST_DIALLED_NAME, value) else remove(KEY_LAST_DIALLED_NAME) }
 
+    /** The call forwarding the launcher shortcut switches, as last read; null: not known, or none set up. */
+    var shortcutDeflection: DeflectionState?
+        get() = prefs.getString(KEY_SHORTCUT_DEFLECTION, null)?.let { DeflectionState(it.startsWith("1"), it.drop(2)) }
+        set(value) = prefs.edit {
+            if (value != null) putString(KEY_SHORTCUT_DEFLECTION, (if (value.enabled) "1:" else "0:") + value.toNumber)
+            else remove(KEY_SHORTCUT_DEFLECTION)
+        }
+
     /**
      * Whether a quick settings tile (by its key) is in the quick settings, as its service last
      * learned; Android offers no way to ask.
@@ -273,6 +284,7 @@ class SettingsRepository(context: Context) {
         const val KEY_LAST_DIALLED = "last_dialled_number"
         const val KEY_LAST_DIALLED_NAME = "last_dialled_name"
         const val KEY_TILE_ADDED = "tile_added_"
+        const val KEY_SHORTCUT_DEFLECTION = "shortcut_deflection"
         const val KEY_TILE_DEFLECTION = "tile_deflection_"
 
         // single-connection keys of earlier versions (migrated)

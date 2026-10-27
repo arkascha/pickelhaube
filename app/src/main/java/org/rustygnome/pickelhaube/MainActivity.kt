@@ -20,7 +20,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
-import org.rustygnome.pickelhaube.ui.PickerTab
 import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
 import org.rustygnome.pickelhaube.ui.DialerScreen
 import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
@@ -330,8 +329,7 @@ class MainActivity : ComponentActivity() {
             when (intent.action) {
                 LauncherShortcuts.ACTION_DIAL_NOW ->
                     intent.data?.takeIf { it.scheme == "tel" }?.schemeSpecificPart?.let(viewModel::dialFromShortcut)
-                LauncherShortcuts.ACTION_SPEED_DIALS -> viewModel.openPickerFromShortcut(PickerTab.SPEED_DIALS)
-                LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut(PickerTab.RECENT)
+                LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut()
             }
             return
         }

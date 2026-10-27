@@ -975,7 +975,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!_state.value.deviceContactsEnabled || !DeviceContacts.hasPermission(app)) return
         viewModelScope.launch {
             val book = withContext(Dispatchers.IO) { runCatching { DeviceContacts.load(app) }.getOrNull() }
-            if (book != null) _state.update { it.copy(deviceContacts = book) }
+            if (book != null) {
+                _state.update { it.copy(deviceContacts = book) }
+                completeRedialName()
+            }
         }
     }
 
@@ -1006,6 +1009,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         runOnBox(uiText(R.string.phonebook_loading)) { dialer ->
             val books = dialer.loadPhonebooks()
             _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+            completeRedialName()
             UiText.Plural(R.plurals.status_contacts_loaded, books.sumOf { it.contacts.size })
         }
     }
@@ -1386,12 +1390,24 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    /** The launcher shortcuts "Speed dial" and "Choose number": the number picker, on [tab]. */
-    fun openPickerFromShortcut(tab: PickerTab) {
+    /** The launcher shortcut "Choose number": the number picker. */
+    fun openPickerFromShortcut() {
         if (!settings.isConfigured()) return
         showDialer()
         openPicker()
-        selectPickerTab(tab)
+    }
+
+    /**
+     * The phone books were read: if the name of the number dialled last was not known when it was
+     * dialled (phone books not loaded yet, or dialled before names were kept), the "Redial" shortcut
+     * gets it now.
+     */
+    private fun completeRedialName() {
+        val number = settings.lastDialledNumber ?: return
+        if (settings.lastDialledName != null) return
+        val name = nameFor(number) ?: return
+        settings.lastDialledName = name
+        LauncherShortcuts.updateRedial(getApplication(), number, name)
     }
 
     /** Leaves whatever page is open for the dialer; unsaved changes on a connection page are dropped. */

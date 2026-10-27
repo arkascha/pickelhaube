@@ -384,7 +384,7 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_deflection_on">Umleitung an</string>
     <string name="shortcut_deflection_off">Umleitung aus</string>
-    <string name="shortcut_deflection_on_long">Rufumleitung zu %1$s: an</string>
-    <string name="shortcut_deflection_off_long">Rufumleitung zu %1$s: aus</string>
+    <string name="shortcut_deflection_on_long">Umleitung an → %1$s</string>
+    <string name="shortcut_deflection_off_long">Umleitung aus → %1$s</string>
     <string name="shortcut_deflection_unknown">Die Rufumleitung ließ sich nicht lesen, oder es ist keine eingerichtet</string>
 </resources>

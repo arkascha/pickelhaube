@@ -388,7 +388,7 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_deflection_on">Desvío activado</string>
     <string name="shortcut_deflection_off">Desvío desactivado</string>
-    <string name="shortcut_deflection_on_long">Desvío de llamadas a %1$s: activado</string>
-    <string name="shortcut_deflection_off_long">Desvío de llamadas a %1$s: desactivado</string>
+    <string name="shortcut_deflection_on_long">Desvío activado → %1$s</string>
+    <string name="shortcut_deflection_off_long">Desvío desactivado → %1$s</string>
     <string name="shortcut_deflection_unknown">No se pudo leer el desvío de llamadas, o no hay ninguno configurado</string>
 </resources>
