@@ -40,6 +40,23 @@
             </intent-filter>
         </activity>
 
+        <!--
+            The dialer as started by the entries of the launcher icon's long-press menu: not exported, so no
+            other app can start it – only an intent sent here may dial without the green button being pressed.
+        -->
+        <activity-alias
+            android:name=".LauncherShortcut"
+            android:exported="false"
+            android:targetActivity=".MainActivity" />
+
+        <!-- Launcher shortcut "Call forwarding": switches it without opening the app; invisible. -->
+        <activity
+            android:name=".shortcut.DeflectionShortcutActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- Quick settings tiles: open the dialer, open it with the number dialled last, and switch a call forwarding. -->
         <service
             android:name=".tile.DialerTileService"

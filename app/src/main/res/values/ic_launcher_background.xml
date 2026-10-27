@@ -2,4 +2,6 @@
 <resources>
     <!-- Prussian blue -->
     <color name="ic_launcher_background">#003153</color>
+    <!-- Background of a launcher shortcut for something switched off (call forwarding). -->
+    <color name="shortcut_off_background">#E3E8EC</color>
 </resources>

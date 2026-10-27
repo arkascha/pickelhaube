@@ -295,6 +295,27 @@ shade twice, tap the pencil and drag them into your tiles – apps' tiles are us
 
 On a locked phone, they do what they do only once the phone is unlocked.
 
+### Long press on the app icon
+
+A long press on Pickelhaube's icon in the launcher opens a menu with four entries (Android's app
+shortcuts; each can also be dragged onto the home screen on its own):
+
+1. **Redial** – the number dialled last, with the name the phone books gave it then. It **dials right
+   away**, once the app knows which FRITZ!Box is reachable from here; with none reachable, the number
+   just stands in the dialer.
+2. **Speed dial** – the number picker, on its *Speed dial* tab.
+3. **Call forwarding** – switches the call forwarding the quick settings tile switches (see *Call
+   forwarding* above), on the box reachable from the current network, without opening the app; a short
+   message says how it went. The entry says whether it is on and where it forwards to – as last read,
+   while the box itself is asked before switching. It is there once the forwardings were read, and goes
+   when the box has none set up.
+4. **Choose number** – the number picker.
+
+The entries are published when the app starts (so their texts follow the language) and updated with
+each call and each reading of the forwardings. Entries 1, 2 and 4 open the dialer through an activity
+alias that other apps cannot start – only an intent sent there may dial without the green button being
+pressed. An entry reopened from the recent apps is not carried out again.
+
 ### Export and import of the settings
 
 *Settings › Back up and transfer* writes all connections and options into a JSON file
@@ -324,6 +345,8 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
+| `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |
+| `shortcut/DeflectionShortcutActivity.kt` | Invisible activity behind the "Call forwarding" entry: switches it |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |

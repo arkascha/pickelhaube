@@ -165,6 +165,11 @@ class SettingsRepository(context: Context) {
         get() = prefs.getString(KEY_LAST_DIALLED, null)
         set(value) = prefs.edit { if (value != null) putString(KEY_LAST_DIALLED, value) else remove(KEY_LAST_DIALLED) }
 
+    /** Whose number [lastDialledNumber] is, as the phone books said then; null if they did not know. */
+    var lastDialledName: String?
+        get() = prefs.getString(KEY_LAST_DIALLED_NAME, null)
+        set(value) = prefs.edit { if (value != null) putString(KEY_LAST_DIALLED_NAME, value) else remove(KEY_LAST_DIALLED_NAME) }
+
     /**
      * Whether a quick settings tile (by its key) is in the quick settings, as its service last
      * learned; Android offers no way to ask.
@@ -266,6 +271,7 @@ class SettingsRepository(context: Context) {
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
         const val KEY_CALL_STATUS = "call_status_enabled"
         const val KEY_LAST_DIALLED = "last_dialled_number"
+        const val KEY_LAST_DIALLED_NAME = "last_dialled_name"
         const val KEY_TILE_ADDED = "tile_added_"
         const val KEY_TILE_DEFLECTION = "tile_deflection_"
 

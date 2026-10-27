@@ -19,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.SpeedDials
+import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
+import org.rustygnome.pickelhaube.ui.PickerTab
 import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
 import org.rustygnome.pickelhaube.ui.DialerScreen
 import org.rustygnome.pickelhaube.ui.TrustCertificateDialog
@@ -316,9 +318,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Pre-fills the number when opened from a tel: link (e.g. tapping a number in Contacts). */
+    /**
+     * Pre-fills the number when opened from a tel: link (e.g. tapping a number in Contacts); carries out
+     * the entries of the launcher icon's menu – those only when they come through their alias, which
+     * no other app can start, and not again when the app is reopened from the recent apps.
+     */
     private fun handleIntent(intent: Intent?) {
-        val data: Uri = intent?.data ?: return
+        if (intent == null) return
+        if (intent.component?.className == LauncherShortcuts.ALIAS) {
+            if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
+            when (intent.action) {
+                LauncherShortcuts.ACTION_DIAL_NOW ->
+                    intent.data?.takeIf { it.scheme == "tel" }?.schemeSpecificPart?.let(viewModel::dialFromShortcut)
+                LauncherShortcuts.ACTION_SPEED_DIALS -> viewModel.openPickerFromShortcut(PickerTab.SPEED_DIALS)
+                LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut(PickerTab.RECENT)
+            }
+            return
+        }
+        val data: Uri = intent.data ?: return
         if (data.scheme == "tel") {
             data.schemeSpecificPart?.let(viewModel::prefill)
         }

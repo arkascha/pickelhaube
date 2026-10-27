@@ -382,4 +382,12 @@
     <string name="call_ended">Call ended · %1$s</string>
     <string name="call_not_answered">Not answered, or busy</string>
     <string name="call_not_picked_up">The phone was not picked up</string>
+
+    <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_redial_named" translatable="false">%1$s · %2$s</string>
+    <string name="shortcut_deflection_on">Forwarding on</string>
+    <string name="shortcut_deflection_off">Forwarding off</string>
+    <string name="shortcut_deflection_on_long">Call forwarding to %1$s: on</string>
+    <string name="shortcut_deflection_off_long">Call forwarding to %1$s: off</string>
+    <string name="shortcut_deflection_unknown">Call forwarding could not be read, or none is set up</string>
 </resources>

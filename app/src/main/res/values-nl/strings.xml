@@ -380,4 +380,11 @@
     <string name="call_ended">Gesprek beëindigd · %1$s</string>
     <string name="call_not_answered">Niet beantwoord of in gesprek</string>
     <string name="call_not_picked_up">De telefoon is niet opgenomen</string>
+
+    <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_deflection_on">Doorschakeling aan</string>
+    <string name="shortcut_deflection_off">Doorschakeling uit</string>
+    <string name="shortcut_deflection_on_long">Doorschakeling naar %1$s: aan</string>
+    <string name="shortcut_deflection_off_long">Doorschakeling naar %1$s: uit</string>
+    <string name="shortcut_deflection_unknown">De doorschakeling kon niet worden gelezen, of er is er geen ingesteld</string>
 </resources>

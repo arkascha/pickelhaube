@@ -18,6 +18,7 @@ import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.SettingsRepository
+import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tr064.CallDeflection
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.forTile
@@ -215,7 +216,9 @@ class DeflectionTileService : TileService() {
         val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(box.config).loadDeflections() }.getOrNull() }
             ?: return unavailable(getString(R.string.tile_deflection_unreadable))
         val deflection = deflections.forTile(settings.tileDeflection(box.id))
-            ?: return unavailable(getString(R.string.tile_deflection_none))
+        // The launcher shortcut switches the same one.
+        LauncherShortcuts.updateDeflection(this, deflection)
+        if (deflection == null) return unavailable(getString(R.string.tile_deflection_none))
         show(box, deflection, null)
     }
 
@@ -249,18 +252,8 @@ class DeflectionTileService : TileService() {
     }
 }
 
-/**
- * The configured box reachable from the current network, looked for as the app does: by device id,
- * or – for a connection without one – the box in use when its host answered.
- */
-private suspend fun TileService.reachableBox(settings: SettingsRepository): BoxProfile? {
-    val profiles = settings.profiles()
-    if (profiles.isEmpty()) return null
-    val recognition = BoxRecognition.recognise(this, profiles)
-    return recognition.match ?: settings.activeProfile()?.takeIf { p ->
-        p.deviceId == null && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
-    }
-}
+private suspend fun TileService.reachableBox(settings: SettingsRepository): BoxProfile? =
+    BoxRecognition.reachableBox(this, settings)
 
 /** The tiles Pickelhaube offers, for adding them from the settings. */
 enum class PickelhaubeTile(val service: Class<out TileService>, val label: Int, val icon: Int) {

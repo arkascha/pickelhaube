@@ -384,4 +384,11 @@
     <string name="call_ended">Llamada terminada · %1$s</string>
     <string name="call_not_answered">Sin respuesta, o comunicando</string>
     <string name="call_not_picked_up">No se descolgó el teléfono</string>
+
+    <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_deflection_on">Desvío activado</string>
+    <string name="shortcut_deflection_off">Desvío desactivado</string>
+    <string name="shortcut_deflection_on_long">Desvío de llamadas a %1$s: activado</string>
+    <string name="shortcut_deflection_off_long">Desvío de llamadas a %1$s: desactivado</string>
+    <string name="shortcut_deflection_unknown">No se pudo leer el desvío de llamadas, o no hay ninguno configurado</string>
 </resources>

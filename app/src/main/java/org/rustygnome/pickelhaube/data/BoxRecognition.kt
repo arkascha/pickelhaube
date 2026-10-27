@@ -35,4 +35,18 @@ object BoxRecognition {
             boxes.firstNotNullOfOrNull { identity -> profiles.firstOrNull { it.deviceId == identity.udn } }
         return Recognition(found, gateway, matchIn(found.filter { it.host in local }) ?: matchIn(found))
     }
+
+    /**
+     * The configured box reachable from the current network, looked for as the app does: by device id,
+     * or – for a connection without one – the box in use when its host answered. For the quick
+     * settings tiles and the launcher shortcuts, which work without the app running.
+     */
+    suspend fun reachableBox(context: Context, settings: SettingsRepository): BoxProfile? {
+        val profiles = settings.profiles()
+        if (profiles.isEmpty()) return null
+        val recognition = recognise(context, profiles)
+        return recognition.match ?: settings.activeProfile()?.takeIf { p ->
+            p.deviceId == null && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
+        }
+    }
 }

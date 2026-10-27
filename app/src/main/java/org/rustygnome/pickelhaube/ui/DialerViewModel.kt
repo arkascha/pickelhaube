@@ -26,6 +26,7 @@ import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.data.WrongPassphraseException
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
+import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
@@ -48,6 +49,7 @@ import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
 import org.rustygnome.pickelhaube.tr064.UntrustedCertificateException
 import org.rustygnome.pickelhaube.tr064.UserRights
+import org.rustygnome.pickelhaube.tr064.forTile
 import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -501,6 +503,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             settings.saveProfile(profile)
             settings.activeProfileId = profile.id
             verifyingSettings = false
+            LauncherShortcuts.publish(getApplication())
             // First setup: straight to the dialer. Later changes: back to the settings overview.
             _state.update {
                 it.copy(
@@ -567,6 +570,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         when {
             remaining.isEmpty() -> {
+                LauncherShortcuts.removeAll(getApplication())
                 _state.update { it.copy(phones = emptyList(), selectedPhone = null, config = FritzConfig(), deflections = null) }
                 addProfile()
             }
@@ -637,6 +641,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!settings.isConfigured()) return
         // Possibly switched meanwhile – from the quick settings tile, or on the box.
         if (_state.value.deflections != null) preloadDeflections()
+        detectIfStale()
+    }
+
+    /** Detects the box again – unless that just happened, or is happening. */
+    private fun detectIfStale() {
         if (SystemClock.elapsedRealtime() - lastDetection < DETECT_MIN_INTERVAL_MILLIS) return
         if (detectJob?.isActive == true) return
         detectJob = viewModelScope.launch { detectAgainIfNotFound(detectBox()) }
@@ -879,6 +888,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (options.callLogEnabled) loadCallLog()
         DeflectionTileService.refresh(app)
         RedialTileService.refresh(app)
+        LauncherShortcuts.removeAll(app)
+        LauncherShortcuts.publish(app)
         if (settings.isConfigured()) {
             viewModelScope.launch {
                 val detection = detectBox()
@@ -908,6 +919,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         settings.setTileDeflection(profileId, id)
         _state.update { it.copy(tileDeflection = id) }
         DeflectionTileService.refresh(getApplication())
+        _state.value.deflections?.let(::publishDeflectionShortcut)
     }
 
     /**
@@ -920,7 +932,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadDeflections() }.getOrNull() }
             // Unless the box in use changed meanwhile.
-            if (deflections != null && _state.value.config == config) _state.update { it.copy(deflections = deflections) }
+            if (deflections != null && _state.value.config == config) {
+                _state.update { it.copy(deflections = deflections) }
+                publishDeflectionShortcut(deflections)
+            }
         }
     }
 
@@ -929,6 +944,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun loadDeflections() = runOnBox(uiText(R.string.status_loading_deflections)) { dialer ->
         val deflections = dialer.loadDeflections()
         _state.update { it.copy(deflections = deflections) }
+        publishDeflectionShortcut(deflections)
         uiText(R.string.status_deflections_loaded)
     }
 
@@ -939,6 +955,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             val deflections = dialer.loadDeflections()
             _state.update { it.copy(deflections = deflections) }
             DeflectionTileService.refresh(getApplication())
+            publishDeflectionShortcut(deflections)
             uiText(if (enabled) R.string.status_deflection_on_done else R.string.status_deflection_off_done)
         }
 
@@ -1327,11 +1344,76 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 clearDialActive()
                 throw e
             }
+            val name = nameFor(number)
             settings.lastDialledNumber = number
+            settings.lastDialledName = name
             RedialTileService.refresh(getApplication())
+            LauncherShortcuts.updateRedial(getApplication(), number, name)
             phone?.let { uiText(R.string.status_pick_up, FritzDialer.displayName(it), number) }
                 ?: uiText(R.string.status_pick_up_any, number)
         }
+    }
+
+    /** Whose [number] is, as far as the phone books and recent calls loaded so far tell. */
+    private fun nameFor(number: String): String? {
+        val key = numberKeys()
+        val wanted = key(number)
+        val state = _state.value
+        val books = state.phonebooks + listOfNotNull(state.deviceContacts)
+        return books.asSequence().flatMap { it.contacts }
+            .firstOrNull { c -> c.numbers.any { key(it.number) == wanted } }?.name?.takeIf { it.isNotBlank() }
+            ?: (state.boxCalls + state.phoneCalls.orEmpty())
+                .firstOrNull { !it.name.isNullOrBlank() && key(it.number) == wanted }?.name
+    }
+
+    // --- launcher shortcuts -----------------------------------------------------------
+
+    /**
+     * The launcher shortcut "Redial": [number] into the dialer, and dialled right away – once it is
+     * known which box is reachable from here, and only if one is (otherwise it just stands there).
+     */
+    fun dialFromShortcut(number: String) {
+        if (!settings.isConfigured()) return
+        showDialer()
+        prefill(number)
+        viewModelScope.launch {
+            // Where are we? The app may have been in the background for long (onStart comes after this).
+            detectIfStale()
+            detectJob?.join()
+            // Changed meanwhile by hand, or no box to dial through.
+            if (_state.value.number != number || _state.value.noBoxReachable) return@launch
+            if (_state.value.busy) runWhenIdle("dial", ::dial) else dial()
+        }
+    }
+
+    /** The launcher shortcuts "Speed dial" and "Choose number": the number picker, on [tab]. */
+    fun openPickerFromShortcut(tab: PickerTab) {
+        if (!settings.isConfigured()) return
+        showDialer()
+        openPicker()
+        selectPickerTab(tab)
+    }
+
+    /** Leaves whatever page is open for the dialer; unsaved changes on a connection page are dropped. */
+    private fun showDialer() {
+        verifyingSettings = false
+        _state.update {
+            it.copy(
+                showSettings = false,
+                showConnectionSettings = false,
+                showLanguage = false,
+                showDeflections = false,
+                showPicker = false,
+                editingProfileId = null,
+                config = activeConfig(),
+            )
+        }
+    }
+
+    /** The launcher shortcut "Call forwarding" switches the one the tile switches: says which, and its state. */
+    private fun publishDeflectionShortcut(deflections: List<CallDeflection>) {
+        val id = settings.activeProfileId ?: return
+        LauncherShortcuts.updateDeflection(getApplication(), deflections.forTile(settings.tileDeflection(id)))
     }
 
     /** Without the call monitor: the call counts as cancellable (and "pick up" as shown) for a while. */
@@ -1629,11 +1711,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     init {
         if (settings.isConfigured()) {
             // Pick the box of the current network first; if that did not switch (and load), load now.
-            viewModelScope.launch {
+            detectJob = viewModelScope.launch {
                 val detection = detectBox()
                 if (!detection.switched && !_state.value.noBoxReachable) refreshPhones()
                 detectAgainIfNotFound(detection)
             }
+            // Their texts in the language of now.
+            LauncherShortcuts.publish(getApplication())
         }
         watchNetwork()
     }

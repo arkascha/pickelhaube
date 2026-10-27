@@ -384,4 +384,11 @@
     <string name="call_ended">Appel terminé · %1$s</string>
     <string name="call_not_answered">Pas de réponse, ou occupé</string>
     <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>
+
+    <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_deflection_on">Renvoi activé</string>
+    <string name="shortcut_deflection_off">Renvoi désactivé</string>
+    <string name="shortcut_deflection_on_long">Renvoi d’appel vers %1$s : activé</string>
+    <string name="shortcut_deflection_off_long">Renvoi d’appel vers %1$s : désactivé</string>
+    <string name="shortcut_deflection_unknown">Impossible de lire le renvoi d’appel, ou aucun n’est configuré</string>
 </resources>
