@@ -19,7 +19,8 @@ import java.util.UUID
  * phone books, its call list and the speed dials set up in its phone books are used (on by default).
  * [model], [softwareVersion] and [serialNumber] are what the box last said about itself (see [BoxInfo]);
  * [dialingCodes] its country and area code, for comparing numbers; [userRights] what the box said
- * the configured user may do.
+ * the configured user may do; [callMonitor] whether the box accepted a call monitor connection the
+ * last time one was tried (null: not tried yet).
  */
 data class BoxProfile(
     val id: String = UUID.randomUUID().toString(),
@@ -34,6 +35,7 @@ data class BoxProfile(
     val phonebooksEnabled: Boolean = true,
     val callListEnabled: Boolean = true,
     val speedDialsEnabled: Boolean = true,
+    val callMonitor: Boolean? = null,
 ) {
     val info: BoxInfo get() = BoxInfo(model, softwareVersion, serialNumber)
 }
@@ -106,6 +108,12 @@ class SettingsRepository(context: Context) {
         if (profile.userRights != rights) saveProfile(profile.copy(userRights = rights))
     }
 
+    /** Stores whether a connection's box accepted a call monitor connection. */
+    fun updateCallMonitor(id: String, available: Boolean) {
+        val profile = profiles().firstOrNull { it.id == id } ?: return
+        if (profile.callMonitor != available) saveProfile(profile.copy(callMonitor = available))
+    }
+
     var activeProfileId: String?
         get() = prefs.getString(KEY_ACTIVE, null)?.takeIf { id -> profiles().any { it.id == id } }
             ?: profiles().firstOrNull()?.id
@@ -139,6 +147,11 @@ class SettingsRepository(context: Context) {
     var phoneSpeedDialsEnabled: Boolean
         get() = prefs.getBoolean(KEY_PHONE_SPEED_DIALS_ENABLED, true)
         set(value) = prefs.edit { putBoolean(KEY_PHONE_SPEED_DIALS_ENABLED, value) }
+
+    /** Optional feature: follow the calls placed on the box' call monitor. On by default. */
+    var callStatusEnabled: Boolean
+        get() = prefs.getBoolean(KEY_CALL_STATUS, true)
+        set(value) = prefs.edit { putBoolean(KEY_CALL_STATUS, value) }
 
     /** This phone's speed dials: name and number are stored as copies, so they work everywhere. */
     var phoneSpeedDials: List<SpeedDial>
@@ -178,6 +191,7 @@ class SettingsRepository(context: Context) {
                 callLogEnabled = callLogEnabled,
                 phoneSpeedDialsEnabled = phoneSpeedDialsEnabled,
                 phoneSpeedDials = phoneSpeedDials,
+                callStatusEnabled = callStatusEnabled,
                 tileDeflections = profiles.mapNotNull { p -> tileDeflection(p.id)?.let { p.id to it } }.toMap(),
                 language = language,
             ),
@@ -205,6 +219,7 @@ class SettingsRepository(context: Context) {
         callLogEnabled = backup.options.callLogEnabled
         phoneSpeedDialsEnabled = backup.options.phoneSpeedDialsEnabled
         phoneSpeedDials = backup.options.phoneSpeedDials
+        callStatusEnabled = backup.options.callStatusEnabled
     }
 
     // --- storage ----------------------------------------------------------------------
@@ -249,6 +264,7 @@ class SettingsRepository(context: Context) {
         const val KEY_CALL_LOG = "call_log_enabled"
         const val KEY_PHONE_SPEED_DIALS_ENABLED = "phone_speed_dials_enabled"
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
+        const val KEY_CALL_STATUS = "call_status_enabled"
         const val KEY_LAST_DIALLED = "last_dialled_number"
         const val KEY_TILE_ADDED = "tile_added_"
         const val KEY_TILE_DEFLECTION = "tile_deflection_"
@@ -298,6 +314,7 @@ internal fun BoxProfile.toJson(storedPassword: String?): JSONObject {
         put("phonebooks", p.phonebooksEnabled)
         put("callList", p.callListEnabled)
         put("speedDials", p.speedDialsEnabled)
+        p.callMonitor?.let { put("callMonitor", it) }
     }
 }
 
@@ -336,6 +353,7 @@ internal fun boxProfileFromJson(o: JSONObject, password: String) = BoxProfile(
     phonebooksEnabled = o.optBoolean("phonebooks", true),
     callListEnabled = o.optBoolean("callList", true),
     speedDialsEnabled = o.optBoolean("speedDials", true),
+    callMonitor = if (o.has("callMonitor")) o.optBoolean("callMonitor") else null,
 )
 
 internal fun List<SpeedDial>.toJson(): JSONArray = JSONArray().also { array ->

@@ -128,6 +128,11 @@ fun SettingsScreen(
     onDisableCallLog: () -> Unit,
     phoneSpeedDialsEnabled: Boolean,
     onPhoneSpeedDialsChange: (Boolean) -> Unit,
+    callStatusEnabled: Boolean,
+    onCallStatusChange: (Boolean) -> Unit,
+    checkingCallMonitors: Boolean,
+    /** Asks the boxes reachable now whether their call monitor is on. */
+    onCheckCallMonitors: () -> Unit,
     transferBusy: Boolean,
     pendingImport: SettingsFileInfo?,
     importError: UiText?,
@@ -249,6 +254,22 @@ fun SettingsScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                Text(stringResource(R.string.settings_call_status), style = MaterialTheme.typography.titleSmall)
+                CallStatusSetting(
+                    enabled = callStatusEnabled,
+                    onChange = onCallStatusChange,
+                    profiles = profiles,
+                    checking = checkingCallMonitors,
+                    canCheck = !boxesSeen.isNullOrEmpty(),
+                    onCheck = onCheckCallMonitors,
+                )
+            }
+
+            HorizontalDivider()
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
                 Text(stringResource(R.string.settings_tiles), style = MaterialTheme.typography.titleSmall)
                 TilesSetting()
             }
@@ -277,6 +298,55 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(16.dp),
             )
+        }
+    }
+}
+
+/**
+ * Switch for following the calls on the box' call monitor and, while on, whether each box has its
+ * monitor on – asked when the settings open (the boxes reachable from here), and again on request,
+ * e.g. right after switching it on at the box.
+ */
+@Composable
+private fun CallStatusSetting(
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit,
+    profiles: List<BoxProfile>,
+    checking: Boolean,
+    canCheck: Boolean,
+    onCheck: () -> Unit,
+) {
+    LaunchedEffect(Unit) { if (enabled) onCheck() }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OptionTitle(
+            stringResource(R.string.settings_call_status_switch),
+            listOf(stringResource(R.string.settings_call_status_hint), stringResource(R.string.settings_call_status_privacy)),
+            Modifier.weight(1f),
+        )
+        Switch(checked = enabled, onCheckedChange = onChange)
+    }
+    if (!enabled) return
+    profiles.forEach { profile ->
+        Text(
+            when (profile.callMonitor) {
+                true -> stringResource(R.string.settings_call_monitor_on, profile.name)
+                false -> stringResource(R.string.settings_call_monitor_off, profile.name)
+                null -> stringResource(R.string.settings_call_monitor_unknown, profile.name)
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = if (profile.callMonitor == false) MaterialTheme.colorScheme.error
+            else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    if (canCheck) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            OutlinedButton(onClick = onCheck, enabled = !checking) {
+                Text(stringResource(R.string.settings_call_monitor_check))
+            }
+            if (checking) {
+                Spacer(Modifier.width(12.dp))
+                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+            }
         }
     }
 }

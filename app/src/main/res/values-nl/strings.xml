@@ -363,4 +363,21 @@
     <string name="status_deflection_off">Doorschakeling wordt uitgeschakeld…</string>
     <string name="status_deflection_on_done">Doorschakeling ingeschakeld.</string>
     <string name="status_deflection_off_done">Doorschakeling uitgeschakeld.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">Gespreksstatus</string>
+    <string name="settings_call_status_switch">Gesprekken op de FRITZ!Box volgen</string>
+    <string name="settings_call_status_hint">Terwijl je belt, toont het kiesscherm hoe het gesprek verloopt: wordt gekozen, verbonden met de duur, beëindigd of niet beantwoord. De FRITZ!Box meldt dit via zijn gespreksmonitor, die eenmalig moet worden ingeschakeld: kies #96*5* op een telefoon die op de box is aangesloten (#96*4* schakelt hem weer uit).</string>
+    <string name="settings_call_status_privacy">De gespreksmonitor vraagt geen aanmelding en is niet versleuteld: staat hij aan, dan kan elk apparaat in het thuisnetwerk de gesprekken van de box volgen, nummers inbegrepen. Pickelhaube maakt alleen verbinding zolang een van zijn eigen gesprekken loopt.</string>
+    <string name="settings_call_monitor_on">%1$s: gespreksmonitor aan</string>
+    <string name="settings_call_monitor_off">%1$s: gespreksmonitor uit – kies #96*5* op een telefoon die erop is aangesloten</string>
+    <string name="settings_call_monitor_unknown">%1$s: nog niet gecontroleerd</string>
+    <string name="settings_call_monitor_check">Opnieuw controleren</string>
+    <string name="call_monitor_off_hint">De gespreksstatus staat uit op de FRITZ!Box: kies #96*5* op een telefoon die erop is aangesloten</string>
+    <string name="call_dialling">%1$s wordt gebeld…</string>
+    <string name="call_dialling_from">%1$s wordt gebeld vanaf %2$s…</string>
+    <string name="call_connected">Verbonden met %1$s · %2$s</string>
+    <string name="call_ended">Gesprek beëindigd · %1$s</string>
+    <string name="call_not_answered">Niet beantwoord of in gesprek</string>
+    <string name="call_not_picked_up">De telefoon is niet opgenomen</string>
 </resources>

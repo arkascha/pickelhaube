@@ -216,6 +216,29 @@ the current network: the one marked on that page (a choice offered when there is
 the first. It shows whether it is on and where it forwards to, and asks for the phone to be unlocked
 before switching.
 
+### Live call status
+
+Above the call buttons, the dialer shows how the call goes: *pick up* while the box rings your phone,
+then *calling …* (with the own number it goes out from) once you picked up, *connected* with a running
+timer, and finally *call ended* with its duration, *not answered, or busy*, or – when nobody picked
+up within 45 seconds – *the phone was not picked up*. The red button stays usable exactly as long as
+the call is still being set up. The end stays shown for 20 seconds.
+
+TR-064 does not report any of this. It comes from the box' **call monitor**: a plain TCP connection to
+port 1012, on which the box reports every call as it happens (`CALL`, `CONNECT`, `DISCONNECT`, `RING`).
+Pickelhaube connects to it right before asking the box to dial and closes it once the call is over, so
+it is not a permanent listener; of all the calls of the household it follows only the one reporting
+the number it dialled. The monitor is **off by default** and cannot be switched through TR-064: dial
+`#96*5*` once on a phone connected to the box (`#96*4*` switches it off again). If it is off, the
+dialer says so on the first call; without it, the dialer just shows *pick up* and the red button stays
+usable for 30 seconds, as before.
+
+**Settings › Live call status** switches the feature (on by default) and lists, per box, whether its
+call monitor is on, off or not checked yet – asked when the settings open, for the boxes reachable
+from there, and with **Check again**. Mind that the call monitor needs no login and is not encrypted:
+once it is on, any device in the home network can follow the box' calls, numbers included. It is
+reachable in the home network and usually through a VPN, not through MyFRITZ.
+
 ### Language
 
 Pickelhaube is available in English, German, Dutch, French, Italian, Spanish and Polish.
@@ -299,6 +322,8 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/BoxUsers.kt` | The box' users, offered for the user name (`LANConfigSecurity` `X_AVM-DE_GetUserList`) |
 | `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
+| `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
+| `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
@@ -311,7 +336,7 @@ Contacts or a web page; the number is pre-filled.
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising,
-the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning and the settings file.
+the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines and recognising the dialled number in them.
 
 ## Notes / ideas
 

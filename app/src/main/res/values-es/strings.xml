@@ -367,4 +367,21 @@
     <string name="status_deflection_off">Desactivando el desvío de llamadas…</string>
     <string name="status_deflection_on_done">Desvío de llamadas activado.</string>
     <string name="status_deflection_off_done">Desvío de llamadas desactivado.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">Estado de la llamada</string>
+    <string name="settings_call_status_switch">Seguir las llamadas en la FRITZ!Box</string>
+    <string name="settings_call_status_hint">Mientras llamas, el teclado muestra cómo va la llamada: marcando, conectada con su duración, terminada o sin respuesta. La FRITZ!Box lo comunica mediante su monitor de llamadas, que hay que activar una vez: marca #96*5* en un teléfono conectado a la box (#96*4* lo desactiva).</string>
+    <string name="settings_call_status_privacy">El monitor de llamadas no pide inicio de sesión y no está cifrado: una vez activado, cualquier dispositivo de la red doméstica puede seguir las llamadas de la box, números incluidos. Pickelhaube solo se conecta a él mientras dura una de sus propias llamadas.</string>
+    <string name="settings_call_monitor_on">%1$s: monitor de llamadas activado</string>
+    <string name="settings_call_monitor_off">%1$s: monitor de llamadas desactivado – marca #96*5* en un teléfono conectado a ella</string>
+    <string name="settings_call_monitor_unknown">%1$s: aún no comprobado</string>
+    <string name="settings_call_monitor_check">Comprobar de nuevo</string>
+    <string name="call_monitor_off_hint">El estado de la llamada está desactivado en la FRITZ!Box: marca #96*5* en un teléfono conectado a ella</string>
+    <string name="call_dialling">Llamando a %1$s…</string>
+    <string name="call_dialling_from">Llamando a %1$s desde %2$s…</string>
+    <string name="call_connected">Conectado con %1$s · %2$s</string>
+    <string name="call_ended">Llamada terminada · %1$s</string>
+    <string name="call_not_answered">Sin respuesta, o comunicando</string>
+    <string name="call_not_picked_up">No se descolgó el teléfono</string>
 </resources>

@@ -363,4 +363,21 @@
     <string name="status_deflection_off">Schalte die Rufumleitung aus…</string>
     <string name="status_deflection_on_done">Rufumleitung eingeschaltet.</string>
     <string name="status_deflection_off_done">Rufumleitung ausgeschaltet.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">Gesprächsstatus</string>
+    <string name="settings_call_status_switch">Gespräche auf der FRITZ!Box verfolgen</string>
+    <string name="settings_call_status_hint">Während du telefonierst, zeigt das Wählfeld, wie das Gespräch läuft: wird gewählt, verbunden mit Dauer, beendet oder nicht angenommen. Die FRITZ!Box meldet das über ihren Anrufmonitor, der einmal eingeschaltet werden muss: an einem Telefon an der Box #96*5* wählen (#96*4* schaltet ihn wieder aus).</string>
+    <string name="settings_call_status_privacy">Der Anrufmonitor braucht keine Anmeldung und ist nicht verschlüsselt: Ist er eingeschaltet, kann jedes Gerät im Heimnetz die Gespräche der Box mitverfolgen, Rufnummern eingeschlossen. Pickelhaube verbindet sich nur mit ihm, solange eines seiner eigenen Gespräche läuft.</string>
+    <string name="settings_call_monitor_on">%1$s: Anrufmonitor an</string>
+    <string name="settings_call_monitor_off">%1$s: Anrufmonitor aus – an einem Telefon an der Box #96*5* wählen</string>
+    <string name="settings_call_monitor_unknown">%1$s: noch nicht geprüft</string>
+    <string name="settings_call_monitor_check">Erneut prüfen</string>
+    <string name="call_monitor_off_hint">Der Gesprächsstatus ist auf der FRITZ!Box aus: an einem Telefon an der Box #96*5* wählen</string>
+    <string name="call_dialling">Wähle %1$s…</string>
+    <string name="call_dialling_from">Wähle %1$s von %2$s…</string>
+    <string name="call_connected">Verbunden mit %1$s · %2$s</string>
+    <string name="call_ended">Gespräch beendet · %1$s</string>
+    <string name="call_not_answered">Nicht angenommen oder besetzt</string>
+    <string name="call_not_picked_up">Das Telefon wurde nicht abgehoben</string>
 </resources>

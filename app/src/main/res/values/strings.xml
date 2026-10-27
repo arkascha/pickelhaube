@@ -365,4 +365,21 @@
     <string name="status_deflection_off">Switching call forwarding off…</string>
     <string name="status_deflection_on_done">Call forwarding switched on.</string>
     <string name="status_deflection_off_done">Call forwarding switched off.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">Live call status</string>
+    <string name="settings_call_status_switch">Follow calls on the FRITZ!Box</string>
+    <string name="settings_call_status_hint">While you call, the dialer shows how the call goes: being dialled, connected with its duration, ended, or not answered. The FRITZ!Box reports this through its call monitor, which has to be switched on once: dial #96*5* on a phone connected to the box (#96*4* switches it off again).</string>
+    <string name="settings_call_status_privacy">The call monitor needs no login and is not encrypted: once it is on, any device in the home network can follow the box’s calls, numbers included. Pickelhaube connects to it only while one of its own calls is going on.</string>
+    <string name="settings_call_monitor_on">%1$s: call monitor on</string>
+    <string name="settings_call_monitor_off">%1$s: call monitor off – dial #96*5* on a phone connected to it</string>
+    <string name="settings_call_monitor_unknown">%1$s: not checked yet</string>
+    <string name="settings_call_monitor_check">Check again</string>
+    <string name="call_monitor_off_hint">Live call status is off on the FRITZ!Box: dial #96*5* on a phone connected to it</string>
+    <string name="call_dialling">Calling %1$s…</string>
+    <string name="call_dialling_from">Calling %1$s from %2$s…</string>
+    <string name="call_connected">Connected with %1$s · %2$s</string>
+    <string name="call_ended">Call ended · %1$s</string>
+    <string name="call_not_answered">Not answered, or busy</string>
+    <string name="call_not_picked_up">The phone was not picked up</string>
 </resources>

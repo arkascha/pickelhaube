@@ -367,4 +367,21 @@
     <string name="status_deflection_off">Disattivazione del trasferimento di chiamata…</string>
     <string name="status_deflection_on_done">Trasferimento di chiamata attivato.</string>
     <string name="status_deflection_off_done">Trasferimento di chiamata disattivato.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">Stato della chiamata</string>
+    <string name="settings_call_status_switch">Seguire le chiamate sul FRITZ!Box</string>
+    <string name="settings_call_status_hint">Mentre telefoni, il tastierino mostra come va la chiamata: in composizione, connessa con la durata, terminata o senza risposta. Il FRITZ!Box lo comunica tramite il suo monitor chiamate, che va attivato una volta: componi #96*5* su un telefono collegato al box (#96*4* lo disattiva).</string>
+    <string name="settings_call_status_privacy">Il monitor chiamate non richiede accesso e non è cifrato: una volta attivo, qualsiasi dispositivo della rete domestica può seguire le chiamate del box, numeri compresi. Pickelhaube vi si collega solo durante una delle sue chiamate.</string>
+    <string name="settings_call_monitor_on">%1$s: monitor chiamate attivo</string>
+    <string name="settings_call_monitor_off">%1$s: monitor chiamate disattivato – componi #96*5* su un telefono collegato</string>
+    <string name="settings_call_monitor_unknown">%1$s: non ancora verificato</string>
+    <string name="settings_call_monitor_check">Verifica di nuovo</string>
+    <string name="call_monitor_off_hint">Lo stato della chiamata è disattivato sul FRITZ!Box: componi #96*5* su un telefono collegato</string>
+    <string name="call_dialling">Chiamata a %1$s…</string>
+    <string name="call_dialling_from">Chiamata a %1$s da %2$s…</string>
+    <string name="call_connected">Connesso con %1$s · %2$s</string>
+    <string name="call_ended">Chiamata terminata · %1$s</string>
+    <string name="call_not_answered">Nessuna risposta, o occupato</string>
+    <string name="call_not_picked_up">Il telefono non è stato sollevato</string>
 </resources>

@@ -367,4 +367,21 @@
     <string name="status_deflection_off">Désactivation du renvoi d’appel…</string>
     <string name="status_deflection_on_done">Renvoi d’appel activé.</string>
     <string name="status_deflection_off_done">Renvoi d’appel désactivé.</string>
+
+    <!-- live call status -->
+    <string name="settings_call_status">État de l’appel</string>
+    <string name="settings_call_status_switch">Suivre les appels sur la FRITZ!Box</string>
+    <string name="settings_call_status_hint">Pendant l’appel, le clavier indique où il en est : numérotation, connecté avec sa durée, terminé ou sans réponse. La FRITZ!Box le signale par son moniteur d’appels, qui doit être activé une fois : composez #96*5* sur un téléphone connecté à la box (#96*4* le désactive).</string>
+    <string name="settings_call_status_privacy">Le moniteur d’appels ne demande aucune connexion et n’est pas chiffré : une fois activé, tout appareil du réseau domestique peut suivre les appels de la box, numéros compris. Pickelhaube ne s’y connecte que pendant l’un de ses propres appels.</string>
+    <string name="settings_call_monitor_on">%1$s : moniteur d’appels activé</string>
+    <string name="settings_call_monitor_off">%1$s : moniteur d’appels désactivé – composez #96*5* sur un téléphone qui y est connecté</string>
+    <string name="settings_call_monitor_unknown">%1$s : pas encore vérifié</string>
+    <string name="settings_call_monitor_check">Vérifier à nouveau</string>
+    <string name="call_monitor_off_hint">L’état de l’appel est désactivé sur la FRITZ!Box : composez #96*5* sur un téléphone qui y est connecté</string>
+    <string name="call_dialling">Appel de %1$s…</string>
+    <string name="call_dialling_from">Appel de %1$s depuis %2$s…</string>
+    <string name="call_connected">Connecté avec %1$s · %2$s</string>
+    <string name="call_ended">Appel terminé · %1$s</string>
+    <string name="call_not_answered">Pas de réponse, ou occupé</string>
+    <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>
 </resources>

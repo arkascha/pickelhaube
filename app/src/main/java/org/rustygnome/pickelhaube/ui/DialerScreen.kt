@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.ui
 
+import android.os.SystemClock
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -38,7 +39,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.tr064.FritzDialer
+import kotlinx.coroutines.delay
 
 /**
  * Single, non-scrolling screen: number, dial pad, phone selector and call buttons.
@@ -220,6 +224,12 @@ fun DialerScreen(
                     onRefresh = onRefresh,
                 )
 
+                // Its room stays reserved while the feature is on, so the layout does not jump with each call.
+                if (state.callStatusEnabled) {
+                    Spacer(Modifier.height(8.dp))
+                    CallStatusLine(state.callProgress)
+                }
+
                 Spacer(Modifier.height(12.dp))
 
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
@@ -240,6 +250,47 @@ fun DialerScreen(
             }
         }
     }
+}
+
+/** How the call placed last is going, in up to two lines; empty while there is none. */
+@Composable
+private fun CallStatusLine(progress: CallProgress?) {
+    val text = when (progress) {
+        null -> ""
+        is CallProgress.PickUp -> when {
+            progress.monitorOff -> stringResource(R.string.call_monitor_off_hint)
+            progress.phone != null ->
+                stringResource(R.string.status_pick_up, FritzDialer.displayName(progress.phone), progress.number)
+            else -> stringResource(R.string.status_pick_up_any, progress.number)
+        }
+        is CallProgress.Dialling -> progress.from?.let { stringResource(R.string.call_dialling_from, progress.number, it) }
+            ?: stringResource(R.string.call_dialling, progress.number)
+        is CallProgress.Connected -> {
+            // Counts up while connected.
+            var now by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
+            LaunchedEffect(progress) {
+                while (true) {
+                    now = SystemClock.elapsedRealtime()
+                    delay(1_000 - (now - progress.since) % 1_000)
+                }
+            }
+            stringResource(R.string.call_connected, progress.number, formatDuration(((now - progress.since) / 1_000).toInt()))
+        }
+        is CallProgress.Ended -> stringResource(R.string.call_ended, formatDuration(progress.seconds))
+        CallProgress.NotAnswered -> stringResource(R.string.call_not_answered)
+        CallProgress.NotPickedUp -> stringResource(R.string.call_not_picked_up)
+    }
+    Text(
+        text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = if (progress is CallProgress.PickUp && progress.monitorOff) MaterialTheme.colorScheme.error
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+        minLines = 2,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 /** ⌫ button: tap deletes the last digit, long press clears the whole number. */

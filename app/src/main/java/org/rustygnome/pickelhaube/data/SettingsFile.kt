@@ -20,6 +20,8 @@ data class AppOptions(
     val callLogEnabled: Boolean,
     val phoneSpeedDialsEnabled: Boolean,
     val phoneSpeedDials: List<SpeedDial>,
+    /** Follow the calls placed on the box' call monitor. */
+    val callStatusEnabled: Boolean = true,
     /** Per connection (id) the call deflection the quick settings tile switches. */
     val tileDeflections: Map<String, Int>,
     /** The chosen language tag; null for the system language. */
@@ -119,6 +121,7 @@ object SettingsFile {
         put("callLog", options.callLogEnabled)
         put("phoneSpeedDials", options.phoneSpeedDialsEnabled)
         put("speedDials", options.phoneSpeedDials.toJson())
+        put("callStatus", options.callStatusEnabled)
         put("tileDeflections", JSONObject(options.tileDeflections))
         options.language?.let { put("language", it) }
     }
@@ -130,6 +133,7 @@ object SettingsFile {
             callLogEnabled = o.optBoolean("callLog", false),
             phoneSpeedDialsEnabled = o.optBoolean("phoneSpeedDials", true),
             phoneSpeedDials = o.optJSONArray("speedDials")?.let(::speedDialsFromJson).orEmpty(),
+            callStatusEnabled = o.optBoolean("callStatus", true),
             tileDeflections = deflections?.keys()?.asSequence()?.associateWith { deflections.getInt(it) }.orEmpty(),
             language = o.optString("language").takeIf { it.isNotEmpty() },
         )

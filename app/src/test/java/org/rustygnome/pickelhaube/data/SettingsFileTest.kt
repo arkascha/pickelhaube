@@ -30,6 +30,7 @@ class SettingsFileTest {
             callLogEnabled = false,
             phoneSpeedDialsEnabled = true,
             phoneSpeedDials = listOf(SpeedDial("1", "Mama", "040123")),
+            callStatusEnabled = false,
             tileDeflections = mapOf("a" to 2),
             language = "de",
         ),
@@ -90,6 +91,7 @@ class SettingsFileTest {
         val read = SettingsFile.read("""{"format":"pickelhaube-settings","version":1,"boxes":[]}""", null)
         assertTrue(read.profiles.isEmpty())
         assertTrue(read.options.phoneSpeedDialsEnabled)
+        assertTrue(read.options.callStatusEnabled)
         assertFalse(read.options.deviceContactsEnabled)
         assertEquals(null, read.options.language)
     }
