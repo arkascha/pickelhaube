@@ -504,6 +504,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             settings.activeProfileId = profile.id
             verifyingSettings = false
             LauncherShortcuts.publish(getApplication())
+            // It just answered, so it is the one reachable – under the name it has now.
+            LauncherShortcuts.updateBox(getApplication(), profile)
             // First setup: straight to the dialer. Later changes: back to the settings overview.
             _state.update {
                 it.copy(
