@@ -49,21 +49,21 @@
             android:exported="false"
             android:targetActivity=".MainActivity" />
 
-        <!-- Launcher shortcut "Call forwarding": switches it without opening the app; invisible. -->
+        <!-- Launcher shortcut "Call forwarding": switches it without opening the app; no window. -->
         <activity
             android:name=".shortcut.DeflectionShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.NoDisplay" />
 
-        <!-- Launcher shortcut showing the reachable FRITZ!Box: looks for it again; invisible. -->
+        <!-- Launcher shortcut showing the reachable FRITZ!Box: looks for it again; no window. -->
         <activity
             android:name=".shortcut.BoxShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.NoDisplay" />
 
         <!-- Quick settings tiles: open the dialer, open it with the number dialled last, and switch a call forwarding. -->
         <service
