@@ -584,6 +584,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     private var detectJob: Job? = null
 
+    /** The first detection and loading, at start. */
+    private var startupJob: Job? = null
+
     /** When the last detection started ([SystemClock.elapsedRealtime]), to skip needless repeats. */
     private var lastDetection = 0L
 
@@ -621,8 +624,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         if (match != null && match.id != settings.activeProfileId) {
             activateProfile(match.id)
+            LauncherShortcuts.updateBox(getApplication(), match)
             return Detection(match, true)
         }
+        LauncherShortcuts.updateBox(getApplication(), _state.value.activeProfile.takeIf { !_state.value.noBoxReachable })
         return Detection(match, false)
     }
 
@@ -1382,8 +1387,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         prefill(number)
         viewModelScope.launch {
             // Where are we? The app may have been in the background for long (onStart comes after this).
+            startupJob?.join()
             detectIfStale()
-            detectJob?.join()
+            // A network change restarts the detection: until one has run to its end.
+            while (detectJob?.isActive == true) detectJob?.join()
             // Changed meanwhile by hand, or no box to dial through.
             if (_state.value.number != number || _state.value.noBoxReachable) return@launch
             if (_state.value.busy) runWhenIdle("dial", ::dial) else dial()
@@ -1727,7 +1734,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     init {
         if (settings.isConfigured()) {
             // Pick the box of the current network first; if that did not switch (and load), load now.
-            detectJob = viewModelScope.launch {
+            // Not the detectJob: a network change right at the start (Android reports the current network
+            // at once) restarts that, and would take the loading with it.
+            startupJob = viewModelScope.launch {
                 val detection = detectBox()
                 if (!detection.switched && !_state.value.noBoxReachable) refreshPhones()
                 detectAgainIfNotFound(detection)

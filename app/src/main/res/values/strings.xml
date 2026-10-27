@@ -385,6 +385,10 @@
 
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_redial_named" translatable="false">%1$s · %2$s</string>
+    <string name="shortcut_dial_number">Dial number</string>
+    <string name="shortcut_box_reachable">%1$s reachable</string>
+    <string name="shortcut_box_unknown">Look for FRITZ!Box</string>
+    <string name="shortcut_box_looking">Looking for your FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Forwarding on</string>
     <string name="shortcut_deflection_off">Forwarding off</string>
     <string name="shortcut_deflection_on_long">Forwarding on → %1$s</string>

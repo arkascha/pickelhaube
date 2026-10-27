@@ -386,6 +386,10 @@
     <string name="call_not_picked_up">No se descolgó el teléfono</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Marcar número</string>
+    <string name="shortcut_box_reachable">%1$s accesible</string>
+    <string name="shortcut_box_unknown">Buscar FRITZ!Box</string>
+    <string name="shortcut_box_looking">Buscando tu FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Desvío activado</string>
     <string name="shortcut_deflection_off">Desvío desactivado</string>
     <string name="shortcut_deflection_on_long">Desvío activado → %1$s</string>

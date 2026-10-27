@@ -182,6 +182,14 @@ class SettingsRepository(context: Context) {
         }
 
     /**
+     * The box the launcher shortcut says is reachable, as last looked for: its name, "" for none;
+     * null: not looked for yet.
+     */
+    var shortcutBox: String?
+        get() = prefs.getString(KEY_SHORTCUT_BOX, null)
+        set(value) = prefs.edit { if (value != null) putString(KEY_SHORTCUT_BOX, value) else remove(KEY_SHORTCUT_BOX) }
+
+    /**
      * Whether a quick settings tile (by its key) is in the quick settings, as its service last
      * learned; Android offers no way to ask.
      */
@@ -285,6 +293,7 @@ class SettingsRepository(context: Context) {
         const val KEY_LAST_DIALLED_NAME = "last_dialled_name"
         const val KEY_TILE_ADDED = "tile_added_"
         const val KEY_SHORTCUT_DEFLECTION = "shortcut_deflection"
+        const val KEY_SHORTCUT_BOX = "shortcut_box"
         const val KEY_TILE_DEFLECTION = "tile_deflection_"
 
         // single-connection keys of earlier versions (migrated)

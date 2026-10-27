@@ -253,7 +253,7 @@ class DeflectionTileService : TileService() {
 }
 
 private suspend fun TileService.reachableBox(settings: SettingsRepository): BoxProfile? =
-    BoxRecognition.reachableBox(this, settings)
+    BoxRecognition.reachableBox(this, settings).also { LauncherShortcuts.updateBox(this, it) }
 
 /** The tiles Pickelhaube offers, for adding them from the settings. */
 enum class PickelhaubeTile(val service: Class<out TileService>, val label: Int, val icon: Int) {

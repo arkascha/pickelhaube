@@ -386,6 +386,10 @@
     <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Composer un numéro</string>
+    <string name="shortcut_box_reachable">%1$s accessible</string>
+    <string name="shortcut_box_unknown">Chercher la FRITZ!Box</string>
+    <string name="shortcut_box_looking">Recherche de votre FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Renvoi activé</string>
     <string name="shortcut_deflection_off">Renvoi désactivé</string>
     <string name="shortcut_deflection_on_long">Renvoi activé → %1$s</string>

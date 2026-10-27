@@ -9,14 +9,16 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.AppLanguage
+import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.DeflectionState
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.tr064.CallDeflection
 
 /**
  * The entries of the menu a long press on the app icon opens, in this order: redial the number dialled
- * last, switch the call forwarding, choose a number. All are published at run time – also the fixed
- * one, since launchers put the ones declared in the manifest before all others.
+ * last, switch the call forwarding, dial a number, the FRITZ!Box reachable from here. All are published
+ * at run time – also the fixed one, since launchers put the ones declared in the manifest before all
+ * others.
  *
  * Launchers show an entry's long label when it fits in one line, else its short one; so the long
  * labels are kept short, and the short ones carry what matters most.
@@ -41,6 +43,7 @@ object LauncherShortcuts {
     private const val ID_SPEED_DIALS = "speed_dials"
     private const val ID_DEFLECTION = "deflection"
     private const val ID_PICKER = "picker"
+    private const val ID_BOX = "box"
 
     /** All entries as far as known without the box: at every start, so their texts follow the language. */
     fun publish(context: Context) {
@@ -51,7 +54,7 @@ object LauncherShortcuts {
         push(
             context,
             ShortcutInfoCompat.Builder(context, ID_PICKER)
-                .setShortLabel(texts.getString(R.string.picker_title))
+                .setShortLabel(texts.getString(R.string.shortcut_dial_number))
                 .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_picker))
                 .setIntent(aliasIntent(context, ACTION_PICKER))
                 .setRank(2)
@@ -59,6 +62,49 @@ object LauncherShortcuts {
         )
         settings.lastDialledNumber?.let { updateRedial(context, it, settings.lastDialledName) }
         pushDeflection(context, settings.shortcutDeflection)
+        pushBox(context, settings.shortcutBox)
+    }
+
+    /** The FRITZ!Box reachable from here: [box], as just looked for; null: none. */
+    fun updateBox(context: Context, box: BoxProfile?) {
+        val name = box?.name.orEmpty()
+        val settings = SettingsRepository(context)
+        if (settings.shortcutBox == name) return
+        settings.shortcutBox = name
+        pushBox(context, name)
+    }
+
+    /** The FRITZ!Box entry: [name] reachable, "" none, null not looked for yet. A tap looks again. */
+    private fun pushBox(context: Context, name: String?) {
+        val texts = AppLanguage.wrap(context)
+        val reachable = !name.isNullOrEmpty()
+        push(
+            context,
+            ShortcutInfoCompat.Builder(context, ID_BOX)
+                .setShortLabel(
+                    when {
+                        name == null -> texts.getString(R.string.shortcut_box_unknown)
+                        reachable -> name
+                        else -> texts.getString(R.string.tile_no_box)
+                    },
+                )
+                .setLongLabel(
+                    when {
+                        name == null -> texts.getString(R.string.shortcut_box_unknown)
+                        reachable -> texts.getString(R.string.shortcut_box_reachable, name)
+                        else -> texts.getString(R.string.tile_no_box)
+                    },
+                )
+                .setIcon(
+                    IconCompat.createWithResource(
+                        context,
+                        if (reachable) R.drawable.ic_shortcut_box_on else R.drawable.ic_shortcut_box_off,
+                    ),
+                )
+                .setIntent(Intent(Intent.ACTION_VIEW).setClass(context, BoxShortcutActivity::class.java))
+                .setRank(3)
+                .build(),
+        )
     }
 
     /** "Redial": dials [number] – the one dialled last – at once; shows [name] as well, if known. */

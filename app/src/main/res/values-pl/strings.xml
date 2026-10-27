@@ -392,6 +392,10 @@
     <string name="call_not_picked_up">Telefon nie został podniesiony</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Wybierz numer</string>
+    <string name="shortcut_box_reachable">%1$s osiągalny</string>
+    <string name="shortcut_box_unknown">Szukaj FRITZ!Box</string>
+    <string name="shortcut_box_looking">Szukanie FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Przekierowanie wł.</string>
     <string name="shortcut_deflection_off">Przekierowanie wył.</string>
     <string name="shortcut_deflection_on_long">Przekierowanie wł. → %1$s</string>

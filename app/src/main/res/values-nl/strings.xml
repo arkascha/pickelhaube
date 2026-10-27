@@ -382,6 +382,10 @@
     <string name="call_not_picked_up">De telefoon is niet opgenomen</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Nummer bellen</string>
+    <string name="shortcut_box_reachable">%1$s bereikbaar</string>
+    <string name="shortcut_box_unknown">FRITZ!Box zoeken</string>
+    <string name="shortcut_box_looking">Je FRITZ!Box wordt gezocht…</string>
     <string name="shortcut_deflection_on">Doorschakeling aan</string>
     <string name="shortcut_deflection_off">Doorschakeling uit</string>
     <string name="shortcut_deflection_on_long">Doorschakeling aan → %1$s</string>

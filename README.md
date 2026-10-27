@@ -297,7 +297,7 @@ On a locked phone, they do what they do only once the phone is unlocked.
 
 ### Long press on the app icon
 
-A long press on Pickelhaube's icon in the launcher opens a menu with three entries (Android's app
+A long press on Pickelhaube's icon in the launcher opens a menu with four entries (Android's app
 shortcuts; each can also be dragged onto the home screen on its own):
 
 1. **Redial** – the number dialled last, with its name from the phone books (taken when it is dialled,
@@ -308,10 +308,13 @@ shortcuts; each can also be dragged onto the home screen on its own):
    message says how it went, or why it could not switch (no box reachable, none set up, not readable).
    The entry is always there; it says whether the forwarding is on and where it forwards to, as last
    read by the app or the tile – the box itself is asked before switching.
-3. **Choose number** – the number picker.
+3. **Dial number** – the number picker.
+4. **The FRITZ!Box reachable from here** (e.g. *FRITZ!Box 7530 AX reachable*, or *No FRITZ!Box
+   reachable*), as the app, a tile or a shortcut last found. A tap looks again, without opening the app,
+   and says what it found.
 
 Launchers show an entry's long text (e.g. *Erika Muster · 030 1234567*) only when it fits in one line,
-otherwise its short one (*Erika Muster*). The entries are published when the app starts (so their texts
+otherwise its short one – the name rather than the number (*Erika Muster*). The entries are published when the app starts (so their texts
 follow the language) and updated with each call and each reading of the forwardings. Entries 1 and 3
 open the dialer through an activity alias that other apps cannot start – only an intent sent there may
 dial without the green button being pressed. An entry reopened from the recent apps is not carried out
@@ -347,7 +350,7 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
 | `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |
-| `shortcut/DeflectionShortcutActivity.kt` | Invisible activity behind the "Call forwarding" entry: switches it |
+| `shortcut/ShortcutActivities.kt` | Invisible activities behind the "Call forwarding" and FRITZ!Box entries |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |

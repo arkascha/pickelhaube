@@ -382,6 +382,10 @@
     <string name="call_not_picked_up">Das Telefon wurde nicht abgehoben</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Rufnummer wählen</string>
+    <string name="shortcut_box_reachable">%1$s erreichbar</string>
+    <string name="shortcut_box_unknown">FRITZ!Box suchen</string>
+    <string name="shortcut_box_looking">Suche deine FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Umleitung an</string>
     <string name="shortcut_deflection_off">Umleitung aus</string>
     <string name="shortcut_deflection_on_long">Umleitung an → %1$s</string>

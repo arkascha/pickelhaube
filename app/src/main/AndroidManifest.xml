@@ -57,6 +57,14 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- Launcher shortcut showing the reachable FRITZ!Box: looks for it again; invisible. -->
+        <activity
+            android:name=".shortcut.BoxShortcutActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- Quick settings tiles: open the dialer, open it with the number dialled last, and switch a call forwarding. -->
         <service
             android:name=".tile.DialerTileService"

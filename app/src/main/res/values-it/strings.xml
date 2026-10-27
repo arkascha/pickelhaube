@@ -386,6 +386,10 @@
     <string name="call_not_picked_up">Il telefono non è stato sollevato</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
+    <string name="shortcut_dial_number">Componi numero</string>
+    <string name="shortcut_box_reachable">%1$s raggiungibile</string>
+    <string name="shortcut_box_unknown">Cerca FRITZ!Box</string>
+    <string name="shortcut_box_looking">Ricerca della tua FRITZ!Box…</string>
     <string name="shortcut_deflection_on">Deviazione attiva</string>
     <string name="shortcut_deflection_off">Deviazione disattivata</string>
     <string name="shortcut_deflection_on_long">Deviazione attiva → %1$s</string>
