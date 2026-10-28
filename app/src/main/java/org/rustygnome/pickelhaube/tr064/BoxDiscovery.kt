@@ -61,7 +61,7 @@ object BoxDiscovery {
             .build()
         http.newCall(request).execute().use { response ->
             if (!response.isSuccessful) return null
-            parse(response.body?.string().orEmpty(), host)
+            parse(response.body.string(), host)
         }
     }.getOrNull()
 

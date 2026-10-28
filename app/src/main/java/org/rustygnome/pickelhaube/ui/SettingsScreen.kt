@@ -38,9 +38,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.HorizontalDivider
@@ -587,7 +587,7 @@ fun ConnectionSettingsScreen(
     LaunchedEffect(host, portValue, useHttps) {
         if (!valid) return@LaunchedEffect
         delay(USER_LOOKUP_DELAY_MILLIS)
-        onLookUpUsers(initial.copy(host = host.trim(), port = portValue ?: FritzConfig.HTTP_PORT, useHttps = useHttps))
+        onLookUpUsers(initial.copy(host = host.trim(), port = portValue, useHttps = useHttps))
     }
 
     // With HTTPS, ask the box on which port it talks it, rather than assume the usual one.
@@ -817,7 +817,7 @@ private fun UserField(value: String, onValueChange: (String) -> Unit, users: Lis
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryEditable, canOpen),
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, canOpen),
         )
         ExposedDropdownMenu(expanded = expanded && canOpen, onDismissRequest = { expanded = false }) {
             users.forEach { candidate ->

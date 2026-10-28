@@ -152,7 +152,7 @@ class Tr064Client(
 
             executed.use { response ->
                 status = response.code
-                val body = response.body?.string().orEmpty()
+                val body = response.body.string()
                 if (response.code == 401) throw AuthenticationException()
                 if (!response.isSuccessful) {
                     val fault = parseFault(body)
@@ -198,7 +198,7 @@ class Tr064Client(
                 status = it.code
                 if (it.code == 401) throw AuthenticationException()
                 if (!it.isSuccessful) throw HttpStatusException(it.code)
-                return it.body?.string().orEmpty()
+                return it.body.string()
             }
         } catch (e: IOException) {
             // The path only: the query holds the session id.
