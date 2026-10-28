@@ -6,19 +6,20 @@ plugins {
 
 android {
     namespace = "org.rustygnome.pickelhaube"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "org.rustygnome.pickelhaube"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
