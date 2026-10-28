@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
  * Arguments may be [UiText] themselves (e.g. "your phone" inside "Pick up %1$s …").
  */
 sealed interface UiText {
-    data class Res(@StringRes val id: Int, val args: List<Any> = emptyList()) : UiText
-    data class Plural(@PluralsRes val id: Int, val count: Int, val args: List<Any> = listOf(count)) : UiText
+    data class Res(@param:StringRes val id: Int, val args: List<Any> = emptyList()) : UiText
+    data class Plural(@param:PluralsRes val id: Int, val count: Int, val args: List<Any> = listOf(count)) : UiText
     /** Text that is not ours to translate: from the router, the system or an exception. */
     data class Raw(val text: String) : UiText
 
