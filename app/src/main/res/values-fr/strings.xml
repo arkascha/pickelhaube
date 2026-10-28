@@ -332,6 +332,7 @@
     <string name="settings_imported">Réglages importés</string>
     <plurals name="settings_import_text">
         <item quantity="one">Le fichier contient %d connexion FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
+        <item quantity="many">Le fichier contient %d connexions FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
         <item quantity="other">Le fichier contient %d connexions FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
     </plurals>
     <string name="settings_tile_add">Ajouter « %1$s »</string>

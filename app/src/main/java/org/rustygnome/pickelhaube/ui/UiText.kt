@@ -5,8 +5,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 
 /**
  * Text the ViewModel hands to the UI (status, errors, notes). It is only turned into a string when
@@ -34,6 +33,5 @@ fun uiText(@StringRes id: Int, vararg args: Any): UiText = UiText.Res(id, args.t
 @ReadOnlyComposable
 fun UiText.asString(): String {
     // Read like stringResource() does, so a configuration (language) change is noticed.
-    LocalConfiguration.current
-    return resolve(LocalContext.current.resources)
+    return resolve(LocalResources.current)
 }

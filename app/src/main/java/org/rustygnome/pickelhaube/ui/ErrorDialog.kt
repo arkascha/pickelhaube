@@ -39,9 +39,10 @@ import org.rustygnome.pickelhaube.R
 private fun TechnicalDetailsSection(details: TechnicalDetails) {
     var open by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val label = stringResource(R.string.error_technical_details)
     val text = remember(details) { details.asText() }
     TextButton(onClick = { open = !open }, contentPadding = PaddingValues(0.dp), modifier = Modifier.padding(top = 8.dp)) {
-        Text(stringResource(R.string.error_technical_details))
+        Text(label)
         Icon(if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, contentDescription = null)
     }
     if (open) {
@@ -51,7 +52,7 @@ private fun TechnicalDetailsSection(details: TechnicalDetails) {
         TextButton(
             onClick = {
                 context.getSystemService(ClipboardManager::class.java)
-                    ?.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.error_technical_details), text))
+                    ?.setPrimaryClip(ClipData.newPlainText(label, text))
             },
             contentPadding = PaddingValues(0.dp),
         ) { Text(stringResource(R.string.copy)) }
