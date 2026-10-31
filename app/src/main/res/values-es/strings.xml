@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">Los números marcados, recibidos y perdidos recientemente, de la lista de llamadas de esta FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s no tiene este permiso en el router, por lo que no se puede leer la lista de llamadas.</string>
     <string name="connection_help">En la box, activa «Permitir el acceso a aplicaciones» (Red doméstica › Red › Ajustes de red) y la «Ayuda de marcación» (Telefonía › Llamadas › Ayuda de marcación). El usuario necesita el permiso de telefonía. Si inicias sesión solo con contraseña, usa el nombre de usuario generado automáticamente que aparece en Sistema › Usuarios de FRITZ!Box.</string>
+    <string name="connection_demo_hint">¿No tienes una FRITZ!Box a mano? Prueba Pickelhaube con su box de demostración: host «demo», nombre de usuario y contraseña «demo». Tiene agendas y llamadas para probar, y sus llamadas no suenan en ningún sitio.</string>
+    <string name="connection_demo_fill">Rellenar la box de demostración</string>
     <string name="connection_connecting">Conectando…</string>
     <string name="connection_save">Guardar y conectar</string>
     <string name="connection_box_info">Datos del dispositivo</string>

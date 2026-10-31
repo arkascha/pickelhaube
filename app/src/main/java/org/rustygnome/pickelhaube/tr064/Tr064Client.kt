@@ -97,6 +97,8 @@ class Tr064Client(
 
     private val http: OkHttpClient = OkHttpClient.Builder()
         .apply {
+            // The demo box answers in the app itself, in place of the network.
+            if (DemoBox.isDemo(config.host)) addInterceptor(DemoBox.Interceptor(config))
             // Without credentials a 401 is final: answering it would only count as a failed login.
             if (config.username.isNotEmpty() || config.password.isNotEmpty()) {
                 authenticator(DigestAuthenticator(config.username, config.password))

@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">Die zuletzt gewählten, angenommenen und verpassten Nummern aus der Anrufliste dieser FRITZ!Box. Benötigt die Berechtigung „Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste“.</string>
     <string name="connection_call_list_no_right">%1$s hat diese Berechtigung auf der Box nicht, die Anrufliste kann daher nicht gelesen werden.</string>
     <string name="connection_help">Auf der Box „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und die „Wählhilfe“ (Telefonie › Anrufe › Wählhilfe) aktivieren. Der Benutzer braucht die Berechtigung für Telefonie. Wenn du dich nur mit Kennwort anmeldest, verwende den automatisch erzeugten Benutzernamen unter System › FRITZ!Box-Benutzer.</string>
+    <string name="connection_demo_hint">Keine FRITZ!Box zur Hand? Probiere Pickelhaube mit seiner Demo-Box aus: Host „demo“, Benutzername und Kennwort „demo“. Sie hat Telefonbücher und Anrufe zum Ausprobieren, und ihre Anrufe klingeln nirgends.</string>
+    <string name="connection_demo_fill">Demo-Box eintragen</string>
     <string name="connection_connecting">Verbinde …</string>
     <string name="connection_save">Speichern &amp; verbinden</string>
     <string name="connection_box_info">Geräteangaben</string>

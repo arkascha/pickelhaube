@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">Ostatnio wybierane, odebrane i nieodebrane numery z listy połączeń tego FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s nie ma tego uprawnienia na routerze, dlatego nie można odczytać listy połączeń.</string>
     <string name="connection_help">Na urządzeniu włącz „Zezwalaj na dostęp aplikacji” (Sieć domowa › Sieć › Ustawienia sieci) oraz „Pomoc przy wybieraniu” (Telefonia › Połączenia › Pomoc przy wybieraniu). Użytkownik potrzebuje uprawnienia do telefonii. Jeśli logujesz się tylko hasłem, użyj automatycznie utworzonej nazwy użytkownika podanej w System › Użytkownicy FRITZ!Box.</string>
+    <string name="connection_demo_hint">Nie masz pod ręką FRITZ!Box? Wypróbuj Pickelhaube z urządzeniem demonstracyjnym: host „demo”, nazwa użytkownika i hasło „demo”. Ma książki telefoniczne i połączenia do wypróbowania, a jego połączenia nigdzie nie dzwonią.</string>
+    <string name="connection_demo_fill">Wpisz urządzenie demonstracyjne</string>
     <string name="connection_connecting">Łączenie…</string>
     <string name="connection_save">Zapisz i połącz</string>
     <string name="connection_box_info">Dane urządzenia</string>

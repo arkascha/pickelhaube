@@ -116,6 +116,8 @@
     <string name="connection_call_list_hint">The numbers recently dialled, received and missed, from this FRITZ!Box’s call list. Needs the permission “Voice messages, fax messages, FRITZ!App Fon and call list”.</string>
     <string name="connection_call_list_no_right">%1$s does not have this permission on the box, so the call list cannot be read.</string>
     <string name="connection_help">On the box, enable “Allow access for applications” (Home Network › Network › Network Settings) and “Dial help” (Telephony › Calls › Dial Help). The user needs telephony permission. If you log in with password only, use the auto-generated user name shown under System › FRITZ!Box Users.</string>
+    <string name="connection_demo_hint">No FRITZ!Box at hand? Try Pickelhaube with its demo box: host “demo”, user name and password “demo”. It has phone books and calls to try out, and its calls ring nowhere.</string>
+    <string name="connection_demo_fill">Fill in the demo box</string>
     <string name="connection_connecting">Connecting…</string>
     <string name="connection_save">Save &amp; connect</string>
     <string name="connection_box_info">Device details</string>

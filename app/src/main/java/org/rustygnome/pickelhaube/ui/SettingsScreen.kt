@@ -90,6 +90,7 @@ import org.rustygnome.pickelhaube.tile.requestAddTile
 import org.rustygnome.pickelhaube.tr064.BoxInfo
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.BoxUser
+import org.rustygnome.pickelhaube.tr064.DemoBox
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.UserRights
 import kotlinx.coroutines.delay
@@ -637,6 +638,26 @@ fun ConnectionSettingsScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            // Without a box at hand (and for the app store's review): the box that answers in the app itself.
+            if (isNew && !DemoBox.isDemo(host)) {
+                Text(
+                    stringResource(R.string.connection_demo_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                OutlinedButton(
+                    onClick = {
+                        name = "Demo"
+                        host = DemoBox.HOST
+                        port = FritzConfig.HTTP_PORT.toString()
+                        useHttps = false
+                        user = DemoBox.USERNAME
+                        password = DemoBox.PASSWORD
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) { Text(stringResource(R.string.connection_demo_fill)) }
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
+            }
             OutlinedTextField(
                 value = name, onValueChange = { name = it },
                 label = { Text(stringResource(R.string.connection_name)) },

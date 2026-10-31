@@ -51,7 +51,10 @@ object CallMonitor {
      * box closes it. [onListening] is called once connected; a box with the monitor off ends the flow
      * with an [IOException].
      */
-    fun events(host: String, onListening: () -> Unit = {}): Flow<CallEvent> = callbackFlow {
+    fun events(host: String, onListening: () -> Unit = {}): Flow<CallEvent> =
+        if (DemoBox.isDemo(host)) DemoBox.monitorEvents(onListening) else socketEvents(host, onListening)
+
+    private fun socketEvents(host: String, onListening: () -> Unit): Flow<CallEvent> = callbackFlow {
         val socket = Socket()
         launch(Dispatchers.IO) {
             try {
@@ -69,7 +72,7 @@ object CallMonitor {
     }
 
     /** Whether the box at [host] accepts call monitor connections (connects and closes right away). */
-    suspend fun isAvailable(host: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun isAvailable(host: String): Boolean = DemoBox.isDemo(host) || withContext(Dispatchers.IO) {
         runCatching { Socket().use { it.connect(InetSocketAddress(host, PORT), CONNECT_TIMEOUT_MILLIS) } }.isSuccess
     }
 

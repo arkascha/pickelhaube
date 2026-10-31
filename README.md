@@ -72,6 +72,20 @@ arguments (long ones shortened), the HTTP status and the box' error code, and th
 selectable and with **Copy**, for a message to whoever looks into it. Credentials are no arguments,
 so they never appear there; numbers can.
 
+### Demo box
+
+Without a FRITZ!Box at hand – and for the review in the app stores – Pickelhaube has a box of its
+own: host `demo`, user `demo`, password `demo` (**Fill in the demo box** on the page for a new
+connection enters them). It answers in the app itself instead of over the network (`tr064/DemoBox.kt`,
+an OkHttp interceptor in `Tr064Client`, plus its device description and call monitor), with phones,
+two phone books with speed dials, a call list and call forwardings. A call through it rings nowhere:
+after a few seconds it counts as picked up, then connected, ends after a short talk and appears in
+its call list. Changes (speed dials, entries, call forwardings) last until the app is closed. Its
+numbers are from the ranges the Bundesnetzagentur keeps free for films.
+
+Like any box reached only at its configured host, it is used when the current network has none of
+the configured boxes.
+
 ### Several FRITZ!Boxes
 
 **Settings › FRITZ!Box connections** holds any number of boxes (e.g. home and office), each with its
@@ -372,6 +386,7 @@ Contacts or a web page; the number is pre-filled.
 | `tr064/FritzDialer.kt` | `X_VoIP` actions: `X_AVM-DE_GetPhonePort`, `X_AVM-DE_DialGetConfig`, `X_AVM-DE_DialSetConfig`, `X_AVM-DE_DialNumber`, `X_AVM-DE_DialHangup`; device details (`DeviceInfo` `GetInfo`) |
 | `tr064/BoxUsers.kt` | The box' users, offered for the user name (`LANConfigSecurity` `X_AVM-DE_GetUserList`) |
 | `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
+| `tr064/DemoBox.kt` | The demo box (host `demo`): answers TR-064 requests, its device description and its call monitor in the app itself |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
@@ -389,7 +404,7 @@ Contacts or a web page; the number is pre-filled.
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising,
-the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines and recognising the dialled number in them.
+the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas
 

@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">I numeri chiamati, ricevuti e persi di recente, dall’elenco chiamate di questa FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s non ha questa autorizzazione sul box, quindi l’elenco chiamate non può essere letto.</string>
     <string name="connection_help">Sulla box, attiva «Consenti l’accesso alle applicazioni» (Rete domestica › Rete › Impostazioni di rete) e l’«Aiuto alla selezione» (Telefonia › Chiamate › Aiuto alla selezione). L’utente ha bisogno dell’autorizzazione per la telefonia. Se accedi solo con la password, usa il nome utente generato automaticamente indicato in Sistema › Utenti FRITZ!Box.</string>
+    <string name="connection_demo_hint">Nessuna FRITZ!Box a portata di mano? Prova Pickelhaube con la sua box dimostrativa: host «demo», nome utente e password «demo». Ha rubriche e chiamate da provare, e le sue chiamate non squillano da nessuna parte.</string>
+    <string name="connection_demo_fill">Inserisci la box dimostrativa</string>
     <string name="connection_connecting">Connessione…</string>
     <string name="connection_save">Salva e connetti</string>
     <string name="connection_box_info">Dati del dispositivo</string>

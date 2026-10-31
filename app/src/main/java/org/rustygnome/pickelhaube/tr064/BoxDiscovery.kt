@@ -56,6 +56,7 @@ object BoxDiscovery {
 
     /** Reads the device description of [host], or null if no FritzBox answers there. */
     fun identify(host: String): BoxIdentity? = runCatching {
+        if (DemoBox.isDemo(host)) return parse(DemoBox.description(), host)
         val request = Request.Builder()
             .url("http://${hostForUrl(host)}:${FritzConfig.HTTP_PORT}/tr64desc.xml")
             .build()

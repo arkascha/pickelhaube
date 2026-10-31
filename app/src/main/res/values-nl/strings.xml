@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s heeft dit recht op de box niet, daarom kan de gesprekkenlijst niet worden gelezen.</string>
     <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig. Als je alleen met een wachtwoord inlogt, gebruik dan de automatisch aangemaakte gebruikersnaam onder Systeem › FRITZ!Box-gebruikers.</string>
+    <string name="connection_demo_hint">Geen FRITZ!Box bij de hand? Probeer Pickelhaube uit met de demobox: host “demo”, gebruikersnaam en wachtwoord “demo”. Hij heeft telefoonboeken en gesprekken om uit te proberen, en zijn gesprekken gaan nergens over.</string>
+    <string name="connection_demo_fill">Demobox invullen</string>
     <string name="connection_connecting">Verbinden…</string>
     <string name="connection_save">Opslaan &amp; verbinden</string>
     <string name="connection_box_info">Apparaatgegevens</string>

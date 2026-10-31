@@ -114,6 +114,8 @@
     <string name="connection_call_list_hint">Les numéros récemment composés, reçus et manqués, de la liste d’appels de cette FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s n’a pas ce droit sur la box, la liste d’appels ne peut donc pas être lue.</string>
     <string name="connection_help">Sur la box, activez « Autoriser l’accès aux applications » (Réseau domestique › Réseau › Paramètres réseau) et l’« Aide à la numérotation » (Téléphonie › Appels › Aide à la numérotation). L’utilisateur a besoin du droit Téléphonie. Si vous vous connectez uniquement avec un mot de passe, utilisez le nom d’utilisateur généré automatiquement, indiqué sous Système › Utilisateurs FRITZ!Box.</string>
+    <string name="connection_demo_hint">Pas de FRITZ!Box sous la main ? Essayez Pickelhaube avec sa box de démonstration : hôte « demo », nom d’utilisateur et mot de passe « demo ». Elle a des annuaires et des appels à essayer, et ses appels ne sonnent nulle part.</string>
+    <string name="connection_demo_fill">Remplir avec la box de démonstration</string>
     <string name="connection_connecting">Connexion…</string>
     <string name="connection_save">Enregistrer et connecter</string>
     <string name="connection_box_info">Informations sur l’appareil</string>
