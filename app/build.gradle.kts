@@ -11,8 +11,8 @@ android {
         applicationId = "org.rustygnome.pickelhaube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
     }
 
     // "play" is the build for Google Play, which allows reading the call log only for the default
