@@ -3,6 +3,18 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// Release signing: the upload key and its passwords come from Gradle properties kept outside the
+// repository – in ~/.gradle/gradle.properties, or as environment variables ORG_GRADLE_PROJECT_<name>.
+// Without them, release builds are simply not signed.
+val releaseSigningProperties = listOf(
+    "pickelhaubeStoreFile", "pickelhaubeStorePassword", "pickelhaubeKeyAlias", "pickelhaubeKeyPassword",
+)
+val releaseSigning = releaseSigningProperties.map { providers.gradleProperty(it).orNull }
+if (releaseSigning.any { it != null } && releaseSigning.any { it == null }) {
+    val missing = releaseSigningProperties.filterIndexed { i, _ -> releaseSigning[i] == null }
+    logger.warn("Release signing incomplete, release builds stay unsigned: ${missing.joinToString()} not set")
+}
+
 android {
     namespace = "org.rustygnome.pickelhaube"
     compileSdk = 37
@@ -29,8 +41,21 @@ android {
         }
     }
 
+    signingConfigs {
+        if (releaseSigning.all { it != null }) {
+            create("release") {
+                val (path, storePass, alias, keyPass) = releaseSigning.map { it!! }
+                storeFile = file(path)
+                storePassword = storePass
+                keyAlias = alias
+                keyPassword = keyPass
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

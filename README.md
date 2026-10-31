@@ -24,6 +24,20 @@ dependencies on first sync. If it offers an AGP / dependency upgrade, accepting 
 Both have the same application id. Build the Play bundle with `./gradlew bundlePlayRelease`
 (`app/build/outputs/bundle/playRelease/`), or in Studio via *Build Variants* (*playRelease*).
 
+### Release signing
+
+Release builds are signed with the upload key when these Gradle properties are set – outside the
+repository, e.g. in `~/.gradle/gradle.properties` (or as environment variables `ORG_GRADLE_PROJECT_<name>`):
+
+```properties
+pickelhaubeStoreFile=/path/to/upload-key.jks
+pickelhaubeStorePassword=…
+pickelhaubeKeyAlias=…
+pickelhaubeKeyPassword=…
+```
+
+Without them, release builds are not signed; with only some of them, Gradle warns which are missing.
+
 ## FRITZ!Box preparation
 
 1. **Home Network › Network › Network Settings** → enable *Allow access for applications* (TR-064).
