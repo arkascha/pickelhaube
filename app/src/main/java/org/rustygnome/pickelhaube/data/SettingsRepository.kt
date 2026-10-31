@@ -141,9 +141,10 @@ class SettingsRepository(context: Context) {
     /**
      * Optional feature: also offer the numbers dialled with the phone's own telephony app (needs
      * READ_CALL_LOG). Off by default; only switched on once reading the call log actually worked.
+     * Always off in a build without it (see [DeviceCallLog.available]).
      */
     var callLogEnabled: Boolean
-        get() = prefs.getBoolean(KEY_CALL_LOG, false)
+        get() = DeviceCallLog.available && prefs.getBoolean(KEY_CALL_LOG, false)
         set(value) = prefs.edit { putBoolean(KEY_CALL_LOG, value) }
 
     /** Optional feature: this phone's own speed dials 1–9 (valid with every box). On by default. */

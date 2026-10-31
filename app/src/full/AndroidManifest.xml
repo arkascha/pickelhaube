@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Optional: offer the numbers dialled, received and missed with the phone's own telephony app
+        (asked at runtime). Not in the "play" flavour: Google Play allows it only for the default phone app.
+    -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
+</manifest>

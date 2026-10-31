@@ -221,18 +221,21 @@ fun SettingsScreen(
                 DeviceContactsSetting(enabled = deviceContactsEnabled, onChange = onDeviceContactsChange)
             }
 
-            HorizontalDivider()
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text(stringResource(R.string.settings_recents), style = MaterialTheme.typography.titleSmall)
-                CallLogSetting(
-                    enabled = callLogEnabled,
-                    problem = callLogProblem,
-                    onEnable = onEnableCallLog,
-                    onDisable = onDisableCallLog,
-                )
+            // The section holds only the phone's calls, which the Google Play build leaves out.
+            if (DeviceCallLog.available) {
+                HorizontalDivider()
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    Text(stringResource(R.string.settings_recents), style = MaterialTheme.typography.titleSmall)
+                    CallLogSetting(
+                        enabled = callLogEnabled,
+                        problem = callLogProblem,
+                        onEnable = onEnableCallLog,
+                        onDisable = onDisableCallLog,
+                    )
+                }
             }
 
             HorizontalDivider()

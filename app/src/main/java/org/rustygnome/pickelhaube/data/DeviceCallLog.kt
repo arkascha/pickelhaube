@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.provider.CallLog
 import androidx.core.content.ContextCompat
+import org.rustygnome.pickelhaube.BuildConfig
 import org.rustygnome.pickelhaube.tr064.RecentCall
 
 /**
@@ -12,9 +13,12 @@ import org.rustygnome.pickelhaube.tr064.RecentCall
  * Pickelhaube's calls run on the FRITZ!Box and never show up there).
  *
  * Needs READ_CALL_LOG. Google Play only allows that for the default phone app, so this works only
- * when Pickelhaube is installed from elsewhere (APK, F-Droid).
+ * when Pickelhaube is installed from elsewhere (APK, F-Droid): the "play" flavour leaves it out.
  */
 object DeviceCallLog {
+
+    /** This build can read the call log at all (not the "play" flavour). */
+    val available: Boolean = BuildConfig.CALL_LOG
 
     /** How many calls to read at most. */
     const val MAX_ENTRIES = 100

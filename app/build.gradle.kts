@@ -15,6 +15,20 @@ android {
         versionName = "1.0.0"
     }
 
+    // "play" is the build for Google Play, which allows reading the call log only for the default
+    // phone app: it leaves out the phone's own calls (and READ_CALL_LOG). "full" is everything else.
+    flavorDimensions += "store"
+    productFlavors {
+        create("full") {
+            dimension = "store"
+            buildConfigField("boolean", "CALL_LOG", "true")
+        }
+        create("play") {
+            dimension = "store"
+            buildConfigField("boolean", "CALL_LOG", "false")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -33,6 +47,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     // The language can be chosen in the app, so an app bundle must keep all translations.

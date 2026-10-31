@@ -13,6 +13,17 @@ dependencies on first sync. If it offers an AGP / dependency upgrade, accepting 
 - Kotlin + Jetpack Compose (Material 3), minSdk 26, target/compileSdk 36
 - Only external library: OkHttp (TR-064 digest auth is implemented in-app)
 
+### Build flavours
+
+- **full** – everything; for an APK or F-Droid.
+- **play** – for Google Play: without the phone's own calls in **Recent** (no `READ_CALL_LOG`, no switch
+  for it in the settings), since Google Play allows the call log only for the default phone app. The
+  FRITZ!Box call list is there as in **full**. The flavours set `BuildConfig.CALL_LOG`
+  (`DeviceCallLog.available`); the permission is declared in `src/full/AndroidManifest.xml` only.
+
+Both have the same application id. Build the Play bundle with `./gradlew bundlePlayRelease`
+(`app/build/outputs/bundle/playRelease/`), or in Studio via *Build Variants* (*playRelease*).
+
 ## FRITZ!Box preparation
 
 1. **Home Network › Network › Network Settings** → enable *Allow access for applications* (TR-064).
@@ -149,8 +160,9 @@ reload button), from two sources:
 - **This phone** (phone icon; optional, off by default) – the dialled, received and missed calls of the phone's own telephony app,
   read from the Android call log (`READ_CALL_LOG`, used for nothing else). Pickelhaube's calls run on
   the FRITZ!Box and never appear there. Switch it on in **Settings › Recent numbers › Include this
-  phone's calls**. **This only works if Pickelhaube was installed from outside Google Play** (APK or
-  F-Droid): Google Play allows the call log permission only for the default phone app.
+  phone's calls**. **Not in the Google Play build**: Google Play allows the call log permission only
+  for the default phone app, so the `play` flavour leaves out the permission and this switch (see
+  *Build flavours* above).
   On switching it on, Pickelhaube asks Android for the permission and test-reads the call log; if
   either fails, the switch stays off and the settings show why. If reading fails later (e.g. the
   permission was revoked), the **Recent** tab shows a note with **Turn off** and **App settings**.
