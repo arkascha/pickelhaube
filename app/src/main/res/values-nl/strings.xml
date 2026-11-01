@@ -98,8 +98,9 @@
 
     <!-- connection page -->
     <string name="connection_title">FRITZ!Box-verbinding</string>
-    <string name="connection_name">Naam</string>
+    <string name="connection_name">Weergavenaam</string>
     <string name="connection_name_placeholder">standaard: de eigen naam van de box</string>
+    <string name="connection_name_hint">Alleen voor jou: hoe deze box in Pickelhaube heet, bijv. „Thuis” of „Kantoor”. Er wordt niet naar deze naam gezocht – de box wordt bereikt via de host hieronder.</string>
     <string name="connection_host">Host (bijv. fritz.box of 192.168.178.1)</string>
     <string name="connection_https">HTTPS gebruiken</string>
     <string name="connection_https_hint">Versleutelde verbinding (poort %1$d). Het zelfondertekende certificaat van de box moet één keer worden bevestigd.</string>
@@ -107,13 +108,21 @@
     <string name="connection_port_from_box">De HTTPS-poort die deze FRITZ!Box heeft gemeld</string>
     <string name="connection_user">FRITZ!Box-gebruikersnaam</string>
     <string name="connection_user_last">Laatst aangemeld</string>
+    <string name="connection_user_made_by_box">Door de box aangemaakt voor inloggen met alleen een wachtwoord</string>
+    <string name="connection_user_current">Nu ingevuld</string>
+    <string name="connection_user_taken_over">Overgenomen: de enige gebruiker van deze box</string>
+    <string name="connection_user_hint">De gebruiker waarmee je op de FRITZ!Box inlogt. Log je alleen met een wachtwoord in, dan heeft de box daarvoor toch een gebruiker aangemaakt, met een eigen naam (bijv. fritz1234). Je kunt ook een gebruiker alleen voor Pickelhaube aanmaken onder Systeem › FRITZ!Box-gebruikers; die heeft het recht voor telefonie nodig.</string>
     <string name="connection_password">Wachtwoord</string>
     <string name="connection_phonebooks">Telefoonboeken</string>
     <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FRITZ!Box, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FRITZ!Box gelezen en niet op de telefoon opgeslagen.</string>
     <string name="connection_call_list">Gesprekkenlijst</string>
     <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s heeft dit recht op de box niet, daarom kan de gesprekkenlijst niet worden gelezen.</string>
-    <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig. Als je alleen met een wachtwoord inlogt, gebruik dan de automatisch aangemaakte gebruikersnaam onder Systeem › FRITZ!Box-gebruikers.</string>
+    <string name="connection_help_title">De FRITZ!Box instellen</string>
+    <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig.</string>
+    <string name="connection_demo_question">Geen FRITZ!Box?</string>
+    <string name="connection_demo">Probeer de demobox ›</string>
+    <string name="connection_demo_title">De demobox</string>
     <string name="connection_demo_hint">Geen FRITZ!Box bij de hand? Probeer Pickelhaube uit met de demobox: host “demo”, gebruikersnaam en wachtwoord “demo”. Hij heeft telefoonboeken en gesprekken om uit te proberen, en zijn gesprekken gaan nergens over.</string>
     <string name="connection_demo_fill">Demobox invullen</string>
     <string name="connection_connecting">Verbinden…</string>

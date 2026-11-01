@@ -22,12 +22,23 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.TextUnit
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
@@ -178,8 +189,7 @@ fun SettingsScreen(
             )
             Text(
                 stringResource(R.string.settings_connections_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextRoles.hint,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
             )
             networkNotice?.let {
@@ -298,8 +308,7 @@ fun SettingsScreen(
             HorizontalDivider()
             Text(
                 stringResource(R.string.trademark_notice),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextRoles.hint,
                 modifier = Modifier.padding(16.dp),
             )
         }
@@ -337,9 +346,8 @@ private fun CallStatusSetting(
                 false -> stringResource(R.string.settings_call_monitor_off, profile.name)
                 null -> stringResource(R.string.settings_call_monitor_unknown, profile.name)
             },
-            style = MaterialTheme.typography.bodySmall,
-            color = if (profile.callMonitor == false) MaterialTheme.colorScheme.error
-            else MaterialTheme.colorScheme.onSurfaceVariant,
+            style = TextRoles.finding,
+            color = if (profile.callMonitor == false) MaterialTheme.colorScheme.error else Color.Unspecified,
         )
     }
     if (canCheck) {
@@ -410,16 +418,14 @@ private fun TilesSetting() {
                 TileAddResult.NOT_ADDED -> stringResource(R.string.settings_tile_not_added, name)
                 TileAddResult.FAILED -> stringResource(R.string.settings_tile_failed, name)
             },
-            style = MaterialTheme.typography.bodySmall,
-            color = if (outcome == TileAddResult.FAILED) MaterialTheme.colorScheme.error
-            else MaterialTheme.colorScheme.onSurfaceVariant,
+            style = TextRoles.finding,
+            color = if (outcome == TileAddResult.FAILED) MaterialTheme.colorScheme.error else Color.Unspecified,
         )
     }
     if (added.size < PickelhaubeTile.entries.size && (!canRequestAddTile || result?.second == TileAddResult.FAILED)) {
         Text(
             stringResource(R.string.settings_tiles_by_hand),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = TextRoles.hint,
         )
     }
 }
@@ -462,7 +468,15 @@ private fun ProfileRow(
     ListItem(
         // The name and where the box is; the details are on the connection page.
         headlineContent = { Text(profile.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        supportingContent = presence?.let { { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
+        // What was found out about the box; red when it is not there.
+        supportingContent = presence?.let {
+            {
+                Text(
+                    it, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    color = if (seen == false && !trying) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
+                )
+            }
+        },
         leadingContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 MarkSlot {
@@ -519,6 +533,18 @@ private fun ConfirmDeleteDialog(name: String, onConfirm: () -> Unit, onDismiss: 
         confirmButton = {
             TextButton(onClick = onConfirm) { Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error) }
         },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}
+
+/** What the demo box is, and filling it in on the page for a new connection. */
+@Composable
+private fun DemoBoxDialog(onFill: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.connection_demo_title)) },
+        text = { Text(stringResource(R.string.connection_demo_hint), fontStyle = FontStyle.Italic) },
+        confirmButton = { TextButton(onClick = onFill) { Text(stringResource(R.string.connection_demo_fill)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }
@@ -594,6 +620,18 @@ fun ConnectionSettingsScreen(
         onLookUpUsers(initial.copy(host = host.trim(), port = portValue, useHttps = useHttps))
     }
 
+    // A box with a single user – the usual case, often the one it made for logging in with a password
+    // only – gets it entered, unless another name has been typed in. When the address changes, a name
+    // entered that way gives way to the single user of the box there, or is taken out again.
+    var userTakenOver by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(boxUsers) {
+        if (boxUsers.isEmpty() || (user.isNotBlank() && user != userTakenOver)) return@LaunchedEffect
+        val single = boxUsers.singleOrNull()?.name
+        if (single == null && user == userTakenOver) user = ""
+        if (single != null) user = single
+        userTakenOver = single
+    }
+
     // With HTTPS, ask the box on which port it talks it, rather than assume the usual one.
     LaunchedEffect(host, useHttps) {
         if (!useHttps || host.isBlank()) return@LaunchedEffect
@@ -612,6 +650,8 @@ fun ConnectionSettingsScreen(
         }
     }
 
+    var showDemoOffer by remember { mutableStateOf(false) }
+
     // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it
     // itself, so fields further down can be scrolled to (and are, when tapped).
     Scaffold(
@@ -626,10 +666,28 @@ fun ConnectionSettingsScreen(
                         }
                     }
                 },
-                actions = { importOffer?.invoke() },
+                actions = {
+                    importOffer?.invoke()
+                    // What the box needs before it can be used – asked about only when it fails.
+                    HelpButton(stringResource(R.string.connection_help_title), listOf(stringResource(R.string.connection_help)))
+                },
             )
         },
     ) { padding ->
+        if (showDemoOffer) {
+            DemoBoxDialog(
+                onFill = {
+                    showDemoOffer = false
+                    name = "Demo"
+                    host = DemoBox.HOST
+                    port = FritzConfig.HTTP_PORT.toString()
+                    useHttps = false
+                    user = DemoBox.USERNAME
+                    password = DemoBox.PASSWORD
+                },
+                onDismiss = { showDemoOffer = false },
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -638,30 +696,33 @@ fun ConnectionSettingsScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            // Without a box at hand (and for the app store's review): the box that answers in the app itself.
+            // Without a box at hand (and for the app store's review): the box that answers in the app
+            // itself – a single line at the top, so it is seen at once without being in the way.
             if (isNew && !DemoBox.isDemo(host)) {
-                Text(
-                    stringResource(R.string.connection_demo_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                OutlinedButton(
-                    onClick = {
-                        name = "Demo"
-                        host = DemoBox.HOST
-                        port = FritzConfig.HTTP_PORT.toString()
-                        useHttps = false
-                        user = DemoBox.USERNAME
-                        password = DemoBox.PASSWORD
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                ) { Text(stringResource(R.string.connection_demo_fill)) }
-                HorizontalDivider(Modifier.padding(vertical = 8.dp))
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .clickable(role = Role.Button) { showDemoOffer = true }
+                        .padding(vertical = 4.dp),
+                ) {
+                    Text(
+                        stringResource(R.string.connection_demo_question),
+                        style = MaterialTheme.typography.bodyMedium.merge(TextRoles.hint.copy(fontSize = TextUnit.Unspecified, lineHeight = TextUnit.Unspecified)),
+                    )
+                    Text(
+                        stringResource(R.string.connection_demo),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
             }
             OutlinedTextField(
                 value = name, onValueChange = { name = it },
                 label = { Text(stringResource(R.string.connection_name)) },
                 placeholder = { Text(stringResource(R.string.connection_name_placeholder), maxLines = 1) },
+                // Only a label – the box is reached by its host, not looked for by this name.
+                trailingIcon = { HelpButton(stringResource(R.string.connection_name), listOf(stringResource(R.string.connection_name_hint))) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
@@ -677,14 +738,11 @@ fun ConnectionSettingsScreen(
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.connection_https), style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        stringResource(R.string.connection_https_hint, boxHttpsPort ?: FritzConfig.HTTPS_PORT),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                OptionTitle(
+                    stringResource(R.string.connection_https),
+                    listOf(stringResource(R.string.connection_https_hint, boxHttpsPort ?: FritzConfig.HTTPS_PORT)),
+                    Modifier.weight(1f),
+                )
                 Switch(
                     checked = useHttps,
                     onCheckedChange = { checked ->
@@ -702,12 +760,12 @@ fun ConnectionSettingsScreen(
                 value = port, onValueChange = { port = it.filter(Char::isDigit) },
                 label = { Text(stringResource(R.string.connection_port)) },
                 supportingText = if (useHttps && boxHttpsPort != null && port == boxHttpsPort.toString()) {
-                    { Text(stringResource(R.string.connection_port_from_box)) }
+                    { Text(stringResource(R.string.connection_port_from_box), style = TextRoles.finding) }
                 } else null,
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
-            UserField(value = user, onValueChange = { user = it }, users = boxUsers)
+            UserField(value = user, onValueChange = { user = it }, users = boxUsers, takenOver = user == userTakenOver && user == boxUsers.singleOrNull()?.name)
             PasswordField(
                 value = password,
                 onValueChange = { password = it },
@@ -740,12 +798,6 @@ fun ConnectionSettingsScreen(
                 enabled = speedDialsEnabled,
                 onChange = { speedDialsEnabled = it },
             )
-            HorizontalDivider(Modifier.padding(vertical = 8.dp))
-            Text(
-                stringResource(R.string.connection_help),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
             Button(
                 onClick = {
                     keyboard?.hide()
@@ -769,7 +821,7 @@ fun ConnectionSettingsScreen(
 
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             if (busy && status != null) {
-                Text(status.asString(), style = MaterialTheme.typography.bodySmall)
+                Text(status.asString(), style = TextRoles.finding)
             }
 
             if (userRights != null && userRights.access.isNotEmpty()) {
@@ -782,11 +834,10 @@ fun ConnectionSettingsScreen(
             if (!hasTrustedCert) {
                 Text(
                     stringResource(R.string.connection_no_cert),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = TextRoles.finding,
                 )
             } else {
-                Text(stringResource(R.string.connection_cert_trusted), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.connection_cert_trusted), style = TextRoles.finding)
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = onShowCertificate) { Text(stringResource(R.string.show)) }
                     OutlinedButton(onClick = onForgetCertificate) {
@@ -825,39 +876,70 @@ private const val USER_LOOKUP_DELAY_MILLIS = 800L
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UserField(value: String, onValueChange: (String) -> Unit, users: List<BoxUser>) {
+private fun UserField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    users: List<BoxUser>,
+    /** [value] is the box' only user, entered by the app. */
+    takenOver: Boolean,
+) {
     var expanded by remember { mutableStateOf(false) }
     val canOpen = users.isNotEmpty()
     ExposedDropdownMenuBox(expanded = expanded && canOpen, onExpandedChange = { if (canOpen) expanded = it }) {
         OutlinedTextField(
             value = value, onValueChange = onValueChange,
             label = { Text(stringResource(R.string.connection_user)) },
-            supportingText = if (canOpen) {
-                { Text(pluralStringResource(R.plurals.connection_users_found, users.size, users.size)) }
-            } else null,
-            trailingIcon = if (canOpen) {
-                { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
-            } else null,
+            supportingText = when {
+                takenOver -> {
+                    { Text(stringResource(R.string.connection_user_taken_over), style = TextRoles.finding) }
+                }
+                canOpen -> {
+                    { Text(pluralStringResource(R.plurals.connection_users_found, users.size, users.size), style = TextRoles.finding) }
+                }
+                else -> null
+            },
+            trailingIcon = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    HelpButton(stringResource(R.string.connection_user), listOf(stringResource(R.string.connection_user_hint)))
+                    if (canOpen) {
+                        // Only the arrow opens the list, so that tapping the help next to it does not.
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expanded,
+                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable, canOpen),
+                        )
+                        Spacer(Modifier.width(12.dp))
+                    }
+                }
+            },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, canOpen),
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, enabled = false),
         )
         ExposedDropdownMenu(expanded = expanded && canOpen, onDismissRequest = { expanded = false }) {
             users.forEach { candidate ->
+                // The one in the field is marked, and why a user is there is said below its name.
+                val current = candidate.name == value.trim()
+                val notes = listOfNotNull(
+                    stringResource(R.string.connection_user_made_by_box).takeIf { candidate.madeByBox },
+                    stringResource(R.string.connection_user_last).takeIf { candidate.lastUsed },
+                )
                 DropdownMenuItem(
                     text = {
                         Column {
-                            Text(candidate.name)
-                            if (candidate.lastUsed) {
-                                Text(
-                                    stringResource(R.string.connection_user_last),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
+                            Text(
+                                candidate.name,
+                                fontWeight = if (current) FontWeight.Bold else null,
+                            )
+                            notes.forEach {
+                                Text(it, style = TextRoles.finding)
                             }
                         }
                     },
+                    trailingIcon = if (current) {
+                        { Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.connection_user_current)) }
+                    } else null,
+                    modifier = if (current) Modifier.background(MaterialTheme.colorScheme.secondaryContainer) else Modifier,
                     onClick = {
                         expanded = false
                         onValueChange(candidate.name)
@@ -871,7 +953,20 @@ private fun UserField(value: String, onValueChange: (String) -> Unit, users: Lis
 /** What the box reported about itself – to tell it apart from others, and its dialling codes; selectable for copying. */
 @Composable
 private fun BoxInfoSection(info: BoxInfo, codes: DialingCodes?) {
-    Text(stringResource(R.string.connection_box_info), style = MaterialTheme.typography.titleSmall)
+    // Rarely needed, so folded away until asked for.
+    var open by rememberSaveable { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable(role = Role.Button) { open = !open },
+    ) {
+        Text(stringResource(R.string.connection_box_info), style = MaterialTheme.typography.titleSmall)
+        Icon(
+            if (open) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    if (!open) return
     val lines = listOfNotNull(
         info.model?.let { stringResource(R.string.connection_box_model, it) },
         info.fritzOsVersion?.let { stringResource(R.string.connection_box_fritzos, it) },
@@ -883,8 +978,7 @@ private fun BoxInfoSection(info: BoxInfo, codes: DialingCodes?) {
     if (lines.isEmpty()) {
         Text(
             stringResource(R.string.connection_box_info_unknown),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = TextRoles.hint,
         )
     } else {
         SelectionContainer {
@@ -909,8 +1003,7 @@ private fun UserRightsSection(username: String, rights: UserRights) {
     }
     Text(
         stringResource(R.string.connection_rights_hint),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = TextRoles.hint,
     )
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         rights.access.forEach { (area, access) ->

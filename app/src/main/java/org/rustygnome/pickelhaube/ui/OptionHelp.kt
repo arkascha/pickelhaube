@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import org.rustygnome.pickelhaube.R
 
@@ -37,17 +38,23 @@ internal fun OptionTitle(
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
 ) {
-    var open by rememberSaveable { mutableStateOf(false) }
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Text(title, style = style, modifier = Modifier.weight(1f, fill = false))
-        IconButton(onClick = { open = true }) {
-            Icon(
-                HelpOutlineIcon,
-                contentDescription = stringResource(R.string.help_for, title),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
-            )
-        }
+        HelpButton(title, help)
+    }
+}
+
+/** The small question mark on its own (e.g. inside a text field), showing [help] about [title] in a dialog. */
+@Composable
+internal fun HelpButton(title: String, help: List<String>) {
+    var open by rememberSaveable { mutableStateOf(false) }
+    IconButton(onClick = { open = true }) {
+        Icon(
+            HelpOutlineIcon,
+            contentDescription = stringResource(R.string.help_for, title),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp),
+        )
     }
     if (open) {
         AlertDialog(
@@ -56,7 +63,7 @@ internal fun OptionTitle(
             title = { Text(title) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    help.forEach { Text(it) }
+                    help.forEach { Text(it, fontStyle = FontStyle.Italic) }
                 }
             },
             confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(R.string.close)) } },

@@ -1,6 +1,8 @@
 package org.rustygnome.pickelhaube.tr064
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class BoxUsersTest {
@@ -19,5 +21,13 @@ class BoxUsersTest {
             listOf(BoxUser("anna", false)),
             BoxUsers.parse("""<List><Username> </Username><Username>anna</Username><Username>anna</Username></List>"""),
         )
+    }
+
+    @Test
+    fun `tells the users made by the box`() {
+        assertTrue(BoxUser("fritz1234", false).madeByBox)
+        assertFalse(BoxUser("fritz", false).madeByBox)
+        assertFalse(BoxUser("fritz12345", false).madeByBox)
+        assertFalse(BoxUser("anna", false).madeByBox)
     }
 }

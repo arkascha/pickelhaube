@@ -98,8 +98,9 @@
 
     <!-- connection page -->
     <string name="connection_title">Połączenie z FRITZ!Box</string>
-    <string name="connection_name">Nazwa</string>
+    <string name="connection_name">Nazwa wyświetlana</string>
     <string name="connection_name_placeholder">domyślnie: własna nazwa urządzenia</string>
+    <string name="connection_name_hint">Tylko dla Ciebie: jak ten router nazywa się w Pickelhaube, np. „Dom” lub „Biuro”. Router nie jest wyszukiwany po tej nazwie – łączysz się z nim pod hostem poniżej.</string>
     <string name="connection_host">Host (np. fritz.box lub 192.168.178.1)</string>
     <string name="connection_https">Używaj HTTPS</string>
     <string name="connection_https_hint">Połączenie szyfrowane (port %1$d). Certyfikat urządzenia z podpisem własnym trzeba raz potwierdzić.</string>
@@ -107,13 +108,21 @@
     <string name="connection_port_from_box">Port HTTPS zgłoszony przez ten FRITZ!Box</string>
     <string name="connection_user">Nazwa użytkownika FRITZ!Box</string>
     <string name="connection_user_last">Ostatnio zalogowany</string>
+    <string name="connection_user_made_by_box">Utworzony przez router do logowania samym hasłem</string>
+    <string name="connection_user_current">Wpisany teraz</string>
+    <string name="connection_user_taken_over">Wpisano: jedyny użytkownik tego routera</string>
+    <string name="connection_user_hint">Użytkownik, którym logujesz się do FRITZ!Box. Jeśli logujesz się tylko hasłem, urządzenie i tak utworzyło do tego użytkownika z własną nazwą (np. fritz1234). Możesz też utworzyć użytkownika tylko dla Pickelhaube w System › Użytkownicy FRITZ!Box; potrzebuje on uprawnienia do telefonii.</string>
     <string name="connection_password">Hasło</string>
     <string name="connection_phonebooks">Książki telefoniczne</string>
     <string name="connection_phonebooks_hint">Pokazuje kontakty zapisane w książkach telefonicznych tego FRITZ!Box, w tym zsynchronizowane z nim książki online (np. CardDAV). Są odczytywane z FRITZ!Box w razie potrzeby i nie są zapisywane na telefonie.</string>
     <string name="connection_call_list">Lista połączeń</string>
     <string name="connection_call_list_hint">Ostatnio wybierane, odebrane i nieodebrane numery z listy połączeń tego FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s nie ma tego uprawnienia na routerze, dlatego nie można odczytać listy połączeń.</string>
-    <string name="connection_help">Na urządzeniu włącz „Zezwalaj na dostęp aplikacji” (Sieć domowa › Sieć › Ustawienia sieci) oraz „Pomoc przy wybieraniu” (Telefonia › Połączenia › Pomoc przy wybieraniu). Użytkownik potrzebuje uprawnienia do telefonii. Jeśli logujesz się tylko hasłem, użyj automatycznie utworzonej nazwy użytkownika podanej w System › Użytkownicy FRITZ!Box.</string>
+    <string name="connection_help_title">Przygotowanie FRITZ!Box</string>
+    <string name="connection_help">Na urządzeniu włącz „Zezwalaj na dostęp aplikacji” (Sieć domowa › Sieć › Ustawienia sieci) oraz „Pomoc przy wybieraniu” (Telefonia › Połączenia › Pomoc przy wybieraniu). Użytkownik potrzebuje uprawnienia do telefonii.</string>
+    <string name="connection_demo_question">Brak FRITZ!Box?</string>
+    <string name="connection_demo">Wypróbuj router demonstracyjny ›</string>
+    <string name="connection_demo_title">Router demonstracyjny</string>
     <string name="connection_demo_hint">Nie masz pod ręką FRITZ!Box? Wypróbuj Pickelhaube z urządzeniem demonstracyjnym: host „demo”, nazwa użytkownika i hasło „demo”. Ma książki telefoniczne i połączenia do wypróbowania, a jego połączenia nigdzie nie dzwonią.</string>
     <string name="connection_demo_fill">Wpisz urządzenie demonstracyjne</string>
     <string name="connection_connecting">Łączenie…</string>

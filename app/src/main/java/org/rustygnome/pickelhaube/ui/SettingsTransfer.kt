@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import org.rustygnome.pickelhaube.data.SettingsFileInfo
 import java.time.LocalDate
 
@@ -62,8 +63,7 @@ fun SettingsTransferSetting(
 
     Text(
         stringResource(R.string.settings_transfer_hint),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = TextRoles.hint,
     )
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(onClick = { exporting = true }, enabled = !busy) { Text(stringResource(R.string.settings_export)) }
@@ -151,8 +151,7 @@ private fun ExportDialog(onExport: (CharArray?) -> Unit, onDismiss: () -> Unit) 
                 if (withPasswords) {
                     Text(
                         stringResource(R.string.settings_export_passphrase_hint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = TextRoles.hint,
                     )
                     PasswordField(passphrase, { passphrase = it }, stringResource(R.string.settings_passphrase))
                     PasswordField(repeated, { repeated = it }, stringResource(R.string.settings_passphrase_repeat))
@@ -195,15 +194,13 @@ private fun ImportDialog(
                 if (info.withPasswords) {
                     Text(
                         stringResource(R.string.settings_import_passphrase_hint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = TextRoles.hint,
                     )
                     PasswordField(passphrase, { passphrase = it }, stringResource(R.string.settings_passphrase))
                 } else {
                     Text(
                         stringResource(R.string.settings_import_no_passwords),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = TextRoles.hint,
                     )
                 }
                 error?.let {

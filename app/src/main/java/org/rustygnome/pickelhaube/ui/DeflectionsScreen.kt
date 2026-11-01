@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import org.rustygnome.pickelhaube.tr064.CallDeflection
 import org.rustygnome.pickelhaube.tr064.forTile
 
@@ -83,8 +84,7 @@ fun DeflectionsScreen(
             }
             Text(
                 stringResource(R.string.deflections_hint, boxName ?: stringResource(R.string.fritzbox)),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextRoles.hint,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             )
             when {
@@ -96,8 +96,7 @@ fun DeflectionsScreen(
                     if (forTile != null) {
                         Text(
                             stringResource(R.string.deflections_tile_hint),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = TextRoles.hint,
                             modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 8.dp),
                         )
                     }

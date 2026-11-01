@@ -98,8 +98,9 @@
 
     <!-- connection page -->
     <string name="connection_title">Connessione FRITZ!Box</string>
-    <string name="connection_name">Nome</string>
+    <string name="connection_name">Nome visualizzato</string>
     <string name="connection_name_placeholder">predefinito: il nome della box</string>
+    <string name="connection_name_hint">Solo per te: come si chiama questa box in Pickelhaube, ad es. «Casa» o «Ufficio». La box non viene cercata con questo nome: viene raggiunta all’host qui sotto.</string>
     <string name="connection_host">Host (ad es. fritz.box o 192.168.178.1)</string>
     <string name="connection_https">Usa HTTPS</string>
     <string name="connection_https_hint">Connessione cifrata (porta %1$d). Il certificato autofirmato della box va confermato una volta.</string>
@@ -107,13 +108,21 @@
     <string name="connection_port_from_box">La porta HTTPS indicata da questa FRITZ!Box</string>
     <string name="connection_user">Nome utente FRITZ!Box</string>
     <string name="connection_user_last">Ultimo accesso</string>
+    <string name="connection_user_made_by_box">Creato dalla box per l’accesso con sola password</string>
+    <string name="connection_user_current">Inserito ora</string>
+    <string name="connection_user_taken_over">Inserito: l’unico utente di questo box</string>
+    <string name="connection_user_hint">L’utente con cui accedi alla FRITZ!Box. Se accedi solo con la password, la box ha comunque creato un utente per questo, con un nome suo (ad es. fritz1234). Puoi anche creare un utente solo per Pickelhaube in Sistema › Utenti FRITZ!Box; ha bisogno dell’autorizzazione per la telefonia.</string>
     <string name="connection_password">Password</string>
     <string name="connection_phonebooks">Rubriche</string>
     <string name="connection_phonebooks_hint">Mostra i contatti salvati nelle rubriche di questa FRITZ!Box, incluse le rubriche online sincronizzate su di essa (ad es. CardDAV). Vengono letti dalla FRITZ!Box quando serve e non vengono salvati sul telefono.</string>
     <string name="connection_call_list">Elenco chiamate</string>
     <string name="connection_call_list_hint">I numeri chiamati, ricevuti e persi di recente, dall’elenco chiamate di questa FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s non ha questa autorizzazione sul box, quindi l’elenco chiamate non può essere letto.</string>
-    <string name="connection_help">Sulla box, attiva «Consenti l’accesso alle applicazioni» (Rete domestica › Rete › Impostazioni di rete) e l’«Aiuto alla selezione» (Telefonia › Chiamate › Aiuto alla selezione). L’utente ha bisogno dell’autorizzazione per la telefonia. Se accedi solo con la password, usa il nome utente generato automaticamente indicato in Sistema › Utenti FRITZ!Box.</string>
+    <string name="connection_help_title">Preparare la FRITZ!Box</string>
+    <string name="connection_help">Sulla box, attiva «Consenti l’accesso alle applicazioni» (Rete domestica › Rete › Impostazioni di rete) e l’«Aiuto alla selezione» (Telefonia › Chiamate › Aiuto alla selezione). L’utente ha bisogno dell’autorizzazione per la telefonia.</string>
+    <string name="connection_demo_question">Niente FRITZ!Box?</string>
+    <string name="connection_demo">Prova la box demo ›</string>
+    <string name="connection_demo_title">La box demo</string>
     <string name="connection_demo_hint">Nessuna FRITZ!Box a portata di mano? Prova Pickelhaube con la sua box dimostrativa: host «demo», nome utente e password «demo». Ha rubriche e chiamate da provare, e le sue chiamate non squillano da nessuna parte.</string>
     <string name="connection_demo_fill">Inserisci la box dimostrativa</string>
     <string name="connection_connecting">Connessione…</string>

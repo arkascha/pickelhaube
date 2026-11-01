@@ -32,6 +32,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import org.rustygnome.pickelhaube.data.AppLanguage
 import java.util.Locale
 
@@ -70,8 +71,7 @@ fun LanguageScreen(onBack: () -> Unit) {
         ) {
             Text(
                 stringResource(R.string.settings_language_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextRoles.hint,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
             Column(Modifier.selectableGroup()) {

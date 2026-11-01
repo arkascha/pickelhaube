@@ -6,7 +6,14 @@ import java.io.IOException
 import java.io.StringReader
 
 /** A user of the box; [lastUsed]: the one who logged in last (to the web UI or an app). */
-data class BoxUser(val name: String, val lastUsed: Boolean)
+data class BoxUser(val name: String, val lastUsed: Boolean) {
+    /** Made by the box itself for logging in with a password only: "fritz" and four digits. */
+    val madeByBox: Boolean get() = MADE_BY_BOX.matches(name)
+
+    private companion object {
+        val MADE_BY_BOX = Regex("""fritz\d{4}""")
+    }
+}
 
 /**
  * Lists the users of the box via TR-064 `LANConfigSecurity` `X_AVM-DE_GetUserList`, so the user

@@ -98,8 +98,9 @@
 
     <!-- connection page -->
     <string name="connection_title">FRITZ!Box-Verbindung</string>
-    <string name="connection_name">Name</string>
+    <string name="connection_name">Anzeigename</string>
     <string name="connection_name_placeholder">Standard: der eigene Name der Box</string>
+    <string name="connection_name_hint">Nur für dich: wie diese Box in Pickelhaube heißt, z. B. „Zuhause“ oder „Büro“. Nach diesem Namen wird nicht gesucht – die Box wird unter dem Host unten erreicht.</string>
     <string name="connection_host">Host (z. B. fritz.box oder 192.168.178.1)</string>
     <string name="connection_https">HTTPS verwenden</string>
     <string name="connection_https_hint">Verschlüsselte Verbindung (Port %1$d). Das selbstsignierte Zertifikat der Box muss einmal bestätigt werden.</string>
@@ -107,13 +108,21 @@
     <string name="connection_port_from_box">Der HTTPS-Port, den diese FRITZ!Box gemeldet hat</string>
     <string name="connection_user">FRITZ!Box-Benutzername</string>
     <string name="connection_user_last">Zuletzt angemeldet</string>
+    <string name="connection_user_made_by_box">Von der Box angelegt für die Anmeldung nur mit Kennwort</string>
+    <string name="connection_user_current">Eingetragen</string>
+    <string name="connection_user_taken_over">Übernommen: der einzige Benutzer dieser Box</string>
+    <string name="connection_user_hint">Der Benutzer, mit dem du dich an der FRITZ!Box anmeldest. Meldest du dich nur mit Kennwort an, hat die Box trotzdem einen Benutzer dafür angelegt, mit einem eigenen Namen (z. B. fritz1234). Du kannst auch einen Benutzer nur für Pickelhaube anlegen, unter System › FRITZ!Box-Benutzer – er braucht die Berechtigung für Telefonie.</string>
     <string name="connection_password">Kennwort</string>
     <string name="connection_phonebooks">Telefonbücher</string>
     <string name="connection_phonebooks_hint">Zeigt die in den Telefonbüchern dieser FRITZ!Box gespeicherten Kontakte, einschließlich dort eingebundener Online-Telefonbücher (z. B. CardDAV). Sie werden bei Bedarf von der Box gelesen und nicht auf dem Telefon gespeichert.</string>
     <string name="connection_call_list">Anrufliste</string>
     <string name="connection_call_list_hint">Die zuletzt gewählten, angenommenen und verpassten Nummern aus der Anrufliste dieser FRITZ!Box. Benötigt die Berechtigung „Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste“.</string>
     <string name="connection_call_list_no_right">%1$s hat diese Berechtigung auf der Box nicht, die Anrufliste kann daher nicht gelesen werden.</string>
-    <string name="connection_help">Auf der Box „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und die „Wählhilfe“ (Telefonie › Anrufe › Wählhilfe) aktivieren. Der Benutzer braucht die Berechtigung für Telefonie. Wenn du dich nur mit Kennwort anmeldest, verwende den automatisch erzeugten Benutzernamen unter System › FRITZ!Box-Benutzer.</string>
+    <string name="connection_help_title">FRITZ!Box einrichten</string>
+    <string name="connection_help">Auf der Box „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und die „Wählhilfe“ (Telefonie › Anrufe › Wählhilfe) aktivieren. Der Benutzer braucht die Berechtigung für Telefonie.</string>
+    <string name="connection_demo_question">Keine FRITZ!Box?</string>
+    <string name="connection_demo">Teste die Demo-Box ›</string>
+    <string name="connection_demo_title">Die Demo-Box</string>
     <string name="connection_demo_hint">Keine FRITZ!Box zur Hand? Probiere Pickelhaube mit seiner Demo-Box aus: Host „demo“, Benutzername und Kennwort „demo“. Sie hat Telefonbücher und Anrufe zum Ausprobieren, und ihre Anrufe klingeln nirgends.</string>
     <string name="connection_demo_fill">Demo-Box eintragen</string>
     <string name="connection_connecting">Verbinde …</string>

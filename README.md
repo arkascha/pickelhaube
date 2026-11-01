@@ -54,7 +54,9 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    A port entered by hand is kept.
    The **user name** field offers the users of the box once host, port and HTTPS are entered
    (TR-064 `LANConfigSecurity` `X_AVM-DE_GetUserList`), the one who logged in last marked – handy for the
-   auto-generated name. The box is asked without credentials, so no failed login is counted; with HTTPS
+   auto-generated name; a box with a single user – the usual case – gets it entered right away, unless
+   another name has been typed in. The **(?)** in the field says what the user is, and that one can be
+   created just for Pickelhaube. The box is asked without credentials, so no failed login is counted; with HTTPS
    whose certificate is not trusted yet, over plain HTTP. If the box does not tell (older FRITZ!OS), the
    field is simply typed in.
 2. The app reads the phones the box knows (FON / DECT / IP) and the one currently configured
@@ -75,8 +77,8 @@ so they never appear there; numbers can.
 ### Demo box
 
 Without a FRITZ!Box at hand – and for the review in the app stores – Pickelhaube has a box of its
-own: host `demo`, user `demo`, password `demo` (**Fill in the demo box** on the page for a new
-connection enters them). It answers in the app itself instead of over the network (`tr064/DemoBox.kt`,
+own: host `demo`, user `demo`, password `demo` (*No FRITZ!Box? Try the demo box*, right at the top of the page for a new
+connection explains it, and its **Fill in the demo box** enters them). It answers in the app itself instead of over the network (`tr064/DemoBox.kt`,
 an OkHttp interceptor in `Tr064Client`, plus its device description and call monitor), with phones,
 two phone books with speed dials, a call list and call forwardings. A call through it rings nowhere:
 after a few seconds it counts as picked up, then connected, ends after a short talk and appears in
@@ -89,8 +91,10 @@ the configured boxes.
 ### Several FRITZ!Boxes
 
 **Settings › FRITZ!Box connections** holds any number of boxes (e.g. home and office), each with its
-own name, host, port, HTTPS, user, password, use of its phone books and call list, and trusted
-certificate. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
+own display name, host, port, HTTPS, user, password, use of its phone books and call list, and trusted
+certificate. The display name is only a label in the app (default: the box' own name) – the box is
+reached at its host, never looked for by that name; the **(?)** in the field says so. Explanations on the connection page sit behind such **(?)** icons – also
+what the box needs set up, at the top of the page – so the page stays short. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
 box is *reachable* (it answered the last detection: in this network, or at its configured host),
 *not reachable* or *not recognised yet* (its device id is not known yet, see below). The box in use is
 chosen automatically and marked with a check mark, and shown under the app name on the dialer. The mark
@@ -102,7 +106,7 @@ use (they all look alike), and the dialer says that none of your boxes is reacha
 its own and disables the dial button (a number can still be entered); the picker then shows only the
 phone's own contacts and calls, while its reload button still tries the box.
 
-The connection page also shows the box' **device details** – model, FRITZ!OS version and serial number
+The connection page also shows the box' **device details** (folded, a tap opens them) – model, FRITZ!OS version and serial number
 (TR-064 `DeviceInfo` `GetInfo`) – right under its address, to tell boxes apart (hidden while another
 address is entered). They are read when the connection is saved and
 again whenever the phones are loaded, so they stay current after a FRITZ!OS update. Reading them is
@@ -401,10 +405,11 @@ Contacts or a web page; the number is pre-filled.
 | `data/SettingsRepository.kt` | FRITZ!Box connections (passwords encrypted via Android Keystore) and options |
 | `data/SettingsFile.kt` | Settings file for export and import (passwords optionally under a passphrase) |
 | `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources |
+| `ui/theme/TextRoles.kt` | How hints (grey italic) and findings about a box (accent colour) look, on every page |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising,
-the call list's date format, the device details, the user list, the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines, recognising the dialled number in them and the demo box.
+the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas
 
