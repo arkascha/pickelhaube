@@ -118,6 +118,16 @@
     <string name="connection_call_list">Gesprekkenlijst</string>
     <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s heeft dit recht op de box niet, daarom kan de gesprekkenlijst niet worden gelezen.</string>
+    <string name="connection_host_other">%1$s leidt hier naar ‘%2$s’ – deze box kan alleen in zijn eigen netwerk worden gecontroleerd.</string>
+    <string name="connection_host_known">%1$s leidt naar ‘%2$s’, die al is ingesteld.</string>
+    <string name="save_check_other_title">Een andere FRITZ!Box antwoordt</string>
+    <string name="save_check_other_text">Op %1$s antwoordt ‘%2$s’ – niet ‘%3$s’. Daarom is niet bij ‘%3$s’ ingelogd: die kan alleen in zijn eigen netwerk worden gecontroleerd. De wijzigingen zonder controle opslaan? De gebruikte box blijft dezelfde.</string>
+    <string name="save_check_none_title">Geen FRITZ!Box antwoordt</string>
+    <string name="save_check_none_text">Op %1$s antwoordt geen FRITZ!Box, dus ‘%2$s’ kan van hieruit niet worden gecontroleerd. De wijzigingen zonder controle opslaan? De gebruikte box blijft dezelfde.</string>
+    <string name="save_check_known_title">Al ingesteld</string>
+    <string name="save_check_known_text">De FRITZ!Box op %1$s is al ingesteld, als ‘%2$s’. Toch nog een keer toevoegen?</string>
+    <string name="save_unchecked">Opslaan zonder controle</string>
+    <string name="save_anyway">Toch toevoegen</string>
     <string name="connection_help_title">De FRITZ!Box instellen</string>
     <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig.</string>
     <string name="connection_demo_question">Geen FRITZ!Box?</string>

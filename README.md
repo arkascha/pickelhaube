@@ -65,6 +65,13 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    The red button cancels a dial-help call that is still being set up.
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
+Before logging in, it asks the box at the host who it is (its public device description, no login):
+`fritz.box` always leads to the box of the current network, so a box set up for elsewhere is never
+logged in to there – its credentials would go to the wrong box, and that box' certificate and device
+id would be taken over. If another box answers, or none, the page offers **Save without checking**:
+the entries are stored, the device id, details and certificate stay, and the box in use does not
+change. A new connection to a box that is set up already asks before adding it once more. While the
+entered host leads to another box, the page says so and does not offer that box' users or HTTPS port.
 Otherwise the settings stay open and an error dialog explains the problem (wrong user name or password,
 missing telephony permission, router not found or not reachable, wrong port / HTTPS setting, router
 temporarily blocking logins). Errors during normal use appear in the same dialog on top of the dialer,
@@ -402,6 +409,7 @@ Contacts or a web page; the number is pre-filled.
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |
 | `data/AppLanguage.kt` | UI language: system or chosen (per-app language on Android 13+, own handling before) |
 | `data/BoxRecognition.kt` | Which configured FRITZ!Box is reachable from the current network (app and tile) |
+| `data/HostCheck.kt` | Which box answers at the host of a connection being saved, compared with the boxes set up |
 | `data/SettingsRepository.kt` | FRITZ!Box connections (passwords encrypted via Android Keystore) and options |
 | `data/SettingsFile.kt` | Settings file for export and import (passwords optionally under a passphrase) |
 | `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources |
@@ -409,7 +417,7 @@ Contacts or a web page; the number is pre-filled.
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising,
-the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the call monitor's lines, recognising the dialled number in them and the demo box.
+the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas
 

@@ -14,6 +14,7 @@ import android.net.Network
 import android.os.SystemClock
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
+import org.rustygnome.pickelhaube.data.HostCheck
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
@@ -122,6 +123,10 @@ data class UiState(
     val boxUsers: List<BoxUser> = emptyList(),
     /** Connection page: the HTTPS port the box at the entered host reported (null = not known). */
     val securityPort: SecurityPort? = null,
+    /** Connection page: the entered host leads to another box than the one edited, or to one set up already (null: neither). */
+    val hostNote: HostNote? = null,
+    /** Saving a connection waits for a decision: the box at its host is not (or not only) the one edited. */
+    val saveCheck: SaveCheck? = null,
     /**
      * Whether the box in use answered the last detection in the current network (null = not
      * detected yet), and whether the last request to it worked (null = none since it became active).
@@ -212,6 +217,12 @@ enum class ActiveBoxIssue { NOT_FOUND, NOT_WORKING }
 
 /** The HTTPS port the box at [host] reported. */
 data class SecurityPort(val host: String, val port: Int)
+
+/** What answers at the entered [host] on the connection page: [check] is [HostCheck.OtherBox] or [HostCheck.AlreadySetUp]. */
+data class HostNote(val host: String, val check: HostCheck)
+
+/** Saving the connection named [name] to [host] is held up: [check] is not [HostCheck.Expected]. */
+data class SaveCheck(val host: String, val name: String, val check: HostCheck)
 
 /**
  * The last detection found none of the configured boxes (e.g. on mobile data, or via VPN): the box
@@ -368,6 +379,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             config = FritzConfig(),
             boxUsers = emptyList(),
             securityPort = null,
+            hostNote = null,
+            saveCheck = null,
         )
     }
 
@@ -382,6 +395,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 config = profile.config,
                 boxUsers = emptyList(),
                 securityPort = null,
+                hostNote = null,
+                saveCheck = null,
             )
         }
         refreshUserRights(profile)
@@ -411,9 +426,16 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun lookUpBoxUsers(edited: FritzConfig) {
         usersJob?.cancel()
-        _state.update { it.copy(boxUsers = emptyList()) }
+        _state.update { it.copy(boxUsers = emptyList(), hostNote = null) }
         val config = edited.copy(trustedCertDer = _state.value.config.trustedCertDer)
         usersJob = viewModelScope.launch {
+            // Another box there would offer its own users – and they would mean nothing for this one.
+            val check = checkHost(config.host)
+            if (!_state.value.showConnectionSettings) return@launch
+            if (check is HostCheck.OtherBox || check is HostCheck.AlreadySetUp) {
+                _state.update { it.copy(hostNote = HostNote(config.host, check)) }
+            }
+            if (check is HostCheck.OtherBox) return@launch
             val users = withContext(Dispatchers.IO) { runCatching { BoxUsers.list(config) }.getOrNull() }
             if (users != null && _state.value.showConnectionSettings) _state.update { it.copy(boxUsers = users) }
         }
@@ -425,18 +447,29 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun lookUpSecurityPort(host: String) {
         securityPortJob?.cancel()
         securityPortJob = viewModelScope.launch {
+            if (checkHost(host) is HostCheck.OtherBox) return@launch
             val port = withContext(Dispatchers.IO) { BoxDiscovery.securityPort(host) } ?: return@launch
             if (_state.value.showConnectionSettings) _state.update { it.copy(securityPort = SecurityPort(host, port)) }
         }
     }
 
+    /** Which box answers at [host], compared with the connection being edited and the others (see [HostCheck]). */
+    private suspend fun checkHost(host: String): HostCheck {
+        val identity = withContext(Dispatchers.IO) { BoxDiscovery.identify(host) }
+        val profiles = settings.profiles()
+        return HostCheck.of(identity, profiles.firstOrNull { it.id == _state.value.editingProfileId }, profiles)
+    }
+
     /** Leaves the connection page without saving: back to the connection in use. */
     fun closeConnectionSettings() {
         verifyingSettings = false
+        pendingSave = null
         _state.update {
             it.copy(
                 showConnectionSettings = false,
                 editingProfileId = null,
+                hostNote = null,
+                saveCheck = null,
                 config = activeConfig(),
                 error = null,
             )
@@ -471,7 +504,92 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         callListEnabled: Boolean,
         speedDialsEnabled: Boolean,
     ) {
-        val config = edited.copy(trustedCertDer = _state.value.config.trustedCertDer)
+        if (_state.value.busy) return
+        val request = SaveRequest(
+            edited.copy(trustedCertDer = _state.value.config.trustedCertDer),
+            name, phonebooksEnabled, callListEnabled, speedDialsEnabled,
+        )
+        // First, without logging in, which box answers there: logging in to another one would hand it
+        // this box' credentials, and take over its certificate and device id.
+        _state.update { it.copy(busy = true, status = uiText(R.string.status_connecting, request.config.host), error = null) }
+        viewModelScope.launch {
+            val check = checkHost(request.config.host)
+            _state.update { it.copy(busy = false, status = null) }
+            if (!_state.value.showConnectionSettings) return@launch
+            if (check == HostCheck.Expected) {
+                saveChecked(request)
+            } else {
+                pendingSave = request
+                val editing = settings.profiles().firstOrNull { it.id == _state.value.editingProfileId }
+                val shown = request.name.trim().ifEmpty { editing?.name ?: request.config.host }
+                _state.update { it.copy(saveCheck = SaveCheck(request.config.host, shown, check)) }
+            }
+        }
+    }
+
+    /** The connection page's entries, kept while [SaveCheck] waits for a decision. */
+    private data class SaveRequest(
+        val config: FritzConfig,
+        val name: String,
+        val phonebooksEnabled: Boolean,
+        val callListEnabled: Boolean,
+        val speedDialsEnabled: Boolean,
+    )
+
+    private var pendingSave: SaveRequest? = null
+
+    /** [SaveCheck] answered with "save anyway": checked against the box there after all (a new connection only). */
+    fun saveAnyway() {
+        val request = pendingSave ?: return
+        dismissSaveCheck()
+        saveChecked(request)
+    }
+
+    /**
+     * [SaveCheck] answered with "save without checking": the entries are stored as they are, while
+     * all the box told about itself before – device id, details, certificate – stays. The box in use
+     * stays as well: this one was not found here.
+     */
+    fun saveUnchecked() {
+        val request = pendingSave ?: return
+        dismissSaveCheck()
+        val previous = settings.profiles().firstOrNull { it.id == _state.value.editingProfileId } ?: return
+        val profile = previous.copy(
+            name = request.name.trim().ifEmpty { previous.name },
+            config = request.config,
+            // Rights read before belong to the user of then.
+            userRights = previous.userRights?.takeIf { previous.config.username == request.config.username },
+            phonebooksEnabled = request.phonebooksEnabled,
+            callListEnabled = request.callListEnabled,
+            speedDialsEnabled = request.speedDialsEnabled,
+        )
+        settings.saveProfile(profile)
+        LauncherShortcuts.publish(getApplication())
+        val active = settings.activeProfileId == profile.id
+        _state.update {
+            it.copy(
+                profiles = settings.profiles(),
+                editingProfileId = null,
+                showSettings = it.settingsSaved,
+                showConnectionSettings = false,
+                config = activeConfig(),
+            )
+        }
+        // Chosen by hand while elsewhere: its changed entries are to be used from now on.
+        if (active) activateProfile(profile.id)
+    }
+
+    fun dismissSaveCheck() {
+        pendingSave = null
+        _state.update { it.copy(saveCheck = null) }
+    }
+
+    private fun saveChecked(request: SaveRequest) {
+        val config = request.config
+        val name = request.name
+        val phonebooksEnabled = request.phonebooksEnabled
+        val callListEnabled = request.callListEnabled
+        val speedDialsEnabled = request.speedDialsEnabled
         val editingId = _state.value.editingProfileId
         verifyingSettings = true
         _state.update { it.copy(config = config, error = null) }

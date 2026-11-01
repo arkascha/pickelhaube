@@ -118,6 +118,16 @@
     <string name="connection_call_list">Elenco chiamate</string>
     <string name="connection_call_list_hint">I numeri chiamati, ricevuti e persi di recente, dall’elenco chiamate di questa FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s non ha questa autorizzazione sul box, quindi l’elenco chiamate non può essere letto.</string>
+    <string name="connection_host_other">%1$s porta qui a «%2$s»: questa box si può verificare solo nella sua rete.</string>
+    <string name="connection_host_known">%1$s porta a «%2$s», già configurata.</string>
+    <string name="save_check_other_title">Risponde un’altra FRITZ!Box</string>
+    <string name="save_check_other_text">A %1$s risponde «%2$s», non «%3$s». Per questo non è stato fatto l’accesso a «%3$s»: si può verificare solo nella sua rete. Salvare le modifiche senza verifica? La box in uso resta la stessa.</string>
+    <string name="save_check_none_title">Non risponde nessuna FRITZ!Box</string>
+    <string name="save_check_none_text">A %1$s non risponde nessuna FRITZ!Box, quindi «%2$s» non si può verificare da qui. Salvare le modifiche senza verifica? La box in uso resta la stessa.</string>
+    <string name="save_check_known_title">Già configurata</string>
+    <string name="save_check_known_text">La FRITZ!Box a %1$s è già configurata, come «%2$s». Aggiungerla comunque un’altra volta?</string>
+    <string name="save_unchecked">Salva senza verifica</string>
+    <string name="save_anyway">Aggiungi comunque</string>
     <string name="connection_help_title">Preparare la FRITZ!Box</string>
     <string name="connection_help">Sulla box, attiva «Consenti l’accesso alle applicazioni» (Rete domestica › Rete › Impostazioni di rete) e l’«Aiuto alla selezione» (Telefonia › Chiamate › Aiuto alla selezione). L’utente ha bisogno dell’autorizzazione per la telefonia.</string>
     <string name="connection_demo_question">Niente FRITZ!Box?</string>

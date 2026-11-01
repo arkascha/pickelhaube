@@ -120,6 +120,16 @@
     <string name="connection_call_list">Call list</string>
     <string name="connection_call_list_hint">The numbers recently dialled, received and missed, from this FRITZ!Box’s call list. Needs the permission “Voice messages, fax messages, FRITZ!App Fon and call list”.</string>
     <string name="connection_call_list_no_right">%1$s does not have this permission on the box, so the call list cannot be read.</string>
+    <string name="connection_host_other">%1$s leads to “%2$s” here – this box can only be checked in its own network.</string>
+    <string name="connection_host_known">%1$s leads to “%2$s”, which is already set up.</string>
+    <string name="save_check_other_title">Another FRITZ!Box answers</string>
+    <string name="save_check_other_text">At %1$s, “%2$s” answers – not “%3$s”. So “%3$s” was not logged in to: it can only be checked in its own network. Save the changes without checking? The box in use stays the same.</string>
+    <string name="save_check_none_title">No FRITZ!Box answers</string>
+    <string name="save_check_none_text">No FRITZ!Box answers at %1$s, so “%2$s” cannot be checked from here. Save the changes without checking? The box in use stays the same.</string>
+    <string name="save_check_known_title">Already set up</string>
+    <string name="save_check_known_text">The FRITZ!Box at %1$s is already set up, as “%2$s”. Add it once more anyway?</string>
+    <string name="save_unchecked">Save without checking</string>
+    <string name="save_anyway">Add anyway</string>
     <string name="connection_help_title">Setting up the FRITZ!Box</string>
     <string name="connection_help">On the box, enable “Allow access for applications” (Home Network › Network › Network Settings) and “Dial help” (Telephony › Calls › Dial Help). The user needs telephony permission.</string>
     <string name="connection_demo_question">No FRITZ!Box?</string>

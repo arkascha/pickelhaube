@@ -118,6 +118,16 @@
     <string name="connection_call_list">Liste d’appels</string>
     <string name="connection_call_list_hint">Les numéros récemment composés, reçus et manqués, de la liste d’appels de cette FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s n’a pas ce droit sur la box, la liste d’appels ne peut donc pas être lue.</string>
+    <string name="connection_host_other">%1$s mène ici à « %2$s » – cette box ne peut être vérifiée que dans son propre réseau.</string>
+    <string name="connection_host_known">%1$s mène à « %2$s », déjà configurée.</string>
+    <string name="save_check_other_title">Une autre FRITZ!Box répond</string>
+    <string name="save_check_other_text">À %1$s, c’est « %2$s » qui répond – pas « %3$s ». Aucune connexion à « %3$s » n’a donc été tentée : elle ne peut être vérifiée que dans son propre réseau. Enregistrer les modifications sans vérification ? La box utilisée reste la même.</string>
+    <string name="save_check_none_title">Aucune FRITZ!Box ne répond</string>
+    <string name="save_check_none_text">Aucune FRITZ!Box ne répond à %1$s, « %2$s » ne peut donc pas être vérifiée d’ici. Enregistrer les modifications sans vérification ? La box utilisée reste la même.</string>
+    <string name="save_check_known_title">Déjà configurée</string>
+    <string name="save_check_known_text">La FRITZ!Box à %1$s est déjà configurée, sous « %2$s ». L’ajouter quand même une seconde fois ?</string>
+    <string name="save_unchecked">Enregistrer sans vérifier</string>
+    <string name="save_anyway">Ajouter quand même</string>
     <string name="connection_help_title">Préparer la FRITZ!Box</string>
     <string name="connection_help">Sur la box, activez « Autoriser l’accès aux applications » (Réseau domestique › Réseau › Paramètres réseau) et l’« Aide à la numérotation » (Téléphonie › Appels › Aide à la numérotation). L’utilisateur a besoin du droit Téléphonie.</string>
     <string name="connection_demo_question">Pas de FRITZ!Box ?</string>

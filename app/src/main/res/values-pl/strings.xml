@@ -118,6 +118,16 @@
     <string name="connection_call_list">Lista połączeń</string>
     <string name="connection_call_list_hint">Ostatnio wybierane, odebrane i nieodebrane numery z listy połączeń tego FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s nie ma tego uprawnienia na routerze, dlatego nie można odczytać listy połączeń.</string>
+    <string name="connection_host_other">%1$s prowadzi tutaj do „%2$s” – ten router można sprawdzić tylko w jego własnej sieci.</string>
+    <string name="connection_host_known">%1$s prowadzi do „%2$s”, który jest już skonfigurowany.</string>
+    <string name="save_check_other_title">Odpowiada inny FRITZ!Box</string>
+    <string name="save_check_other_text">Pod %1$s odpowiada „%2$s” – nie „%3$s”. Dlatego nie zalogowano się do „%3$s”: można go sprawdzić tylko w jego własnej sieci. Zapisać zmiany bez sprawdzania? Używany router pozostaje ten sam.</string>
+    <string name="save_check_none_title">Żaden FRITZ!Box nie odpowiada</string>
+    <string name="save_check_none_text">Pod %1$s nie odpowiada żaden FRITZ!Box, więc „%2$s” nie da się stąd sprawdzić. Zapisać zmiany bez sprawdzania? Używany router pozostaje ten sam.</string>
+    <string name="save_check_known_title">Już skonfigurowany</string>
+    <string name="save_check_known_text">FRITZ!Box pod %1$s jest już skonfigurowany, jako „%2$s”. Mimo to dodać go jeszcze raz?</string>
+    <string name="save_unchecked">Zapisz bez sprawdzania</string>
+    <string name="save_anyway">Dodaj mimo to</string>
     <string name="connection_help_title">Przygotowanie FRITZ!Box</string>
     <string name="connection_help">Na urządzeniu włącz „Zezwalaj na dostęp aplikacji” (Sieć domowa › Sieć › Ustawienia sieci) oraz „Pomoc przy wybieraniu” (Telefonia › Połączenia › Pomoc przy wybieraniu). Użytkownik potrzebuje uprawnienia do telefonii.</string>
     <string name="connection_demo_question">Brak FRITZ!Box?</string>

@@ -118,6 +118,16 @@
     <string name="connection_call_list">Anrufliste</string>
     <string name="connection_call_list_hint">Die zuletzt gewählten, angenommenen und verpassten Nummern aus der Anrufliste dieser FRITZ!Box. Benötigt die Berechtigung „Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste“.</string>
     <string name="connection_call_list_no_right">%1$s hat diese Berechtigung auf der Box nicht, die Anrufliste kann daher nicht gelesen werden.</string>
+    <string name="connection_host_other">%1$s führt hier zu „%2$s“ – diese Box lässt sich nur in ihrem eigenen Netz prüfen.</string>
+    <string name="connection_host_known">%1$s führt zu „%2$s“, die schon eingerichtet ist.</string>
+    <string name="save_check_other_title">Eine andere FRITZ!Box antwortet</string>
+    <string name="save_check_other_text">Unter %1$s antwortet „%2$s“ – nicht „%3$s“. Darum wurde nicht an „%3$s“ angemeldet: Sie lässt sich nur in ihrem eigenen Netz prüfen. Die Änderungen ohne Prüfung speichern? Die verwendete Box bleibt dieselbe.</string>
+    <string name="save_check_none_title">Keine FRITZ!Box antwortet</string>
+    <string name="save_check_none_text">Unter %1$s antwortet keine FRITZ!Box, „%2$s“ lässt sich von hier also nicht prüfen. Die Änderungen ohne Prüfung speichern? Die verwendete Box bleibt dieselbe.</string>
+    <string name="save_check_known_title">Schon eingerichtet</string>
+    <string name="save_check_known_text">Die FRITZ!Box unter %1$s ist schon eingerichtet, als „%2$s“. Trotzdem noch einmal hinzufügen?</string>
+    <string name="save_unchecked">Ohne Prüfung speichern</string>
+    <string name="save_anyway">Trotzdem hinzufügen</string>
     <string name="connection_help_title">FRITZ!Box einrichten</string>
     <string name="connection_help">Auf der Box „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und die „Wählhilfe“ (Telefonie › Anrufe › Wählhilfe) aktivieren. Der Benutzer braucht die Berechtigung für Telefonie.</string>
     <string name="connection_demo_question">Keine FRITZ!Box?</string>

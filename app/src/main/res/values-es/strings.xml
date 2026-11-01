@@ -118,6 +118,16 @@
     <string name="connection_call_list">Lista de llamadas</string>
     <string name="connection_call_list_hint">Los números marcados, recibidos y perdidos recientemente, de la lista de llamadas de esta FRITZ!Box.</string>
     <string name="connection_call_list_no_right">%1$s no tiene este permiso en el router, por lo que no se puede leer la lista de llamadas.</string>
+    <string name="connection_host_other">%1$s lleva aquí a «%2$s»: este router solo se puede comprobar en su propia red.</string>
+    <string name="connection_host_known">%1$s lleva a «%2$s», que ya está configurado.</string>
+    <string name="save_check_other_title">Responde otra FRITZ!Box</string>
+    <string name="save_check_other_text">En %1$s responde «%2$s», no «%3$s». Por eso no se ha iniciado sesión en «%3$s»: solo se puede comprobar en su propia red. ¿Guardar los cambios sin comprobar? El router en uso sigue siendo el mismo.</string>
+    <string name="save_check_none_title">No responde ninguna FRITZ!Box</string>
+    <string name="save_check_none_text">En %1$s no responde ninguna FRITZ!Box, así que «%2$s» no se puede comprobar desde aquí. ¿Guardar los cambios sin comprobar? El router en uso sigue siendo el mismo.</string>
+    <string name="save_check_known_title">Ya configurado</string>
+    <string name="save_check_known_text">La FRITZ!Box en %1$s ya está configurada, como «%2$s». ¿Añadirla otra vez de todos modos?</string>
+    <string name="save_unchecked">Guardar sin comprobar</string>
+    <string name="save_anyway">Añadir de todos modos</string>
     <string name="connection_help_title">Preparar la FRITZ!Box</string>
     <string name="connection_help">En la box, activa «Permitir el acceso a aplicaciones» (Red doméstica › Red › Ajustes de red) y la «Ayuda de marcación» (Telefonía › Llamadas › Ayuda de marcación). El usuario necesita el permiso de telefonía.</string>
     <string name="connection_demo_question">¿Sin FRITZ!Box?</string>

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import org.rustygnome.pickelhaube.ui.theme.TextRoles
+import org.rustygnome.pickelhaube.data.HostCheck
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -537,6 +538,31 @@ private fun ConfirmDeleteDialog(name: String, onConfirm: () -> Unit, onDismiss: 
     )
 }
 
+/**
+ * Saving waits: another box (or none) answers at the host of the one edited – it can be saved without
+ * checking –, or a new one is set up already – it can be added anyway.
+ */
+@Composable
+private fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSaveAnyway: () -> Unit, onDismiss: () -> Unit) {
+    val (title, text) = when (val found = check.check) {
+        is HostCheck.OtherBox -> R.string.save_check_other_title to stringResource(R.string.save_check_other_text, check.host, found.name, check.name)
+        is HostCheck.AlreadySetUp -> R.string.save_check_known_title to stringResource(R.string.save_check_known_text, check.host, found.name)
+        else -> R.string.save_check_none_title to stringResource(R.string.save_check_none_text, check.host, check.name)
+    }
+    val alreadySetUp = check.check is HostCheck.AlreadySetUp
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(title)) },
+        text = { Text(text) },
+        confirmButton = {
+            TextButton(onClick = if (alreadySetUp) onSaveAnyway else onSaveUnchecked) {
+                Text(stringResource(if (alreadySetUp) R.string.save_anyway else R.string.save_unchecked))
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}
+
 /** What the demo box is, and filling it in on the page for a new connection. */
 @Composable
 private fun DemoBoxDialog(onFill: () -> Unit, onDismiss: () -> Unit) {
@@ -580,6 +606,13 @@ fun ConnectionSettingsScreen(
     boxUsers: List<BoxUser>,
     /** Asks the box at the entered host, port and HTTPS setting for its users. */
     onLookUpUsers: (FritzConfig) -> Unit,
+    /** The entered host leads to another box than this one, or to one set up already. */
+    hostNote: HostNote?,
+    /** Saving waits for a decision, as the box at the host is not (or not only) this one. */
+    saveCheck: SaveCheck?,
+    onSaveUnchecked: () -> Unit,
+    onSaveAnyway: () -> Unit,
+    onDismissSaveCheck: () -> Unit,
     /** The HTTPS port the box at the entered host reported, if it did. */
     securityPort: SecurityPort?,
     /** Asks the box at the entered host for its HTTPS port. */
@@ -731,6 +764,20 @@ fun ConnectionSettingsScreen(
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
             )
+            hostNote?.takeIf { it.host == host.trim() }?.let { note ->
+                when (val check = note.check) {
+                    is HostCheck.OtherBox -> Text(
+                        stringResource(R.string.connection_host_other, note.host, check.name),
+                        style = TextRoles.finding,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    is HostCheck.AlreadySetUp -> Text(
+                        stringResource(R.string.connection_host_known, note.host, check.name),
+                        style = TextRoles.finding,
+                    )
+                    else -> {}
+                }
+            }
             // What the box at the stored address said about itself – not about one just typed in.
             if (boxInfo != null && host.trim() == initial.host) {
                 Column(Modifier.padding(start = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -855,6 +902,8 @@ fun ConnectionSettingsScreen(
             }
         }
     }
+
+    saveCheck?.let { SaveCheckDialog(it, onSaveUnchecked, onSaveAnyway, onDismissSaveCheck) }
 
     if (confirmDelete && onDelete != null) {
         ConfirmDeleteDialog(
