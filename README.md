@@ -53,12 +53,13 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    (TR-064 `DeviceInfo` `GetSecurityPort`, asked over plain HTTP without login), else the usual `49443`.
    A port entered by hand is kept.
    The **user name** field offers the users of the box once host, port and HTTPS are entered
-   (TR-064 `LANConfigSecurity` `X_AVM-DE_GetUserList`), the one who logged in last marked – handy for the
-   auto-generated name; a box with a single user – the usual case – gets it entered right away, unless
-   another name has been typed in. The **(?)** in the field says what the user is, and that one can be
-   created just for Pickelhaube. The box is asked without credentials, so no failed login is counted; with HTTPS
-   whose certificate is not trusted yet, over plain HTTP. If the box does not tell (older FRITZ!OS), the
-   field is simply typed in.
+   (TR-064 `LANConfigSecurity` `X_AVM-DE_GetUserList`) – the list opens from the field's **▾**. The user in
+   the field is marked, the one who logged in last is named so, and the auto-generated one (`fritz` and
+   four digits, made by the box for logging in with a password only) is explained. A box with a single
+   user – the usual case – gets it entered right away, unless another name has been typed in. The
+   **(?)** in the field says what the user is, and that one can be created just for Pickelhaube. The box
+   is asked without credentials, so no failed login is counted; with HTTPS whose certificate is not
+   trusted yet, over plain HTTP. If the box does not tell (older FRITZ!OS), the field is simply typed in.
 2. The app reads the phones the box knows (FON / DECT / IP) and the one currently configured
    for dial help. Choose your DECT handset in **Ring phone**.
 3. Enter a number (long-press **0** for **+**) and tap the green button → the handset rings → pick it up → the call is placed.
@@ -84,8 +85,9 @@ so they never appear there; numbers can.
 ### Demo box
 
 Without a FRITZ!Box at hand – and for the review in the app stores – Pickelhaube has a box of its
-own: host `demo`, user `demo`, password `demo` (*No FRITZ!Box? Try the demo box*, right at the top of the page for a new
-connection explains it, and its **Fill in the demo box** enters them). It answers in the app itself instead of over the network (`tr064/DemoBox.kt`,
+own: host `demo`, user `demo`, password `demo` (*No FRITZ!Box? Try the demo box*, right at the top
+of the page for a new connection, explains it, and its **Fill in the demo box** enters them). It
+answers in the app itself instead of over the network (`tr064/DemoBox.kt`,
 an OkHttp interceptor in `Tr064Client`, plus its device description and call monitor), with phones,
 two phone books with speed dials, a call list and call forwardings. A call through it rings nowhere:
 after a few seconds it counts as picked up, then connected, ends after a short talk and appears in
@@ -100,8 +102,11 @@ the configured boxes.
 **Settings › FRITZ!Box connections** holds any number of boxes (e.g. home and office), each with its
 own display name, host, port, HTTPS, user, password, use of its phone books and call list, and trusted
 certificate. The display name is only a label in the app (default: the box' own name) – the box is
-reached at its host, never looked for by that name; the **(?)** in the field says so. Explanations on the connection page sit behind such **(?)** icons – also
-what the box needs set up, at the top of the page – so the page stays short. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
+reached at its host, never looked for by that name; the **(?)** in the field says so. Explanations
+on the connection page sit behind such **(?)** icons – also what the box needs set up, at the top of
+the page – so the page stays short. Explaining texts are grey and italic, what the app found out about
+a box (reachable, its users, its HTTPS port, …) is in the accent colour, values in the normal text
+colour. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
 box is *reachable* (it answered the last detection: in this network, or at its configured host),
 *not reachable* or *not recognised yet* (its device id is not known yet, see below). The box in use is
 chosen automatically and marked with a check mark, and shown under the app name on the dialer. The mark
@@ -113,7 +118,8 @@ use (they all look alike), and the dialer says that none of your boxes is reacha
 its own and disables the dial button (a number can still be entered); the picker then shows only the
 phone's own contacts and calls, while its reload button still tries the box.
 
-The connection page also shows the box' **device details** (folded, a tap opens them) – model, FRITZ!OS version and serial number
+The connection page also shows the box' **device details** (folded, a tap opens them) – model,
+FRITZ!OS version and serial number
 (TR-064 `DeviceInfo` `GetInfo`) – right under its address, to tell boxes apart (hidden while another
 address is entered). They are read when the connection is saved and
 again whenever the phones are loaded, so they stay current after a FRITZ!OS update. Reading them is

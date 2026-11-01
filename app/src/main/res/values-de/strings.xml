@@ -251,8 +251,8 @@
         <item quantity="other">Verbunden – %d Telefone gefunden</item>
     </plurals>
     <plurals name="connection_users_found">
-        <item quantity="one">%d Benutzer auf dieser Box – zum Auswählen tippen</item>
-        <item quantity="other">%d Benutzer auf dieser Box – zum Auswählen tippen</item>
+        <item quantity="one">%d Benutzer auf dieser Box – Auswahl mit ▾</item>
+        <item quantity="other">%d Benutzer auf dieser Box – Auswahl mit ▾</item>
     </plurals>
     <plurals name="status_contacts_loaded">
         <item quantity="one">%d Kontakt geladen</item>

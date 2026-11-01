@@ -253,8 +253,8 @@
         <item quantity="other">Connected – %d phones found</item>
     </plurals>
     <plurals name="connection_users_found">
-        <item quantity="one">%d user on this box – tap to choose</item>
-        <item quantity="other">%d users on this box – tap to choose</item>
+        <item quantity="one">%d user on this box – choose with ▾</item>
+        <item quantity="other">%d users on this box – choose with ▾</item>
     </plurals>
     <plurals name="status_contacts_loaded">
         <item quantity="one">%d contact loaded</item>

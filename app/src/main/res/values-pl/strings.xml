@@ -253,10 +253,10 @@
         <item quantity="other">Połączono – znaleziono %d telefonu</item>
     </plurals>
     <plurals name="connection_users_found">
-        <item quantity="one">%d użytkownik na tym routerze – dotknij, aby wybrać</item>
-        <item quantity="few">%d użytkownicy na tym routerze – dotknij, aby wybrać</item>
-        <item quantity="many">%d użytkowników na tym routerze – dotknij, aby wybrać</item>
-        <item quantity="other">%d użytkownika na tym routerze – dotknij, aby wybrać</item>
+        <item quantity="one">%d użytkownik na tym routerze – wybierz przez ▾</item>
+        <item quantity="few">%d użytkownicy na tym routerze – wybierz przez ▾</item>
+        <item quantity="many">%d użytkowników na tym routerze – wybierz przez ▾</item>
+        <item quantity="other">%d użytkownika na tym routerze – wybierz przez ▾</item>
     </plurals>
     <plurals name="status_contacts_loaded">
         <item quantity="one">Wczytano %d kontakt</item>

@@ -251,8 +251,8 @@
         <item quantity="other">Verbonden – %d telefoons gevonden</item>
     </plurals>
     <plurals name="connection_users_found">
-        <item quantity="one">%d gebruiker op deze box – tik om te kiezen</item>
-        <item quantity="other">%d gebruikers op deze box – tik om te kiezen</item>
+        <item quantity="one">%d gebruiker op deze box – kies met ▾</item>
+        <item quantity="other">%d gebruikers op deze box – kies met ▾</item>
     </plurals>
     <plurals name="status_contacts_loaded">
         <item quantity="one">%d contact geladen</item>

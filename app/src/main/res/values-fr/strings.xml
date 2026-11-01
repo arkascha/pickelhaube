@@ -252,9 +252,9 @@
         <item quantity="other">Connecté – %d téléphones trouvés</item>
     </plurals>
     <plurals name="connection_users_found">
-        <item quantity="one">%d utilisateur sur cette box – touchez pour choisir</item>
-        <item quantity="many">%d utilisateurs sur cette box – touchez pour choisir</item>
-        <item quantity="other">%d utilisateurs sur cette box – touchez pour choisir</item>
+        <item quantity="one">%d utilisateur sur cette box – choisir avec ▾</item>
+        <item quantity="many">%d utilisateurs sur cette box – choisir avec ▾</item>
+        <item quantity="other">%d utilisateurs sur cette box – choisir avec ▾</item>
     </plurals>
     <plurals name="status_contacts_loaded">
         <item quantity="one">%d contact chargé</item>
