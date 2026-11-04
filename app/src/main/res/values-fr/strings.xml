@@ -18,6 +18,9 @@
     <string name="settings">Paramètres</string>
     <string name="this_phone">Ce téléphone</string>
     <string name="fritzbox">FRITZ!Box</string>
+    <string name="settings_build_play">Version Google Play</string>
+    <string name="settings_build_full">Version complète</string>
+    <string name="settings_source_code">Code source sur GitHub ›</string>
     <string name="trademark_notice">Pickelhaube est un projet indépendant, sans lien avec FRITZ! GmbH (anciennement AVM). FRITZ! et FRITZ!Box sont des marques de FRITZ! GmbH.</string>
     <string name="phone_books">Répertoires</string>
 

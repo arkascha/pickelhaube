@@ -24,6 +24,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import android.content.ClipboardManager
+import android.content.ClipData
+import org.rustygnome.pickelhaube.BuildConfig
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import org.rustygnome.pickelhaube.ui.theme.TextRoles
@@ -307,6 +313,7 @@ fun SettingsScreen(
             }
 
             HorizontalDivider()
+            VersionInfo()
             Text(
                 stringResource(R.string.trademark_notice),
                 style = TextRoles.hint,
@@ -562,6 +569,45 @@ private fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSav
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }
+
+/**
+ * Which version this is, as the build says – a long press copies it, for reporting a problem – and
+ * where its source code is.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun VersionInfo() {
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+    val version = stringResource(R.string.settings_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .combinedClickable(onClick = {}, onLongClick = {
+                context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(
+                    ClipData.newPlainText(version, "$version, ${BuildConfig.FLAVOR}")
+                )
+            })
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+    ) {
+        Text(version, style = MaterialTheme.typography.bodyMedium)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(if (BuildConfig.CALL_LOG) R.string.settings_build_full else R.string.settings_build_play),
+                style = TextRoles.hint,
+            )
+            Text(" · ", style = TextRoles.hint)
+            Text(
+                stringResource(R.string.settings_source_code),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(role = Role.Button) { uriHandler.openUri(SOURCE_CODE_URL) },
+            )
+        }
+    }
+}
+
+private const val SOURCE_CODE_URL = "https://github.com/arkascha/pickelhaube"
 
 /** What the demo box is, and filling it in on the page for a new connection. */
 @Composable

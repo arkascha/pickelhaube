@@ -20,6 +20,10 @@
     <string name="settings">Settings</string>
     <string name="this_phone">This phone</string>
     <string name="fritzbox">FRITZ!Box</string>
+    <string name="settings_version" translatable="false">Pickelhaube %1$s (%2$d)</string>
+    <string name="settings_build_play">Google Play version</string>
+    <string name="settings_build_full">Full version</string>
+    <string name="settings_source_code">Source code on GitHub ›</string>
     <string name="trademark_notice">Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH.</string>
     <string name="phone_books">Phone books</string>
 

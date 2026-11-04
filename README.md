@@ -395,6 +395,10 @@ the import as well, as *Restore backup…* in its top bar, instead of entering o
 Pickelhaube also registers for `tel:` links, so you can pick it when tapping a number in
 Contacts or a web page; the number is pre-filled.
 
+The bottom of the settings shows the **version** – name and version code, and whether it is the full
+or the Google Play version – with a link to the source code; a long press copies it, e.g. for a bug
+report.
+
 ## Code map
 
 | File | Purpose |
