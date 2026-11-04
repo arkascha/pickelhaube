@@ -49,6 +49,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.unit.TextUnit
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Badge
@@ -107,6 +112,8 @@ fun DialerScreen(
     onDismissNumberChoice: () -> Unit,
     /** Opens the call forwarding of the box in use. */
     onOpenDeflections: () -> Unit,
+    /** Places the call with the own number withheld (long press on the green button). */
+    onDialHidden: () -> Unit,
 ) {
     state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
     Scaffold(
@@ -278,6 +285,11 @@ fun DialerScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
                     RoundActionButton(
                         onClick = onDial,
+                        // A long press offers the call with the own number withheld.
+                        menu = listOf(
+                            stringResource(R.string.dialer_dial) to onDial,
+                            stringResource(R.string.dialer_dial_hidden) to onDialHidden,
+                        ),
                         // Only when there is something dialable (same check the dial action uses).
                         // No box to dial through: entering a number still works, dialling does not.
                         enabled = !state.busy && !state.noBoxReachable &&
@@ -434,21 +446,51 @@ private fun BackspaceButton(onBackspace: () -> Unit, onClear: () -> Unit) {
     }
 }
 
+/**
+ * Round call button. With a [menu] (label and action each), a long press opens it – a Button has no
+ * long press, so this one is drawn by hand in the Button's colours.
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun RoundActionButton(
     onClick: () -> Unit,
     enabled: Boolean,
     color: Color,
+    menu: List<Pair<String, () -> Unit>> = emptyList(),
     icon: @Composable () -> Unit,
 ) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        shape = CircleShape,
-        modifier = Modifier.size(68.dp),
-        contentPadding = ButtonDefaults.TextButtonContentPadding,
-        colors = ButtonDefaults.buttonColors(containerColor = color),
-    ) { icon() }
+    val haptics = LocalHapticFeedback.current
+    var open by remember { mutableStateOf(false) }
+    val container = if (enabled) color else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+    val content = if (enabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+    Box {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(68.dp)
+                .clip(CircleShape)
+                .background(container)
+                .combinedClickable(
+                    enabled = enabled,
+                    role = Role.Button,
+                    onClick = onClick,
+                    onLongClickLabel = menu.getOrNull(1)?.first,
+                    onLongClick = if (menu.isEmpty()) null else {
+                        {
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            open = true
+                        }
+                    },
+                ),
+        ) {
+            CompositionLocalProvider(LocalContentColor provides content) { icon() }
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            menu.forEach { (label, action) ->
+                DropdownMenuItem(text = { Text(label) }, onClick = { open = false; action() })
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

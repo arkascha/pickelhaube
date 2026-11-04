@@ -249,6 +249,7 @@
     <string name="error_connection_https_port">%1$s: el puerto %2$d espera HTTPS.</string>
     <string name="error_cert_rejected_title">Certificado no aceptado</string>
     <string name="error_cert_rejected">Se rechazó la conexión porque no confiaste en el certificado del router.</string>
+    <string name="dialer_dial_hidden">Llamar con número oculto</string>
     <string name="dialer_paste">Pegar número</string>
     <string name="number_choice_title">¿Qué número?</string>
     <string name="error_no_number_found_title">Ningún número de teléfono</string>

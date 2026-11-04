@@ -249,6 +249,7 @@
     <string name="error_connection_https_port">%1$s – Port %2$d erwartet HTTPS.</string>
     <string name="error_cert_rejected_title">Zertifikat nicht vertraut</string>
     <string name="error_cert_rejected">Die Verbindung wurde abgelehnt, weil du dem Zertifikat des Routers nicht vertraut hast.</string>
+    <string name="dialer_dial_hidden">Mit unterdrückter Nummer wählen</string>
     <string name="dialer_paste">Nummer einfügen</string>
     <string name="number_choice_title">Welche Nummer?</string>
     <string name="error_no_number_found_title">Keine Telefonnummer</string>

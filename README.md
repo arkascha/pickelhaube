@@ -64,6 +64,8 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    for dial help. Choose your phone in **Ring phone**.
 3. Enter a number (long-press **0** for **+**) and tap the green button → the phone rings → take the call → the call is placed.
    The red button cancels a dial-help call that is still being set up.
+   A **long press on the green button** offers *Dial with hidden number*: your own number is withheld
+   for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
 Before logging in, it asks the box at the host who it is (its public device description, no login):
@@ -461,7 +463,7 @@ report.
 | `ui/theme/TextRoles.kt` | How hints (grey italic) and findings about a box (accent colour) look, on every page |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
-Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, picking numbers out of text, the new missed calls,
+Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, withholding the own number, picking numbers out of text, the new missed calls,
 the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas

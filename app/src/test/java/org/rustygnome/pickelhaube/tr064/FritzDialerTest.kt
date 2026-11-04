@@ -63,4 +63,12 @@ class FritzDialerTest {
         assertEquals("7.57", BoxInfo(null, "7.57", null).fritzOsVersion)
         assertEquals(null, BoxInfo(null, null, null).fritzOsVersion)
     }
+
+    @Test
+    fun `withholds the own number only for real numbers`() {
+        assertEquals("*31#0301234567", FritzDialer.withheld("0301234567"))
+        assertEquals("*31#+491715550000", FritzDialer.withheld("+491715550000"))
+        assertEquals("**610", FritzDialer.withheld("**610"))
+        assertEquals("#96*5*", FritzDialer.withheld("#96*5*"))
+    }
 }

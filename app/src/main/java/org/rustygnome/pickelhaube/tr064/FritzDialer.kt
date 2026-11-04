@@ -192,6 +192,16 @@ class FritzDialer(
         private val PORT_PREFIX =
             Regex("""^\s*(ISDN|DECT|FON\s*\d*|SIP|IP|LAN|WLAN|S0|TAM)\s*\d*\s*:\s*""", RegexOption.IGNORE_CASE)
 
+        /** The box' code that withholds the own number for a single call, dialled before it. */
+        const val WITHHOLD_PREFIX = "*31#"
+
+        /**
+         * [number] dialled with the own number withheld: behind [WITHHOLD_PREFIX] – unless it is a
+         * code itself (internal numbers like **610, service codes), where a prefix makes no sense.
+         */
+        fun withheld(number: String): String =
+            if (number.firstOrNull()?.let { it.isDigit() || it == '+' } == true) WITHHOLD_PREFIX + number else number
+
         /** Keeps digits and the characters the box understands (+ * #); drops spaces, dashes, brackets. */
         fun sanitizeNumber(raw: String): String =
             raw.filter { it.isDigit() || it == '+' || it == '*' || it == '#' }

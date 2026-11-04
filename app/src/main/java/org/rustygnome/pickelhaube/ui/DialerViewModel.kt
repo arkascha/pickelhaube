@@ -1603,7 +1603,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun dial() {
+    /** Places the call; [withhold]: with the own number withheld (see [FritzDialer.withheld]). */
+    fun dial(withhold: Boolean = false) {
         if (_state.value.noBoxReachable) return
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
@@ -1627,7 +1628,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             // Listening before the box dials, so its report of the call is not missed.
             followCall(number, phone)
             try {
-                dialer.dial(number)
+                dialer.dial(if (withhold) FritzDialer.withheld(number) else number)
             } catch (e: Exception) {
                 stopFollowingCall()
                 clearDialActive()
@@ -1673,7 +1674,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             while (detectJob?.isActive == true) detectJob?.join()
             // Changed meanwhile by hand, or no box to dial through.
             if (_state.value.number != number || _state.value.noBoxReachable) return@launch
-            if (_state.value.busy) runWhenIdle("dial", ::dial) else dial()
+            if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
         }
     }
 
