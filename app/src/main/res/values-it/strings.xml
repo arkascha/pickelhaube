@@ -234,6 +234,11 @@
     <string name="error_connection_https_port">%1$s – la porta %2$d richiede HTTPS.</string>
     <string name="error_cert_rejected_title">Certificato non attendibile</string>
     <string name="error_cert_rejected">La connessione è stata rifiutata perché non hai considerato attendibile il certificato del router.</string>
+    <string name="dialer_paste">Incolla numero</string>
+    <string name="number_choice_title">Quale numero?</string>
+    <string name="error_no_number_found_title">Nessun numero di telefono</string>
+    <string name="error_no_number_in_text">Il testo condiviso non contiene alcun numero di telefono.</string>
+    <string name="error_no_number_in_clipboard">Gli appunti non contengono alcun numero di telefono.</string>
     <string name="error_no_number_title">Nessun numero</string>
     <string name="error_no_number">Inserisci un numero da chiamare.</string>
 

@@ -267,6 +267,9 @@ class MainActivity : ComponentActivity() {
                         onRefresh = viewModel::refreshPhones,
                         onOpenSettings = viewModel::openSettings,
                         onOpenPicker = viewModel::openPicker,
+                        onPaste = { viewModel.takeNumbersFrom(it, fromClipboard = true) },
+                        onChooseNumber = viewModel::chooseNumber,
+                        onDismissNumberChoice = viewModel::dismissNumberChoice,
                         onOpenDeflections = viewModel::openDeflections,
                     )
                 }
@@ -323,7 +326,8 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * Pre-fills the number when opened from a tel: link (e.g. tapping a number in Contacts); carries out
+     * Pre-fills the number when opened from a tel: link (e.g. tapping a number in Contacts) or with a
+     * shared text; carries out
      * the entries of the launcher icon's menu – those only when they come through their alias, which
      * no other app can start, and not again when the app is reopened from the recent apps.
      */
@@ -336,6 +340,11 @@ class MainActivity : ComponentActivity() {
                     intent.data?.takeIf { it.scheme == "tel" }?.schemeSpecificPart?.let(viewModel::dialFromShortcut)
                 LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut()
             }
+            return
+        }
+        // Text shared from another app (e.g. an email signature): the phone number in it.
+        if (intent.action == Intent.ACTION_SEND && intent.type?.startsWith("text/") == true) {
+            intent.getStringExtra(Intent.EXTRA_TEXT)?.let { viewModel.takeNumbersFrom(it, fromClipboard = false) }
             return
         }
         val data: Uri = intent.data ?: return

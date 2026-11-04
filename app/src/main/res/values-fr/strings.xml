@@ -234,6 +234,11 @@
     <string name="error_connection_https_port">%1$s – le port %2$d attend HTTPS.</string>
     <string name="error_cert_rejected_title">Certificat non approuvé</string>
     <string name="error_cert_rejected">La connexion a été refusée, car vous n’avez pas fait confiance au certificat du routeur.</string>
+    <string name="dialer_paste">Coller le numéro</string>
+    <string name="number_choice_title">Quel numéro ?</string>
+    <string name="error_no_number_found_title">Aucun numéro de téléphone</string>
+    <string name="error_no_number_in_text">Le texte partagé ne contient aucun numéro de téléphone.</string>
+    <string name="error_no_number_in_clipboard">Le presse-papiers ne contient aucun numéro de téléphone.</string>
     <string name="error_no_number_title">Aucun numéro</string>
     <string name="error_no_number">Veuillez saisir un numéro à composer.</string>
 

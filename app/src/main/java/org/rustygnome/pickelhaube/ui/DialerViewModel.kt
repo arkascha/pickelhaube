@@ -15,6 +15,7 @@ import android.os.SystemClock
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.HostCheck
+import org.rustygnome.pickelhaube.data.NumberText
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
@@ -121,6 +122,8 @@ data class UiState(
     val editingName: String = "",
     /** Connection page: the users of the box at the entered address, to choose from (empty = none known). */
     val boxUsers: List<BoxUser> = emptyList(),
+    /** Several numbers came in a shared or pasted text: the one to dial is chosen from these. */
+    val numberChoice: List<String>? = null,
     /** Connection page: the HTTPS port the box at the entered host reported (null = not known). */
     val securityPort: SecurityPort? = null,
     /** Connection page: the entered host leads to another box than the one edited, or to one set up already (null: neither). */
@@ -316,7 +319,37 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null) }
 
     /** Called with the number from a tel: link (ACTION_DIAL / ACTION_VIEW). */
-    fun prefill(number: String) = _state.update { it.copy(number = number, numberLabel = null) }
+    fun prefill(number: String) = _state.update { it.copy(number = NumberText.clean(number), numberLabel = null) }
+
+    /**
+     * A text shared from another app ([fromClipboard]: pasted) – an email, a signature, a web page: its
+     * phone number into the dialer, or – with several – the one chosen from them.
+     */
+    fun takeNumbersFrom(text: String, fromClipboard: Boolean) {
+        if (settings.isConfigured()) showDialer()
+        val numbers = NumberText.extract(text)
+        when (numbers.size) {
+            0 -> _state.update {
+                it.copy(
+                    error = BoxError(
+                        uiText(R.string.error_no_number_found_title),
+                        uiText(if (fromClipboard) R.string.error_no_number_in_clipboard else R.string.error_no_number_in_text),
+                        false,
+                    ),
+                    canRetry = false,
+                )
+            }
+            1 -> prefill(numbers.single())
+            else -> _state.update { it.copy(numberChoice = numbers) }
+        }
+    }
+
+    fun chooseNumber(number: String) {
+        _state.update { it.copy(numberChoice = null) }
+        prefill(number)
+    }
+
+    fun dismissNumberChoice() = _state.update { it.copy(numberChoice = null) }
 
     /**
      * Long press on a digit of the dial pad: a speed dial if there is one for it (see

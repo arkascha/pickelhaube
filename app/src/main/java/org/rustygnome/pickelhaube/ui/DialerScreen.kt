@@ -49,6 +49,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.addPathNodes
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
+import android.content.ClipboardManager
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -88,9 +98,14 @@ fun DialerScreen(
     onRefresh: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPicker: () -> Unit,
+    /** The clipboard's text, for the phone number in it. */
+    onPaste: (String) -> Unit,
+    onChooseNumber: (String) -> Unit,
+    onDismissNumberChoice: () -> Unit,
     /** Opens the call forwarding of the box in use. */
     onOpenDeflections: () -> Unit,
 ) {
+    state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -202,6 +217,15 @@ fun DialerScreen(
                                 onBackspace = onBackspace,
                                 onClear = { onNumberChange("") },
                             )
+                        } else {
+                            // An empty field offers the clipboard instead: read only when tapped.
+                            val context = LocalContext.current
+                            IconButton(onClick = {
+                                val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
+                                onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
+                            }) {
+                                Icon(PasteIcon, contentDescription = stringResource(R.string.dialer_paste))
+                            }
                         }
                     },
                 )
@@ -254,6 +278,49 @@ fun DialerScreen(
             }
         }
     }
+}
+
+/** Several numbers in a shared or pasted text: which one goes into the dialer. */
+@Composable
+private fun NumberChoiceDialog(numbers: List<String>, onChoose: (String) -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.number_choice_title)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                numbers.forEach { number ->
+                    Text(
+                        number,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onChoose(number) }
+                            .padding(vertical = 12.dp),
+                    )
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}
+
+/** Material "content_paste" glyph (clipboard, Apache 2.0). */
+private val PasteIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "ContentPaste",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).addPath(
+        pathData = addPathNodes(
+            "M19,2h-4.18C14.4,0.84 13.3,0 12,0c-1.3,0 -2.4,0.84 -2.82,2L5,2c-1.1,0 -2,0.9 -2,2v16c0,1.1 0.9,2 2,2h14" +
+                "c1.1,0 2,-0.9 2,-2L21,4c0,-1.1 -0.9,-2 -2,-2zM12,2c0.55,0 1,0.45 1,1s-0.45,1 -1,1 -1,-0.45 -1,-1 0.45,-1 1,-1z" +
+                "M19,20L5,20L5,4h2v3h10L17,4h2v16z"
+        ),
+        fill = SolidColor(Color.Black),
+    ).build()
 }
 
 /** How the call placed last is going, in up to two lines; empty while there is none. */
