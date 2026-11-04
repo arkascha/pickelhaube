@@ -61,8 +61,8 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    is asked without credentials, so no failed login is counted; with HTTPS whose certificate is not
    trusted yet, over plain HTTP. If the box does not tell (older FRITZ!OS), the field is simply typed in.
 2. The app reads the phones the box knows (FON / DECT / IP) and the one currently configured
-   for dial help. Choose your DECT handset in **Ring phone**.
-3. Enter a number (long-press **0** for **+**) and tap the green button → the handset rings → pick it up → the call is placed.
+   for dial help. Choose your phone in **Ring phone**.
+3. Enter a number (long-press **0** for **+**) and tap the green button → the phone rings → take the call → the call is placed.
    The red button cancels a dial-help call that is still being set up.
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
@@ -198,7 +198,7 @@ withheld number are left out. The list is read anew every time the picker is ope
 reload button), from two sources:
 
 - **FRITZ!Box** (router icon with the box' name from the settings) – the dialled, received and missed calls in the box' call list (TR-064 `X_AVM-DE_OnTel` `GetCallList`),
-  i.e. Pickelhaube's dial-help calls as well as the calls of the handsets themselves. The FRITZ!Box user
+  i.e. Pickelhaube's dial-help calls as well as the calls of the phones themselves. The FRITZ!Box user
   needs the permission *Voice messages, fax messages, FRITZ!App Fon and call list* for this.
   Whether it is used is set per FRITZ!Box, on its connection page (**Settings › FRITZ!Box connections ›
   <box> › Call list**, on by default) – e.g. for a box whose user lacks that permission.
@@ -235,7 +235,7 @@ Speed dials come from two sources that never collide, each of which can be switc
   number in the phone books; long-press a set one to change or remove it), or long-press a number in
   the **Phone books** tab and choose **Make speed dial**. Switch: **Settings › Speed dial › This phone's speed dials** (on by default).
 - **FRITZ!Box** – the two-digit speed dials (**00 to 99**) set up in the phone books of the box in use
-  (the `quickdial` attribute of its phone book export), the same ones its handsets dial with `**7`.
+  (the `quickdial` attribute of its phone book export), the same ones its phones dial with `**7`.
   So they depend on where you are. Tap the first digit and long-press the second, or enter `**7` and
   the number – Pickelhaube dials the number it stands for. Switch: on each box' connection page,
   **Speed dials** (on by default, independent of **Phone books**). The box' phone books are read in
@@ -279,7 +279,9 @@ Above the call buttons, the dialer shows how the call goes: *pick up* while the 
 then *calling …* (with the own number it goes out from) once you picked up, *connected* with a running
 timer, and finally *call ended* with its duration, *not answered, or busy*, or – when nobody picked
 up within 45 seconds – *the phone was not picked up*. The red button stays usable exactly as long as
-the call is still being set up. The end stays shown for 20 seconds.
+the call is still being set up: the box' hang-up (`X_AVM-DE_DialHangup`) only cancels the dial help and
+does not end a connected call – tested on a 7530 AX –, so while connected the dialer says to hang up on
+the device itself (handset, headset or speakerphone). The end stays shown for 20 seconds.
 
 TR-064 does not report any of this. It comes from the box' **call monitor**: a plain TCP connection to
 port 1012, on which the box reports every call as it happens (`CALL`, `CONNECT`, `DISCONNECT`, `RING`).

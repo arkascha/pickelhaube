@@ -277,7 +277,7 @@
     <string name="speed_dial">Numéros abrégés</string>
     <string name="speed_dial_none_enabled">Aucun numéro abrégé n’est activé. Vous pouvez les activer dans les paramètres.</string>
     <string name="speed_dial_phone_help">Les numéros abrégés 1 à 9 sont enregistrés sur ce téléphone et fonctionnent avec toutes les FRITZ!Box. Sur le clavier, appuyez longuement sur le chiffre. Touchez un emplacement libre pour choisir son numéro dans les répertoires ; appuyez longuement sur un emplacement occupé pour le modifier ou le supprimer.</string>
-    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box, tels qu’ils se composent sur ses combinés avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
+    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box, tels qu’ils se composent sur ses téléphones avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
     <string name="speed_dial_box_failed">Les numéros abrégés de la FRITZ!Box n’ont pas pu être chargés. Touchez Recharger pour réessayer.</string>
     <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FRITZ!Box.</string>
     <string name="speed_dial_free">Libre</string>
@@ -316,7 +316,7 @@
     <string name="settings_phone_speed_dials">Numéros abrégés de ce téléphone</string>
     <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>
     <string name="connection_speed_dials">Numéros abrégés</string>
-    <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses combinés avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
+    <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses téléphones avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Rappel</string>
@@ -403,6 +403,7 @@
     <string name="call_dialling">Appel de %1$s…</string>
     <string name="call_dialling_from">Appel de %1$s depuis %2$s…</string>
     <string name="call_connected">Connecté avec %1$s · %2$s</string>
+    <string name="call_hang_up_on_device">Raccrochez sur l’appareil lui-même</string>
     <string name="call_ended">Appel terminé · %1$s</string>
     <string name="call_not_answered">Pas de réponse, ou occupé</string>
     <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>

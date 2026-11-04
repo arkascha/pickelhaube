@@ -240,8 +240,8 @@
     <string name="status_selecting">Selezione di %1$s…</string>
     <string name="status_ring_on">Le chiamate squilleranno su %1$s</string>
     <string name="status_dialling">Chiamata a %1$s…</string>
-    <string name="status_pick_up">Solleva %1$s – poi la box chiama %2$s</string>
-    <string name="status_pick_up_any">Solleva il telefono – poi la box chiama %1$s</string>
+    <string name="status_pick_up">Rispondi su %1$s – poi la box chiama %2$s</string>
+    <string name="status_pick_up_any">Rispondi al telefono – poi la box chiama %1$s</string>
     <string name="status_hanging_up">Riaggancio…</string>
     <string name="status_call_cancelled">Chiamata annullata</string>
     <string name="status_waiting_cert">In attesa della decisione sul certificato…</string>
@@ -277,7 +277,7 @@
     <string name="speed_dial">Selezione rapida</string>
     <string name="speed_dial_none_enabled">Nessuna selezione rapida attivata. Puoi attivarle nelle impostazioni.</string>
     <string name="speed_dial_phone_help">Le selezioni rapide da 1 a 9 sono salvate su questo telefono e funzionano con ogni FRITZ!Box. Nel tastierino, tieni premuta la cifra. Tocca una libera per sceglierne il numero dalle rubriche; tieni premuta una assegnata per modificarla o rimuoverla.</string>
-    <string name="speed_dial_box_help">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box, come si compongono sui suoi portatili con **7. Nel tastierino, tocca la prima cifra e tieni premuta la seconda, oppure inserisci **7 e il numero. In basso puoi crearne una nuova; tieni premuta una per modificarla o rimuoverla.</string>
+    <string name="speed_dial_box_help">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box, come si compongono sui suoi telefoni con **7. Nel tastierino, tocca la prima cifra e tieni premuta la seconda, oppure inserisci **7 e il numero. In basso puoi crearne una nuova; tieni premuta una per modificarla o rimuoverla.</string>
     <string name="speed_dial_box_failed">Non è stato possibile caricare le selezioni rapide della FRITZ!Box. Tocca Ricarica per riprovare.</string>
     <string name="speed_dial_box_none">Nelle rubriche di questa FRITZ!Box non sono impostate selezioni rapide.</string>
     <string name="speed_dial_free">Libera</string>
@@ -316,7 +316,7 @@
     <string name="settings_phone_speed_dials">Selezioni rapide di questo telefono</string>
     <string name="settings_phone_speed_dials_hint">Selezioni rapide da 1 a 9, scelte dalle rubriche e salvate su questo telefono, quindi funzionano con ogni FRITZ!Box. Per usarne una, tieni premuta la sua cifra nel tastierino.</string>
     <string name="connection_speed_dials">Selezioni rapide</string>
-    <string name="connection_speed_dials_hint">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box (da 00 a 99, come si compongono sui suoi portatili con **7). Per usarne una, tocca la prima cifra nel tastierino e tieni premuta la seconda. Funziona anche con le rubriche disattivate.</string>
+    <string name="connection_speed_dials_hint">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box (da 00 a 99, come si compongono sui suoi telefoni con **7). Per usarne una, tocca la prima cifra nel tastierino e tieni premuta la seconda. Funziona anche con le rubriche disattivate.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Ripeti chiamata</string>
@@ -403,9 +403,10 @@
     <string name="call_dialling">Chiamata a %1$s…</string>
     <string name="call_dialling_from">Chiamata a %1$s da %2$s…</string>
     <string name="call_connected">Connesso con %1$s · %2$s</string>
+    <string name="call_hang_up_on_device">Riaggancia sull’apparecchio stesso</string>
     <string name="call_ended">Chiamata terminata · %1$s</string>
     <string name="call_not_answered">Nessuna risposta, o occupato</string>
-    <string name="call_not_picked_up">Il telefono non è stato sollevato</string>
+    <string name="call_not_picked_up">Nessuna risposta al telefono</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_dial_number">Componi numero</string>

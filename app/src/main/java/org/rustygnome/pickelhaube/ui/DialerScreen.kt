@@ -55,6 +55,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -280,8 +284,17 @@ private fun CallStatusLine(progress: CallProgress?) {
         CallProgress.NotAnswered -> stringResource(R.string.call_not_answered)
         CallProgress.NotPickedUp -> stringResource(R.string.call_not_picked_up)
     }
+    // The box cannot end a connected call – its hang-up only cancels the dial help, so the red
+    // button is off then: the call is ended on the device itself, as the second line says.
+    val hint = if (progress is CallProgress.Connected) stringResource(R.string.call_hang_up_on_device) else null
     Text(
-        text,
+        buildAnnotatedString {
+            append(text)
+            hint?.let {
+                append("\n")
+                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) { append(it) }
+            }
+        },
         style = MaterialTheme.typography.bodyMedium,
         color = if (progress is CallProgress.PickUp && progress.monitorOff) MaterialTheme.colorScheme.error
         else MaterialTheme.colorScheme.onSurfaceVariant,
