@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The dial widget, in Pickelhaube's colours (those of the app icon), the same in light and dark mode. -->
+<resources>
+    <color name="widget_background">#005EA2</color>
+    <color name="widget_row">#29FFFFFF</color>
+    <color name="widget_row_transparent">#8C0A1E33</color>
+    <color name="widget_frame_transparent">#330A1E33</color>
+    <color name="widget_frame_outline">#8CFFFFFF</color>
+    <color name="widget_text">#FFFFFF</color>
+    <color name="widget_number">#FEE400</color>
+    <color name="widget_logo_ring">#FFFFFF</color>
+    <dimen name="widget_radius">20dp</dimen>
+    <dimen name="widget_row_radius">12dp</dimen>
+    <!-- How far the logo sticks out over the frame's top. -->
+    <dimen name="widget_logo_overhang">10dp</dimen>
+</resources>

@@ -21,6 +21,20 @@
     <string name="settings_build_play">Versión de Google Play</string>
     <string name="settings_build_full">Versión completa</string>
     <string name="settings_source_code">Código fuente en GitHub ›</string>
+    <string name="widget_label">Números para llamar</string>
+    <string name="widget_description">Los números que elijas, a un toque del marcador</string>
+    <string name="widget_empty">Aún no hay números: toca para elegirlos</string>
+    <string name="widget_edit">Editar widget</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Título (p. ej. Familia)</string>
+    <string name="widget_setup_hint">Añade los números que ofrece este widget: de las llamadas recientes, las marcaciones rápidas o las agendas. Un toque en un número del widget lo pasa al marcador; un toque en el icono de Pickelhaube de su esquina te trae de vuelta aquí.</string>
+    <string name="widget_setup_transparent">Transparente</string>
+    <string name="widget_setup_transparent_help">Sin el marco azul: se ve el fondo de pantalla, y los números llevan un tono oscuro propio para seguir siendo legibles.</string>
+    <string name="widget_setup_add">Añadir número</string>
+    <string name="widget_setup_save">Listo</string>
+    <string name="widget_setup_up">Subir</string>
+    <string name="widget_setup_down">Bajar</string>
+    <string name="widget_setup_remove">Quitar %1$s</string>
     <string name="trademark_notice">Pickelhaube es un proyecto independiente y no está vinculado a FRITZ! GmbH (antes AVM). FRITZ! y FRITZ!Box son marcas de FRITZ! GmbH.</string>
     <string name="phone_books">Agendas</string>
 

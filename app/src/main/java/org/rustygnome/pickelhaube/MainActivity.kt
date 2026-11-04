@@ -5,6 +5,7 @@ import org.rustygnome.pickelhaube.ui.numberKey
 import org.rustygnome.pickelhaube.ui.deviceCountryIso
 import androidx.compose.ui.platform.LocalContext
 import android.content.Context
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -36,6 +37,7 @@ import org.rustygnome.pickelhaube.ui.PhonebookTab
 import org.rustygnome.pickelhaube.ui.RecentsTab
 import org.rustygnome.pickelhaube.ui.SettingsImportOffer
 import org.rustygnome.pickelhaube.ui.SettingsScreen
+import org.rustygnome.pickelhaube.ui.WidgetSetupScreen
 import org.rustygnome.pickelhaube.ui.SecondFactorDialog
 import org.rustygnome.pickelhaube.ui.SpeedDialTab
 import org.rustygnome.pickelhaube.ui.theme.PickelhaubeTheme
@@ -159,7 +161,7 @@ class MainActivity : ComponentActivity() {
                                 boxName = state.activeProfile?.name,
                                 boxLoaded = state.phonebooksLoaded,
                                 busy = state.busy,
-                                onPick = viewModel::useSpeedDial,
+                                onPick = { if (state.addingToWidget) viewModel.addToWidget(it.name, it.number) else viewModel.useSpeedDial(it) },
                                 onAssign = viewModel::startAssigningSpeedDial,
                                 onRemove = viewModel::removePhoneSpeedDial,
                                 boxEditable = editableBoxSpeedDials != null,
@@ -169,6 +171,21 @@ class MainActivity : ComponentActivity() {
                                 onDeleteCopy = viewModel::deleteOnlineCopy,
                             )
                         },
+                    )
+                } else if (state.widgetSetup != null) {
+                    val setup = state.widgetSetup!!
+                    // Done or not: back to where the widget was placed or tapped.
+                    val leave = { moveTaskToBack(true) }
+                    BackHandler { viewModel.cancelWidgetSetup(); leave() }
+                    WidgetSetupScreen(
+                        list = setup.list,
+                        onTitleChange = viewModel::setWidgetTitle,
+                        onTransparentChange = viewModel::setWidgetTransparent,
+                        onAdd = viewModel::startAddingToWidget,
+                        onRemove = viewModel::removeFromWidget,
+                        onMove = viewModel::moveInWidget,
+                        onSave = { viewModel.saveWidget(); leave() },
+                        onCancel = { viewModel.cancelWidgetSetup(); leave() },
                     )
                 } else if (state.showSettings && state.showConnectionSettings) {
                     val canGoBack = state.settingsSaved
@@ -318,6 +335,10 @@ class MainActivity : ComponentActivity() {
         handleIntent(intent)
     }
 
+    private fun Intent.widgetId(): Int? =
+        getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            .takeIf { it != AppWidgetManager.INVALID_APPWIDGET_ID }
+
     /** Imports the opened settings file; then switches to the file's language, if it is not the one in use. */
     private fun importSettings(passphrase: CharArray?) {
         viewModel.importSettings(passphrase) { language ->
@@ -339,6 +360,10 @@ class MainActivity : ComponentActivity() {
                 LauncherShortcuts.ACTION_DIAL_NOW ->
                     intent.data?.takeIf { it.scheme == "tel" }?.schemeSpecificPart?.let(viewModel::dialFromShortcut)
                 LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut()
+                LauncherShortcuts.ACTION_WIDGET_SETUP -> intent.widgetId()?.let(viewModel::openWidgetSetup)
+                LauncherShortcuts.ACTION_WIDGET_DIAL -> intent.widgetId()?.let { id ->
+                    viewModel.showFromWidget(id, intent.getIntExtra(LauncherShortcuts.EXTRA_WIDGET_ENTRY, -1))
+                }
             }
             return
         }

@@ -21,6 +21,20 @@
     <string name="settings_build_play">Version Google Play</string>
     <string name="settings_build_full">Version complète</string>
     <string name="settings_source_code">Code source sur GitHub ›</string>
+    <string name="widget_label">Numéros à composer</string>
+    <string name="widget_description">Les numéros que vous choisissez, à un appui du clavier</string>
+    <string name="widget_empty">Pas encore de numéros – touchez pour les choisir</string>
+    <string name="widget_edit">Modifier le widget</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Titre (p. ex. Famille)</string>
+    <string name="widget_setup_hint">Ajoutez les numéros que propose ce widget – depuis les appels récents, les numéros abrégés ou les répertoires. Un appui sur un numéro du widget le place dans le clavier ; un appui sur l’icône Pickelhaube dans son coin vous ramène ici.</string>
+    <string name="widget_setup_transparent">Transparent</string>
+    <string name="widget_setup_transparent_help">Sans le cadre bleu : le fond d’écran transparaît, et les numéros ont leur propre teinte sombre pour rester lisibles.</string>
+    <string name="widget_setup_add">Ajouter un numéro</string>
+    <string name="widget_setup_save">Terminé</string>
+    <string name="widget_setup_up">Monter</string>
+    <string name="widget_setup_down">Descendre</string>
+    <string name="widget_setup_remove">Retirer %1$s</string>
     <string name="trademark_notice">Pickelhaube est un projet indépendant, sans lien avec FRITZ! GmbH (anciennement AVM). FRITZ! et FRITZ!Box sont des marques de FRITZ! GmbH.</string>
     <string name="phone_books">Répertoires</string>
 

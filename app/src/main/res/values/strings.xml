@@ -24,6 +24,20 @@
     <string name="settings_build_play">Google Play version</string>
     <string name="settings_build_full">Full version</string>
     <string name="settings_source_code">Source code on GitHub ›</string>
+    <string name="widget_label">Numbers to dial</string>
+    <string name="widget_description">Numbers you choose, one tap away from the dialer</string>
+    <string name="widget_empty">No numbers yet – tap to choose them</string>
+    <string name="widget_edit">Edit widget</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Title (e.g. Family)</string>
+    <string name="widget_setup_hint">Add the numbers this widget offers – from the recent calls, the speed dials or the phone books. A tap on a number in the widget puts it into the dialer; a tap on the Pickelhaube icon in its corner brings you back here.</string>
+    <string name="widget_setup_transparent">Transparent</string>
+    <string name="widget_setup_transparent_help">Without the blue frame: the wallpaper shows through, and the numbers get a dark tint of their own to stay readable.</string>
+    <string name="widget_setup_add">Add number</string>
+    <string name="widget_setup_save">Done</string>
+    <string name="widget_setup_up">Move up</string>
+    <string name="widget_setup_down">Move down</string>
+    <string name="widget_setup_remove">Remove %1$s</string>
     <string name="trademark_notice">Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH.</string>
     <string name="phone_books">Phone books</string>
 

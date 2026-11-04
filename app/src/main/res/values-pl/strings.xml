@@ -21,6 +21,20 @@
     <string name="settings_build_play">Wersja z Google Play</string>
     <string name="settings_build_full">Pełna wersja</string>
     <string name="settings_source_code">Kod źródłowy na GitHubie ›</string>
+    <string name="widget_label">Numery do wybrania</string>
+    <string name="widget_description">Wybrane przez Ciebie numery, jedno dotknięcie od klawiatury</string>
+    <string name="widget_empty">Brak numerów – dotknij, aby je wybrać</string>
+    <string name="widget_edit">Edytuj widżet</string>
+    <string name="widget_setup_title">Widżet</string>
+    <string name="widget_setup_name">Tytuł (np. Rodzina)</string>
+    <string name="widget_setup_hint">Dodaj numery, które oferuje ten widżet – z ostatnich połączeń, szybkiego wybierania lub książek telefonicznych. Dotknięcie numeru w widżecie przenosi go na klawiaturę; dotknięcie ikony Pickelhaube w rogu przenosi tutaj.</string>
+    <string name="widget_setup_transparent">Przezroczysty</string>
+    <string name="widget_setup_transparent_help">Bez niebieskiej ramki: widać tapetę, a numery dostają własne ciemne tło, by pozostać czytelne.</string>
+    <string name="widget_setup_add">Dodaj numer</string>
+    <string name="widget_setup_save">Gotowe</string>
+    <string name="widget_setup_up">W górę</string>
+    <string name="widget_setup_down">W dół</string>
+    <string name="widget_setup_remove">Usuń %1$s</string>
     <string name="trademark_notice">Pickelhaube to niezależny projekt, niezwiązany z FRITZ! GmbH (dawniej AVM). FRITZ! i FRITZ!Box są znakami towarowymi FRITZ! GmbH.</string>
     <string name="phone_books">Książki telefoniczne</string>
 

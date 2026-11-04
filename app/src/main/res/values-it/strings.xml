@@ -21,6 +21,20 @@
     <string name="settings_build_play">Versione Google Play</string>
     <string name="settings_build_full">Versione completa</string>
     <string name="settings_source_code">Codice sorgente su GitHub ›</string>
+    <string name="widget_label">Numeri da chiamare</string>
+    <string name="widget_description">I numeri che scegli, a un tocco dal tastierino</string>
+    <string name="widget_empty">Ancora nessun numero – tocca per sceglierli</string>
+    <string name="widget_edit">Modifica widget</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Titolo (ad es. Famiglia)</string>
+    <string name="widget_setup_hint">Aggiungi i numeri che offre questo widget – dalle chiamate recenti, dalle selezioni rapide o dalle rubriche. Un tocco su un numero nel widget lo porta nel tastierino; un tocco sull’icona di Pickelhaube nel suo angolo ti riporta qui.</string>
+    <string name="widget_setup_transparent">Trasparente</string>
+    <string name="widget_setup_transparent_help">Senza la cornice blu: si vede lo sfondo, e i numeri hanno una propria tinta scura per restare leggibili.</string>
+    <string name="widget_setup_add">Aggiungi numero</string>
+    <string name="widget_setup_save">Fatto</string>
+    <string name="widget_setup_up">Sposta su</string>
+    <string name="widget_setup_down">Sposta giù</string>
+    <string name="widget_setup_remove">Rimuovi %1$s</string>
     <string name="trademark_notice">Pickelhaube è un progetto indipendente e non è collegato a FRITZ! GmbH (già AVM). FRITZ! e FRITZ!Box sono marchi di FRITZ! GmbH.</string>
     <string name="phone_books">Rubriche</string>
 

@@ -379,6 +379,21 @@ open the dialer through an activity alias that other apps cannot start – only 
 dial without the green button being pressed. An entry reopened from the recent apps is not carried out
 again.
 
+### Home screen widget
+
+The widget **Numbers to dial** offers numbers chosen by hand, each widget its own list (e.g. "Family"
+and "Work"). Placing it opens its setup in the app: an optional title, and **Add number** opens the
+number picker (recent calls, speed dials, phone books) to add an entry with its name; entries can be
+moved up and down and removed. In the widget a tap on an entry puts its number into the dialer, with
+the name as the field's label – it is dialled with the green button only, as a tap on the home
+screen is easily made by mistake. A tap on the Pickelhaube icon in its top right corner (or on the title) opens the setup again
+(from Android 12 also *Reconfigure* in the launcher). The setup also switches the widget to
+**transparent**: the wallpaper shows through, a thin light outline holds it together, and the rows
+have a dark tint of their own. Wide enough (from about 250 dp), a row has the number right-aligned
+beside the name rather than below it. The lists belong to this phone's home screen: they are kept apart
+from the settings and not exported. The widget's row only says which entry was tapped; the number is
+looked up in its stored list, so no other app can put another number into the dialer through it.
+
 ### Export and import of the settings
 
 *Settings › Back up and transfer* writes all connections and options into a JSON file
@@ -422,6 +437,7 @@ report.
 | `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |
 | `shortcut/ShortcutActivities.kt` | Invisible activities behind the "Call forwarding" and FRITZ!Box entries |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
+| `widget/` | Home screen widget "Numbers to dial": the widget, its rows, its lists and the activity the launcher starts to set it up |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |
@@ -436,7 +452,7 @@ report.
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, picking numbers out of text,
-the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
+the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas
 

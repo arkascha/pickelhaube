@@ -21,6 +21,20 @@
     <string name="settings_build_play">Google-Play-Version</string>
     <string name="settings_build_full">Vollversion</string>
     <string name="settings_source_code">Quellcode auf GitHub ›</string>
+    <string name="widget_label">Nummern zum Wählen</string>
+    <string name="widget_description">Von dir gewählte Nummern, einen Tipp vom Wählfeld entfernt</string>
+    <string name="widget_empty">Noch keine Nummern – zum Auswählen tippen</string>
+    <string name="widget_edit">Widget bearbeiten</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Titel (z. B. Familie)</string>
+    <string name="widget_setup_hint">Füge die Nummern hinzu, die dieses Widget anbietet – aus den letzten Anrufen, den Kurzwahlen oder den Telefonbüchern. Ein Tipp auf eine Nummer im Widget übernimmt sie ins Wählfeld; ein Tipp auf das Pickelhaube-Symbol in seiner Ecke führt hierher zurück.</string>
+    <string name="widget_setup_transparent">Transparent</string>
+    <string name="widget_setup_transparent_help">Ohne den blauen Rahmen: das Hintergrundbild scheint durch, und die Nummern bekommen eine eigene dunkle Tönung, damit sie lesbar bleiben.</string>
+    <string name="widget_setup_add">Nummer hinzufügen</string>
+    <string name="widget_setup_save">Fertig</string>
+    <string name="widget_setup_up">Nach oben</string>
+    <string name="widget_setup_down">Nach unten</string>
+    <string name="widget_setup_remove">%1$s entfernen</string>
     <string name="trademark_notice">Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (ehemals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH.</string>
     <string name="phone_books">Telefonbücher</string>
 

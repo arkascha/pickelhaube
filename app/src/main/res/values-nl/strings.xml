@@ -21,6 +21,20 @@
     <string name="settings_build_play">Google Play-versie</string>
     <string name="settings_build_full">Volledige versie</string>
     <string name="settings_source_code">Broncode op GitHub ›</string>
+    <string name="widget_label">Nummers om te bellen</string>
+    <string name="widget_description">Nummers die je kiest, één tik van het kiesscherm</string>
+    <string name="widget_empty">Nog geen nummers – tik om ze te kiezen</string>
+    <string name="widget_edit">Widget bewerken</string>
+    <string name="widget_setup_title">Widget</string>
+    <string name="widget_setup_name">Titel (bijv. Familie)</string>
+    <string name="widget_setup_hint">Voeg de nummers toe die deze widget aanbiedt – uit de recente gesprekken, de snelkeuzes of de telefoonboeken. Een tik op een nummer in de widget zet het in het kiesscherm; een tik op het Pickelhaube-pictogram in de hoek brengt je hier terug.</string>
+    <string name="widget_setup_transparent">Transparant</string>
+    <string name="widget_setup_transparent_help">Zonder het blauwe kader: de achtergrond schijnt door, en de nummers krijgen een eigen donkere tint om leesbaar te blijven.</string>
+    <string name="widget_setup_add">Nummer toevoegen</string>
+    <string name="widget_setup_save">Klaar</string>
+    <string name="widget_setup_up">Omhoog</string>
+    <string name="widget_setup_down">Omlaag</string>
+    <string name="widget_setup_remove">%1$s verwijderen</string>
     <string name="trademark_notice">Pickelhaube is een onafhankelijk project en heeft geen banden met FRITZ! GmbH (voorheen AVM). FRITZ! en FRITZ!Box zijn merken van FRITZ! GmbH.</string>
     <string name="phone_books">Telefoonboeken</string>
 

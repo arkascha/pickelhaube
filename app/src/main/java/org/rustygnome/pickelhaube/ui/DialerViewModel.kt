@@ -16,6 +16,10 @@ import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.HostCheck
 import org.rustygnome.pickelhaube.data.NumberText
+import org.rustygnome.pickelhaube.widget.DialWidget
+import org.rustygnome.pickelhaube.widget.WidgetEntry
+import org.rustygnome.pickelhaube.widget.WidgetList
+import org.rustygnome.pickelhaube.widget.WidgetLists
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
@@ -122,6 +126,10 @@ data class UiState(
     val editingName: String = "",
     /** Connection page: the users of the box at the entered address, to choose from (empty = none known). */
     val boxUsers: List<BoxUser> = emptyList(),
+    /** The setup of a dial widget is open: which widget, and its list as being edited. */
+    val widgetSetup: WidgetSetup? = null,
+    /** The number picker is open to add a number to [widgetSetup]. */
+    val addingToWidget: Boolean = false,
     /** Several numbers came in a shared or pasted text: the one to dial is chosen from these. */
     val numberChoice: List<String>? = null,
     /** Connection page: the HTTPS port the box at the entered host reported (null = not known). */
@@ -217,6 +225,9 @@ val UiState.activeBoxIssue: ActiveBoxIssue?
     }
 
 enum class ActiveBoxIssue { NOT_FOUND, NOT_WORKING }
+
+/** The dial widget [id] being set up, with its [list] as edited so far. */
+data class WidgetSetup(val id: Int, val list: WidgetList)
 
 /** The HTTPS port the box at [host] reported. */
 data class SecurityPort(val host: String, val port: Int)
@@ -910,6 +921,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 showPicker = true,
                 pickerTab = PickerTab.RECENT,
                 assigningSpeedDial = null,
+                addingToWidget = false,
                 askForDeviceContacts = !it.deviceContactsEnabled &&
                     !settings.deviceContactsNeverAsk,
             )
@@ -920,7 +932,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (_state.value.deviceContacts == null) loadDeviceContacts()
     }
 
-    fun closePicker() = _state.update { it.copy(showPicker = false, assigningSpeedDial = null) }
+    fun closePicker() = _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
 
     fun selectPickerTab(tab: PickerTab) = _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
 
@@ -1193,19 +1205,80 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /** A number was tapped in the picker (recent calls or phone books): put it into the dialer and go back. */
-    fun pickNumber(number: String) =
+    fun pickNumber(number: String) {
+        if (_state.value.addingToWidget) return addToWidget(nameFor(number).orEmpty(), number)
         _state.update { it.copy(number = number, numberLabel = null, showPicker = false) }
+    }
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
     fun pickContactNumber(name: String, number: String) {
         when (val assignment = _state.value.assigningSpeedDial) {
-            null -> pickNumber(number)
+            null -> if (_state.value.addingToWidget) addToWidget(name, number) else pickNumber(number)
             is SpeedDialAssignment.Phone -> {
                 setPhoneSpeedDial(assignment.slot, name, number)
                 _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
             }
             // The phone book tab asks what is still open, then calls setBoxSpeedDial.
             is SpeedDialAssignment.Box -> Unit
+        }
+    }
+
+    // --- dial widget -----------------------------------------------------------------
+
+    /** Opens the setup of the dial widget [id] (placed just now, or its title tapped). */
+    fun openWidgetSetup(id: Int) {
+        showDialer()
+        _state.update { it.copy(widgetSetup = WidgetSetup(id, WidgetLists.get(getApplication(), id))) }
+    }
+
+    private fun editWidget(change: (WidgetList) -> WidgetList) =
+        _state.update { state -> state.copy(widgetSetup = state.widgetSetup?.let { it.copy(list = change(it.list)) }) }
+
+    fun setWidgetTitle(title: String) = editWidget { it.copy(title = title) }
+
+    fun setWidgetTransparent(transparent: Boolean) = editWidget { it.copy(transparent = transparent) }
+
+    fun removeFromWidget(index: Int) = editWidget { it.copy(entries = it.entries.filterIndexed { i, _ -> i != index }) }
+
+    /** Moves entry [index] up ([by] -1) or down (+1). */
+    fun moveInWidget(index: Int, by: Int) = editWidget { list ->
+        val to = index + by
+        if (to !in list.entries.indices) list
+        else list.copy(entries = list.entries.toMutableList().apply { add(to, removeAt(index)) })
+    }
+
+    /** The number picker, to add a number to the widget being set up. */
+    fun startAddingToWidget() {
+        openPicker()
+        _state.update { it.copy(addingToWidget = true) }
+    }
+
+    /** Back from the picker with [number] (and whose it is) – once only, the first place kept. */
+    fun addToWidget(name: String, number: String) {
+        editWidget { list ->
+            if (list.entries.any { it.number == number }) list else list.copy(entries = list.entries + WidgetEntry(name, number))
+        }
+        _state.update { it.copy(showPicker = false, addingToWidget = false) }
+    }
+
+    fun saveWidget() {
+        val setup = _state.value.widgetSetup ?: return
+        WidgetLists.set(getApplication(), setup.id, setup.list.copy(title = setup.list.title.trim()))
+        DialWidget.update(getApplication(), setup.id)
+        _state.update { it.copy(widgetSetup = null) }
+    }
+
+    fun cancelWidgetSetup() = _state.update { it.copy(widgetSetup = null) }
+
+    /**
+     * A row of the dial widget [id] was tapped: its number into the dialer, with whose it is as the
+     * field's label – dialled only with the green button, as a tap on the home screen is easily made.
+     */
+    fun showFromWidget(id: Int, index: Int) {
+        val entry = WidgetLists.get(getApplication(), id).entries.getOrNull(index) ?: return
+        showDialer()
+        _state.update {
+            it.copy(number = NumberText.clean(entry.number), numberLabel = entry.name.takeIf(String::isNotBlank)?.let(UiText::Raw))
         }
     }
 
@@ -1896,7 +1969,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             }
             // Their texts in the language of now.
             LauncherShortcuts.publish(getApplication())
-        }
+            }
         watchNetwork()
     }
 }

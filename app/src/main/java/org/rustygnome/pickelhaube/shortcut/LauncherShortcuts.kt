@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.shortcut
 
+import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -33,6 +34,10 @@ object LauncherShortcuts {
 
     /** Dials the number of the intent's `tel:` data right away. */
     const val ACTION_DIAL_NOW = "org.rustygnome.pickelhaube.action.DIAL_NOW"
+    const val ACTION_WIDGET_SETUP = "org.rustygnome.pickelhaube.action.WIDGET_SETUP"
+    const val ACTION_WIDGET_DIAL = "org.rustygnome.pickelhaube.action.WIDGET_DIAL"
+    /** Which entry of a dial widget's list was tapped (its position). */
+    const val EXTRA_WIDGET_ENTRY = "org.rustygnome.pickelhaube.extra.WIDGET_ENTRY"
 
     /** Opens the number picker. */
     const val ACTION_PICKER = "org.rustygnome.pickelhaube.action.PICKER"
@@ -169,6 +174,14 @@ object LauncherShortcuts {
     fun removeAll(context: Context) {
         runCatching { ShortcutManagerCompat.removeAllDynamicShortcuts(context) }
     }
+
+    /** The setup of the dial widget [id] (see [org.rustygnome.pickelhaube.widget.DialWidget]), through [ALIAS]. */
+    fun widgetSetupIntent(context: Context, id: Int): Intent =
+        aliasIntent(context, ACTION_WIDGET_SETUP).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+
+    /** Puts an entry of the dial widget [id] into the dialer – which one, its row fills in as [EXTRA_WIDGET_ENTRY]. */
+    fun widgetDialIntent(context: Context, id: Int): Intent =
+        aliasIntent(context, ACTION_WIDGET_DIAL).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
 
     private fun aliasIntent(context: Context, action: String) =
         Intent(action).setComponent(ComponentName(context.packageName, ALIAS))
