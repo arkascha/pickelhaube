@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Registrata da questo telefono</string>
     <string name="recents_dialled">Effettuata</string>
     <string name="recents_received">Ricevuta</string>
+    <string name="recents_new_missed">Nuova chiamata persa</string>
     <string name="recents_missed">Persa</string>
 
     <!-- settings overview -->
@@ -440,4 +441,9 @@
     <string name="shortcut_deflection_on_long">Deviazione attiva → %1$s</string>
     <string name="shortcut_deflection_off_long">Deviazione disattivata → %1$s</string>
     <string name="shortcut_deflection_unknown">Impossibile leggere la deviazione di chiamata, oppure non ne è configurata nessuna</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d nuova chiamata persa su %2$s – mostra</item>
+        <item quantity="many">%1$d nuove chiamate perse su %2$s – mostra</item>
+        <item quantity="other">%1$d nuove chiamate perse su %2$s – mostra</item>
+    </plurals>
 </resources>

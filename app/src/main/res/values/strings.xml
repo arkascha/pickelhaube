@@ -90,6 +90,7 @@
     <string name="recents_recorded_by_phone">Recorded by this phone</string>
     <string name="recents_dialled">Dialled</string>
     <string name="recents_received">Received</string>
+    <string name="recents_new_missed">New missed call</string>
     <string name="recents_missed">Missed</string>
 
     <!-- settings overview -->
@@ -439,4 +440,8 @@
     <string name="shortcut_deflection_on_long">Forwarding on → %1$s</string>
     <string name="shortcut_deflection_off_long">Forwarding off → %1$s</string>
     <string name="shortcut_deflection_unknown">Call forwarding could not be read, or none is set up</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d new missed call at %2$s – show</item>
+        <item quantity="other">%1$d new missed calls at %2$s – show</item>
+    </plurals>
 </resources>

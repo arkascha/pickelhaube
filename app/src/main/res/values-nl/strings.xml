@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Vastgelegd door deze telefoon</string>
     <string name="recents_dialled">Gebeld</string>
     <string name="recents_received">Aangenomen</string>
+    <string name="recents_new_missed">Nieuwe gemiste oproep</string>
     <string name="recents_missed">Gemist</string>
 
     <!-- settings overview -->
@@ -435,4 +436,8 @@
     <string name="shortcut_deflection_on_long">Doorschakeling aan → %1$s</string>
     <string name="shortcut_deflection_off_long">Doorschakeling uit → %1$s</string>
     <string name="shortcut_deflection_unknown">De doorschakeling kon niet worden gelezen, of er is er geen ingesteld</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d nieuwe gemiste oproep bij %2$s – tonen</item>
+        <item quantity="other">%1$d nieuwe gemiste oproepen bij %2$s – tonen</item>
+    </plurals>
 </resources>

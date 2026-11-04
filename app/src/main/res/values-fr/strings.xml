@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Enregistré par ce téléphone</string>
     <string name="recents_dialled">Émis</string>
     <string name="recents_received">Reçu</string>
+    <string name="recents_new_missed">Nouvel appel manqué</string>
     <string name="recents_missed">Manqué</string>
 
     <!-- settings overview -->
@@ -440,4 +441,9 @@
     <string name="shortcut_deflection_on_long">Renvoi activé → %1$s</string>
     <string name="shortcut_deflection_off_long">Renvoi désactivé → %1$s</string>
     <string name="shortcut_deflection_unknown">Impossible de lire le renvoi d’appel, ou aucun n’est configuré</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d nouvel appel manqué sur %2$s – afficher</item>
+        <item quantity="many">%1$d nouveaux appels manqués sur %2$s – afficher</item>
+        <item quantity="other">%1$d nouveaux appels manqués sur %2$s – afficher</item>
+    </plurals>
 </resources>

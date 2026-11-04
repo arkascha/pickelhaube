@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Registrada por este teléfono</string>
     <string name="recents_dialled">Realizada</string>
     <string name="recents_received">Recibida</string>
+    <string name="recents_new_missed">Nueva llamada perdida</string>
     <string name="recents_missed">Perdida</string>
 
     <!-- settings overview -->
@@ -440,4 +441,9 @@
     <string name="shortcut_deflection_on_long">Desvío activado → %1$s</string>
     <string name="shortcut_deflection_off_long">Desvío desactivado → %1$s</string>
     <string name="shortcut_deflection_unknown">No se pudo leer el desvío de llamadas, o no hay ninguno configurado</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d llamada perdida nueva en %2$s – mostrar</item>
+        <item quantity="many">%1$d llamadas perdidas nuevas en %2$s – mostrar</item>
+        <item quantity="other">%1$d llamadas perdidas nuevas en %2$s – mostrar</item>
+    </plurals>
 </resources>

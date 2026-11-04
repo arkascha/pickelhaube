@@ -73,8 +73,17 @@ class SettingsRepository(context: Context) {
 
     fun deleteProfile(id: String) {
         writeProfiles(profiles().filterNot { it.id == id })
+        prefs.edit { remove(KEY_MISSED_SEEN + id) }
         if (activeProfileId == id) activeProfileId = profiles().firstOrNull()?.id
     }
+
+    /**
+     * Up to when (ms since the epoch) the call list of box [id] was last looked at in "Recent": its
+     * missed calls after that count as new. Null before the first look.
+     */
+    fun missedSeenUntil(id: String): Long? = prefs.getLong(KEY_MISSED_SEEN + id, -1).takeIf { it >= 0 }
+
+    fun setMissedSeenUntil(id: String, time: Long) = prefs.edit { putLong(KEY_MISSED_SEEN + id, time) }
 
     /** Changes only the trusted certificate of a stored connection (null = forget). */
     fun updateTrustedCert(id: String, certDer: String?) {
@@ -291,6 +300,8 @@ class SettingsRepository(context: Context) {
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
         const val KEY_CALL_STATUS = "call_status_enabled"
         const val KEY_LAST_DIALLED = "last_dialled_number"
+        /** Followed by a connection's id. */
+        const val KEY_MISSED_SEEN = "missed_seen_"
         const val KEY_LAST_DIALLED_NAME = "last_dialled_name"
         const val KEY_TILE_ADDED = "tile_added_"
         const val KEY_SHORTCUT_DEFLECTION = "shortcut_deflection"

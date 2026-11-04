@@ -103,6 +103,7 @@ class MainActivity : ComponentActivity() {
                             RecentsTab(
                                 boxCalls = state.boxCalls,
                                 boxCallsLoaded = state.boxCallsLoaded,
+                                newSince = state.newCallsSince,
                                 boxName = state.activeProfile?.name,
                                 dialingCodes = state.activeProfile?.dialingCodes,
                                 contacts = remember(state.phonebooks, routerBooksEnabled, state.deviceContacts, state.deviceContactsEnabled) {

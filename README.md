@@ -212,6 +212,15 @@ reload button), from two sources:
   either fails, the switch stays off and the settings show why. If reading fails later (e.g. the
   permission was revoked), the **Recent** tab shows a note with **Turn off** and **App settings**.
 
+**New missed calls.** Whenever the app comes up or back to the foreground, it reads the box' call
+list in the background (no service, no polling) and counts its missed calls since **Recent** was
+last looked at – those still the latest call with their number: a call back, from the landline or
+the mobile, or another call from that number settles one. The dialer then shows the count as a
+badge on the picker button and, while no call is being followed, a red line *1 new missed call at
+<connection> – show* (its display name) that opens **Recent**; there those calls are marked *New missed call*. Shown
+in **Recent**, they count as seen. The first time for a box, its list as it is counts as seen. The
+phone's own missed calls are left to Android, which reports them itself (`data/MissedCalls.kt`).
+
 ### Numbers written differently
 
 The same number is often written in different ways: `+49 30 123456`, `0049 30 123456`, `030 123456`
@@ -441,6 +450,7 @@ report.
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |
+| `data/MissedCalls.kt` | Which of the box' missed calls are new: after the last look at "Recent", and not settled by a later call |
 | `data/NumberText.kt` | Phone numbers picked out of shared or pasted text, cleaned for dialling |
 | `data/AppLanguage.kt` | UI language: system or chosen (per-app language on Android 13+, own handling before) |
 | `data/BoxRecognition.kt` | Which configured FRITZ!Box is reachable from the current network (app and tile) |
@@ -451,7 +461,7 @@ report.
 | `ui/theme/TextRoles.kt` | How hints (grey italic) and findings about a box (accent colour) look, on every page |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
-Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, picking numbers out of text,
+Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, picking numbers out of text, the new missed calls,
 the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas

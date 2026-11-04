@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Zarejestrowane przez ten telefon</string>
     <string name="recents_dialled">Wychodzące</string>
     <string name="recents_received">Odebrane</string>
+    <string name="recents_new_missed">Nowe nieodebrane połączenie</string>
     <string name="recents_missed">Nieodebrane</string>
 
     <!-- settings overview -->
@@ -445,4 +446,10 @@
     <string name="shortcut_deflection_on_long">Przekierowanie wł. → %1$s</string>
     <string name="shortcut_deflection_off_long">Przekierowanie wył. → %1$s</string>
     <string name="shortcut_deflection_unknown">Nie udało się odczytać przekierowania lub żadne nie jest skonfigurowane</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d nowe nieodebrane połączenie w %2$s – pokaż</item>
+        <item quantity="few">%1$d nowe nieodebrane połączenia w %2$s – pokaż</item>
+        <item quantity="many">%1$d nowych nieodebranych połączeń w %2$s – pokaż</item>
+        <item quantity="other">%1$d nowe nieodebrane połączenia w %2$s – pokaż</item>
+    </plurals>
 </resources>

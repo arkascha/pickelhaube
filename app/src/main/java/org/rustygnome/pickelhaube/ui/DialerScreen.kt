@@ -49,6 +49,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Badge
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
@@ -208,7 +211,14 @@ fun DialerScreen(
                     ),
                     leadingIcon = {
                         IconButton(onClick = onOpenPicker) {
-                            Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
+                            // The box' missed calls not looked at yet, counted on the way to them.
+                            BadgedBox(
+                                badge = {
+                                    if (state.newMissedCalls > 0) Badge { Text(state.newMissedCalls.coerceAtMost(99).toString()) }
+                                },
+                            ) {
+                                Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
+                            }
                         }
                     },
                     trailingIcon = {
@@ -255,7 +265,12 @@ fun DialerScreen(
                 // Its room stays reserved while the feature is on, so the layout does not jump with each call.
                 if (state.callStatusEnabled) {
                     Spacer(Modifier.height(8.dp))
-                    CallStatusLine(state.callProgress)
+                    CallStatusLine(
+                        state.callProgress,
+                        state.newMissedCalls,
+                        state.activeProfile?.name ?: stringResource(R.string.fritzbox),
+                        onOpenPicker,
+                    )
                 }
 
                 Spacer(Modifier.height(12.dp))
@@ -325,7 +340,28 @@ private val PasteIcon: ImageVector by lazy {
 
 /** How the call placed last is going, in up to two lines; empty while there is none. */
 @Composable
-private fun CallStatusLine(progress: CallProgress?) {
+private fun CallStatusLine(
+    progress: CallProgress?,
+    /** Shown while there is no call to follow: the box' missed calls not looked at yet, a tap shows them. */
+    newMissedCalls: Int,
+    /** The connection in use (its display name), where the calls were missed. */
+    boxName: String,
+    onShowMissed: () -> Unit,
+) {
+    if (progress == null && newMissedCalls > 0) {
+        Text(
+            pluralStringResource(R.plurals.dialer_new_missed_calls, newMissedCalls, newMissedCalls, boxName),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+            minLines = 2,
+            maxLines = 2,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Button, onClick = onShowMissed),
+        )
+        return
+    }
     val text = when (progress) {
         null -> ""
         is CallProgress.PickUp -> when {

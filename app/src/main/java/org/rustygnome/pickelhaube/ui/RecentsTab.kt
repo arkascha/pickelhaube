@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -70,6 +71,8 @@ import java.util.Locale
 fun RecentsTab(
     boxCalls: List<RecentCall>,
     boxCallsLoaded: Boolean,
+    /** The box' missed calls after this time (ms) are marked as new; null: none. */
+    newSince: Long?,
     /** Name of the FritzBox in use (as in the settings), shown as the source of its calls. */
     boxName: String?,
     /** Country and area code of the box in use, for recognising a number written differently. */
@@ -199,7 +202,9 @@ fun RecentsTab(
                                 }
                             } else null,
                         )
-                        RecentRow(call, times.format(call.time, now), boxName, onPick, actions)
+                        val isNew = newSince != null && call.source == RecentCall.Source.FRITZBOX &&
+                            call.direction == RecentCall.Direction.MISSED && call.time > newSince
+                        RecentRow(call, times.format(call.time, now), boxName, isNew, onPick, actions)
                         HorizontalDivider()
                     }
                 }
@@ -220,6 +225,8 @@ private fun RecentRow(
     call: RecentCall,
     time: String,
     boxName: String?,
+    /** A missed call of the box not looked at before: marked. */
+    isNew: Boolean,
     onPick: (String) -> Unit,
     /** What a long press offers to do with the number. */
     actions: List<NumberAction>,
@@ -228,7 +235,17 @@ private fun RecentRow(
     var menu by remember { mutableStateOf(false) }
     Box {
         ListItem(
-            headlineContent = { Text(call.name ?: call.number, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            overlineContent = if (isNew) {
+                { Text(stringResource(R.string.recents_new_missed), color = MaterialTheme.colorScheme.error) }
+            } else null,
+            headlineContent = {
+                Text(
+                    call.name ?: call.number,
+                    fontWeight = if (isNew) FontWeight.Bold else null,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
             supportingContent = call.name?.let { { Text(call.number, maxLines = 1) } },
             trailingContent = {
                 Column(horizontalAlignment = Alignment.End) {

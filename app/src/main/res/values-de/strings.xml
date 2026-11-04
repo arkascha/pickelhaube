@@ -87,6 +87,7 @@
     <string name="recents_recorded_by_phone">Aufgezeichnet von diesem Telefon</string>
     <string name="recents_dialled">Gewählt</string>
     <string name="recents_received">Angenommen</string>
+    <string name="recents_new_missed">Neuer verpasster Anruf</string>
     <string name="recents_missed">Verpasst</string>
 
     <!-- settings overview -->
@@ -435,4 +436,8 @@
     <string name="shortcut_deflection_on_long">Umleitung an → %1$s</string>
     <string name="shortcut_deflection_off_long">Umleitung aus → %1$s</string>
     <string name="shortcut_deflection_unknown">Die Rufumleitung ließ sich nicht lesen, oder es ist keine eingerichtet</string>
+    <plurals name="dialer_new_missed_calls">
+        <item quantity="one">%1$d neuer verpasster Anruf bei %2$s – anzeigen</item>
+        <item quantity="other">%1$d neue verpasste Anrufe bei %2$s – anzeigen</item>
+    </plurals>
 </resources>

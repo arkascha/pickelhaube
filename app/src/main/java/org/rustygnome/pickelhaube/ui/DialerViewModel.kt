@@ -15,6 +15,7 @@ import android.os.SystemClock
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.HostCheck
+import org.rustygnome.pickelhaube.data.MissedCalls
 import org.rustygnome.pickelhaube.data.NumberText
 import org.rustygnome.pickelhaube.widget.DialWidget
 import org.rustygnome.pickelhaube.widget.WidgetEntry
@@ -126,6 +127,10 @@ data class UiState(
     val editingName: String = "",
     /** Connection page: the users of the box at the entered address, to choose from (empty = none known). */
     val boxUsers: List<BoxUser> = emptyList(),
+    /** Missed calls in the call list of the box in use since it was last looked at in "Recent". */
+    val newMissedCalls: Int = 0,
+    /** While the picker is open: its box calls after this time (ms) are marked as new; null: none. */
+    val newCallsSince: Long? = null,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */
     val widgetSetup: WidgetSetup? = null,
     /** The number picker is open to add a number to [widgetSetup]. */
@@ -681,6 +686,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     phonebooks = emptyList(),
                     phonebooksLoaded = false,
                     boxCalls = emptyList(),
+                    newMissedCalls = 0,
                     boxCallsLoaded = false,
                     deflections = null,
                     showSettings = it.settingsSaved,
@@ -692,6 +698,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         preloadBoxSpeedDials()
         preloadDeflections()
+        preloadMissedCalls()
     }
 
     /** Switches to another configured FritzBox (manually, or after automatic recognition). */
@@ -710,6 +717,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phonebooks = emptyList(),
                 phonebooksLoaded = false,
                 boxCalls = emptyList(),
+                newMissedCalls = 0,
                 boxCallsLoaded = false,
                 deflections = null,
                 networkNotice = null,
@@ -810,6 +818,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!settings.isConfigured()) return
         // Possibly switched meanwhile – from the quick settings tile, or on the box.
         if (_state.value.deflections != null) preloadDeflections()
+        // Calls may have been missed while the app was in the background.
+        preloadMissedCalls()
         detectIfStale()
     }
 
@@ -922,10 +932,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 pickerTab = PickerTab.RECENT,
                 assigningSpeedDial = null,
                 addingToWidget = false,
+                newCallsSince = null,
                 askForDeviceContacts = !it.deviceContactsEnabled &&
                     !settings.deviceContactsNeverAsk,
             )
         }
+        markMissedSeen()
         // Without a reachable box only the phone's own sources; "reload" still tries the box.
         if (_state.value.noBoxReachable) loadCallLog() else reloadRecents()
         if (!_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
@@ -934,7 +946,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun closePicker() = _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
 
-    fun selectPickerTab(tab: PickerTab) = _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
+    fun selectPickerTab(tab: PickerTab) {
+        _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
+        markMissedSeen()
+    }
 
     fun openLanguage() = _state.update { it.copy(showLanguage = true) }
 
@@ -1042,6 +1057,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phonebooks = emptyList(),
                 phonebooksLoaded = false,
                 boxCalls = emptyList(),
+                newMissedCalls = 0,
                 boxCallsLoaded = false,
                 deflections = null,
                 deviceContactsEnabled = options.deviceContactsEnabled,
@@ -1394,8 +1410,45 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         runOnBox(uiText(R.string.recents_loading)) { dialer ->
             val calls = dialer.loadRecentCalls()
             _state.update { it.copy(boxCalls = calls, boxCallsLoaded = true) }
+            markMissedSeen()
             UiText.Plural(R.plurals.status_calls_loaded, calls.size)
         }
+    }
+
+    /**
+     * Reads the box' call list in the background – when the app comes up, or the box in use changed
+     * –, to count its missed calls not looked at yet (and to have it ready for "Recent"). The first
+     * time for a box, its list counts as seen: only calls after that are new.
+     */
+    private fun preloadMissedCalls() = runWhenIdle("missedCalls") {
+        val profile = settings.activeProfile() ?: return@runWhenIdle
+        if (_state.value.noBoxReachable || !profile.callListEnabled) return@runWhenIdle
+        val config = _state.value.config
+        viewModelScope.launch {
+            val calls = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadRecentCalls() }.getOrNull() }
+            // Unless the box in use changed meanwhile.
+            if (calls == null || _state.value.config != config) return@launch
+            val seen = settings.missedSeenUntil(profile.id)
+                ?: MissedCalls.seenUntil(calls, 0).also { settings.setMissedSeenUntil(profile.id, it) }
+            // With the phone's calls, as one returned from the mobile settles a missed one as well.
+            val phoneCalls = if (_state.value.callLogEnabled) {
+                withContext(Dispatchers.IO) { runCatching { DeviceCallLog.load(getApplication()) }.getOrNull() }
+            } else null
+            val all = calls + phoneCalls.orEmpty()
+            val missed = MissedCalls.newSince(all, seen, numberKeys()).size
+            _state.update { it.copy(boxCalls = calls, boxCallsLoaded = true, newMissedCalls = missed) }
+            markMissedSeen()
+        }
+    }
+
+    /** "Recent" shows the box' calls: they count as seen from now on (marked as new while it stays open). */
+    private fun markMissedSeen() {
+        val state = _state.value
+        if (!state.showPicker || state.pickerTab != PickerTab.RECENT || !state.boxCallsLoaded) return
+        val id = settings.activeProfileId ?: return
+        val seen = settings.missedSeenUntil(id) ?: 0L
+        settings.setMissedSeenUntil(id, MissedCalls.seenUntil(state.boxCalls, seen))
+        _state.update { it.copy(newMissedCalls = 0, newCallsSince = it.newCallsSince ?: seen) }
     }
 
     /** (Re)reads the phone's calls, if the feature is on. A failure is shown, not thrown. */
@@ -1464,6 +1517,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         preloadBoxSpeedDials()
         preloadDeflections()
+        preloadMissedCalls()
     }
 
     /**
