@@ -442,6 +442,13 @@
     <string name="shortcut_deflection_on_long">Renvoi activé → %1$s</string>
     <string name="shortcut_deflection_off_long">Renvoi désactivé → %1$s</string>
     <string name="shortcut_deflection_unknown">Impossible de lire le renvoi d’appel, ou aucun n’est configuré</string>
+    <string name="dialer_line_not_registered">%1$s sur %2$s : non enregistré auprès de l’opérateur, les appels échouent – vérifier à nouveau</string>
+    <plurals name="dialer_lines_not_registered">
+        <item quantity="one">%1$d numéro sur %2$s non enregistré auprès de l’opérateur – vérifier à nouveau</item>
+        <item quantity="many">%1$d numéros sur %2$s non enregistrés auprès de l’opérateur – vérifier à nouveau</item>
+        <item quantity="other">%1$d numéros sur %2$s non enregistrés auprès de l’opérateur – vérifier à nouveau</item>
+    </plurals>
+    <string name="dialer_no_line_registered">Aucun numéro de %1$s n’est enregistré auprès de l’opérateur : les appels échouent – vérifier à nouveau</string>
     <plurals name="dialer_new_missed_calls">
         <item quantity="one">%1$d nouvel appel manqué sur %2$s – afficher</item>
         <item quantity="many">%1$d nouveaux appels manqués sur %2$s – afficher</item>

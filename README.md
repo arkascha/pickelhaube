@@ -309,6 +309,17 @@ from there, and with **Check again**. Mind that the call monitor needs no login 
 once it is on, any device in the home network can follow the box' calls, numbers included. It is
 reachable in the home network and usually through a VPN, not through MyFRITZ.
 
+### Numbers not registered
+
+When the app comes up, or the box in use changes, it asks the box in the background whether its
+internet numbers are registered with their provider (`X_VoIP` `X_AVM-DE_GetNumbers`, then
+`X_AVM-DE_GetVoIPStatus` for each VoIP number). If one that is switched on is not, the dialer says so
+in red where the call status goes – e.g. *030 123456 at Home: not registered with the provider, calls
+fail* –, before the dial help rings your phone for a call that cannot go out. A tap on it asks the box
+again. Numbers switched off on the box, and analogue or ISDN lines, are left out; if the box does not
+answer (user rights, older FRITZ!OS), nothing is shown. `X_AVM-DE_GetVoIPAccounts` is not used, as it
+also returns the accounts' SIP credentials.
+
 ### Language
 
 Pickelhaube is available in English, German, Dutch, French, Italian, Spanish and Polish.
@@ -443,6 +454,7 @@ report.
 | `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/DemoBox.kt` | The demo box (host `demo`): answers TR-064 requests, its device description and its call monitor in the app itself |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
+| `tr064/LineStatus.kt` | Whether the box' internet numbers are registered with their provider (`X_VoIP` `X_AVM-DE_GetNumbers`, `X_AVM-DE_GetVoIPStatus`) |
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
 | `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |
@@ -464,7 +476,7 @@ report.
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, withholding the own number, picking numbers out of text, the new missed calls,
-the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, recognising the dialled number in them and the demo box.
+the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, the box' VoIP numbers and their state, recognising the dialled number in them and the demo box.
 
 ## Notes / ideas
 

@@ -447,6 +447,14 @@
     <string name="shortcut_deflection_on_long">Przekierowanie wł. → %1$s</string>
     <string name="shortcut_deflection_off_long">Przekierowanie wył. → %1$s</string>
     <string name="shortcut_deflection_unknown">Nie udało się odczytać przekierowania lub żadne nie jest skonfigurowane</string>
+    <string name="dialer_line_not_registered">%1$s w %2$s: niezarejestrowany u operatora, połączenia się nie udają – sprawdź ponownie</string>
+    <plurals name="dialer_lines_not_registered">
+        <item quantity="one">%1$d numer w %2$s niezarejestrowany u operatora – sprawdź ponownie</item>
+        <item quantity="few">%1$d numery w %2$s niezarejestrowane u operatora – sprawdź ponownie</item>
+        <item quantity="many">%1$d numerów w %2$s niezarejestrowanych u operatora – sprawdź ponownie</item>
+        <item quantity="other">%1$d numeru w %2$s niezarejestrowane u operatora – sprawdź ponownie</item>
+    </plurals>
+    <string name="dialer_no_line_registered">Żaden numer w %1$s nie jest zarejestrowany u operatora: połączenia się nie udają – sprawdź ponownie</string>
     <plurals name="dialer_new_missed_calls">
         <item quantity="one">%1$d nowe nieodebrane połączenie w %2$s – pokaż</item>
         <item quantity="few">%1$d nowe nieodebrane połączenia w %2$s – pokaż</item>

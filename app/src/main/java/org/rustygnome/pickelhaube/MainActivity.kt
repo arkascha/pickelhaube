@@ -290,6 +290,7 @@ class MainActivity : ComponentActivity() {
                         onChooseNumber = viewModel::chooseNumber,
                         onDismissNumberChoice = viewModel::dismissNumberChoice,
                         onOpenDeflections = viewModel::openDeflections,
+                        onCheckLines = viewModel::checkLines,
                     )
                 }
 

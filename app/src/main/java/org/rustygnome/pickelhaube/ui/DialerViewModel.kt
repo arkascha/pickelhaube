@@ -56,6 +56,7 @@ import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
 import org.rustygnome.pickelhaube.tr064.UntrustedCertificateException
 import org.rustygnome.pickelhaube.tr064.UserRights
+import org.rustygnome.pickelhaube.tr064.VoipLine
 import org.rustygnome.pickelhaube.tr064.forTile
 import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
@@ -129,6 +130,8 @@ data class UiState(
     val boxUsers: List<BoxUser> = emptyList(),
     /** Missed calls in the call list of the box in use since it was last looked at in "Recent". */
     val newMissedCalls: Int = 0,
+    /** The internet numbers of the box in use and whether they are registered with their provider (empty = not known). */
+    val lines: List<VoipLine> = emptyList(),
     /** While the picker is open: its box calls after this time (ms) are marked as new; null: none. */
     val newCallsSince: Long? = null,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */
@@ -256,6 +259,10 @@ val UiState.noKnownBoxFound: Boolean
  */
 val UiState.noBoxReachable: Boolean
     get() = noKnownBoxFound && activeBoxSeen != true
+
+/** The internet numbers of the box in use that are switched on but not registered with their provider. */
+val UiState.linesDown: List<VoipLine>
+    get() = if (noBoxReachable) emptyList() else lines.filter { it.down }
 
 /** The box answering at the configured address is not the stored one: its serial number differs. */
 class OtherBoxException(val host: String, val boxName: String) :
@@ -687,6 +694,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     phonebooksLoaded = false,
                     boxCalls = emptyList(),
                     newMissedCalls = 0,
+                    lines = emptyList(),
                     boxCallsLoaded = false,
                     deflections = null,
                     showSettings = it.settingsSaved,
@@ -699,6 +707,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         preloadBoxSpeedDials()
         preloadDeflections()
         preloadMissedCalls()
+        preloadLines()
     }
 
     /** Switches to another configured FritzBox (manually, or after automatic recognition). */
@@ -718,6 +727,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phonebooksLoaded = false,
                 boxCalls = emptyList(),
                 newMissedCalls = 0,
+                lines = emptyList(),
                 boxCallsLoaded = false,
                 deflections = null,
                 networkNotice = null,
@@ -820,6 +830,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (_state.value.deflections != null) preloadDeflections()
         // Calls may have been missed while the app was in the background.
         preloadMissedCalls()
+        preloadLines()
         detectIfStale()
     }
 
@@ -1058,6 +1069,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phonebooksLoaded = false,
                 boxCalls = emptyList(),
                 newMissedCalls = 0,
+                lines = emptyList(),
                 boxCallsLoaded = false,
                 deflections = null,
                 deviceContactsEnabled = options.deviceContactsEnabled,
@@ -1441,6 +1453,27 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    /**
+     * Asks the box in the background – when the app comes up, or the box in use changed – whether its
+     * internet numbers are registered with their provider, so the dialer can warn before a call
+     * fails for that. Nothing is shown if the box does not say (rights, older FRITZ!OS).
+     */
+    private fun preloadLines() = runWhenIdle("lines") {
+        if (_state.value.noBoxReachable) return@runWhenIdle
+        val config = _state.value.config
+        viewModelScope.launch {
+            val lines = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadLines() }.getOrNull() }
+            // Unless the box in use changed meanwhile.
+            if (lines != null && _state.value.config == config) _state.update { it.copy(lines = lines) }
+        }
+    }
+
+    /** The warning about lines not registered was tapped: ask the box again. */
+    fun checkLines() {
+        preloadLines()
+        startQueuedRequests()
+    }
+
     /** "Recent" shows the box' calls: they count as seen from now on (marked as new while it stays open). */
     private fun markMissedSeen() {
         val state = _state.value
@@ -1518,6 +1551,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         preloadBoxSpeedDials()
         preloadDeflections()
         preloadMissedCalls()
+        preloadLines()
     }
 
     /**

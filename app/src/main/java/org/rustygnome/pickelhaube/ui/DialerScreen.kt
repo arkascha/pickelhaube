@@ -54,6 +54,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.TextUnit
 import org.rustygnome.pickelhaube.ui.theme.TextRoles
+import org.rustygnome.pickelhaube.tr064.VoipLine
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Badge
@@ -114,6 +115,8 @@ fun DialerScreen(
     onOpenDeflections: () -> Unit,
     /** Places the call with the own number withheld (long press on the green button). */
     onDialHidden: () -> Unit,
+    /** Asks the box again whether its numbers are registered (tap on the warning). */
+    onCheckLines: () -> Unit,
 ) {
     state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
     Scaffold(
@@ -270,13 +273,18 @@ fun DialerScreen(
                 )
 
                 // Its room stays reserved while the feature is on, so the layout does not jump with each call.
-                if (state.callStatusEnabled) {
+                // Numbers not registered are warned about even without it.
+                val linesDown = state.linesDown
+                if (state.callStatusEnabled || linesDown.isNotEmpty()) {
                     Spacer(Modifier.height(8.dp))
                     CallStatusLine(
                         state.callProgress,
                         state.newMissedCalls,
+                        linesDown,
+                        allLinesDown = linesDown.size == state.lines.size,
                         state.activeProfile?.name ?: stringResource(R.string.fritzbox),
                         onOpenPicker,
+                        onCheckLines,
                     )
                 }
 
@@ -356,10 +364,33 @@ private fun CallStatusLine(
     progress: CallProgress?,
     /** Shown while there is no call to follow: the box' missed calls not looked at yet, a tap shows them. */
     newMissedCalls: Int,
+    /** Shown while there is no call to follow, before the missed calls: the box' numbers not registered. */
+    linesDown: List<VoipLine>,
+    /** None of the box' numbers is registered. */
+    allLinesDown: Boolean,
     /** The connection in use (its display name), where the calls were missed. */
     boxName: String,
     onShowMissed: () -> Unit,
+    onCheckLines: () -> Unit,
 ) {
+    if (progress == null && linesDown.isNotEmpty()) {
+        Text(
+            when {
+                allLinesDown && linesDown.size > 1 -> stringResource(R.string.dialer_no_line_registered, boxName)
+                linesDown.size == 1 -> stringResource(R.string.dialer_line_not_registered, linesDown.single().number, boxName)
+                else -> pluralStringResource(R.plurals.dialer_lines_not_registered, linesDown.size, linesDown.size, boxName)
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+            minLines = 2,
+            maxLines = 2,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Button, onClick = onCheckLines),
+        )
+        return
+    }
     if (progress == null && newMissedCalls > 0) {
         Text(
             pluralStringResource(R.plurals.dialer_new_missed_calls, newMissedCalls, newMissedCalls, boxName),

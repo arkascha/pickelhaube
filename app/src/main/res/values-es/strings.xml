@@ -442,6 +442,13 @@
     <string name="shortcut_deflection_on_long">Desvío activado → %1$s</string>
     <string name="shortcut_deflection_off_long">Desvío desactivado → %1$s</string>
     <string name="shortcut_deflection_unknown">No se pudo leer el desvío de llamadas, o no hay ninguno configurado</string>
+    <string name="dialer_line_not_registered">%1$s en %2$s: no registrado con el operador, las llamadas fallan – comprobar de nuevo</string>
+    <plurals name="dialer_lines_not_registered">
+        <item quantity="one">%1$d número en %2$s no registrado con el operador – comprobar de nuevo</item>
+        <item quantity="many">%1$d números en %2$s no registrados con el operador – comprobar de nuevo</item>
+        <item quantity="other">%1$d números en %2$s no registrados con el operador – comprobar de nuevo</item>
+    </plurals>
+    <string name="dialer_no_line_registered">Ningún número de %1$s está registrado con el operador: las llamadas fallan – comprobar de nuevo</string>
     <plurals name="dialer_new_missed_calls">
         <item quantity="one">%1$d llamada perdida nueva en %2$s – mostrar</item>
         <item quantity="many">%1$d llamadas perdidas nuevas en %2$s – mostrar</item>

@@ -442,6 +442,13 @@
     <string name="shortcut_deflection_on_long">Deviazione attiva → %1$s</string>
     <string name="shortcut_deflection_off_long">Deviazione disattivata → %1$s</string>
     <string name="shortcut_deflection_unknown">Impossibile leggere la deviazione di chiamata, oppure non ne è configurata nessuna</string>
+    <string name="dialer_line_not_registered">%1$s su %2$s: non registrato presso l’operatore, le chiamate falliscono – verifica di nuovo</string>
+    <plurals name="dialer_lines_not_registered">
+        <item quantity="one">%1$d numero su %2$s non registrato presso l’operatore – verifica di nuovo</item>
+        <item quantity="many">%1$d numeri su %2$s non registrati presso l’operatore – verifica di nuovo</item>
+        <item quantity="other">%1$d numeri su %2$s non registrati presso l’operatore – verifica di nuovo</item>
+    </plurals>
+    <string name="dialer_no_line_registered">Nessun numero di %1$s è registrato presso l’operatore: le chiamate falliscono – verifica di nuovo</string>
     <plurals name="dialer_new_missed_calls">
         <item quantity="one">%1$d nuova chiamata persa su %2$s – mostra</item>
         <item quantity="many">%1$d nuove chiamate perse su %2$s – mostra</item>

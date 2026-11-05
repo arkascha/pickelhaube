@@ -437,6 +437,12 @@
     <string name="shortcut_deflection_on_long">Doorschakeling aan → %1$s</string>
     <string name="shortcut_deflection_off_long">Doorschakeling uit → %1$s</string>
     <string name="shortcut_deflection_unknown">De doorschakeling kon niet worden gelezen, of er is er geen ingesteld</string>
+    <string name="dialer_line_not_registered">%1$s bij %2$s: niet geregistreerd bij de provider, oproepen mislukken – opnieuw controleren</string>
+    <plurals name="dialer_lines_not_registered">
+        <item quantity="one">%1$d nummer bij %2$s niet geregistreerd bij de provider – opnieuw controleren</item>
+        <item quantity="other">%1$d nummers bij %2$s niet geregistreerd bij de provider – opnieuw controleren</item>
+    </plurals>
+    <string name="dialer_no_line_registered">Geen nummer bij %1$s is geregistreerd bij de provider: oproepen mislukken – opnieuw controleren</string>
     <plurals name="dialer_new_missed_calls">
         <item quantity="one">%1$d nieuwe gemiste oproep bij %2$s – tonen</item>
         <item quantity="other">%1$d nieuwe gemiste oproepen bij %2$s – tonen</item>

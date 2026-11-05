@@ -296,6 +296,12 @@ object DemoBox {
             hangUp()
             emptyMap()
         }
+        "X_AVM-DE_GetNumbers" -> mapOf(
+            "NewNumberList" to "<List><Item><Number>$OWN_NUMBER</Number><Type>eVoIP</Type><Index>0</Index><Name></Name></Item></List>",
+        )
+        "X_AVM-DE_GetVoIPStatus" -> mapOf(
+            "NewX_AVM-DE_VoIPStatus" to if (args["NewVoIPAccountIndex"] == "0") "registered" else throw Fault(713, "SpecifiedArrayIndexInvalid"),
+        )
         "GetPhonebookList" -> mapOf("NewPhonebookList" to books.keys.joinToString(","))
         "GetPhonebook" -> {
             val id = args["NewPhonebookID"]?.toIntOrNull()
