@@ -106,6 +106,7 @@ class MainActivity : ComponentActivity() {
                                 newSince = state.newCallsSince,
                                 boxName = state.activeProfile?.name,
                                 dialingCodes = state.activeProfile?.dialingCodes,
+                                ownNumbers = state.ownNumbers,
                                 contacts = remember(state.phonebooks, routerBooksEnabled, state.deviceContacts, state.deviceContactsEnabled) {
                                     val books = (if (routerBooksEnabled) state.phonebooks else emptyList()) +
                                         listOfNotNull(state.deviceContacts?.takeIf { state.deviceContactsEnabled })
@@ -291,6 +292,7 @@ class MainActivity : ComponentActivity() {
                         onDismissNumberChoice = viewModel::dismissNumberChoice,
                         onOpenDeflections = viewModel::openDeflections,
                         onCheckLines = viewModel::checkLines,
+                        onDialFrom = { viewModel.dial(from = it) },
                     )
                 }
 

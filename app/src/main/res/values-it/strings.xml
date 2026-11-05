@@ -86,6 +86,8 @@
     <string name="recents_recorded_by_box">Registrata da %1$s</string>
     <string name="recents_recorded_by_phone">Registrata da questo telefono</string>
     <string name="recents_dialled">Effettuata</string>
+    <string name="recents_from_own">da %1$s</string>
+    <string name="recents_to_own">a %1$s</string>
     <string name="recents_received">Ricevuta</string>
     <string name="recents_new_missed">Nuova chiamata persa</string>
     <string name="recents_missed">Persa</string>
@@ -250,6 +252,7 @@
     <string name="error_cert_rejected_title">Certificato non attendibile</string>
     <string name="error_cert_rejected">La connessione è stata rifiutata perché non hai considerato attendibile il certificato del router.</string>
     <string name="dialer_dial_hidden">Chiama con numero nascosto</string>
+    <string name="dialer_dial_from">Chiama da %1$s</string>
     <string name="dialer_paste">Incolla numero</string>
     <string name="number_choice_title">Quale numero?</string>
     <string name="error_no_number_found_title">Nessun numero di telefono</string>

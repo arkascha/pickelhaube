@@ -137,9 +137,9 @@ class FritzDialer(
     @Throws(IOException::class)
     fun loadRecentCalls(): List<RecentCall> = FritzCallList(config, authToken).load()
 
-    /** The box' internet numbers and whether they are registered with their provider (see [FritzLines]). */
+    /** The box' own numbers, and whether its internet numbers are registered with their provider (see [FritzLines]). */
     @Throws(IOException::class)
-    fun loadLines(): List<VoipLine> = FritzLines(config, authToken).load()
+    fun loadNumbers(): BoxNumbers = FritzLines(config, authToken).load()
 
     // --- second factor (X_AVM-DE_Auth) ------------------------------------------------
 

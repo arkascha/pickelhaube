@@ -54,6 +54,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.TextUnit
 import org.rustygnome.pickelhaube.ui.theme.TextRoles
+import org.rustygnome.pickelhaube.tr064.OwnNumber
 import org.rustygnome.pickelhaube.tr064.VoipLine
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.material3.BadgedBox
@@ -117,6 +118,8 @@ fun DialerScreen(
     onDialHidden: () -> Unit,
     /** Asks the box again whether its numbers are registered (tap on the warning). */
     onCheckLines: () -> Unit,
+    /** Places the call from another own number of the box (long press on the green button). */
+    onDialFrom: (OwnNumber) -> Unit,
 ) {
     state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
     Scaffold(
@@ -294,10 +297,14 @@ fun DialerScreen(
                     RoundActionButton(
                         onClick = onDial,
                         // A long press offers the call with the own number withheld.
+                        // and, with several internet numbers on the box, the call from one of them.
                         menu = listOf(
                             stringResource(R.string.dialer_dial) to onDial,
                             stringResource(R.string.dialer_dial_hidden) to onDialHidden,
-                        ),
+                        ) + state.dialFromNumbers.map { own ->
+                            val label = if (own.name.isBlank()) own.number else "${own.name} (${own.number})"
+                            stringResource(R.string.dialer_dial_from, label) to { onDialFrom(own) }
+                        },
                         // Only when there is something dialable (same check the dial action uses).
                         // No box to dial through: entering a number still works, dialling does not.
                         enabled = !state.busy && !state.noBoxReachable &&

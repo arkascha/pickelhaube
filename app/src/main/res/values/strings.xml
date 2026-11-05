@@ -89,6 +89,8 @@
     <string name="recents_recorded_by_box">Recorded by %1$s</string>
     <string name="recents_recorded_by_phone">Recorded by this phone</string>
     <string name="recents_dialled">Dialled</string>
+    <string name="recents_from_own">from %1$s</string>
+    <string name="recents_to_own">to %1$s</string>
     <string name="recents_received">Received</string>
     <string name="recents_new_missed">New missed call</string>
     <string name="recents_missed">Missed</string>
@@ -253,6 +255,7 @@
     <string name="error_cert_rejected_title">Certificate not trusted</string>
     <string name="error_cert_rejected">The connection was refused because you did not trust the router’s certificate.</string>
     <string name="dialer_dial_hidden">Dial with hidden number</string>
+    <string name="dialer_dial_from">Dial from %1$s</string>
     <string name="dialer_paste">Paste number</string>
     <string name="number_choice_title">Which number?</string>
     <string name="error_no_number_found_title">No phone number</string>

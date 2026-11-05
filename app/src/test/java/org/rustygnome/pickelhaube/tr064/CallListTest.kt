@@ -47,5 +47,15 @@ class CallListTest {
         )
         assertEquals(FritzCallList.parseDate("21.10.26 14:30"), calls.first().time)
         assertEquals(RecentCall.Source.FRITZBOX, calls.first().source)
+        // The own number: what it went out from, or came in on – without the line in front.
+        assertEquals(listOf("301111111", "301111111", "301111111"), calls.map { it.ownNumber })
+    }
+
+    @Test
+    fun `takes the own number from Caller or Called when the box gives no more`() {
+        val xml = "<root><Call><Type>3</Type><Called>0301</Called><Caller>SIP: 0302</Caller><Date>21.10.26 14:30</Date></Call>" +
+            "<Call><Type>1</Type><Caller>0303</Caller><Called>0304</Called><Date>21.10.26 14:00</Date></Call>" +
+            "<Call><Type>2</Type><Caller>0305</Caller><Date>21.10.26 13:00</Date></Call></root>"
+        assertEquals(listOf("0302", "0304", null), FritzCallList.parseCalls(xml).map { it.ownNumber })
     }
 }

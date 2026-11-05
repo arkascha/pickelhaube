@@ -86,6 +86,8 @@
     <string name="recents_recorded_by_box">Aufgezeichnet von %1$s</string>
     <string name="recents_recorded_by_phone">Aufgezeichnet von diesem Telefon</string>
     <string name="recents_dialled">Gewählt</string>
+    <string name="recents_from_own">von %1$s</string>
+    <string name="recents_to_own">an %1$s</string>
     <string name="recents_received">Angenommen</string>
     <string name="recents_new_missed">Neuer verpasster Anruf</string>
     <string name="recents_missed">Verpasst</string>
@@ -250,6 +252,7 @@
     <string name="error_cert_rejected_title">Zertifikat nicht vertraut</string>
     <string name="error_cert_rejected">Die Verbindung wurde abgelehnt, weil du dem Zertifikat des Routers nicht vertraut hast.</string>
     <string name="dialer_dial_hidden">Mit unterdrückter Nummer wählen</string>
+    <string name="dialer_dial_from">Von %1$s aus wählen</string>
     <string name="dialer_paste">Nummer einfügen</string>
     <string name="number_choice_title">Welche Nummer?</string>
     <string name="error_no_number_found_title">Keine Telefonnummer</string>

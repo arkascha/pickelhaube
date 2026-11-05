@@ -86,6 +86,8 @@
     <string name="recents_recorded_by_box">Enregistré par %1$s</string>
     <string name="recents_recorded_by_phone">Enregistré par ce téléphone</string>
     <string name="recents_dialled">Émis</string>
+    <string name="recents_from_own">depuis %1$s</string>
+    <string name="recents_to_own">vers %1$s</string>
     <string name="recents_received">Reçu</string>
     <string name="recents_new_missed">Nouvel appel manqué</string>
     <string name="recents_missed">Manqué</string>
@@ -250,6 +252,7 @@
     <string name="error_cert_rejected_title">Certificat non approuvé</string>
     <string name="error_cert_rejected">La connexion a été refusée, car vous n’avez pas fait confiance au certificat du routeur.</string>
     <string name="dialer_dial_hidden">Appeler en numéro masqué</string>
+    <string name="dialer_dial_from">Appeler depuis %1$s</string>
     <string name="dialer_paste">Coller le numéro</string>
     <string name="number_choice_title">Quel numéro ?</string>
     <string name="error_no_number_found_title">Aucun numéro de téléphone</string>

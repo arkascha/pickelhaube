@@ -56,6 +56,7 @@ import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
 import org.rustygnome.pickelhaube.tr064.UntrustedCertificateException
 import org.rustygnome.pickelhaube.tr064.UserRights
+import org.rustygnome.pickelhaube.tr064.OwnNumber
 import org.rustygnome.pickelhaube.tr064.VoipLine
 import org.rustygnome.pickelhaube.tr064.forTile
 import java.io.IOException
@@ -132,6 +133,8 @@ data class UiState(
     val newMissedCalls: Int = 0,
     /** The internet numbers of the box in use and whether they are registered with their provider (empty = not known). */
     val lines: List<VoipLine> = emptyList(),
+    /** The own numbers of the box in use (empty = not known). */
+    val ownNumbers: List<OwnNumber> = emptyList(),
     /** While the picker is open: its box calls after this time (ms) are marked as new; null: none. */
     val newCallsSince: Long? = null,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */
@@ -263,6 +266,17 @@ val UiState.noBoxReachable: Boolean
 /** The internet numbers of the box in use that are switched on but not registered with their provider. */
 val UiState.linesDown: List<VoipLine>
     get() = if (noBoxReachable) emptyList() else lines.filter { it.down }
+
+/**
+ * The box' internet numbers a call can be placed from by their code (see [OwnNumber.selectCode]) –
+ * offered only when there are several to choose from, and not one that is known to be down.
+ */
+val UiState.dialFromNumbers: List<OwnNumber>
+    get() {
+        val down = linesDown.map { it.index }.toSet()
+        val selectable = ownNumbers.filter { it.selectCode != null }
+        return if (selectable.size < 2) emptyList() else selectable.filter { it.index !in down }
+    }
 
 /** The box answering at the configured address is not the stored one: its serial number differs. */
 class OtherBoxException(val host: String, val boxName: String) :
@@ -695,6 +709,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     boxCalls = emptyList(),
                     newMissedCalls = 0,
                     lines = emptyList(),
+                    ownNumbers = emptyList(),
                     boxCallsLoaded = false,
                     deflections = null,
                     showSettings = it.settingsSaved,
@@ -728,6 +743,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 boxCalls = emptyList(),
                 newMissedCalls = 0,
                 lines = emptyList(),
+                ownNumbers = emptyList(),
                 boxCallsLoaded = false,
                 deflections = null,
                 networkNotice = null,
@@ -1070,6 +1086,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 boxCalls = emptyList(),
                 newMissedCalls = 0,
                 lines = emptyList(),
+                ownNumbers = emptyList(),
                 boxCallsLoaded = false,
                 deflections = null,
                 deviceContactsEnabled = options.deviceContactsEnabled,
@@ -1454,17 +1471,19 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * Asks the box in the background – when the app comes up, or the box in use changed – whether its
-     * internet numbers are registered with their provider, so the dialer can warn before a call
-     * fails for that. Nothing is shown if the box does not say (rights, older FRITZ!OS).
+     * Asks the box in the background – when the app comes up, or the box in use changed – for its own
+     * numbers, and whether its internet numbers are registered with their provider, so the dialer can
+     * warn before a call fails for that, and offer to call from another of them. Nothing is shown if the box does not say (rights, older FRITZ!OS).
      */
     private fun preloadLines() = runWhenIdle("lines") {
         if (_state.value.noBoxReachable) return@runWhenIdle
         val config = _state.value.config
         viewModelScope.launch {
-            val lines = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadLines() }.getOrNull() }
+            val numbers = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadNumbers() }.getOrNull() }
             // Unless the box in use changed meanwhile.
-            if (lines != null && _state.value.config == config) _state.update { it.copy(lines = lines) }
+            if (numbers != null && _state.value.config == config) {
+                _state.update { it.copy(lines = numbers.lines, ownNumbers = numbers.numbers) }
+            }
         }
     }
 
@@ -1638,7 +1657,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /** Places the call; [withhold]: with the own number withheld (see [FritzDialer.withheld]). */
-    fun dial(withhold: Boolean = false) {
+    /**
+     * Places the call. [withhold]: with the own number withheld; [from]: over this own number of the
+     * box, by its code (see [OwnNumber.dialling]), instead of the one set up for the dial-help phone.
+     */
+    fun dial(withhold: Boolean = false, from: OwnNumber? = null) {
         if (_state.value.noBoxReachable) return
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
@@ -1662,7 +1685,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             // Listening before the box dials, so its report of the call is not missed.
             followCall(number, phone)
             try {
-                dialer.dial(if (withhold) FritzDialer.withheld(number) else number)
+                dialer.dial(
+                    when {
+                        from != null -> from.dialling(number)
+                        withhold -> FritzDialer.withheld(number)
+                        else -> number
+                    },
+                )
             } catch (e: Exception) {
                 stopFollowingCall()
                 clearDialActive()

@@ -66,6 +66,8 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    The red button cancels a dial-help call that is still being set up.
    A **long press on the green button** offers *Dial with hidden number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
+   With several internet numbers on the box, it also offers *Dial from <number>* for each (see
+   *Own numbers* below).
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
 Before logging in, it asks the box at the host who it is (its public device description, no login):
@@ -214,6 +216,10 @@ reload button), from two sources:
   either fails, the switch stays off and the settings show why. If reading fails later (e.g. the
   permission was revoked), the **Recent** tab shows a note with **Turn off** and **App settings**.
 
+**Own numbers.** With several numbers on the box, each call says which of them it was on – *from
+030 123456* for a dialled call, *to Office* for a received or missed one: the own number from the box'
+call list, by its name on the box if it has one (**Telephony › Own Numbers**).
+
 **New missed calls.** Whenever the app comes up or back to the foreground, it reads the box' call
 list in the background (no service, no polling) and counts its missed calls since **Recent** was
 last looked at – those still the latest call with their number: a call back, from the landline or
@@ -308,6 +314,17 @@ call monitor is on, off or not checked yet – asked when the settings open, for
 from there, and with **Check again**. Mind that the call monitor needs no login and is not encrypted:
 once it is on, any device in the home network can follow the box' calls, numbers included. It is
 reachable in the home network and usually through a VPN, not through MyFRITZ.
+
+### Own numbers
+
+Along with their registration (below), the app reads the box' own numbers (`X_VoIP`
+`X_AVM-DE_GetNumbers`): number, type and the name given on the box. They name the own number in
+**Recent**, and – with two or more internet numbers – the green button's long press offers *Dial from
+<number>* for each one that is not known to be down: the box' code for that number goes before the
+one dialled, as listed in the column *Selection* of the box' internet numbers (`*121#` for the first,
+`*122#` for the second, …, `*120#` for the tenth). Without it, the box uses the outgoing number set up
+for the dial-help phone. Not for internal numbers and service codes, and not together with the hidden
+number. With the live call status on, *calling … from …* shows the number the box actually used.
 
 ### Numbers not registered
 
@@ -454,7 +471,7 @@ report.
 | `tr064/BoxDiscovery.kt` | Recognises the FRITZ!Box of the current network (gateway, `tr64desc.xml` device id) |
 | `tr064/DemoBox.kt` | The demo box (host `demo`): answers TR-064 requests, its device description and its call monitor in the app itself |
 | `tr064/Phonebooks.kt` | Phone book list / download / XML parsing (`X_AVM-DE_OnTel`) |
-| `tr064/LineStatus.kt` | Whether the box' internet numbers are registered with their provider (`X_VoIP` `X_AVM-DE_GetNumbers`, `X_AVM-DE_GetVoIPStatus`) |
+| `tr064/LineStatus.kt` | The box' own numbers, their codes for a single call, and whether its internet numbers are registered with their provider (`X_VoIP` `X_AVM-DE_GetNumbers`, `X_AVM-DE_GetVoIPStatus`) |
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
 | `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |

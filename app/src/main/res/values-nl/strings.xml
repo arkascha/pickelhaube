@@ -86,6 +86,8 @@
     <string name="recents_recorded_by_box">Vastgelegd door %1$s</string>
     <string name="recents_recorded_by_phone">Vastgelegd door deze telefoon</string>
     <string name="recents_dialled">Gebeld</string>
+    <string name="recents_from_own">vanaf %1$s</string>
+    <string name="recents_to_own">naar %1$s</string>
     <string name="recents_received">Aangenomen</string>
     <string name="recents_new_missed">Nieuwe gemiste oproep</string>
     <string name="recents_missed">Gemist</string>
@@ -250,6 +252,7 @@
     <string name="error_cert_rejected_title">Certificaat niet vertrouwd</string>
     <string name="error_cert_rejected">De verbinding is geweigerd omdat je het certificaat van de router niet hebt vertrouwd.</string>
     <string name="dialer_dial_hidden">Bellen met verborgen nummer</string>
+    <string name="dialer_dial_from">Bellen vanaf %1$s</string>
     <string name="dialer_paste">Nummer plakken</string>
     <string name="number_choice_title">Welk nummer?</string>
     <string name="error_no_number_found_title">Geen telefoonnummer</string>

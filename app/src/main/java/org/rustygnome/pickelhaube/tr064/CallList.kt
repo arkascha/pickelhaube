@@ -18,6 +18,8 @@ data class RecentCall(
     val time: Long,
     val source: Source,
     val direction: Direction = Direction.OUTGOING,
+    /** The own number the call went out from or came in on, as the box' call list says (null: not known). */
+    val ownNumber: String? = null,
 ) {
     enum class Source { FRITZBOX, PHONE }
     enum class Direction { OUTGOING, INCOMING, MISSED }
@@ -57,11 +59,16 @@ class FritzCallList(config: FritzConfig, authToken: String? = null) {
         private val MISSED_TYPES = setOf("2")
         private val OUTGOING_TYPES = setOf("3", "11")
 
+        /** What the box may put in front of an own number: the line, e.g. "SIP: " or "ISDN: ". */
+        private val LINE_PREFIX = Regex("""^\s*[A-Za-z]+\s*\d*\s*:\s*""")
+
         /**
          * Parses the call list export, newest first as the box sends it:
          * `<root><Call><Type>3</Type><Called>030123</Called><Name>…</Name>
          *  <Date>21.10.26 14:30</Date>…</Call>…`. The other party is `Called` for outgoing calls and
          * `Caller` for incoming and missed ones; calls with a withheld number are skipped (nothing to call back).
+         * The own number is the other one of the two – `CallerNumber` / `CalledNumber` if the box gives
+         * them, without a line prefix such as "SIP: ".
          */
         fun parseCalls(xml: String): List<RecentCall> {
             val parser = XmlPullParserFactory.newInstance().newPullParser()
@@ -96,6 +103,10 @@ class FritzCallList(config: FritzConfig, authToken: String? = null) {
                                     RecentCall.Direction.OUTGOING -> fields["Called"]
                                     else -> fields["Caller"]
                                 }.orEmpty()
+                                val own = when (direction) {
+                                    RecentCall.Direction.OUTGOING -> fields["CallerNumber"].orEmpty().ifEmpty { fields["Caller"].orEmpty() }
+                                    else -> fields["CalledNumber"].orEmpty().ifEmpty { fields["Called"].orEmpty() }
+                                }.replace(LINE_PREFIX, "").trim()
                                 val time = parseDate(fields["Date"].orEmpty())
                                 if (direction != null && number.isNotEmpty() && time != null) {
                                     calls += RecentCall(
@@ -104,6 +115,7 @@ class FritzCallList(config: FritzConfig, authToken: String? = null) {
                                         time = time,
                                         source = RecentCall.Source.FRITZBOX,
                                         direction = direction,
+                                        ownNumber = own.takeIf { it.isNotEmpty() },
                                     )
                                 }
                             } else {

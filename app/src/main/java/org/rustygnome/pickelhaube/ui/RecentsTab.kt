@@ -52,6 +52,7 @@ import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.Phonebook
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.PhonebookNumber
+import org.rustygnome.pickelhaube.tr064.OwnNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -77,6 +78,8 @@ fun RecentsTab(
     boxName: String?,
     /** Country and area code of the box in use, for recognising a number written differently. */
     dialingCodes: DialingCodes?,
+    /** The own numbers of the box in use, for naming the one a call went out from or came in on. */
+    ownNumbers: List<OwnNumber>,
     /** The contacts of the phone books in use, for the names of calls that come without one. */
     contacts: List<PhonebookContact>,
     /** The call list of the box in use is switched on in the settings. */
@@ -157,6 +160,17 @@ fun RecentsTab(
         val key = { number: String -> numberKey(number, countryIso, dialingCodes) }
         nameRecents(mergeRecents(box + phone, key), contacts, key)
     }
+    // Which own number a call was on – only worth saying when the box has several.
+    val ownLabel = remember(boxCalls, ownNumbers, dialingCodes) {
+        val key = { number: String -> numberKey(number, countryIso, dialingCodes) }
+        val several = ownNumbers.size > 1 || boxCalls.mapNotNull { it.ownNumber }.distinct().size > 1
+        val label: (RecentCall) -> String? = { call ->
+            call.ownNumber?.takeIf { several }?.let { own ->
+                ownNumbers.firstOrNull { isDialledNumber(own, it.number, key) }?.label ?: own
+            }
+        }
+        label
+    }
 
     Column(Modifier.fillMaxSize()) {
         if (callLogEnabled && callLogProblem != null) {
@@ -204,7 +218,7 @@ fun RecentsTab(
                         )
                         val isNew = newSince != null && call.source == RecentCall.Source.FRITZBOX &&
                             call.direction == RecentCall.Direction.MISSED && call.time > newSince
-                        RecentRow(call, times.format(call.time, now), boxName, isNew, onPick, actions)
+                        RecentRow(call, times.format(call.time, now), boxName, ownLabel(call), isNew, onPick, actions)
                         HorizontalDivider()
                     }
                 }
@@ -225,6 +239,8 @@ private fun RecentRow(
     call: RecentCall,
     time: String,
     boxName: String?,
+    /** The own number the call was on (its name on the box, else the number); null: not shown. */
+    own: String?,
     /** A missed call of the box not looked at before: marked. */
     isNew: Boolean,
     onPick: (String) -> Unit,
@@ -246,7 +262,18 @@ private fun RecentRow(
                     overflow = TextOverflow.Ellipsis,
                 )
             },
-            supportingContent = call.name?.let { { Text(call.number, maxLines = 1) } },
+            supportingContent = run {
+                val via = own?.let {
+                    stringResource(
+                        if (call.direction == RecentCall.Direction.OUTGOING) R.string.recents_from_own else R.string.recents_to_own,
+                        it,
+                    )
+                }
+                val text = listOfNotNull(call.number.takeIf { call.name != null }, via).joinToString(" · ")
+                if (text.isEmpty()) null else {
+                    { Text(text, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                }
+            },
             trailingContent = {
                 Column(horizontalAlignment = Alignment.End) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

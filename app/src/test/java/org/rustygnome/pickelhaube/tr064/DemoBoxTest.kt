@@ -36,8 +36,10 @@ class DemoBoxTest {
     }
 
     @Test
-    fun `has its number registered`() {
-        assertEquals(listOf(VoipLine(0, "03023125300", "registered")), dialer.loadLines())
+    fun `has its numbers registered`() {
+        val numbers = dialer.loadNumbers()
+        assertEquals(listOf(VoipLine(0, "03023125300", "registered"), VoipLine(1, "03023125301", "registered")), numbers.lines)
+        assertEquals(listOf("*121#", "*122#"), numbers.numbers.map { it.selectCode })
     }
 
     @Test

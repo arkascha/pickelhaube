@@ -44,6 +44,7 @@ object DemoBox {
     private const val SOFTWARE_VERSION = "256.08.20"
     private const val SERIAL_NUMBER = "0000000DE001"
     private const val OWN_NUMBER = "03023125300"
+    private const val OFFICE_NUMBER = "03023125301"
 
     /** How long the box takes to answer – long enough to see that something is loading. */
     private const val LATENCY_MILLIS = 150L
@@ -69,7 +70,17 @@ object DemoBox {
 
     private class Book(val name: String, val entries: MutableList<String>)
 
-    private class Call(val type: Int, val number: String, val name: String?, val time: Long, val seconds: Int)
+    private class Call(
+        val type: Int,
+        val number: String,
+        val name: String?,
+        val time: Long,
+        val seconds: Int,
+        /** The own number it went out from, or came in on. */
+        val own: String = OWN_NUMBER,
+    )
+
+    private val CODES = Regex("""^(\*31#|\*12\d#)+""")
 
     private class Deflection(
         val id: Int,
@@ -126,8 +137,8 @@ object DemoBox {
             Call(3, "03023125203", "Pizzeria Da Marco", now - 2 * hour, 75),
             Call(1, "017604069002", "Ben Hoffmann", now - 5 * hour, 610),
             Call(2, "08999998107", "Grandma", now - day - 3 * hour, 0),
-            Call(3, "03023125201", "Dr. Weber, dentist", now - day - 6 * hour, 120),
-            Call(1, "08999998350", null, now - 3 * day, 45),
+            Call(3, "03023125201", "Dr. Weber, dentist", now - day - 6 * hour, 120, own = OFFICE_NUMBER),
+            Call(1, "08999998350", null, now - 3 * day, 45, own = OFFICE_NUMBER),
             Call(1, "03023125104", "Dad", now - 4 * day, 1260),
             Call(3, "017604069010", "Lena Fischer", now - 9 * day, 300),
         )
@@ -175,9 +186,9 @@ object DemoBox {
         calls.sortedByDescending { it.time }.forEach { c ->
             append("<Call><Type>").append(c.type).append("</Type>")
             if (c.type == 3) {
-                append("<Caller>").append(OWN_NUMBER).append("</Caller><Called>").append(c.number).append("</Called>")
+                append("<Caller>").append(c.own).append("</Caller><Called>").append(c.number).append("</Called>")
             } else {
-                append("<Caller>").append(c.number).append("</Caller><Called>").append(OWN_NUMBER).append("</Called>")
+                append("<Caller>").append(c.number).append("</Caller><Called>").append(c.own).append("</Called>")
             }
             append("<Name>").append(Tr064Client.escapeXml(c.name.orEmpty())).append("</Name>")
             append("<Date>").append(format.format(Date(c.time))).append("</Date>")
@@ -297,10 +308,11 @@ object DemoBox {
             emptyMap()
         }
         "X_AVM-DE_GetNumbers" -> mapOf(
-            "NewNumberList" to "<List><Item><Number>$OWN_NUMBER</Number><Type>eVoIP</Type><Index>0</Index><Name></Name></Item></List>",
+            "NewNumberList" to "<List><Item><Number>$OWN_NUMBER</Number><Type>eVoIP</Type><Index>0</Index><Name></Name></Item>" +
+                "<Item><Number>$OFFICE_NUMBER</Number><Type>eVoIP</Type><Index>1</Index><Name>Office</Name></Item></List>",
         )
         "X_AVM-DE_GetVoIPStatus" -> mapOf(
-            "NewX_AVM-DE_VoIPStatus" to if (args["NewVoIPAccountIndex"] == "0") "registered" else throw Fault(713, "SpecifiedArrayIndexInvalid"),
+            "NewX_AVM-DE_VoIPStatus" to if (args["NewVoIPAccountIndex"] in setOf("0", "1")) "registered" else throw Fault(713, "SpecifiedArrayIndexInvalid"),
         )
         "GetPhonebookList" -> mapOf("NewPhonebookList" to books.keys.joinToString(","))
         "GetPhonebook" -> {
@@ -387,18 +399,22 @@ object DemoBox {
      * Dial help for [number]: the dial-help phone rings, is picked up, the box dials, the other side
      * answers and, after a short talk, hangs up – as reported on the call monitor.
      */
-    private fun placeCall(number: String) {
+    private fun placeCall(dialled: String) {
         call?.cancel()
+        // The codes in front, as the box takes them: number withheld (*31#), over which own number (*12x#).
+        val codes = CODES.find(dialled)?.value.orEmpty()
+        val number = dialled.removePrefix(codes)
+        val (from, line) = if ("*122#" in codes) OFFICE_NUMBER to "SIP1" else OWN_NUMBER to "SIP0"
         val connection = (nextConnection++).toString()
         call = scope.launch {
             delay(RING_MILLIS)
-            monitor.emit(CallEvent.Call(connection, extension = "11", caller = OWN_NUMBER, called = number, line = "SIP0"))
+            monitor.emit(CallEvent.Call(connection, extension = "11", caller = from, called = number, line = line))
             delay(ANSWER_MILLIS)
             monitor.emit(CallEvent.Connect(connection, extension = "11", number = number))
             delay(TALK_MILLIS)
             val seconds = (TALK_MILLIS / 1000).toInt()
             synchronized(DemoBox) {
-                calls += Call(3, number, nameFor(number), System.currentTimeMillis(), seconds)
+                calls += Call(3, number, nameFor(number), System.currentTimeMillis(), seconds, own = from)
             }
             monitor.emit(CallEvent.Disconnect(connection, seconds))
         }
