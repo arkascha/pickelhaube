@@ -340,6 +340,8 @@
     <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
     <string name="connection_speed_dials">Snelkeuzes</string>
     <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld (00 tot 99, zoals ze op de telefoons met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
+    <string name="connection_internal_calls">Interne gesprekken</string>
+    <string name="connection_internal_calls_hint">De telefoons van deze FRITZ!Box, om de ene vanaf de andere te bellen: een tabblad ‘Intern’ bij Nummer kiezen, en hun namen in de suggesties tijdens het typen. Alleen zinvol met meerdere telefoons.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Opnieuw kiezen</string>
@@ -427,7 +429,10 @@
     <string name="call_connected">Verbonden met %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Ophangen op het toestel zelf</string>
     <string name="dialer_insert_pause">Pauze invoegen</string>
-    <string name="dialer_more_suggestions_short">nog %d</string>
+    <plurals name="dialer_more_suggestions_short">
+        <item quantity="one">nog %d</item>
+        <item quantity="other">nog %d</item>
+    </plurals>
     <string name="dialer_take_suggestion">Dit nummer nemen</string>
     <plurals name="dialer_more_suggestions">
         <item quantity="one">%d andere suggestie</item>
@@ -462,4 +467,14 @@
         <item quantity="one">%1$d nieuwe gemiste oproep bij %2$s – tonen</item>
         <item quantity="other">%1$d nieuwe gemiste oproepen bij %2$s – tonen</item>
     </plurals>
+    <string name="picker_tab_internal">Intern</string>
+    <string name="internal_loading">Telefoons van de FRITZ!Box worden gelezen…</string>
+    <string name="internal_none">De FRITZ!Box noemt geen telefoons voor interne gesprekken.</string>
+    <string name="internal_all_phones">Alle telefoons</string>
+    <string name="internal_kind_analogue">Analoge telefoon</string>
+    <string name="internal_kind_dect">DECT-handset</string>
+    <string name="internal_kind_ip">IP-telefoon</string>
+    <string name="internal_kind_all">Laat alle telefoons rinkelen</string>
+    <string name="error_call_itself_title">Telefoon belt zichzelf</string>
+    <string name="error_call_itself">%1$s is de telefoon die voor de kieshulp rinkelt: hij kan zichzelf niet bellen. Kies een andere telefoon bij Laten overgaan op.</string>
 </resources>

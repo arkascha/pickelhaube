@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,7 +41,7 @@ import org.rustygnome.pickelhaube.R
 
 /**
  * Picks a number for the dialer: tab "Recent" (calls from the box' call list and the phone's call
- * log), tab "Speed dial" and tab "Phone books". Reload refreshes them all.
+ * log), tab "Speed dial", tab "Phone books" and tab "Internal" (the box' phones). Reload refreshes them all.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +55,11 @@ fun NumberPickerScreen(
     recents: @Composable () -> Unit,
     phonebooks: @Composable () -> Unit,
     speedDials: @Composable () -> Unit,
+    internal: @Composable () -> Unit,
+    /** The tab "Internal" is there: switched on for the box in use. */
+    showInternal: Boolean,
 ) {
+    val shown = if (tab == PickerTab.INTERNAL && !showInternal) PickerTab.RECENT else tab
     // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it
     // itself, so fields further down can be scrolled to (and are, when tapped).
     Scaffold(
@@ -80,10 +85,13 @@ fun NumberPickerScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            PrimaryTabRow(selectedTabIndex = tab.ordinal) {
-                PickerTabItem(tab, PickerTab.RECENT, R.string.picker_tab_recent, HistoryIcon, onTabChange)
-                PickerTabItem(tab, PickerTab.SPEED_DIALS, R.string.speed_dial, Icons.Default.Star, onTabChange)
-                PickerTabItem(tab, PickerTab.PHONEBOOKS, R.string.phone_books, ContactsIcon, onTabChange)
+            PrimaryTabRow(selectedTabIndex = shown.ordinal) {
+                PickerTabItem(shown, PickerTab.RECENT, R.string.picker_tab_recent, HistoryIcon, onTabChange)
+                PickerTabItem(shown, PickerTab.SPEED_DIALS, R.string.speed_dial, Icons.Default.Star, onTabChange)
+                PickerTabItem(shown, PickerTab.PHONEBOOKS, R.string.phone_books, ContactsIcon, onTabChange)
+                if (showInternal) {
+                    PickerTabItem(shown, PickerTab.INTERNAL, R.string.picker_tab_internal, Icons.Default.Home, onTabChange)
+                }
             }
             Box(
                 Modifier
@@ -92,10 +100,11 @@ fun NumberPickerScreen(
             ) {
                 if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             }
-            when (tab) {
+            when (shown) {
                 PickerTab.RECENT -> recents()
                 PickerTab.SPEED_DIALS -> speedDials()
                 PickerTab.PHONEBOOKS -> phonebooks()
+                PickerTab.INTERNAL -> internal()
             }
         }
     }

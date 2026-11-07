@@ -239,6 +239,28 @@ badge on the picker button and, while no call is being followed, a red line *1 n
 in **Recent**, they count as seen. The first time for a box, its list as it is counts as seen. The
 phone's own missed calls are left to Android, which reports them itself (`data/MissedCalls.kt`).
 
+### Internal calls
+
+Switched on per FRITZ!Box on its connection page (**Settings › FRITZ!Box connections › <box> ›
+Internal calls**, off by default, as it is only of use with several phones), the picker's tab
+**Internal** lists the phones of the box with their internal numbers, for a free call from one phone
+of the box to another: analogue phones by their socket (`FON1` → `**1`), DECT
+handsets (TR-064 `X_AVM-DE_Dect` `GetGenericDectEntry`), IP phones and FRITZ!App Fon (`X_VoIP`
+`X_AVM-DE_GetClient3`), and **All phones** (`**9`). A tap puts the number into the dialer with the
+phone's name; the dial help then rings the phone set under **Ring phone**, which calls the other
+one. The box' phones are found by their names in the suggestions while typing as well
+(`5482` → *Kitchen*). They are read together with the phones for dial help; a part the box does
+not tell (user rights, older FRITZ!OS) is left out.
+
+- The box tells the DECT handsets' names and ids, but not their internal numbers: the handset with
+  id *n* is taken to be `**61(n-1)`, `**610` to `**615`, as the box numbers them – *not yet verified
+  on a real box*.
+- A phone cannot call itself: dialling the internal number of the phone under **Ring phone** says so
+  instead of placing the call. With a group under **Ring phone** (e.g. all DECT handsets), the phone
+  being called rings for the dial help as well – choose a single phone there.
+- Internal calls are not followed on the live call status, as it is not known yet whether
+  the box' call monitor reports them; the dialer shows *pick up* as without it.
+
 ### Numbers written differently
 
 The same number is often written in different ways: `+49 30 123456`, `0049 30 123456`, `030 123456`

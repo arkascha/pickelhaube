@@ -343,6 +343,8 @@
     <string name="settings_phone_speed_dials_hint">Speed dials 1 to 9, chosen from the phone books and stored on this phone, so they work with every FRITZ!Box. To use one, long-press its digit in the dialer.</string>
     <string name="connection_speed_dials">Speed dials</string>
     <string name="connection_speed_dials_hint">The speed dials set up in this FRITZ!Box’s phone books (00 to 99, as dialled on its phones with **7). To use one, tap the first digit in the dialer and long-press the second. Also works with the phone books switched off.</string>
+    <string name="connection_internal_calls">Internal calls</string>
+    <string name="connection_internal_calls_hint">The phones of this FRITZ!Box, to call one from another: a tab “Internal” in Choose number, and their names in the suggestions while typing. Only of use with several phones.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Redial</string>
@@ -430,7 +432,10 @@
     <string name="call_connected">Connected with %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Hang up on the device itself</string>
     <string name="dialer_insert_pause">Insert pause</string>
-    <string name="dialer_more_suggestions_short">%d more</string>
+    <plurals name="dialer_more_suggestions_short">
+        <item quantity="one">%d more</item>
+        <item quantity="other">%d more</item>
+    </plurals>
     <string name="dialer_take_suggestion">Take this number</string>
     <plurals name="dialer_more_suggestions">
         <item quantity="one">%d more suggestion</item>
@@ -466,4 +471,14 @@
         <item quantity="one">%1$d new missed call at %2$s – show</item>
         <item quantity="other">%1$d new missed calls at %2$s – show</item>
     </plurals>
+    <string name="picker_tab_internal">Internal</string>
+    <string name="internal_loading">Reading the phones of the FRITZ!Box…</string>
+    <string name="internal_none">The FRITZ!Box names no phones for internal calls.</string>
+    <string name="internal_all_phones">All phones</string>
+    <string name="internal_kind_analogue">Analogue phone</string>
+    <string name="internal_kind_dect">DECT handset</string>
+    <string name="internal_kind_ip">IP phone</string>
+    <string name="internal_kind_all">Rings every phone</string>
+    <string name="error_call_itself_title">Phone calls itself</string>
+    <string name="error_call_itself">%1$s is the phone that rings for dial help: it cannot call itself. Choose another phone under Ring phone.</string>
 </resources>

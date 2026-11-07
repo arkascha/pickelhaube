@@ -344,6 +344,8 @@
     <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>
     <string name="connection_speed_dials">Numéros abrégés</string>
     <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses téléphones avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
+    <string name="connection_internal_calls">Appels internes</string>
+    <string name="connection_internal_calls_hint">Les téléphones de cette FRITZ!Box, pour appeler l’un depuis l’autre : un onglet « Interne » dans Choisir un numéro, et leurs noms dans les suggestions pendant la saisie. Utile seulement avec plusieurs téléphones.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Rappel</string>
@@ -432,7 +434,11 @@
     <string name="call_connected">Connecté avec %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Raccrochez sur l’appareil lui-même</string>
     <string name="dialer_insert_pause">Insérer une pause</string>
-    <string name="dialer_more_suggestions_short">%d autres</string>
+    <plurals name="dialer_more_suggestions_short">
+        <item quantity="one">%d autres</item>
+        <item quantity="many">%d autres</item>
+        <item quantity="other">%d autres</item>
+    </plurals>
     <string name="dialer_take_suggestion">Prendre ce numéro</string>
     <plurals name="dialer_more_suggestions">
         <item quantity="one">%d autre suggestion</item>
@@ -470,4 +476,14 @@
         <item quantity="many">%1$d nouveaux appels manqués sur %2$s – afficher</item>
         <item quantity="other">%1$d nouveaux appels manqués sur %2$s – afficher</item>
     </plurals>
+    <string name="picker_tab_internal">Interne</string>
+    <string name="internal_loading">Lecture des téléphones de la FRITZ!Box…</string>
+    <string name="internal_none">La FRITZ!Box n’indique aucun téléphone pour les appels internes.</string>
+    <string name="internal_all_phones">Tous les téléphones</string>
+    <string name="internal_kind_analogue">Téléphone analogique</string>
+    <string name="internal_kind_dect">Combiné DECT</string>
+    <string name="internal_kind_ip">Téléphone IP</string>
+    <string name="internal_kind_all">Fait sonner tous les téléphones</string>
+    <string name="error_call_itself_title">Le téléphone s’appelle lui-même</string>
+    <string name="error_call_itself">%1$s est le téléphone qui sonne pour l’aide à la numérotation : il ne peut pas s’appeler lui-même. Choisissez un autre téléphone sous Faire sonner.</string>
 </resources>

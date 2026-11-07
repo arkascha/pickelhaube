@@ -642,6 +642,7 @@ fun ConnectionSettingsScreen(
     initialPhonebooksEnabled: Boolean,
     initialCallListEnabled: Boolean,
     initialSpeedDialsEnabled: Boolean,
+    initialInternalCallsEnabled: Boolean,
     /** Model, FRITZ!OS version and serial number as last read from the box; null for a new one. */
     boxInfo: BoxInfo?,
     /** The box' country and area code as last read; null when not known. */
@@ -669,6 +670,7 @@ fun ConnectionSettingsScreen(
         phonebooksEnabled: Boolean,
         callListEnabled: Boolean,
         speedDialsEnabled: Boolean,
+        internalCallsEnabled: Boolean,
     ) -> Unit,
     onBack: () -> Unit,
     /** Deletes the edited connection; null for a new one. */
@@ -688,6 +690,7 @@ fun ConnectionSettingsScreen(
     var phonebooksEnabled by remember { mutableStateOf(initialPhonebooksEnabled) }
     var callListEnabled by remember { mutableStateOf(initialCallListEnabled) }
     var speedDialsEnabled by remember { mutableStateOf(initialSpeedDialsEnabled) }
+    var internalCallsEnabled by remember { mutableStateOf(initialInternalCallsEnabled) }
     val portValue = port.toIntOrNull()
     val keyboard = LocalSoftwareKeyboardController.current
     val valid = host.isNotBlank() && portValue != null && portValue in 1..65535
@@ -891,6 +894,12 @@ fun ConnectionSettingsScreen(
                 enabled = speedDialsEnabled,
                 onChange = { speedDialsEnabled = it },
             )
+            BoxFeatureSetting(
+                title = stringResource(R.string.connection_internal_calls),
+                hint = stringResource(R.string.connection_internal_calls_hint),
+                enabled = internalCallsEnabled,
+                onChange = { internalCallsEnabled = it },
+            )
             Button(
                 onClick = {
                     keyboard?.hide()
@@ -906,6 +915,7 @@ fun ConnectionSettingsScreen(
                         phonebooksEnabled,
                         callListEnabled,
                         speedDialsEnabled,
+                        internalCallsEnabled,
                     )
                 },
                 enabled = valid && !busy,

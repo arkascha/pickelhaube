@@ -16,7 +16,9 @@ import java.util.UUID
  * [deviceId] is the box' UPnP device id (UDN from its public `tr64desc.xml`). It is learned when
  * the connection is saved and used to recognise the box of the current network automatically.
  * [phonebooksEnabled], [callListEnabled] and [speedDialsEnabled] switch, for this box, whether its
- * phone books, its call list and the speed dials set up in its phone books are used (on by default).
+ * phone books, its call list and the speed dials set up in its phone books are used (on by default);
+ * [internalCallsEnabled] whether its phones are offered for internal calls (off by default:
+ * only of use with several phones).
  * [model], [softwareVersion] and [serialNumber] are what the box last said about itself (see [BoxInfo]);
  * [dialingCodes] its country and area code, for comparing numbers; [userRights] what the box said
  * the configured user may do; [callMonitor] whether the box accepted a call monitor connection the
@@ -35,6 +37,7 @@ data class BoxProfile(
     val phonebooksEnabled: Boolean = true,
     val callListEnabled: Boolean = true,
     val speedDialsEnabled: Boolean = true,
+    val internalCallsEnabled: Boolean = false,
     val callMonitor: Boolean? = null,
 ) {
     val info: BoxInfo get() = BoxInfo(model, softwareVersion, serialNumber)
@@ -353,6 +356,7 @@ internal fun BoxProfile.toJson(storedPassword: String?): JSONObject {
         put("phonebooks", p.phonebooksEnabled)
         put("callList", p.callListEnabled)
         put("speedDials", p.speedDialsEnabled)
+        put("internalCalls", p.internalCallsEnabled)
         p.callMonitor?.let { put("callMonitor", it) }
     }
 }
@@ -392,6 +396,7 @@ internal fun boxProfileFromJson(o: JSONObject, password: String) = BoxProfile(
     phonebooksEnabled = o.optBoolean("phonebooks", true),
     callListEnabled = o.optBoolean("callList", true),
     speedDialsEnabled = o.optBoolean("speedDials", true),
+    internalCallsEnabled = o.optBoolean("internalCalls", false),
     callMonitor = if (o.has("callMonitor")) o.optBoolean("callMonitor") else null,
 )
 

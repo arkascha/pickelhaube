@@ -348,6 +348,8 @@
     <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FRITZ!Box. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>
     <string name="connection_speed_dials">Szybkie wybieranie</string>
     <string name="connection_speed_dials_hint">Szybkie wybieranie ustawione w książkach telefonicznych tego FRITZ!Box (00–99, wybierane na jego telefonach przez **7). Aby go użyć, dotknij pierwszej cyfry na klawiaturze i przytrzymaj drugą. Działa także przy wyłączonych książkach telefonicznych.</string>
+    <string name="connection_internal_calls">Rozmowy wewnętrzne</string>
+    <string name="connection_internal_calls_hint">Telefony tego FRITZ!Box, aby dzwonić z jednego do drugiego: karta „Wewnętrzne” w Wybierz numer i ich nazwy w podpowiedziach podczas pisania. Przydatne tylko przy kilku telefonach.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Ponowne wybieranie</string>
@@ -437,7 +439,12 @@
     <string name="call_connected">Połączono z %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Rozłącz się na samym urządzeniu</string>
     <string name="dialer_insert_pause">Wstaw pauzę</string>
-    <string name="dialer_more_suggestions_short">jeszcze %d</string>
+    <plurals name="dialer_more_suggestions_short">
+        <item quantity="one">jeszcze %d</item>
+        <item quantity="few">jeszcze %d</item>
+        <item quantity="many">jeszcze %d</item>
+        <item quantity="other">jeszcze %d</item>
+    </plurals>
     <string name="dialer_take_suggestion">Użyj tego numeru</string>
     <plurals name="dialer_more_suggestions">
         <item quantity="one">%d kolejna propozycja</item>
@@ -478,4 +485,14 @@
         <item quantity="many">%1$d nowych nieodebranych połączeń w %2$s – pokaż</item>
         <item quantity="other">%1$d nowe nieodebrane połączenia w %2$s – pokaż</item>
     </plurals>
+    <string name="picker_tab_internal">Wewnętrzne</string>
+    <string name="internal_loading">Odczytywanie telefonów FRITZ!Box…</string>
+    <string name="internal_none">FRITZ!Box nie podaje telefonów do rozmów wewnętrznych.</string>
+    <string name="internal_all_phones">Wszystkie telefony</string>
+    <string name="internal_kind_analogue">Telefon analogowy</string>
+    <string name="internal_kind_dect">Słuchawka DECT</string>
+    <string name="internal_kind_ip">Telefon IP</string>
+    <string name="internal_kind_all">Dzwoni na wszystkich telefonach</string>
+    <string name="error_call_itself_title">Telefon dzwoni do siebie</string>
+    <string name="error_call_itself">%1$s to telefon, który dzwoni przy pomocy wybierania: nie może zadzwonić do siebie. Wybierz inny telefon w polu Dzwoń na.</string>
 </resources>

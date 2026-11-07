@@ -340,6 +340,8 @@
     <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FRITZ!Box. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>
     <string name="connection_speed_dials">Kurzwahlen</string>
     <string name="connection_speed_dials_hint">Die in den Telefonbüchern dieser FRITZ!Box eingerichteten Kurzwahlen (00 bis 99, wie an ihren Telefonen mit **7 gewählt). Zum Verwenden im Wählfeld die erste Ziffer antippen und die zweite lange drücken. Funktioniert auch, wenn die Telefonbücher ausgeschaltet sind.</string>
+    <string name="connection_internal_calls">Interne Gespräche</string>
+    <string name="connection_internal_calls_hint">Die Telefone dieser FRITZ!Box, um eines vom anderen aus anzurufen: ein Reiter „Intern“ bei Nummer wählen, und ihre Namen in den Vorschlägen beim Tippen. Nur sinnvoll mit mehreren Telefonen.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Wahlwiederholung</string>
@@ -427,7 +429,10 @@
     <string name="call_connected">Verbunden mit %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Auflegen am Gerät selbst</string>
     <string name="dialer_insert_pause">Pause einfügen</string>
-    <string name="dialer_more_suggestions_short">%d weitere</string>
+    <plurals name="dialer_more_suggestions_short">
+        <item quantity="one">%d weitere</item>
+        <item quantity="other">%d weitere</item>
+    </plurals>
     <string name="dialer_take_suggestion">Diese Nummer übernehmen</string>
     <plurals name="dialer_more_suggestions">
         <item quantity="one">%d weiterer Vorschlag</item>
@@ -462,4 +467,14 @@
         <item quantity="one">%1$d neuer verpasster Anruf bei %2$s – anzeigen</item>
         <item quantity="other">%1$d neue verpasste Anrufe bei %2$s – anzeigen</item>
     </plurals>
+    <string name="picker_tab_internal">Intern</string>
+    <string name="internal_loading">Lese die Telefone der FRITZ!Box…</string>
+    <string name="internal_none">Die FRITZ!Box nennt keine Telefone für interne Gespräche.</string>
+    <string name="internal_all_phones">Alle Telefone</string>
+    <string name="internal_kind_analogue">Analoges Telefon</string>
+    <string name="internal_kind_dect">DECT-Mobilteil</string>
+    <string name="internal_kind_ip">IP-Telefon</string>
+    <string name="internal_kind_all">Klingelt an allen Telefonen</string>
+    <string name="error_call_itself_title">Telefon ruft sich selbst an</string>
+    <string name="error_call_itself">%1$s ist das Telefon, das für die Wählhilfe klingelt: es kann sich nicht selbst anrufen. Wähle unter Klingeln an ein anderes Telefon.</string>
 </resources>

@@ -93,6 +93,7 @@ object DemoBox {
 
     /** Port names as the box gives them: the prefix tells the kind of phone (see [FritzDialer.displayName]). */
     private val phones = listOf("FON1: Hallway", "ISDN: Kitchen", "ISDN: Living room", "ISDN: Study", "DECT: All handsets")
+    private val DECT_HANDSETS = listOf("Kitchen", "Living room", "Study")
 
     private var dialPhone = phones[1]
     private var nextUid = 100
@@ -294,6 +295,18 @@ object DemoBox {
             val index = args["NewIndex"]?.toIntOrNull() ?: 0
             mapOf("NewX_AVM-DE_PhoneName" to (phones.getOrNull(index - 1) ?: throw Fault(713, "SpecifiedArrayIndexInvalid")))
         }
+        // The DECT handsets among [phones], and an IP phone, with their internal numbers.
+        "GetNumberOfDectEntries" -> mapOf("NewNumberOfEntries" to DECT_HANDSETS.size.toString())
+        "GetGenericDectEntry" -> {
+            val index = args["NewIndex"]?.toIntOrNull() ?: -1
+            val name = DECT_HANDSETS.getOrNull(index) ?: throw Fault(713, "SpecifiedArrayIndexInvalid")
+            mapOf("NewID" to (index + 1).toString(), "NewActive" to "1", "NewName" to name, "NewModel" to "0x0C")
+        }
+        "X_AVM-DE_GetNumberOfClients" -> mapOf("NewX_AVM-DE_NumberOfClients" to "1")
+        "X_AVM-DE_GetClient3" -> {
+            if (args["NewX_AVM-DE_ClientIndex"] != "0") throw Fault(713, "SpecifiedArrayIndexInvalid")
+            mapOf("NewX_AVM-DE_PhoneName" to "Softphone", "NewX_AVM-DE_InternalNumber" to "620")
+        }
         "X_AVM-DE_DialGetConfig" -> mapOf("NewX_AVM-DE_PhoneName" to dialPhone)
         "X_AVM-DE_DialSetConfig" -> {
             dialPhone = args["NewX_AVM-DE_PhoneName"]?.takeIf { it in phones } ?: throw Fault(402, "Invalid Args")
@@ -413,7 +426,8 @@ object DemoBox {
             monitor.emit(CallEvent.Connect(connection, extension = "11", number = number))
             delay(TALK_MILLIS)
             val seconds = (TALK_MILLIS / 1000).toInt()
-            synchronized(DemoBox) {
+            // Internal calls are not in the call list (as far as is known).
+            if (!FritzInternalPhones.isInternal(number)) synchronized(DemoBox) {
                 calls += Call(3, number, nameFor(number), System.currentTimeMillis(), seconds, own = from)
             }
             monitor.emit(CallEvent.Disconnect(connection, seconds))

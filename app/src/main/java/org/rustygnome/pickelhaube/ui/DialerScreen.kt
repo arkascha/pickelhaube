@@ -426,7 +426,7 @@ private fun SuggestionRow(suggestions: List<Suggestion>, onSuggestion: (Suggesti
                     ) {
                         VerticalDivider(Modifier.height(24.dp).padding(end = 12.dp))
                         Text(
-                            stringResource(R.string.dialer_more_suggestions_short, more),
+                            pluralStringResource(R.plurals.dialer_more_suggestions_short, more, more),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary,
                         )

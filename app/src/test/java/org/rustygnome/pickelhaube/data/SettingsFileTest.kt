@@ -20,6 +20,7 @@ class SettingsFileTest {
         dialingCodes = DialingCodes(countryCode = "49", internationalPrefix = "00", areaCode = "40", nationalPrefix = "0"),
         userRights = UserRights("pickelhaube", mapOf("Phone" to "readwrite")),
         callListEnabled = false,
+        internalCallsEnabled = true,
     )
     private val other = BoxProfile(id = "b", name = "Niendorf", config = FritzConfig(host = "192.168.1.1", username = "u", password = "pw2"))
     private val backup = SettingsBackup(

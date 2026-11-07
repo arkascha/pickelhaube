@@ -32,6 +32,7 @@ import org.rustygnome.pickelhaube.ui.DialerViewModel
 import org.rustygnome.pickelhaube.ui.ErrorDialog
 import org.rustygnome.pickelhaube.ui.DeflectionsScreen
 import org.rustygnome.pickelhaube.ui.LanguageScreen
+import org.rustygnome.pickelhaube.ui.InternalPhonesTab
 import org.rustygnome.pickelhaube.ui.NumberPickerScreen
 import org.rustygnome.pickelhaube.ui.PhonebookTab
 import org.rustygnome.pickelhaube.ui.RecentsTab
@@ -173,6 +174,14 @@ class MainActivity : ComponentActivity() {
                                 onDeleteCopy = viewModel::deleteOnlineCopy,
                             )
                         },
+                        internal = {
+                            InternalPhonesTab(
+                                phones = state.internalPhones,
+                                busy = state.busy,
+                                onPick = viewModel::pickInternalPhone,
+                            )
+                        },
+                        showInternal = state.activeProfile?.internalCallsEnabled == true,
                     )
                 } else if (state.widgetSetup != null) {
                     val setup = state.widgetSetup!!
@@ -206,6 +215,7 @@ class MainActivity : ComponentActivity() {
                             initialPhonebooksEnabled = edited?.phonebooksEnabled ?: true,
                             initialCallListEnabled = edited?.callListEnabled ?: true,
                             initialSpeedDialsEnabled = edited?.speedDialsEnabled ?: true,
+                            initialInternalCallsEnabled = edited?.internalCallsEnabled ?: false,
                             boxInfo = edited?.info,
                             dialingCodes = edited?.dialingCodes,
                             userRights = edited?.userRights,

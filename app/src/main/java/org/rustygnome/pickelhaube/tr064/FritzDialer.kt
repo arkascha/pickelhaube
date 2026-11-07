@@ -43,6 +43,9 @@ class FritzDialer(
         return phones
     }
 
+    /** The box' phones with their internal numbers, [ports] as [listPhones] gave them (see [FritzInternalPhones]). */
+    fun internalPhones(ports: List<String>): List<InternalPhone> = FritzInternalPhones(config, authToken).load(ports)
+
     /** The phone the box currently rings for dial help, or null if none is set. */
     @Throws(IOException::class)
     fun getDialPhone(): String? =

@@ -49,6 +49,8 @@ import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.Phonebook
+import org.rustygnome.pickelhaube.tr064.FritzInternalPhones
+import org.rustygnome.pickelhaube.tr064.InternalPhone
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
@@ -86,7 +88,7 @@ data class CertificatePrompt(
 )
 
 /** The tabs of the number picker, in their order. */
-enum class PickerTab { RECENT, SPEED_DIALS, PHONEBOOKS }
+enum class PickerTab { RECENT, SPEED_DIALS, PHONEBOOKS, INTERNAL }
 
 /** What the number tapped next in the phone books becomes. */
 sealed interface SpeedDialAssignment {
@@ -102,6 +104,8 @@ data class UiState(
     /** Who the number is, when it came from a speed dial ("Speed dial 2: Office"); shown as the field's label. */
     val numberLabel: UiText? = null,
     val phones: List<String> = emptyList(),
+    /** The box' phones with their internal numbers, read with [phones] (empty: none known). */
+    val internalPhones: List<InternalPhone> = emptyList(),
     val selectedPhone: String? = null,
     /** Progress / success information (not an error). */
     val status: UiText? = null,
@@ -360,6 +364,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null) }
 
+    /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
+    fun pickInternalPhone(number: String, label: String) {
+        if (_state.value.addingToWidget) return addToWidget(label, number)
+        _state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false) }
+    }
+
     /** A suggestion was tapped: its number into the dialer, with whose it is as the field's label. */
     fun takeSuggestion(suggestion: Suggestion) = _state.update {
         it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw))
@@ -371,6 +381,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         val labelled: Boolean,
         val phonebooks: List<Phonebook>,
         val deviceContacts: Phonebook?,
+        val internalPhones: List<InternalPhone>,
         val boxCalls: List<RecentCall>,
         val phoneCalls: List<RecentCall>?,
         val codes: DialingCodes?,
@@ -389,6 +400,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     labelled = s.numberLabel != null,
                     phonebooks = if (s.activeProfile?.phonebooksEnabled != false) s.phonebooks else emptyList(),
                     deviceContacts = s.deviceContacts,
+                    internalPhones = s.internalPhones,
                     boxCalls = s.boxCalls,
                     phoneCalls = s.phoneCalls,
                     codes = s.activeProfile?.dialingCodes,
@@ -399,7 +411,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 val key = numberKeys()
                 val found = withContext(Dispatchers.Default) {
                     val typed = key(FritzDialer.sanitizeNumber(input.number))
-                    val contacts = (input.phonebooks + listOfNotNull(input.deviceContacts)).flatMap { it.contacts }
+                    // The box' phones, by their names, too ("Kitchen"); "all phones" has none to type.
+                    val internal = input.internalPhones.filter { it.name.isNotEmpty() }
+                        .map { PhonebookContact(it.name, listOf(PhonebookNumber(it.number, "intern")), "") }
+                    val contacts = (input.phonebooks + listOfNotNull(input.deviceContacts)).flatMap { it.contacts } + internal
                     suggestions(input.number, contacts, input.boxCalls + input.phoneCalls.orEmpty(), key, input.codes)
                         .filterNot { input.labelled && key(it.number) == typed }
                 }
@@ -620,7 +635,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      * Tries the edited connection against the router. Only if that works it is saved – and made
      * the active one, since the box evidently is reachable from here; otherwise the error is shown.
      * [phonebooksEnabled], [callListEnabled], [speedDialsEnabled]: whether this box' phone books, call
-     * list and speed dials are used.
+     * list and speed dials are used; [internalCallsEnabled]: whether its phones are offered for
+     * internal calls.
      */
     fun saveSettings(
         edited: FritzConfig,
@@ -628,11 +644,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         phonebooksEnabled: Boolean,
         callListEnabled: Boolean,
         speedDialsEnabled: Boolean,
+        internalCallsEnabled: Boolean,
     ) {
         if (_state.value.busy) return
         val request = SaveRequest(
             edited.copy(trustedCertDer = _state.value.config.trustedCertDer),
-            name, phonebooksEnabled, callListEnabled, speedDialsEnabled,
+            name, phonebooksEnabled, callListEnabled, speedDialsEnabled, internalCallsEnabled,
         )
         // First, without logging in, which box answers there: logging in to another one would hand it
         // this box' credentials, and take over its certificate and device id.
@@ -659,6 +676,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         val phonebooksEnabled: Boolean,
         val callListEnabled: Boolean,
         val speedDialsEnabled: Boolean,
+        val internalCallsEnabled: Boolean,
     )
 
     private var pendingSave: SaveRequest? = null
@@ -687,6 +705,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             phonebooksEnabled = request.phonebooksEnabled,
             callListEnabled = request.callListEnabled,
             speedDialsEnabled = request.speedDialsEnabled,
+            internalCallsEnabled = request.internalCallsEnabled,
         )
         settings.saveProfile(profile)
         LauncherShortcuts.publish(getApplication())
@@ -719,7 +738,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         verifyingSettings = true
         _state.update { it.copy(config = config, error = null) }
         runOnBox(uiText(R.string.status_connecting, config.host)) { dialer ->
-            val message = loadPhones(dialer)
+            val message = loadPhones(dialer, request.internalCallsEnabled)
             // Learn the box' device id, so it can be recognised automatically later.
             val identity = BoxDiscovery.identify(config.host)
             val info = readBoxInfo(dialer)
@@ -742,6 +761,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 // Without the right the call list could only fail: off, the connection page says why.
                 callListEnabled = callListEnabled && rights?.phone != false,
                 speedDialsEnabled = speedDialsEnabled,
+                internalCallsEnabled = request.internalCallsEnabled,
             )
             settings.saveProfile(profile)
             settings.activeProfileId = profile.id
@@ -792,6 +812,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 activeBoxWorking = null,
                 config = if (it.showConnectionSettings) it.config else profile.config,
                 phones = emptyList(),
+                internalPhones = emptyList(),
                 selectedPhone = null,
                 phonebooks = emptyList(),
                 phonebooksLoaded = false,
@@ -824,7 +845,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         when {
             remaining.isEmpty() -> {
                 LauncherShortcuts.removeAll(getApplication())
-                _state.update { it.copy(phones = emptyList(), selectedPhone = null, config = FritzConfig(), deflections = null) }
+                _state.update { it.copy(phones = emptyList(), internalPhones = emptyList(), selectedPhone = null, config = FritzConfig(), deflections = null) }
                 addProfile()
             }
             wasActive -> activateProfile(remaining.first().id)
@@ -1135,6 +1156,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 boxesSeen = null,
                 networkNotice = null,
                 phones = emptyList(),
+                internalPhones = emptyList(),
                 selectedPhone = null,
                 phonebooks = emptyList(),
                 phonebooksLoaded = false,
@@ -1231,6 +1253,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The picker's reload button: recent calls and phone books. */
     fun reloadPicker() {
+        // The box' phones come with the list of phones for dial help.
+        if (_state.value.pickerTab == PickerTab.INTERNAL) refreshPhones()
         reloadRecents()
         loadDeviceContacts()
         reloadRouterPhonebooks()
@@ -1692,12 +1716,16 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun loadPhones(dialer: FritzDialer): UiText {
+    /** Reads the phones for dial help – and, if [internal] (switched on for the box), its phones for internal calls. */
+    private fun loadPhones(dialer: FritzDialer, internal: Boolean = settings.activeProfile()?.internalCallsEnabled == true): UiText {
         val phones = dialer.listPhones()
         val current = dialer.getDialPhone()
+        // No internal phones is no reason for the phones to fail.
+        val internalPhones = if (internal) runCatching { dialer.internalPhones(phones) }.getOrDefault(emptyList()) else emptyList()
         _state.update {
             it.copy(
                 phones = phones,
+                internalPhones = internalPhones,
                 selectedPhone = current ?: it.selectedPhone ?: phones.firstOrNull(),
             )
         }
@@ -1736,6 +1764,24 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         val phone = _state.value.selectedPhone
+        // A phone of the box cannot call itself: dial help rings it first, then it would call itself.
+        val callee = _state.value.internalPhones.firstOrNull { it.number == number }
+        if (callee != null && phone != null && callee.name.isNotEmpty() &&
+            FritzDialer.displayName(phone).equals(callee.name, ignoreCase = true)
+        ) {
+            _state.update {
+                it.copy(
+                    status = null,
+                    error = BoxError(
+                        uiText(R.string.error_call_itself_title),
+                        uiText(R.string.error_call_itself, callee.name),
+                        false,
+                    ),
+                    canRetry = false,
+                )
+            }
+            return
+        }
         runOnBox(uiText(R.string.status_dialling, number)) { dialer ->
             // Only changes the box setting if needed: a change may require confirmation on the box.
             if (phone != null) dialer.ensureDialPhone(phone)
@@ -1886,6 +1932,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         stopFollowingCall()
         _state.update { it.copy(callProgress = CallProgress.PickUp(phone, number, extension = extension)) }
         if (!_state.value.callStatusEnabled) return
+        // Not known yet whether the call monitor reports internal calls: rather than saying
+        // "not picked up" after a while, such a call is not followed – as without the monitor.
+        if (FritzInternalPhones.isInternal(number)) return
         val profile = settings.activeProfile() ?: return
         val host = _state.value.config.host
         val key = numberKeys()
