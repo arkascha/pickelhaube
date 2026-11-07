@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.tr064
 
+import okhttp3.ConnectionPool
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
@@ -104,6 +105,10 @@ class Tr064Client(
                 authenticator(DigestAuthenticator(config.username, config.password))
             }
         }
+        // One pool for all clients: each client used to keep its own connections open for minutes,
+        // and with a client per request the box' HTTPS port ran out of them and stopped answering
+        // (seen on a 7530 AX with 15 idle connections from the app).
+        .connectionPool(SHARED_POOL)
         .connectTimeout(5, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .apply {
@@ -211,6 +216,14 @@ class Tr064Client(
 
     companion object {
         private val XML = "text/xml; charset=utf-8".toMediaType()
+
+        /**
+         * The connections to the boxes, shared by all clients: at most [MAX_IDLE_CONNECTIONS] are kept
+         * open between requests, each for [KEEP_ALIVE_SECONDS] at most.
+         */
+        private const val MAX_IDLE_CONNECTIONS = 2
+        private const val KEEP_ALIVE_SECONDS = 20L
+        private val SHARED_POOL = ConnectionPool(MAX_IDLE_CONNECTIONS, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS)
 
         internal fun buildEnvelope(
             serviceType: String,
