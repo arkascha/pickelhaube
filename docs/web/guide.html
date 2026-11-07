@@ -31,10 +31,11 @@
     <li><a href="#dialling">Dialling</a></li>
     <li><a href="#numbers">Choosing a number</a></li>
     <li><a href="#speed-dial">Speed dial</a></li>
+    <li><a href="#internal">Internal calls</a></li>
     <li><a href="#boxes">Several FRITZ!Boxes</a></li>
     <li><a href="#status">Live call status</a></li>
     <li><a href="#forwarding">Call forwarding</a></li>
-    <li><a href="#shortcuts">Tiles and shortcuts</a></li>
+    <li><a href="#shortcuts">Tiles, shortcuts and widget</a></li>
     <li><a href="#https">HTTPS and the router certificate</a></li>
     <li><a href="#confirm">Confirmation on the box</a></li>
     <li><a href="#backup">Backup and transfer</a></li>
@@ -65,7 +66,12 @@
     (see <a href="#https">HTTPS</a>). Without it, the password still never travels in clear text (digest authentication).</p>
   <p><strong>Save &amp; connect</strong> tests the settings first and only saves them once the router accepts them.
     If something is wrong – user name, password, missing permission, wrong port, router not reachable – a dialog explains it.</p>
-  <p>Moving from another phone? The first-connection page offers <strong>Restore backup…</strong> instead (see <a href="#backup">Backup</a>).</p>
+  <p>Moving from another phone? The first-connection page offers <strong>Restore backup…</strong> instead (see <a href="#backup">Backup</a>).
+    No FRITZ!Box at hand? <strong>No FRITZ!Box? Try the demo box</strong> at the top of that page fills in a box built into the
+    app – with phones, phone books, a call list and a simulated call – to look around.</p>
+  <p>Each connection has its own switches: <strong>Phone books</strong>, <strong>Call list</strong> and
+    <strong>Speed dials</strong> (on by default), and <strong>Internal calls</strong> (off by default, see
+    <a href="#internal">Internal calls</a>).</p>
 
   <h2 id="dialling">3. Dialling</h2>
   <ol class="steps">
@@ -73,8 +79,29 @@
     <li><strong>Enter a number</strong> Long-press <kbd>0</kbd> for <kbd>+</kbd>, or choose one from the phone books or recent calls.</li>
     <li><strong>Tap the green button</strong> Your handset rings. Pick it up – the box now dials the number.</li>
   </ol>
-  <p>The red button cancels a call that is still being set up. Pickelhaube also handles <code>tel:</code> links,
-    so you can choose it when tapping a number in Contacts or on a web page.</p>
+  <p>The red button cancels a call that is still being set up. Once the call is connected, end it on the handset:
+    the box cannot hang up a connected call for you.</p>
+  <p>A <strong>long press on the green button</strong> offers more:</p>
+  <ul>
+    <li><strong>Hide my number</strong> – your own number is withheld for this call (the box' code <code>*31#</code>).</li>
+    <li><strong>From …</strong> – with several internet numbers on the box, the call goes out over the one you choose
+      instead of the one set up for your handset.</li>
+  </ul>
+  <h3>Extensions, PINs and phone menus</h3>
+  <p>Digits to type once the call is connected – an extension, a conference PIN, a choice in a phone menu – follow the
+    number after a pause: <strong>long-press <kbd>*</kbd></strong> for a <kbd>,</kbd>, as in <code>0301234567,42#</code>.
+    The box' dial help cannot send such digits as tones, so Pickelhaube dials only the number and tells you what to type:
+    below the dialer before the call, and in bold once it is connected (<em>Now type 42# on the phone</em>, with the
+    live call status). Numbers from contacts or links bring their extension along (<code>x 42</code>, <code>;ext=42</code>).</p>
+  <h3>Numbers from elsewhere</h3>
+  <p>Pickelhaube handles <code>tel:</code> links, so you can choose it when tapping a number in Contacts or on a web page.
+    You can also <strong>share a text</strong> to Pickelhaube – an email signature, a message – or paste one with the paste
+    button of the empty number field: the phone number in it is picked out and cleaned for dialling
+    (<code>+49 (0)30 / 123 45-6</code> becomes <code>+4930123456</code>); with several, the app asks which one.</p>
+  <h3>Notes on the dialer</h3>
+  <p>Above the buttons, the dialer points out what needs a look: an internet number of the box that is not registered
+    with its provider (calls over it fail – a tap checks again), and <strong>new missed calls</strong> on the box since you
+    last looked at <em>Recent</em>; the address-book button shows their count as well.</p>
 
   <h2 id="numbers">4. Choosing a number</h2>
   <p>The address-book button left of the number field opens <strong>Choose number</strong>:</p>
@@ -86,6 +113,12 @@
       (off by default; the app asks once).</li>
     <li><strong>Speed dial</strong> – see below.</li>
   </ul>
+  <p>In <em>Recent</em>, new missed calls are marked, and with several own numbers on the box each call says which one it
+    was on (<em>from 030 123456</em>, <em>to Office</em>).</p>
+  <p><strong>Suggestions while typing:</strong> from the third key on, the row below the number field offers the
+    numbers from the phone books and recent calls that what you type may be heading for – numbers starting with it
+    (however they are written), and names whose letters are on the keys you typed (<kbd>2766</kbd> finds <em>Arno</em>).
+    A tap takes the best one; <em>3 more ▾</em> opens the others.</p>
   <p>Long-press a number for more: <em>Add to this phone's contacts</em>, <em>Hand over to the FRITZ!Box</em>
     (copies a phone contact into one of the box's phone books), and making it a speed dial.</p>
   <p>Numbers written differently (<code>+49 30 123456</code>, <code>030 123456</code>, <code>123456</code>) are
@@ -100,7 +133,16 @@
       you can also create, change and remove them from the app.</li>
   </ul>
 
-  <h2 id="boxes">6. Several FRITZ!Boxes</h2>
+  <h2 id="internal">6. Internal calls</h2>
+  <p>With several phones on the box, Pickelhaube can call one from another – the kitchen from the study, for free.
+    Switch on <strong>Internal calls</strong> on the box' connection page; <em>Choose number</em> then has a tab
+    <strong>Internal</strong> with the box' phones and their internal numbers: analogue phones (<code>**1</code>,
+    <code>**2</code>), DECT handsets (<code>**610</code> to <code>**615</code>), IP phones and FRITZ!App Fon
+    (<code>**620</code> …), and <em>All phones</em> (<code>**9</code>). Their names are found in the suggestions while typing too.</p>
+  <p>The phone under <em>Ring phone</em> rings first and then calls the other one, so choose a single phone there –
+    a group would ring the called phone as well. A phone cannot call itself; Pickelhaube says so instead of dialling.</p>
+
+  <h2 id="boxes">7. Several FRITZ!Boxes</h2>
   <p><em>Settings › FRITZ!Box connections</em> holds any number of boxes – home, office, parents – each with its own
     address, user, password and options. The box of the current network is chosen automatically: at start, when
     the network changes, and when the app comes back to the foreground. A box reachable only through a VPN or MyFRITZ
@@ -109,46 +151,51 @@
     box whose number differs from the stored one. Each connection page also shows the model, FRITZ!OS version and the
     permissions of the configured user.</p>
 
-  <h2 id="status">7. Live call status</h2>
+  <h2 id="status">8. Live call status</h2>
   <p>Above the buttons, the dialer shows how the call goes: <em>pick up</em>, <em>calling …</em>, <em>connected</em> with
     a timer, and finally <em>call ended</em> with its duration (or <em>not answered</em>).</p>
   <p>This uses the box's <strong>call monitor</strong>, which is off by default. Switch it on once by dialling
     <code>#96*5*</code> on a phone connected to the box (<code>#96*4*</code> switches it off).</p>
   <p class="note warn">The call monitor needs no login and is not encrypted: while it is on, any device in your home network can
     follow the box's calls, numbers included. Without it, Pickelhaube works as well – it just shows <em>pick up</em>.</p>
+  <p>Internal calls are not followed yet: it is not known whether the call monitor reports them.</p>
 
-  <h2 id="forwarding">8. Call forwarding</h2>
+  <h2 id="forwarding">9. Call forwarding</h2>
   <p>The forwarding symbol in the dialer's top bar lists the call forwardings set up on the box, each with a switch.
     The box only allows switching them on and off through the app; set them up on the box itself
     (<em>Telephony › Call Handling › Call Forwarding</em>).</p>
 
-  <h2 id="shortcuts">9. Tiles and shortcuts</h2>
+  <h2 id="shortcuts">10. Tiles, shortcuts and widget</h2>
   <p>Three quick settings tiles: <strong>Pickelhaube</strong> (opens the dialer, shows whether a box is reachable),
     <strong>Redial</strong> (opens the dialer with the last number – you still press the green button) and
     <strong>Call forwarding</strong>. From Android 13 on, <em>Settings › Quick settings tiles</em> adds them for you.</p>
   <p>A long press on the app icon offers <em>Redial</em> (dials right away), <em>Call forwarding</em>,
     <em>Dial number</em>, and which FRITZ!Box is reachable from here.</p>
+  <p>The home screen widget <strong>Numbers to dial</strong> holds numbers you choose, each widget its own list with an
+    optional title, in Pickelhaube's colours or transparent. Set it up when placing it (add numbers from the number picker,
+    reorder, remove); the Pickelhaube icon in its corner opens the setup again. A tap on an entry puts its number into
+    the dialer – it is dialled only with the green button.</p>
 
-  <h2 id="https">10. HTTPS and the router certificate</h2>
+  <h2 id="https">11. HTTPS and the router certificate</h2>
   <p>The FRITZ!Box uses a self-signed certificate. Pickelhaube uses <em>trust on first use</em>: on the first HTTPS
     connection it shows the certificate's fingerprints. Compare them with what your browser shows for
     <code>https://fritz.box</code>, then tap <strong>Trust</strong>. From then on only that certificate is accepted; if the box
     ever presents a different one, you get a <strong>Certificate has changed!</strong> warning instead of a silent connection.</p>
 
-  <h2 id="confirm">11. Confirmation on the box</h2>
+  <h2 id="confirm">12. Confirmation on the box</h2>
   <p>Newer FRITZ!OS versions ask for an additional confirmation for settings changes. Changing which phone rings for
     dial help is such a change; dialling itself is not. When needed, a dialog tells you what to do – press a button on
     the box or dial a shown code – and the app continues automatically.</p>
 
-  <h2 id="backup">12. Backup and transfer</h2>
+  <h2 id="backup">13. Backup and transfer</h2>
   <p><em>Settings › Back up and transfer</em> exports all connections and options to a JSON file and imports them again.
     Passwords are included only if you ask for it, then encrypted with a passphrase of your choice.</p>
 
-  <h2 id="language">13. Language</h2>
-  <p>English, German, Dutch, French, Italian, Spanish and Polish – automatic (system language) or chosen with the flag
-    button in the settings. The translations still need a review by native speakers; corrections are very welcome.</p>
+  <h2 id="language">14. Language</h2>
+  <p>English, German, Dutch, French, Italian, Spanish and Polish – automatic (the system language, shown as a globe 🌐)
+    or chosen with the flag button in the settings. The translations still need a review by native speakers; corrections are very welcome.</p>
 
-  <h2 id="permissions">14. Permissions</h2>
+  <h2 id="permissions">15. Permissions</h2>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Permission</th><th>Why</th><th>Required?</th></tr></thead>
@@ -160,12 +207,16 @@
     </table>
   </div>
 
-  <h2 id="limits">15. Limitations</h2>
+  <h2 id="limits">16. Limitations</h2>
   <ul>
     <li>Works only while the phone is in the home network of the box, or connected to it through a VPN.</li>
     <li>Google Play allows the call log permission only for the default phone app. The option to include the phone's
       own calls under <em>Recent</em> therefore works only when Pickelhaube is installed from outside Google Play.</li>
     <li>Call forwardings can be switched on and off, not set up.</li>
+    <li>The box' dial help only dials: it sends no tones once connected (see <a href="#dialling">extensions</a>) and cannot
+      end a connected call.</li>
+    <li>The box knows only one phone for dial help, and changing it needs a confirmation on newer FRITZ!OS – so there is
+      no way to let another phone ring for a single call.</li>
   </ul>
 
   <p>Technical details and the source code: <a href="https://github.com/arkascha/pickelhaube">github.com/arkascha/pickelhaube</a>.</p>

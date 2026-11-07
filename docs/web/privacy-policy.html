@@ -23,12 +23,12 @@
 
 <main class="wrap">
   <h1>Privacy Policy</h1>
-  <p class="lead">Pickelhaube for Android &middot; Effective date: October 31, 2026</p>
+  <p class="lead">Pickelhaube for Android &middot; Effective date: November 7, 2026</p>
 
   <div class="note warn">
     <strong>In short:</strong>
     <ul>
-      <li>Your settings, your own speed dials and the number you dialled last are stored only on your Android device.</li>
+      <li>Your settings, your own speed dials, the numbers you put on a home screen widget and the number you dialled last are stored only on your Android device.</li>
       <li>The app communicates only with FRITZ!Box routers: the ones you configured, and – to find out which of them is in the current network – the router of that network.</li>
       <li>Phone books and call lists are read only to let you choose a number; they are not saved by the app.</li>
       <li>No data is collected by, sent to, or shared with the developer or any third party. There are no analytics, advertising or tracking components.</li>
@@ -42,11 +42,13 @@
   <h2>2. Data stored on your device</h2>
   <p>The app stores the following in its private storage on your Android device:</p>
   <ul>
-    <li><strong>FRITZ!Box connections:</strong> for each configured box its name, address, port, whether HTTPS is used, user name and password, the box’s device id and serial number (to recognise it), and, if you trusted one, its HTTPS certificate. Passwords are stored encrypted with a key held in the Android Keystore.</li>
+    <li><strong>FRITZ!Box connections:</strong> for each configured box its name, address, port, whether HTTPS is used, user name and password, the box’s device id and serial number (to recognise it), what it told about itself (model, FRITZ!OS version, country and area code, the permissions of the configured user, whether its call monitor answers), the options you chose for it, and, if you trusted one, its HTTPS certificate. Passwords are stored encrypted with a key held in the Android Keystore.</li>
     <li><strong>App preferences:</strong> for example which phone the FRITZ!Box should ring, the app language, and which optional features are switched on.</li>
     <li><strong>Your own speed dials (1–9):</strong> the name and number you assigned to each, stored as a copy.</li>
     <li><strong>Last dialled number:</strong> the number dialled last and its name, used for the “Redial” tile and the app shortcuts.</li>
     <li><strong>Call forwarding state:</strong> whether a call forwarding was last seen switched on and its destination, shown in the app shortcut.</li>
+    <li><strong>Home screen widgets:</strong> for each “Numbers to dial” widget you place, its title and the names and numbers you put on it, stored as a copy and shown on your home screen.</li>
+    <li><strong>Missed calls seen:</strong> for each FRITZ!Box, the time up to which you looked at its missed calls under “Recent”, to count the new ones. No calls are stored.</li>
   </ul>
   <p>The app publishes the last dialled number and its name to the Android launcher as an app shortcut, so the launcher can show it in the menu of the app icon. This stays on your device.</p>
   <p>This data leaves your device only if you export it yourself (see section 4).</p>
@@ -58,7 +60,7 @@
       <ul>
         <li>logging in (digest authentication, so the password itself is never sent in clear text),</li>
         <li>placing and cancelling calls, and changing which phone rings for dial help,</li>
-        <li>reading phone books, the call list, speed dials, call forwardings, the box’s area and country code, its model, FRITZ!OS version, serial number, and the permissions of the configured user,</li>
+        <li>reading phone books, the call list, speed dials, call forwardings, the box’s own numbers and whether its internet numbers are registered with their provider, its phones (also DECT handsets and IP phones, for internal calls), the box’s area and country code, its model, FRITZ!OS version, serial number, and the permissions of the configured user,</li>
         <li>following the status of a call you placed,</li>
         <li>changes you trigger: switching a call forwarding on or off, adding a contact to one of the box’s phone books, creating, changing or removing a speed dial there, or deleting a copy the app made.</li>
       </ul>
@@ -82,10 +84,10 @@
     <li><strong>Call log</strong> (<code>READ_CALL_LOG</code>): to show the calls of your phone’s own telephony app under “Recent”. This option exists only in versions installed outside Google Play.</li>
   </ul>
   <p>Both are used for nothing else and can be revoked at any time in Android’s app settings. The app does not read your location, device identifiers, or other personal information unrelated to these functions.</p>
-  <p>The app can also be chosen to open <code>tel:</code> links from other apps; the number is then filled into the dialer.</p>
+  <p>The app can also be chosen to open <code>tel:</code> links from other apps; the number is then filled into the dialer. In the same way, you can share a text to the app, or paste one with the paste button of the empty number field: the app looks for a phone number in it and fills that into the dialer. The clipboard is read only when you tap that button; the text is not kept.</p>
 
   <h2>6. Use of data</h2>
-  <p>Phone books, call lists and contacts – whether obtained from your FRITZ!Box or your Android device – are read to display selectable entries, to show names for numbers, and to dial the entry you choose. They are held only while the app runs and are not saved by it, apart from the copies described in section 2 (your own speed dials and the last dialled number). All other data is used solely to connect to your FRITZ!Box and to perform the functions you trigger. Nothing is used for profiling, marketing, or any other purpose.</p>
+  <p>Phone books, call lists and contacts – whether obtained from your FRITZ!Box or your Android device – are read to display selectable entries, to show names for numbers, and to dial the entry you choose. They are held only while the app runs and are not saved by it, apart from the copies described in section 2 (your own speed dials, the numbers on your widgets and the last dialled number). Suggestions while typing a number are made from them on the device as well. All other data is used solely to connect to your FRITZ!Box and to perform the functions you trigger. Nothing is used for profiling, marketing, or any other purpose.</p>
 
   <h2>7. Data sharing</h2>
   <p>No data is shared with, sold to, or otherwise disclosed to anyone.</p>

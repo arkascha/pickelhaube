@@ -5,7 +5,17 @@ NUMMER AUSWÄHLEN
 • Die Telefonbücher der FRITZ!Box, mit Suche, A–Z-Leiste und Filter nach Telefonbuch
 • Auf Wunsch die Kontakte deines Smartphones gleich daneben
 • Kurzwahlen 1–9 auf dem Smartphone, gültig mit jeder Box, dazu die Kurzwahlen 00–99 der FRITZ!Box, die du auch in der App einrichten und ändern kannst
+• Vorschläge beim Tippen: passende Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Buchstaben der Tasten
+• Einen Text an Pickelhaube teilen oder einfügen – die Telefonnummer darin wird herausgesucht und wählbar gemacht
+• Neue verpasste Anrufe der FRITZ!Box werden gezählt und markiert
 • Wähle, welches Telefon klingelt: ein einzelnes Telefon oder alle
+
+WÄHLEN
+• Die eigene Nummer für einen einzelnen Anruf unterdrücken
+• Mehrere eigene Nummern auf der FRITZ!Box: wähle, über welche ein Anruf geht, und sieh in den letzten Anrufen, über welche jeder lief
+• Durchwahlen, Konferenz-PINs und Telefonmenüs: die Nummer wird gewählt, und die App sagt, was nach dem Verbinden zu tippen ist
+• Interne Gespräche zwischen den Telefonen deiner FRITZ!Box – die Küche vom Arbeitszimmer aus, kostenlos
+• Eine Warnung, wenn eine Internetrufnummer der FRITZ!Box nicht beim Anbieter registriert ist
 
 WÄHREND DES ANRUFS
 • Gesprächsstatus live: abnehmen, wählt, verbunden mit laufender Zeit, beendet – über den Anrufmonitor der FRITZ!Box
@@ -18,6 +28,7 @@ RUFUMLEITUNG
 SCHNELLER ZUGRIFF
 • Kacheln in den Schnelleinstellungen: Wählhilfe öffnen, Wahlwiederholung, Rufumleitung schalten
 • Langes Drücken auf das App-Symbol: Wahlwiederholung, Rufumleitung, Nummer auswählen, FRITZ!Box suchen
+• Widget für den Startbildschirm mit deiner eigenen Nummernliste – so viele Widgets, wie du magst
 
 MEHRERE FRITZ!BOXEN
 • Zuhause, Büro, Ferienwohnung: richte beliebig viele Boxen ein
