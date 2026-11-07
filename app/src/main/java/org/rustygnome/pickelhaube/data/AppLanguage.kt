@@ -29,6 +29,12 @@ object AppLanguage {
         "pl" to "Polski",
     )
 
+    /**
+     * Stands for "Auto", the system language: a globe, not the flag of the language that leads to –
+     * that one is in the list already, and would change along with a language chosen by hand.
+     */
+    const val AUTO_SYMBOL = "\uD83C\uDF10"
+
     /** Country whose flag stands for a language when its locale names none (e.g. a chosen "de"). */
     private val flagCountry = mapOf(
         "en" to "GB", "de" to "DE", "nl" to "NL", "fr" to "FR", "it" to "IT", "es" to "ES", "pl" to "PL",

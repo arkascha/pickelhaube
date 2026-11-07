@@ -3,7 +3,6 @@ package org.rustygnome.pickelhaube.ui
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.res.Resources
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +37,7 @@ import java.util.Locale
 
 /**
  * The app's language: the system's ("Auto"), or one of the languages Pickelhaube is translated into,
- * each with its national flag. Choosing one goes back and redraws the app in it (see [AppLanguage]).
+ * each with its national flag; "Auto" with a globe. Choosing one goes back and redraws the app in it (see [AppLanguage]).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,8 +47,6 @@ fun LanguageScreen(onBack: () -> Unit) {
     val current = remember { AppLanguage.current(context) }
     val options = listOf<Pair<String?, String>>(null to stringResource(R.string.settings_language_system)) +
         AppLanguage.supported
-    // "Auto" leads to the system language, so it gets that one's flag.
-    val systemLocale = Resources.getSystem().configuration.locales[0]
 
     Scaffold(
         topBar = {
@@ -82,7 +79,7 @@ fun LanguageScreen(onBack: () -> Unit) {
                         // At the right edge, so the flags line up whatever the length of the names.
                         trailingContent = {
                             Text(
-                                AppLanguage.flag(tag?.let(Locale::forLanguageTag) ?: systemLocale),
+                                tag?.let { AppLanguage.flag(Locale.forLanguageTag(it)) } ?: AppLanguage.AUTO_SYMBOL,
                                 fontSize = 22.sp,
                             )
                         },

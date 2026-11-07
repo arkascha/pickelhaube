@@ -170,8 +170,10 @@ fun SettingsScreen(
                     }
                 },
                 actions = {
-                    // The national flag of the language in use, as an emoji.
-                    val flag = AppLanguage.flag(LocalConfiguration.current.locales[0])
+                    // The national flag of the language chosen, as an emoji; a globe for "Auto".
+                    val context = LocalContext.current
+                    val flag = if (AppLanguage.current(context) == null) AppLanguage.AUTO_SYMBOL
+                    else AppLanguage.flag(LocalConfiguration.current.locales[0])
                     val languageLabel = stringResource(R.string.settings_language)
                     IconButton(
                         onClick = onOpenLanguage,
