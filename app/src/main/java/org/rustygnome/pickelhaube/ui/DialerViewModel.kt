@@ -72,6 +72,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -195,6 +198,8 @@ data class UiState(
     val deviceContacts: Phonebook? = null,
     /** Non-null while the box waits for a second-factor confirmation (error 866). */
     val secondFactor: SecondFactorChallenge? = null,
+    /** Numbers of the phone books and recent calls the number being typed may be heading for (see [suggestions]). */
+    val suggestions: List<Suggestion> = emptyList(),
     /** Dialled, received and missed calls from the box' call list, loaded whenever the picker is opened. */
     val boxCalls: List<RecentCall> = emptyList(),
     val boxCallsLoaded: Boolean = false,
@@ -354,6 +359,53 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun appendDigit(c: Char) = _state.update { it.copy(number = it.number + c, numberLabel = null) }
 
     fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null) }
+
+    /** A suggestion was tapped: its number into the dialer, with whose it is as the field's label. */
+    fun takeSuggestion(suggestion: Suggestion) = _state.update {
+        it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw))
+    }
+
+    /** What the suggestions are made of; a change makes them anew. The lists are compared as the same ones mostly. */
+    private data class SuggestionInput(
+        val number: String,
+        val labelled: Boolean,
+        val phonebooks: List<Phonebook>,
+        val deviceContacts: Phonebook?,
+        val boxCalls: List<RecentCall>,
+        val phoneCalls: List<RecentCall>?,
+        val codes: DialingCodes?,
+    )
+
+    /**
+     * Keeps [DialerState.suggestions] up to date with the number typed and the phone books and calls
+     * loaded – off the main thread, the latest typing only. A number already named in the field
+     * (taken from a suggestion, the picker, a speed dial) is not offered to itself once more.
+     */
+    private fun watchSuggestions() = viewModelScope.launch {
+        _state
+            .map { s ->
+                SuggestionInput(
+                    number = s.number,
+                    labelled = s.numberLabel != null,
+                    phonebooks = if (s.activeProfile?.phonebooksEnabled != false) s.phonebooks else emptyList(),
+                    deviceContacts = s.deviceContacts,
+                    boxCalls = s.boxCalls,
+                    phoneCalls = s.phoneCalls,
+                    codes = s.activeProfile?.dialingCodes,
+                )
+            }
+            .distinctUntilChanged()
+            .collectLatest { input ->
+                val key = numberKeys()
+                val found = withContext(Dispatchers.Default) {
+                    val typed = key(FritzDialer.sanitizeNumber(input.number))
+                    val contacts = (input.phonebooks + listOfNotNull(input.deviceContacts)).flatMap { it.contacts }
+                    suggestions(input.number, contacts, input.boxCalls + input.phoneCalls.orEmpty(), key, input.codes)
+                        .filterNot { input.labelled && key(it.number) == typed }
+                }
+                _state.update { it.copy(suggestions = found) }
+            }
+    }
 
     /** Called with the number from a tel: link (ACTION_DIAL / ACTION_VIEW). */
     fun prefill(number: String) = _state.update { it.copy(number = NumberText.clean(number), numberLabel = null) }
@@ -1421,12 +1473,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * Reads the phone books of the box in use in the background, so its speed dials work right
-     * away in the dialer – not only once the picker was opened. Checked when it is its turn, as
-     * the box in use may change until then.
+     * Reads the phone books of the box in use in the background, so its speed dials and the
+     * suggestions while typing work right away in the dialer – not only once the picker was opened.
+     * Checked when it is its turn, as the box in use may change until then.
      */
     private fun preloadBoxSpeedDials() = runWhenIdle("speedDials") {
-        if (settings.activeProfile()?.speedDialsEnabled == true && !_state.value.phonebooksLoaded &&
+        val profile = settings.activeProfile()
+        if (profile != null && (profile.speedDialsEnabled || profile.phonebooksEnabled) && !_state.value.phonebooksLoaded &&
             !_state.value.noBoxReachable
         ) {
             reloadRouterPhonebooks()
@@ -2096,6 +2149,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             LauncherShortcuts.publish(getApplication())
             }
         watchNetwork()
+        watchSuggestions()
     }
 }
 

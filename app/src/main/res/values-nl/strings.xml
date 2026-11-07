@@ -427,6 +427,12 @@
     <string name="call_connected">Verbonden met %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Ophangen op het toestel zelf</string>
     <string name="dialer_insert_pause">Pauze invoegen</string>
+    <string name="dialer_more_suggestions_short">nog %d</string>
+    <string name="dialer_take_suggestion">Dit nummer nemen</string>
+    <plurals name="dialer_more_suggestions">
+        <item quantity="one">%d andere suggestie</item>
+        <item quantity="other">%d andere suggesties</item>
+    </plurals>
     <string name="dialer_extension_hint">Belt %1$s – zodra verbonden, toets %2$s op de telefoon</string>
     <string name="status_pick_up_extension">Neem %1$s op – de box belt %2$s, toets dan %3$s</string>
     <string name="status_pick_up_any_extension">Neem je telefoon op – de box belt %1$s, toets dan %2$s</string>

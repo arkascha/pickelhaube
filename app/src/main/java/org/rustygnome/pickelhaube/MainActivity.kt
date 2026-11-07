@@ -293,6 +293,7 @@ class MainActivity : ComponentActivity() {
                         onOpenDeflections = viewModel::openDeflections,
                         onCheckLines = viewModel::checkLines,
                         onDialFrom = { viewModel.dial(from = it) },
+                        onSuggestion = viewModel::takeSuggestion,
                     )
                 }
 

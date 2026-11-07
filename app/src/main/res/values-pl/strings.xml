@@ -437,6 +437,14 @@
     <string name="call_connected">Połączono z %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Rozłącz się na samym urządzeniu</string>
     <string name="dialer_insert_pause">Wstaw pauzę</string>
+    <string name="dialer_more_suggestions_short">jeszcze %d</string>
+    <string name="dialer_take_suggestion">Użyj tego numeru</string>
+    <plurals name="dialer_more_suggestions">
+        <item quantity="one">%d kolejna propozycja</item>
+        <item quantity="few">%d kolejne propozycje</item>
+        <item quantity="many">%d kolejnych propozycji</item>
+        <item quantity="other">%d kolejnej propozycji</item>
+    </plurals>
     <string name="dialer_extension_hint">Dzwoni do %1$s – po połączeniu wybierz %2$s na telefonie</string>
     <string name="status_pick_up_extension">Odbierz na %1$s – urządzenie dzwoni do %2$s, potem wybierz %3$s</string>
     <string name="status_pick_up_any_extension">Odbierz telefon – urządzenie dzwoni do %1$s, potem wybierz %2$s</string>

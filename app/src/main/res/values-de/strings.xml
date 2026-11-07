@@ -427,6 +427,12 @@
     <string name="call_connected">Verbunden mit %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Auflegen am Gerät selbst</string>
     <string name="dialer_insert_pause">Pause einfügen</string>
+    <string name="dialer_more_suggestions_short">%d weitere</string>
+    <string name="dialer_take_suggestion">Diese Nummer übernehmen</string>
+    <plurals name="dialer_more_suggestions">
+        <item quantity="one">%d weiterer Vorschlag</item>
+        <item quantity="other">%d weitere Vorschläge</item>
+    </plurals>
     <string name="dialer_extension_hint">Ruft %1$s an – sobald verbunden, tippe %2$s am Telefon</string>
     <string name="status_pick_up_extension">Nimm %1$s ab – die Box ruft %2$s an, dann tippe %3$s</string>
     <string name="status_pick_up_any_extension">Nimm dein Telefon ab – die Box ruft %1$s an, dann tippe %2$s</string>

@@ -430,6 +430,12 @@
     <string name="call_connected">Connected with %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Hang up on the device itself</string>
     <string name="dialer_insert_pause">Insert pause</string>
+    <string name="dialer_more_suggestions_short">%d more</string>
+    <string name="dialer_take_suggestion">Take this number</string>
+    <plurals name="dialer_more_suggestions">
+        <item quantity="one">%d more suggestion</item>
+        <item quantity="other">%d more suggestions</item>
+    </plurals>
     <string name="dialer_extension_hint">Calls %1$s – once connected, type %2$s on the phone</string>
     <string name="status_pick_up_extension">Pick up %1$s – the box calls %2$s, then type %3$s</string>
     <string name="status_pick_up_any_extension">Pick up your phone – the box calls %1$s, then type %2$s</string>

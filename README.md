@@ -153,6 +153,16 @@ The device description needs no login and can be imitated. So after switching, P
 the box' serial number (`DeviceInfo` `GetInfo`, see above) with the stored one, and refuses a box whose
 number differs. With HTTPS, the pinned certificate protects in addition.
 
+### Suggestions while typing
+
+From the third key on, the row under the number field offers the numbers of the phone books and
+recent calls that what is typed may be heading for: numbers starting with it – also written the
+other way, `030 1…` finds `+49 30 1…` and the other way round –, then names whose letters are on the
+keys typed, from the start of a word (`2766` finds *Arno*, `26626` *Anna M…*, umlauts as their
+letter), then numbers containing it elsewhere. Numbers called recently come first. A tap takes the
+best one into the field, with its name above; **3 more ▾** opens all of them (up to eight). For this, the
+box' phone books are read when the app comes up, as long as they are switched on for the box.
+
 ### Choosing a number: recent calls and phone books
 
 The address-book button at the left of the number field opens **Choose number** with two tabs,

@@ -432,6 +432,13 @@
     <string name="call_connected">Connesso con %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Riaggancia sull’apparecchio stesso</string>
     <string name="dialer_insert_pause">Inserisci pausa</string>
+    <string name="dialer_more_suggestions_short">altri %d</string>
+    <string name="dialer_take_suggestion">Usa questo numero</string>
+    <plurals name="dialer_more_suggestions">
+        <item quantity="one">%d altro suggerimento</item>
+        <item quantity="many">%d altri suggerimenti</item>
+        <item quantity="other">%d altri suggerimenti</item>
+    </plurals>
     <string name="dialer_extension_hint">Chiama %1$s – una volta connesso, digita %2$s sul telefono</string>
     <string name="status_pick_up_extension">Rispondi su %1$s – la box chiama %2$s, poi digita %3$s</string>
     <string name="status_pick_up_any_extension">Rispondi al telefono – la box chiama %1$s, poi digita %2$s</string>
