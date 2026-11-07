@@ -64,10 +64,14 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    for dial help. Choose your phone in **Ring phone**.
 3. Enter a number (long-press **0** for **+**) and tap the green button → the phone rings → take the call → the call is placed.
    The red button cancels a dial-help call that is still being set up.
-   A **long press on the green button** offers *Dial with hidden number*: your own number is withheld
+   A **long press on the green button** offers *Hide my number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
-   With several internet numbers on the box, it also offers *Dial from <number>* for each (see
-   *Own numbers* below).
+   With several internet numbers on the box, it also offers *From <number>* for each (see
+   *Own numbers* below). *On <phone>* lets another of the box' phones ring for this one call,
+   instead of the one under **Ring phone** – with more than two other phones, they are in a submenu
+   *Choose phone ›*; none with a single phone. Once the call is under way (or over, or
+   failed), the box is set back to the phone under **Ring phone**. Where the box protects changing the phone for dial help with a
+   confirmation, both changes ask for one.
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
 Before logging in, it asks the box at the host who it is (its public device description, no login):
@@ -367,7 +371,7 @@ back as well.
 
 Along with their registration (below), the app reads the box' own numbers (`X_VoIP`
 `X_AVM-DE_GetNumbers`): number, type and the name given on the box. They name the own number in
-**Recent**, and – with two or more internet numbers – the green button's long press offers *Dial from
+**Recent**, and – with two or more internet numbers – the green button's long press offers *From
 <number>* for each one that is not known to be down: the box' code for that number goes before the
 one dialled, as listed in the column *Selection* of the box' internet numbers (`*121#` for the first,
 `*122#` for the second, …, `*120#` for the tenth). Without it, the box uses the outgoing number set up

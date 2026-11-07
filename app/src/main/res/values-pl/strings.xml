@@ -251,8 +251,10 @@
     <string name="error_connection_https_port">%1$s – port %2$d wymaga HTTPS.</string>
     <string name="error_cert_rejected_title">Certyfikat niezaufany</string>
     <string name="error_cert_rejected">Połączenie zostało odrzucone, ponieważ nie zaufałeś certyfikatowi routera.</string>
-    <string name="dialer_dial_hidden">Zadzwoń z ukrytym numerem</string>
-    <string name="dialer_dial_from">Zadzwoń z numeru %1$s</string>
+    <string name="dialer_dial_hidden">Ukryj numer</string>
+    <string name="dialer_dial_from">Z numeru %1$s</string>
+    <string name="dialer_dial_on">Przez %1$s</string>
+    <string name="dialer_dial_on_other">Wybierz telefon</string>
     <string name="dialer_paste">Wklej numer</string>
     <string name="number_choice_title">Który numer?</string>
     <string name="error_no_number_found_title">Brak numeru telefonu</string>

@@ -251,8 +251,10 @@
     <string name="error_connection_https_port">%1$s – poort %2$d verwacht HTTPS.</string>
     <string name="error_cert_rejected_title">Certificaat niet vertrouwd</string>
     <string name="error_cert_rejected">De verbinding is geweigerd omdat je het certificaat van de router niet hebt vertrouwd.</string>
-    <string name="dialer_dial_hidden">Bellen met verborgen nummer</string>
-    <string name="dialer_dial_from">Bellen vanaf %1$s</string>
+    <string name="dialer_dial_hidden">Anoniem bellen</string>
+    <string name="dialer_dial_from">Vanaf %1$s</string>
+    <string name="dialer_dial_on">Op %1$s</string>
+    <string name="dialer_dial_on_other">Telefoon kiezen</string>
     <string name="dialer_paste">Nummer plakken</string>
     <string name="number_choice_title">Welk nummer?</string>
     <string name="error_no_number_found_title">Geen telefoonnummer</string>
