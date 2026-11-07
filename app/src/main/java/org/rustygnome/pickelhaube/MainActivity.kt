@@ -303,7 +303,6 @@ class MainActivity : ComponentActivity() {
                         onOpenDeflections = viewModel::openDeflections,
                         onCheckLines = viewModel::checkLines,
                         onDialFrom = { viewModel.dial(from = it) },
-                        onDialOn = { viewModel.dial(ringPhone = it) },
                         onSuggestion = viewModel::takeSuggestion,
                     )
                 }

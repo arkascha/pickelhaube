@@ -256,8 +256,6 @@
     <string name="error_cert_rejected">The connection was refused because you did not trust the router’s certificate.</string>
     <string name="dialer_dial_hidden">Hide my number</string>
     <string name="dialer_dial_from">From %1$s</string>
-    <string name="dialer_dial_on">On %1$s</string>
-    <string name="dialer_dial_on_other">Choose phone</string>
     <string name="dialer_paste">Paste number</string>
     <string name="number_choice_title">Which number?</string>
     <string name="error_no_number_found_title">No phone number</string>

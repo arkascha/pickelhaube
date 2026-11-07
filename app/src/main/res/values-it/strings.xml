@@ -253,8 +253,6 @@
     <string name="error_cert_rejected">La connessione è stata rifiutata perché non hai considerato attendibile il certificato del router.</string>
     <string name="dialer_dial_hidden">Numero nascosto</string>
     <string name="dialer_dial_from">Da %1$s</string>
-    <string name="dialer_dial_on">Su %1$s</string>
-    <string name="dialer_dial_on_other">Scegli telefono</string>
     <string name="dialer_paste">Incolla numero</string>
     <string name="number_choice_title">Quale numero?</string>
     <string name="error_no_number_found_title">Nessun numero di telefono</string>

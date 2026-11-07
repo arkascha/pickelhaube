@@ -67,11 +67,7 @@ Without them, release builds are not signed; with only some of them, Gradle warn
    A **long press on the green button** offers *Hide my number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
    With several internet numbers on the box, it also offers *From <number>* for each (see
-   *Own numbers* below). *On <phone>* lets another of the box' phones ring for this one call,
-   instead of the one under **Ring phone** – with more than two other phones, they are in a submenu
-   *Choose phone ›*; none with a single phone. Once the call is under way (or over, or
-   failed), the box is set back to the phone under **Ring phone**. Where the box protects changing the phone for dial help with a
-   confirmation, both changes ask for one.
+   *Own numbers* below).
 
 **Save & connect** tests the settings first: they are only saved once the router accepts them.
 Before logging in, it asks the box at the host who it is (its public device description, no login):
@@ -552,6 +548,9 @@ the call list's date format, the device details, the user list (and the users ma
 - Plain HTTP (port 49000) remains the default; even there the password never travels in clear text
   (digest auth). HTTPS additionally encrypts the numbers you dial and protects against spoofed routers.
 - Works only while the phone is in the home network (or via VPN to it).
+- Letting another phone ring for a single call is not offered: the box knows only one phone for dial
+  help, and changing it (`X_AVM-DE_DialSetConfig`) has to be confirmed on the box (tested on a
+  7530 AX) – twice per call, to switch and to switch back.
 
 ## Trademarks
 

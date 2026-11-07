@@ -22,9 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
@@ -132,7 +129,6 @@ fun DialerScreen(
     onCheckLines: () -> Unit,
     /** Places the call from another own number of the box (long press on the green button). */
     onDialFrom: (OwnNumber) -> Unit,
-    onDialOn: (phone: String) -> Unit,
     onSuggestion: (Suggestion) -> Unit,
 ) {
     state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
@@ -315,12 +311,12 @@ fun DialerScreen(
                         // A long press offers the call with the own number withheld.
                         // and, with several internet numbers on the box, the call from one of them.
                         menu = listOf(
-                            MenuEntry(stringResource(R.string.dialer_dial), action = onDial),
-                            MenuEntry(stringResource(R.string.dialer_dial_hidden), action = onDialHidden),
+                            stringResource(R.string.dialer_dial) to onDial,
+                            stringResource(R.string.dialer_dial_hidden) to onDialHidden,
                         ) + state.dialFromNumbers.map { own ->
                             val label = if (own.name.isBlank()) own.number else "${own.name} (${own.number})"
-                            MenuEntry(stringResource(R.string.dialer_dial_from, label)) { onDialFrom(own) }
-                        } + dialOnEntries(state.phones.filter { it != state.selectedPhone }, onDialOn),
+                            stringResource(R.string.dialer_dial_from, label) to { onDialFrom(own) }
+                        },
                         // Only when there is something dialable (same check the dial action uses).
                         // No box to dial through: entering a number still works, dialling does not.
                         enabled = !state.busy && !state.noBoxReachable &&
@@ -633,33 +629,9 @@ private fun BackspaceButton(onBackspace: () -> Unit, onClear: () -> Unit) {
     }
 }
 
-/** An entry of a menu: [action] when tapped – or, with a [submenu], that one opens in its place. */
-private data class MenuEntry(
-    val label: String,
-    val submenu: List<MenuEntry> = emptyList(),
-    val action: () -> Unit = {},
-)
-
 /**
- * "On <phone>" for each of the [phones] other than the one under "Ring phone": this call only,
- * that phone rings for it. Up to two right in the menu, more in a submenu of their own. None with a
- * single phone.
- */
-@Composable
-private fun dialOnEntries(phones: List<String>, onDialOn: (String) -> Unit): List<MenuEntry> {
-    if (phones.size > 2) {
-        // Under the submenu's title "Choose phone", the phones' names say enough.
-        val entries = phones.map { phone -> MenuEntry(FritzDialer.displayName(phone)) { onDialOn(phone) } }
-        return listOf(MenuEntry(stringResource(R.string.dialer_dial_on_other), entries))
-    }
-    return phones.map { phone ->
-        MenuEntry(stringResource(R.string.dialer_dial_on, FritzDialer.displayName(phone))) { onDialOn(phone) }
-    }
-}
-
-/**
- * Round call button. With a [menu], a long press opens it – a Button has no long press, so this one
- * is drawn by hand in the Button's colours. An entry with a submenu shows it in its place, with a way back.
+ * Round call button. With a [menu] (label and action each), a long press opens it – a Button has no
+ * long press, so this one is drawn by hand in the Button's colours.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -667,13 +639,11 @@ private fun RoundActionButton(
     onClick: () -> Unit,
     enabled: Boolean,
     color: Color,
-    menu: List<MenuEntry> = emptyList(),
+    menu: List<Pair<String, () -> Unit>> = emptyList(),
     icon: @Composable () -> Unit,
 ) {
     val haptics = LocalHapticFeedback.current
     var open by remember { mutableStateOf(false) }
-    // The submenu shown in place of the menu; null: the menu itself.
-    var sub by remember { mutableStateOf<MenuEntry?>(null) }
     val container = if (enabled) color else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
     val content = if (enabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
     Box {
@@ -687,11 +657,10 @@ private fun RoundActionButton(
                     enabled = enabled,
                     role = Role.Button,
                     onClick = onClick,
-                    onLongClickLabel = menu.getOrNull(1)?.label,
+                    onLongClickLabel = menu.getOrNull(1)?.first,
                     onLongClick = if (menu.isEmpty()) null else {
                         {
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                            sub = null
                             open = true
                         }
                     },
@@ -700,32 +669,8 @@ private fun RoundActionButton(
             CompositionLocalProvider(LocalContentColor provides content) { icon() }
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-            val shown = sub
-            if (shown != null) {
-                DropdownMenuItem(
-                    text = { Text(shown.label, fontWeight = FontWeight.Medium) },
-                    leadingIcon = {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-                    },
-                    onClick = { sub = null },
-                )
-                HorizontalDivider()
-            }
-            (shown?.submenu ?: menu).forEach { entry ->
-                DropdownMenuItem(
-                    text = { Text(entry.label) },
-                    trailingIcon = if (entry.submenu.isNotEmpty()) {
-                        { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }
-                    } else null,
-                    onClick = {
-                        if (entry.submenu.isNotEmpty()) {
-                            sub = entry
-                        } else {
-                            open = false
-                            entry.action()
-                        }
-                    },
-                )
+            menu.forEach { (label, action) ->
+                DropdownMenuItem(text = { Text(label) }, onClick = { open = false; action() })
             }
         }
     }

@@ -1726,16 +1726,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 phones = phones,
                 internalPhones = internalPhones,
-                // While a call rings another phone for once, the box' setting is not the choice.
-                selectedPhone = if (ringPhoneToRestore != null) it.selectedPhone else current ?: it.selectedPhone ?: phones.firstOrNull(),
+                selectedPhone = current ?: it.selectedPhone ?: phones.firstOrNull(),
             )
         }
         return UiText.Plural(R.plurals.status_connected, phones.size)
     }
 
     fun selectPhone(name: String) {
-        // Chosen anew: nothing to set back after a call on another phone.
-        ringPhoneToRestore = null
         _state.update { it.copy(selectedPhone = name) }
         runOnBox(uiText(R.string.status_selecting, FritzDialer.displayName(name))) { dialer ->
             dialer.ensureDialPhone(name)
@@ -1746,11 +1743,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** Places the call; [withhold]: with the own number withheld (see [FritzDialer.withheld]). */
     /**
      * Places the call. [withhold]: with the own number withheld; [from]: over this own number of the
-     * box, by its code (see [OwnNumber.dialling]), instead of the one set up for the dial-help phone;
-     * [ringPhone]: this call only, the box rings this phone instead of the one under "Ring phone"; the
-     * box is set back to that one once the call is under way (see [restoreRingPhone]).
+     * box, by its code (see [OwnNumber.dialling]), instead of the one set up for the dial-help phone.
      */
-    fun dial(withhold: Boolean = false, from: OwnNumber? = null, ringPhone: String? = null) {
+    fun dial(withhold: Boolean = false, from: OwnNumber? = null) {
         if (_state.value.noBoxReachable) return
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
@@ -1768,9 +1763,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             }
             return
         }
-        val phone = ringPhone ?: _state.value.selectedPhone
-        // Set back after this call: the phone under "Ring phone" (a call on it sets the box anyway).
-        ringPhoneToRestore = _state.value.selectedPhone.takeIf { ringPhone != null && it != ringPhone }
+        val phone = _state.value.selectedPhone
         // A phone of the box cannot call itself: dial help rings it first, then it would call itself.
         val callee = _state.value.internalPhones.firstOrNull { it.number == number }
         if (callee != null && phone != null && callee.name.isNotEmpty() &&
@@ -1902,7 +1895,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         dialTimeout = viewModelScope.launch {
             delay(DIAL_ACTIVE_MILLIS)
             _state.update { it.copy(dialActive = false, callProgress = it.callProgress.takeUnless { p -> p is CallProgress.PickUp }) }
-            restoreRingPhone()
         }
     }
 
@@ -1910,27 +1902,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         dialTimeout?.cancel()
         dialTimeout = null
         _state.update { it.copy(dialActive = false) }
-        restoreRingPhone()
-    }
-
-    /** The phone under "Ring phone", while a call rang another one for once (see [dial]); null: nothing to set back. */
-    private var ringPhoneToRestore: String? = null
-
-    /**
-     * A call that rang another phone for once is under way, over, or failed: the box rings the phone
-     * under "Ring phone" again for dial help – otherwise the box' setting would become the app's
-     * choice the next time the phones are read.
-     */
-    private fun restoreRingPhone() {
-        if (ringPhoneToRestore == null) return
-        // Kept until done: a failed attempt is made again with the next request that works.
-        if (_state.value.busy) return runWhenIdle("restoreRingPhone", ::restoreRingPhone)
-        val phone = ringPhoneToRestore ?: return
-        runOnBox(uiText(R.string.status_selecting, FritzDialer.displayName(phone))) { dialer ->
-            dialer.ensureDialPhone(phone)
-            if (ringPhoneToRestore == phone) ringPhoneToRestore = null
-            uiText(R.string.status_ring_on, FritzDialer.displayName(phone))
-        }
     }
 
     fun hangup() = runOnBox(uiText(R.string.status_hanging_up)) { dialer ->

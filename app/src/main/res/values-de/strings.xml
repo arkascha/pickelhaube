@@ -253,8 +253,6 @@
     <string name="error_cert_rejected">Die Verbindung wurde abgelehnt, weil du dem Zertifikat des Routers nicht vertraut hast.</string>
     <string name="dialer_dial_hidden">Anonym wählen</string>
     <string name="dialer_dial_from">Von %1$s</string>
-    <string name="dialer_dial_on">An %1$s</string>
-    <string name="dialer_dial_on_other">Telefon auswählen</string>
     <string name="dialer_paste">Nummer einfügen</string>
     <string name="number_choice_title">Welche Nummer?</string>
     <string name="error_no_number_found_title">Keine Telefonnummer</string>
