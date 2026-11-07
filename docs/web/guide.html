@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guide – Pickelhaube</title>
+  <meta name="description" content="How to set up your FRITZ!Box and use Pickelhaube: dial help, phone books, recent calls, speed dial, call forwarding, several boxes, HTTPS.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="guide.html" aria-current="page">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html">Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Guide</h1>
+  <p class="lead">Everything you need to set up Pickelhaube and find your way around it.</p>
+
+  <ol class="toc">
+    <li><a href="#prepare">Prepare your FRITZ!Box</a></li>
+    <li><a href="#first-start">First start</a></li>
+    <li><a href="#dialling">Dialling</a></li>
+    <li><a href="#numbers">Choosing a number</a></li>
+    <li><a href="#speed-dial">Speed dial</a></li>
+    <li><a href="#boxes">Several FRITZ!Boxes</a></li>
+    <li><a href="#status">Live call status</a></li>
+    <li><a href="#forwarding">Call forwarding</a></li>
+    <li><a href="#shortcuts">Tiles and shortcuts</a></li>
+    <li><a href="#https">HTTPS and the router certificate</a></li>
+    <li><a href="#confirm">Confirmation on the box</a></li>
+    <li><a href="#backup">Backup and transfer</a></li>
+    <li><a href="#language">Language</a></li>
+    <li><a href="#permissions">Permissions</a></li>
+    <li><a href="#limits">Limitations</a></li>
+  </ol>
+
+  <h2 id="prepare">1. Prepare your FRITZ!Box</h2>
+  <p>Three settings in the FRITZ!Box web interface (<code>http://fritz.box</code>):</p>
+  <ol class="steps">
+    <li><strong>Allow access for applications</strong>
+      <em>Home Network › Network › Network Settings</em> – this switches on TR-064, the interface the app uses.</li>
+    <li><strong>Use dial help</strong>
+      <em>Telephony › Calls › Dial Help</em>.</li>
+    <li><strong>A user with telephony permission</strong>
+      <em>System › FRITZ!Box Users</em> – use or create one. If you log in to the box with a password only,
+      it still has an auto-generated user name (like <code>fritz1234</code>), shown on that page; the app needs it.
+      For the call list, the user also needs the permission <em>Voice messages, fax messages, FRITZ!App Fon and call list</em>.</li>
+  </ol>
+  <p class="note">Menu names follow the German FRITZ!OS translated into English; your box may word them slightly differently.</p>
+
+  <h2 id="first-start">2. First start</h2>
+  <p>Enter the box's address (<code>fritz.box</code> or <code>192.168.178.1</code>), the user name and the password.
+    Once the address is entered, the user name field offers the users the box knows – handy for the
+    auto-generated one.</p>
+  <p>Optionally switch on <strong>Use HTTPS</strong>; the app then uses the box's HTTPS port
+    (see <a href="#https">HTTPS</a>). Without it, the password still never travels in clear text (digest authentication).</p>
+  <p><strong>Save &amp; connect</strong> tests the settings first and only saves them once the router accepts them.
+    If something is wrong – user name, password, missing permission, wrong port, router not reachable – a dialog explains it.</p>
+  <p>Moving from another phone? The first-connection page offers <strong>Restore backup…</strong> instead (see <a href="#backup">Backup</a>).</p>
+
+  <h2 id="dialling">3. Dialling</h2>
+  <ol class="steps">
+    <li><strong>Choose the phone that should ring</strong> In <em>Ring phone</em>, pick your DECT handset (or another phone the box knows).</li>
+    <li><strong>Enter a number</strong> Long-press <kbd>0</kbd> for <kbd>+</kbd>, or choose one from the phone books or recent calls.</li>
+    <li><strong>Tap the green button</strong> Your handset rings. Pick it up – the box now dials the number.</li>
+  </ol>
+  <p>The red button cancels a call that is still being set up. Pickelhaube also handles <code>tel:</code> links,
+    so you can choose it when tapping a number in Contacts or on a web page.</p>
+
+  <h2 id="numbers">4. Choosing a number</h2>
+  <p>The address-book button left of the number field opens <strong>Choose number</strong>:</p>
+  <ul>
+    <li><strong>Recent</strong> – numbers recently dialled, received or missed, from the FRITZ!Box call list
+      (including calls made on the handsets themselves). Each number appears once, at its latest call.</li>
+    <li><strong>Phone books</strong> – the phone books stored on the box, including online books it syncs (e.g. CardDAV).
+      Search by name or number. Optionally, your phone's own contacts appear as an extra book <em>This phone</em>
+      (off by default; the app asks once).</li>
+    <li><strong>Speed dial</strong> – see below.</li>
+  </ul>
+  <p>Long-press a number for more: <em>Add to this phone's contacts</em>, <em>Hand over to the FRITZ!Box</em>
+    (copies a phone contact into one of the box's phone books), and making it a speed dial.</p>
+  <p>Numbers written differently (<code>+49 30 123456</code>, <code>030 123456</code>, <code>123456</code>) are
+    recognised as the same, using the country and area code set on your box. The number dialled is always exactly the one entered.</p>
+
+  <h2 id="speed-dial">5. Speed dial</h2>
+  <ul>
+    <li><strong>This phone: 1–9</strong> – stored on the phone, valid with every box. Long-press the digit in the dialer;
+      digits with a speed dial show a small dot.</li>
+    <li><strong>FRITZ!Box: 00–99</strong> – the speed dials from the box's phone books, the same ones the handsets use with <code>**7</code>.
+      Tap the first digit and long-press the second, or type <code>**7</code> and the number. While the box is reachable,
+      you can also create, change and remove them from the app.</li>
+  </ul>
+
+  <h2 id="boxes">6. Several FRITZ!Boxes</h2>
+  <p><em>Settings › FRITZ!Box connections</em> holds any number of boxes – home, office, parents – each with its own
+    address, user, password and options. The box of the current network is chosen automatically: at start, when
+    the network changes, and when the app comes back to the foreground. A box reachable only through a VPN or MyFRITZ
+    is used when the local network has none of yours.</p>
+  <p>To make sure it really is your box, Pickelhaube checks the box's device id and serial number, and refuses a
+    box whose number differs from the stored one. Each connection page also shows the model, FRITZ!OS version and the
+    permissions of the configured user.</p>
+
+  <h2 id="status">7. Live call status</h2>
+  <p>Above the buttons, the dialer shows how the call goes: <em>pick up</em>, <em>calling …</em>, <em>connected</em> with
+    a timer, and finally <em>call ended</em> with its duration (or <em>not answered</em>).</p>
+  <p>This uses the box's <strong>call monitor</strong>, which is off by default. Switch it on once by dialling
+    <code>#96*5*</code> on a phone connected to the box (<code>#96*4*</code> switches it off).</p>
+  <p class="note warn">The call monitor needs no login and is not encrypted: while it is on, any device in your home network can
+    follow the box's calls, numbers included. Without it, Pickelhaube works as well – it just shows <em>pick up</em>.</p>
+
+  <h2 id="forwarding">8. Call forwarding</h2>
+  <p>The forwarding symbol in the dialer's top bar lists the call forwardings set up on the box, each with a switch.
+    The box only allows switching them on and off through the app; set them up on the box itself
+    (<em>Telephony › Call Handling › Call Forwarding</em>).</p>
+
+  <h2 id="shortcuts">9. Tiles and shortcuts</h2>
+  <p>Three quick settings tiles: <strong>Pickelhaube</strong> (opens the dialer, shows whether a box is reachable),
+    <strong>Redial</strong> (opens the dialer with the last number – you still press the green button) and
+    <strong>Call forwarding</strong>. From Android 13 on, <em>Settings › Quick settings tiles</em> adds them for you.</p>
+  <p>A long press on the app icon offers <em>Redial</em> (dials right away), <em>Call forwarding</em>,
+    <em>Dial number</em>, and which FRITZ!Box is reachable from here.</p>
+
+  <h2 id="https">10. HTTPS and the router certificate</h2>
+  <p>The FRITZ!Box uses a self-signed certificate. Pickelhaube uses <em>trust on first use</em>: on the first HTTPS
+    connection it shows the certificate's fingerprints. Compare them with what your browser shows for
+    <code>https://fritz.box</code>, then tap <strong>Trust</strong>. From then on only that certificate is accepted; if the box
+    ever presents a different one, you get a <strong>Certificate has changed!</strong> warning instead of a silent connection.</p>
+
+  <h2 id="confirm">11. Confirmation on the box</h2>
+  <p>Newer FRITZ!OS versions ask for an additional confirmation for settings changes. Changing which phone rings for
+    dial help is such a change; dialling itself is not. When needed, a dialog tells you what to do – press a button on
+    the box or dial a shown code – and the app continues automatically.</p>
+
+  <h2 id="backup">12. Backup and transfer</h2>
+  <p><em>Settings › Back up and transfer</em> exports all connections and options to a JSON file and imports them again.
+    Passwords are included only if you ask for it, then encrypted with a passphrase of your choice.</p>
+
+  <h2 id="language">13. Language</h2>
+  <p>English, German, Dutch, French, Italian, Spanish and Polish – automatic (system language) or chosen with the flag
+    button in the settings. The translations still need a review by native speakers; corrections are very welcome.</p>
+
+  <h2 id="permissions">14. Permissions</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Permission</th><th>Why</th><th>Required?</th></tr></thead>
+      <tbody>
+        <tr><td>Network access</td><td>To talk to your FRITZ!Box</td><td>Yes</td></tr>
+        <tr><td>Contacts (<code>READ_CONTACTS</code>)</td><td>Show the phone's own contacts as an extra phone book</td><td>No – only if you switch it on</td></tr>
+        <tr><td>Call log (<code>READ_CALL_LOG</code>)</td><td>Show the phone's own calls under <em>Recent</em></td><td>No – and not available in the Google Play version (see below)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="limits">15. Limitations</h2>
+  <ul>
+    <li>Works only while the phone is in the home network of the box, or connected to it through a VPN.</li>
+    <li>Google Play allows the call log permission only for the default phone app. The option to include the phone's
+      own calls under <em>Recent</em> therefore works only when Pickelhaube is installed from outside Google Play.</li>
+    <li>Call forwardings can be switched on and off, not set up.</li>
+  </ul>
+
+  <p>Technical details and the source code: <a href="https://github.com/arkascha/pickelhaube">github.com/arkascha/pickelhaube</a>.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Footer">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="https://github.com/arkascha/pickelhaube">Source code</a>
+    </nav>
+    <p>Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
+      FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
+  </div>
+</footer>
+</body>
+</html>

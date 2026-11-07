@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pickelhaube – dial through your FRITZ!Box</title>
+  <meta name="description" content="Pickelhaube is an Android dialer that places calls through your FRITZ!Box using its dial help (click-to-dial). Looking for testers for the Google Play closed test.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Main">
+      <a href="./" aria-current="page">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html">Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <img src="logo.svg" alt="Pickelhaube logo">
+    <div>
+      <h1>Dial from your smartphone, talk on your FRITZ!Box headset</h1>
+      <p class="lead">Pickelhaube is a small Android app that places calls through your FRITZ!Box router –
+        exactly like the router's own <em>dial help</em> (click-to-dial).</p>
+    </div>
+  </section>
+
+  <p>Pick a number on your Android phone, tap the green button – the device you chose on the FRITZ!Box
+    rings: a DECT headset, a speakerphone, or a handset. Pick it up, and the FRITZ!Box dials the number from there.
+    The call runs over your landline or internet telephony, not over your mobile plan.</p>
+
+  <h2 id="who">When it makes sense</h2>
+  <div class="grid">
+    <div class="card"><h3>Headsets and speakerphones</h3><p><strong>The main use.</strong> DECT headsets and conference speakerphones attached to a FRITZ!Box have no keypad – they can't dial on their own. Pickelhaube dials for them, with your smartphone as the keypad and address book.</p></div>
+    <div class="card"><h3>Several locations</h3><p>Home, office, a second home: with several FRITZ!Boxes configured, you dial the same way everywhere, from the same contacts and speed dials. The app picks the box of the network you're in.</p></div>
+    <div class="card"><h3>Ordinary phones only</h3><p>Limited benefit. A normal handset can dial by itself – what you gain is dialling from your smartphone's contacts and the recent calls, instead of typing on the handset.</p></div>
+  </div>
+
+  <div class="cta">
+    <h2>I'm looking for testers</h2>
+    <p>Before a new app may go public on Google Play, Google requires a <strong>closed test</strong>:
+      at least 12 people who keep the app installed for 14 days in a row. If you have an Android phone
+      and a few minutes to spare, you would help a lot.</p>
+    <a class="button" href="testing.html">What testing involves</a>
+    <a class="button secondary" href="testing.html#join">Join the test</a>
+  </div>
+
+  <h2>What it does</h2>
+  <div class="grid">
+    <div class="card"><h3>Dial help</h3><p>Uses the FRITZ!Box's TR-064 interface: the box rings your handset first, then dials the target number.</p></div>
+    <div class="card"><h3>Phone books &amp; recent calls</h3><p>Pick numbers from the box's phone books and call list – and optionally from your phone's own contacts.</p></div>
+    <div class="card"><h3>Live call status</h3><p>See whether the handset is ringing, the call is connected, and how long it lasted.</p></div>
+    <div class="card"><h3>Speed dial</h3><p>Your own speed dials 1–9, plus the FRITZ!Box speed dials 00–99 you already know from <code>**7</code>.</p></div>
+    <div class="card"><h3>Several boxes</h3><p>Home and office? Pickelhaube recognises which FRITZ!Box is in the current network and uses that one.</p></div>
+    <div class="card"><h3>Call forwarding</h3><p>Switch the forwardings set up on your box on and off – also from a quick settings tile.</p></div>
+  </div>
+  <p><a href="guide.html">Read the full guide →</a></p>
+
+  <h2>What you need</h2>
+  <ul>
+    <li>An Android phone, Android 8.0 or newer</li>
+    <li>A FRITZ!Box with telephony, with <em>dial help</em> and TR-064 access switched on (<a href="guide.html#prepare">how</a>)</li>
+    <li>The phone in the same home network as the box – or connected to it through a VPN</li>
+  </ul>
+
+  <h2>Privacy in short</h2>
+  <p>Pickelhaube has no account, no ads, and no cloud service of its own. It talks to the FRITZ!Box(es)
+    you configure; your router password is stored encrypted on the phone. Details are in the
+    <a href="privacy-policy.html">privacy policy</a>.</p>
+
+  <h2>Languages</h2>
+  <p>English, German, Dutch, French, Italian, Spanish and Polish.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Footer">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="https://github.com/arkascha/pickelhaube">Source code</a>
+    </nav>
+    <p>Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
+      FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
+  </div>
+</footer>
+</body>
+</html>

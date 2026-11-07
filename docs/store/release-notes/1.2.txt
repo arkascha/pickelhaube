@@ -1,0 +1,14 @@
+<en-US>
+• Several FRITZ!Boxes: saving a box from another network no longer logs in to the box of the current one – its password and certificate stay where they belong. Changes made while away can be saved unchecked
+• A box with only one user gets it filled in; the user list marks the chosen user and explains the one made by the box
+• Shorter connection page: explanations behind (?), device details folded
+• "Display name": only a label in the app
+• Hints, findings and values look different
+</en-US>
+<de-DE>
+• Mehrere FRITZ!Boxen: Speichern einer Box aus einem anderen Netz meldet sich nicht mehr an der des aktuellen an – Kennwort und Zertifikat bleiben, wo sie hingehören. Unterwegs Geändertes ist ungeprüft speicherbar
+• Nur ein Benutzer? Er wird eingetragen; die Liste markiert den gewählten und erklärt den von der Box angelegten
+• Kürzere Verbindungsseite: Erklärungen hinter (?), Gerätedaten zugeklappt
+• „Anzeigename“: nur eine Bezeichnung
+• Hinweise, Befunde und Werte sehen verschieden aus
+</de-DE>

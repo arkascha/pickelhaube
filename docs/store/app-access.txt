@@ -1,0 +1,6 @@
+Name: Demo FRITZ!Box (built into the app)
+Username: demo
+Password: demo
+
+Any other information required to access your app:
+Pickelhaube needs a FRITZ!Box router; a demo box is built in. On first start the app opens "Add FRITZ!Box". Tap "No FRITZ!Box? Try the demo box" at the top right, then "Fill in the demo box" (enters host, username and password "demo"), then "Save & connect". All features then work with sample data: phones, phone books, speed dials, call list, call forwarding and a simulated call. No real calls are placed.

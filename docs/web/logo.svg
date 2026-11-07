@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Pickelhaube">
+  <!-- Placeholder logo: replace with the app's launcher icon (e.g. a 512x512 PNG) -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#b3261e"/>
+  <path d="M32 8 L35 22 H29 Z" fill="#fff"/>
+  <path d="M16 38 a16 14 0 0 1 32 0 v4 H16 Z" fill="#fff"/>
+  <rect x="12" y="42" width="40" height="5" rx="2.5" fill="#fff"/>
+  <circle cx="32" cy="25" r="3" fill="#fff"/>
+</svg>

@@ -1,0 +1,18 @@
+<en-US>
+• Suggestions while typing: numbers and names from phone books and recent calls, also by the letters on the keys
+• Extensions and PINs after a pause (long-press *): dials the number, then says what to type
+• Internal calls between the FRITZ!Box' phones (switch on per box)
+• Several own numbers: "From <number>", and shown in Recent
+• Warning when an internet number is not registered
+• Fix: the FRITZ!Box no longer stops answering over HTTPS
+• Language "Auto" shown as a globe
+</en-US>
+<de-DE>
+• Vorschläge beim Tippen: Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Tastenbuchstaben
+• Durchwahlen und PINs nach einer Pause (lange auf *): wählt die Nummer, sagt dann, was zu tippen ist
+• Interne Gespräche zwischen den Telefonen der FRITZ!Box (je Box einschaltbar)
+• Mehrere eigene Nummern: „Von <Nummer>", Anzeige in Letzte
+• Warnung, wenn eine Internetrufnummer nicht registriert ist
+• Behoben: FRITZ!Box blieb über HTTPS ohne Antwort
+• Sprache „Auto" als Globus
+</de-DE>

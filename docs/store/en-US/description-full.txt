@@ -1,0 +1,43 @@
+Pickelhaube is a dialer for your FRITZ!Box. Pick the number comfortably on your smartphone – from your recent calls, your phone books or a speed dial – and your landline phone makes the call: the FRITZ!Box first rings the phone you chose, for example a DECT handset, and as soon as you pick it up, it dials the number. It works just like the dial help in the FRITZ!Box web interface, only much quicker.
+
+CHOOSE A NUMBER
+• Recent calls of the FRITZ!Box – dialled, received and missed, from all of its phones
+• The phone books of the FRITZ!Box, with search, an A–Z bar and a filter by phone book
+• Optionally your smartphone's own contacts next to them
+• Speed dials 1–9 on your smartphone, valid with every box, plus the FRITZ!Box speed dials 00–99, which you can also set up and change from the app
+• Choose which phone rings: a single phone or all of them
+
+ON THE CALL
+• Live call status: pick up, calling, connected with a running timer, call ended – based on the call monitor of the FRITZ!Box
+• Cancel a call that is still being set up
+
+CALL FORWARDING
+• Switch the call forwardings set up on your FRITZ!Box on and off
+• Also from a quick settings tile or a home screen shortcut, without opening the app
+
+QUICK ACCESS
+• Quick settings tiles: open the dialer, redial the last number, switch call forwarding
+• Long press on the app icon: redial, call forwarding, choose a number, look for the FRITZ!Box
+
+SEVERAL FRITZ!BOXES
+• Home, office, holiday flat: set up as many boxes as you like
+• Pickelhaube finds out which box is in the network you are in and uses it automatically
+• Works through a VPN as well
+
+SECURE AND PRIVATE
+• Talks to your FRITZ!Box only, using its official TR-064 interface – no cloud, no account, no advertising, no tracking
+• Optional HTTPS with a pinned certificate, and support for confirming actions on the FRITZ!Box (two-factor)
+• Passwords are stored encrypted in the Android Keystore
+• Access to your contacts is optional, asked for only when you switch it on, and they never leave the phone
+• Export and import all settings, passwords encrypted with a passphrase if you include them
+
+LANGUAGES
+English, German, Dutch, French, Italian, Spanish and Polish.
+
+WHAT YOU NEED
+• A FRITZ!Box with a telephone connected to it
+• In the FRITZ!Box: "Allow access for applications" (Home Network › Network › Network Settings) and "Use dial help" (Telephony › Calls › Dial Help) switched on
+• A FRITZ!Box user with the permission for telephony
+• For the live call status: the call monitor of the box, switched on once by dialling #96*5* on a connected phone
+
+Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH; they are used here only to say which routers the app works with.

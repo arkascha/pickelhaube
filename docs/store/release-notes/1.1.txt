@@ -1,0 +1,18 @@
+<en-US>
+• Try it without a FRITZ!Box: "Fill in the demo box" when adding a box
+• New app icon in blue, yellow, red and white
+• Texts switch right away when the language changes
+• Better wording in Spanish, French and Italian
+• Settings are no longer copied to a new phone – use Settings › Back up and transfer
+• The phone's own call log is no longer read: Google Play allows that only for the default phone app. Recent calls of the FRITZ!Box stay
+• Updated libraries, for stability and security
+</en-US>
+<de-DE>
+• Ohne FRITZ!Box ausprobieren: „Demo-Box eintragen“ beim Hinzufügen einer Box
+• Neues App-Symbol in Blau, Gelb, Rot und Weiß
+• Texte wechseln sofort mit der Sprache
+• Bessere Texte auf Spanisch, Französisch und Italienisch
+• Einstellungen werden nicht mehr auf ein neues Telefon kopiert – nutze Einstellungen › Sichern und übertragen
+• Die Anrufliste des Telefons wird nicht mehr gelesen (Google Play erlaubt das nur der Standard-Telefon-App), die der FRITZ!Box bleibt
+• Aktualisierte Bibliotheken
+</de-DE>

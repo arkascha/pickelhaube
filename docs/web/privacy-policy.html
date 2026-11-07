@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy – Pickelhaube</title>
+  <meta name="description" content="Privacy policy of the Pickelhaube Android app.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html" aria-current="page">Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Privacy Policy</h1>
+  <p class="lead">Pickelhaube for Android &middot; Effective date: October 31, 2026</p>
+
+  <div class="note warn">
+    <strong>In short:</strong>
+    <ul>
+      <li>Your settings, your own speed dials and the number you dialled last are stored only on your Android device.</li>
+      <li>The app communicates only with FRITZ!Box routers: the ones you configured, and – to find out which of them is in the current network – the router of that network.</li>
+      <li>Phone books and call lists are read only to let you choose a number; they are not saved by the app.</li>
+      <li>No data is collected by, sent to, or shared with the developer or any third party. There are no analytics, advertising or tracking components.</li>
+      <li>Changes on your FRITZ!Box are made only when you trigger them.</li>
+    </ul>
+  </div>
+
+  <h2>1. Scope</h2>
+  <p>This privacy policy applies to the Android app <strong>Pickelhaube</strong> (“the app”), in all its distributions (Google Play, F-Droid, or installed directly as an APK). The app uses one or more FRITZ!Box routers configured by you to place calls, switch call forwarding on and off, and access speed dials, recent calls and phone books. These may come from your FRITZ!Box or, if you choose so, from your Android device.</p>
+
+  <h2>2. Data stored on your device</h2>
+  <p>The app stores the following in its private storage on your Android device:</p>
+  <ul>
+    <li><strong>FRITZ!Box connections:</strong> for each configured box its name, address, port, whether HTTPS is used, user name and password, the box’s device id and serial number (to recognise it), and, if you trusted one, its HTTPS certificate. Passwords are stored encrypted with a key held in the Android Keystore.</li>
+    <li><strong>App preferences:</strong> for example which phone the FRITZ!Box should ring, the app language, and which optional features are switched on.</li>
+    <li><strong>Your own speed dials (1–9):</strong> the name and number you assigned to each, stored as a copy.</li>
+    <li><strong>Last dialled number:</strong> the number dialled last and its name, used for the “Redial” tile and the app shortcuts.</li>
+    <li><strong>Call forwarding state:</strong> whether a call forwarding was last seen switched on and its destination, shown in the app shortcut.</li>
+  </ul>
+  <p>The app publishes the last dialled number and its name to the Android launcher as an app shortcut, so the launcher can show it in the menu of the app icon. This stays on your device.</p>
+  <p>This data leaves your device only if you export it yourself (see section 4).</p>
+
+  <h2>3. Data transmitted</h2>
+  <p>The app has no server of its own and does not contact the internet. It transmits data <strong>only to FRITZ!Box routers</strong>:</p>
+  <ul>
+    <li><strong>The FRITZ!Box(es) you configured</strong>, using the TR-064 interface (and, if you switched on the live call status, the box’s call monitor on port 1012), for:
+      <ul>
+        <li>logging in (digest authentication, so the password itself is never sent in clear text),</li>
+        <li>placing and cancelling calls, and changing which phone rings for dial help,</li>
+        <li>reading phone books, the call list, speed dials, call forwardings, the box’s area and country code, its model, FRITZ!OS version, serial number, and the permissions of the configured user,</li>
+        <li>following the status of a call you placed,</li>
+        <li>changes you trigger: switching a call forwarding on or off, adding a contact to one of the box’s phone books, creating, changing or removing a speed dial there, or deleting a copy the app made.</li>
+      </ul>
+    </li>
+    <li><strong>The router of the current network</strong> (the network’s gateway and the address <code>fritz.box</code>), to read the public device description every FRITZ!Box offers and find out whether it is one of your configured boxes. This request carries no personal data and no credentials. Before you log in, the app may also ask a box, without credentials, for its HTTPS port and for its list of user names, to offer them in the settings.</li>
+  </ul>
+  <p>No data is transmitted to the developer, to any server operated by the developer, or to any other third party. The app contains no analytics, advertising, tracking, or crash-reporting components.</p>
+
+  <h2>4. Data you pass on yourself</h2>
+  <p>Some functions hand data to places you choose. The app does this only when you trigger it:</p>
+  <ul>
+    <li><strong>Export of the settings:</strong> writes your connections and preferences to a file at a location you choose. Passwords are included only if you ask for it, and then encrypted with a passphrase you choose. What happens to that file afterwards is up to you.</li>
+    <li><strong>Add to this phone’s contacts:</strong> opens your phone’s contacts app with the name and numbers filled in; the contact is saved there, in the account you choose there.</li>
+    <li><strong>Technical details of an error:</strong> can be copied to the clipboard, for example to send them to someone helping you. They contain the request that failed and may contain phone numbers, but never credentials.</li>
+  </ul>
+
+  <h2>5. Data read on your device (optional permissions)</h2>
+  <p>The app can read data on your Android device only with permissions you grant, and only if you switch the corresponding option on:</p>
+  <ul>
+    <li><strong>Contacts</strong> (<code>READ_CONTACTS</code>): to show the contacts stored on your phone as an additional phone book.</li>
+    <li><strong>Call log</strong> (<code>READ_CALL_LOG</code>): to show the calls of your phone’s own telephony app under “Recent”. This option exists only in versions installed outside Google Play.</li>
+  </ul>
+  <p>Both are used for nothing else and can be revoked at any time in Android’s app settings. The app does not read your location, device identifiers, or other personal information unrelated to these functions.</p>
+  <p>The app can also be chosen to open <code>tel:</code> links from other apps; the number is then filled into the dialer.</p>
+
+  <h2>6. Use of data</h2>
+  <p>Phone books, call lists and contacts – whether obtained from your FRITZ!Box or your Android device – are read to display selectable entries, to show names for numbers, and to dial the entry you choose. They are held only while the app runs and are not saved by it, apart from the copies described in section 2 (your own speed dials and the last dialled number). All other data is used solely to connect to your FRITZ!Box and to perform the functions you trigger. Nothing is used for profiling, marketing, or any other purpose.</p>
+
+  <h2>7. Data sharing</h2>
+  <p>No data is shared with, sold to, or otherwise disclosed to anyone.</p>
+
+  <h2>8. Google Play</h2>
+  <p>If you install the app from Google Play, Google processes data about the installation (for example installs and crash statistics provided to developers through the Play Console) under its own privacy policy. The developer only receives such aggregated statistics, not data from within the app.</p>
+
+  <h2>9. Your FRITZ!Box</h2>
+  <p>Your FRITZ!Box is a device you operate yourself. Data that the FRITZ!Box itself stores or processes (for example, its own call lists, phone books, or logs, including entries the app added at your request) is governed by the FRITZ!Box configuration you choose and the policies of its manufacturer, not by this app. Note that the box’s call monitor, if you switch it on, is not protected by a password: any device in your home network can then follow the box’s calls.</p>
+
+  <h2>10. Deleting your data</h2>
+  <p>You can delete all data stored by the app at any time by clearing the app’s data in Android’s settings or by uninstalling the app. Not affected are things you created yourself elsewhere: exported settings files, contacts saved in your phone’s contacts app, and entries the app added to your FRITZ!Box at your request – delete those where they are.</p>
+
+  <h2>11. Children</h2>
+  <p>The app does not knowingly collect any data from anyone, including children, since it collects no data at all.</p>
+
+  <h2>12. Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be published at this location with a new effective date.</p>
+
+  <h2>13. Contact</h2>
+  <p>If you have questions about this privacy policy, contact: <a href="mailto:privacy-policy@rustygnome.org">privacy-policy@rustygnome.org</a></p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Footer">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="https://github.com/arkascha/pickelhaube">Source code</a>
+    </nav>
+    <p>Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
+      FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
+  </div>
+</footer>
+</body>
+</html>

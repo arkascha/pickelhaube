@@ -1,0 +1,8 @@
+<en-US>
+• Home screen widget: your own list of numbers, in Pickelhaube's colours or transparent
+• New missed calls on the FRITZ!Box are counted and marked in Recent
+• Dial with hidden number: long press on the green button
+• Share a text to Pickelhaube or paste it: the phone number in it goes into the dialer
+• While connected, the dialer says to hang up on the device itself
+• The version is shown at the bottom of the settings
+</en-US>
