@@ -86,6 +86,7 @@ import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.SpeedDial
+import org.rustygnome.pickelhaube.tr064.DialSplit
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import kotlinx.coroutines.delay
 
@@ -282,6 +283,7 @@ fun DialerScreen(
                     Spacer(Modifier.height(8.dp))
                     CallStatusLine(
                         state.callProgress,
+                        FritzDialer.splitExtension(state.number),
                         state.newMissedCalls,
                         linesDown,
                         allLinesDown = linesDown.size == state.lines.size,
@@ -369,6 +371,8 @@ private val PasteIcon: ImageVector by lazy {
 @Composable
 private fun CallStatusLine(
     progress: CallProgress?,
+    /** The number entered, split: while there is no call to follow, its later digits are explained. */
+    entered: DialSplit,
     /** Shown while there is no call to follow: the box' missed calls not looked at yet, a tap shows them. */
     newMissedCalls: Int,
     /** Shown while there is no call to follow, before the missed calls: the box' numbers not registered. */
@@ -398,6 +402,20 @@ private fun CallStatusLine(
         )
         return
     }
+    val entry = entered.shownExtension
+    if (progress == null && entry != null && entered.number.isNotEmpty()) {
+        Text(
+            stringResource(R.string.dialer_extension_hint, entered.number, entry),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            minLines = 2,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        return
+    }
     if (progress == null && newMissedCalls > 0) {
         Text(
             pluralStringResource(R.plurals.dialer_new_missed_calls, newMissedCalls, newMissedCalls, boxName),
@@ -416,6 +434,11 @@ private fun CallStatusLine(
         null -> ""
         is CallProgress.PickUp -> when {
             progress.monitorOff -> stringResource(R.string.call_monitor_off_hint)
+            // Nothing tells when the call is connected: what to type then is said right away.
+            progress.extension != null && progress.phone != null -> stringResource(
+                R.string.status_pick_up_extension, FritzDialer.displayName(progress.phone), progress.number, progress.extension,
+            )
+            progress.extension != null -> stringResource(R.string.status_pick_up_any_extension, progress.number, progress.extension)
             progress.phone != null ->
                 stringResource(R.string.status_pick_up, FritzDialer.displayName(progress.phone), progress.number)
             else -> stringResource(R.string.status_pick_up_any, progress.number)
@@ -439,13 +462,24 @@ private fun CallStatusLine(
     }
     // The box cannot end a connected call – its hang-up only cancels the dial help, so the red
     // button is off then: the call is ended on the device itself, as the second line says.
-    val hint = if (progress is CallProgress.Connected) stringResource(R.string.call_hang_up_on_device) else null
+    // With digits to type once connected: said while dialling, and in bold once connected.
+    val extension = progress?.extension
+    val hint = when {
+        progress is CallProgress.Connected && extension != null -> stringResource(R.string.call_type_now, extension)
+        progress is CallProgress.Connected -> stringResource(R.string.call_hang_up_on_device)
+        progress is CallProgress.Dialling && extension != null -> stringResource(R.string.call_type_then, extension)
+        else -> null
+    }
     Text(
         buildAnnotatedString {
             append(text)
             hint?.let {
                 append("\n")
-                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) { append(it) }
+                val typeNow = progress is CallProgress.Connected && extension != null
+                withStyle(
+                    if (typeNow) SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    else SpanStyle(fontStyle = FontStyle.Italic),
+                ) { append(it) }
             }
         },
         style = MaterialTheme.typography.bodyMedium,
@@ -640,7 +674,7 @@ private fun DialKey(
     onLongDigit: (Char) -> Unit,
 ) {
     val haptics = LocalHapticFeedback.current
-    val longPress: (() -> Unit)? = if (key.main.isDigit()) {
+    val longPress: (() -> Unit)? = if (key.main.isDigit() || key.main == '*') {
         {
             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
             onLongDigit(key.main)
@@ -655,7 +689,8 @@ private fun DialKey(
             .combinedClickable(
                 role = Role.Button,
                 onClick = { onDigit(key.main) },
-                onLongClickLabel = speedDial?.let {
+                onLongClickLabel = if (key.main == '*') stringResource(R.string.dialer_insert_pause)
+                else speedDial?.let {
                     stringResource(R.string.dialer_speed_dial_label, it.slot, it.name)
                 },
                 onLongClick = longPress,

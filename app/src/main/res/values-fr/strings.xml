@@ -431,6 +431,12 @@
     <string name="call_dialling_from">Appel de %1$s depuis %2$s…</string>
     <string name="call_connected">Connecté avec %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Raccrochez sur l’appareil lui-même</string>
+    <string name="dialer_insert_pause">Insérer une pause</string>
+    <string name="dialer_extension_hint">Appelle %1$s – une fois connecté, tapez %2$s sur le téléphone</string>
+    <string name="status_pick_up_extension">Décrochez %1$s – la box appelle %2$s, puis tapez %3$s</string>
+    <string name="status_pick_up_any_extension">Décrochez votre téléphone – la box appelle %1$s, puis tapez %2$s</string>
+    <string name="call_type_then">Une fois la réponse obtenue, tapez %1$s sur le téléphone</string>
+    <string name="call_type_now">Tapez maintenant %1$s sur le téléphone – raccrochez-y aussi</string>
     <string name="call_ended">Appel terminé · %1$s</string>
     <string name="call_not_answered">Pas de réponse, ou occupé</string>
     <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>

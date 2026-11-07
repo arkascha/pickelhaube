@@ -206,9 +206,50 @@ class FritzDialer(
         fun withheld(number: String): String =
             if (number.firstOrNull()?.let { it.isDigit() || it == '+' } == true) WITHHOLD_PREFIX + number else number
 
-        /** Keeps digits and the characters the box understands (+ * #); drops spaces, dashes, brackets. */
-        fun sanitizeNumber(raw: String): String =
-            raw.filter { it.isDigit() || it == '+' || it == '*' || it == '#' }
+        /**
+         * The number the box is to dial: digits and the characters it understands (+ * #), without
+         * spaces, dashes, brackets – and without what follows a pause (see [splitExtension]).
+         */
+        fun sanitizeNumber(raw: String): String = splitExtension(raw).number
+
+        private fun dialChars(raw: String): String = raw.filter { it.isDigit() || it == '+' || it == '*' || it == '#' }
+
+        /** Where the number ends and what is typed once the call is connected begins: a pause, a wait, an "x" for an extension. */
+        private val PAUSES = ",;pPwWxX"
+
+        /** Parameters of a tel: link that hold digits to be typed later; others (phone-context, …) are no digits at all. */
+        private val TEL_LATER = setOf("postd", "ext")
+
+        /**
+         * [raw] split into the number the box dials and the digits typed on the phone once the call is
+         * connected – an extension, a conference PIN, a choice in a phone menu: "030 1234567,,42#",
+         * "0301234567p42", "030 1234567 x 42", tel: links with ";postd=42" or ";ext=42", Android's
+         * wait ";42". The box' dial help sends no tones: it drops the pause and dials all digits as one
+         * number (tested on a 7530 AX, "0171…,,42" → "0171…42"), so they must never reach it.
+         * Further pauses within the later digits are kept as ",".
+         */
+        fun splitExtension(raw: String): DialSplit {
+            val segments = raw.split(';')
+            val text = buildString {
+                append(segments.first())
+                for (segment in segments.drop(1)) {
+                    val eq = segment.indexOf('=')
+                    when {
+                        eq < 0 -> append(',').append(segment)
+                        segment.substring(0, eq).trim().lowercase() in TEL_LATER -> append(',').append(segment.substring(eq + 1))
+                    }
+                }
+            }
+            val pause = text.indexOfFirst { it in PAUSES }
+            if (pause < 0) return DialSplit(dialChars(text), null)
+            val later = text.substring(pause + 1)
+                .map { if (it in PAUSES) ',' else it }
+                .filter { it.isDigit() || it == '*' || it == '#' || it == ',' }
+                .joinToString("")
+                .replace(Regex(",+"), ",")
+                .trim(',')
+            return DialSplit(dialChars(text.substring(0, pause)), later.ifEmpty { null })
+        }
     }
 }
 
@@ -302,4 +343,17 @@ data class SecondFactorChallenge(
             )
         }
     }
+}
+
+/**
+ * A number as entered, split for dialling through the box (see [FritzDialer.splitExtension]): [number]
+ * is what the box dials, [extension] what is typed on the phone once the call is connected (further
+ * pauses in it as ","), or null.
+ */
+data class DialSplit(val number: String, val extension: String?) {
+    /** Both as written in the dialer: "0301234567,42#". */
+    val written: String get() = number + extension?.let { ",$it" }.orEmpty()
+
+    /** [extension] as shown to be typed: "42 … 1#". */
+    val shownExtension: String? get() = extension?.replace(",", " … ")
 }

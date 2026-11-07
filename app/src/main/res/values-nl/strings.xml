@@ -426,6 +426,12 @@
     <string name="call_dialling_from">%1$s wordt gebeld vanaf %2$s…</string>
     <string name="call_connected">Verbonden met %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Ophangen op het toestel zelf</string>
+    <string name="dialer_insert_pause">Pauze invoegen</string>
+    <string name="dialer_extension_hint">Belt %1$s – zodra verbonden, toets %2$s op de telefoon</string>
+    <string name="status_pick_up_extension">Neem %1$s op – de box belt %2$s, toets dan %3$s</string>
+    <string name="status_pick_up_any_extension">Neem je telefoon op – de box belt %1$s, toets dan %2$s</string>
+    <string name="call_type_then">Zodra er wordt opgenomen, toets %1$s op de telefoon</string>
+    <string name="call_type_now">Toets nu %1$s op de telefoon – daar ook ophangen</string>
     <string name="call_ended">Gesprek beëindigd · %1$s</string>
     <string name="call_not_answered">Niet beantwoord of in gesprek</string>
     <string name="call_not_picked_up">De telefoon is niet opgenomen</string>

@@ -390,9 +390,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /**
      * Long press on a digit of the dial pad: a speed dial if there is one for it (see
-     * [SpeedDials.forLongPress]); otherwise like a tap – except "0", which gives "+".
+     * [SpeedDials.forLongPress]); otherwise like a tap – except "0", which gives "+". A long press
+     * on "*" gives a pause ",".
      */
     fun longPressDigit(digit: Char) {
+        // A pause: what follows is typed on the phone once the call is connected.
+        if (digit == '*') return appendDigit(',')
         val state = _state.value
         val speedDial = SpeedDials.forLongPress(
             state.number, digit, state.usablePhoneSpeedDials, state.usableBoxSpeedDials,
@@ -1666,7 +1669,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
             ?.let(::useSpeedDial)
-        val number = FritzDialer.sanitizeNumber(_state.value.number)
+        // The box dials only the number; what follows a pause is typed on the phone once connected.
+        val split = FritzDialer.splitExtension(_state.value.number)
+        val number = split.number
         if (number.isEmpty()) {
             _state.update {
                 it.copy(
@@ -1683,7 +1688,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             if (phone != null) dialer.ensureDialPhone(phone)
             markDialActive()
             // Listening before the box dials, so its report of the call is not missed.
-            followCall(number, phone)
+            followCall(number, phone, split.shownExtension)
             try {
                 dialer.dial(
                     when {
@@ -1698,10 +1703,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 throw e
             }
             val name = nameFor(number)
-            settings.lastDialledNumber = number
+            // Redial brings the later digits back as well.
+            settings.lastDialledNumber = split.written
             settings.lastDialledName = name
             RedialTileService.refresh(getApplication())
-            LauncherShortcuts.updateRedial(getApplication(), number, name)
+            LauncherShortcuts.updateRedial(getApplication(), split.written, name)
             phone?.let { uiText(R.string.status_pick_up, FritzDialer.displayName(it), number) }
                 ?: uiText(R.string.status_pick_up_any, number)
         }
@@ -1820,11 +1826,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      * on the call monitor of the box in use: dialling once picked up (or not picked up in time), then
      * connected, ended or not answered. Only the box' report of dialling [number] counts; the other
      * calls of the household are ignored. A box with the monitor off is noted for the settings and,
-     * the first time, the dialer says how to switch it on.
+     * the first time, the dialer says how to switch it on. [extension]: the digits to type once
+     * connected, shown all along.
      */
-    private fun followCall(number: String, phone: String?) {
+    private fun followCall(number: String, phone: String?, extension: String?) {
         stopFollowingCall()
-        _state.update { it.copy(callProgress = CallProgress.PickUp(phone, number)) }
+        _state.update { it.copy(callProgress = CallProgress.PickUp(phone, number, extension = extension)) }
         if (!_state.value.callStatusEnabled) return
         val profile = settings.activeProfile() ?: return
         val host = _state.value.config.host
@@ -1852,7 +1859,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                                 connection = event.connection
                                 pickUpTimeout.cancel()
                                 _state.update {
-                                    it.copy(callProgress = CallProgress.Dialling(number, event.caller.ifBlank { null }))
+                                    it.copy(callProgress = CallProgress.Dialling(number, event.caller.ifBlank { null }, extension))
                                 }
                             }
                             false
@@ -1862,7 +1869,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                             connected = true
                             clearDialActive()
                             _state.update {
-                                it.copy(callProgress = CallProgress.Connected(number, SystemClock.elapsedRealtime()))
+                                it.copy(callProgress = CallProgress.Connected(number, SystemClock.elapsedRealtime(), extension))
                             }
                             false
                         }

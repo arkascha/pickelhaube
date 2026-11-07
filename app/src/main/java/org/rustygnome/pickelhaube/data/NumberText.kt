@@ -33,6 +33,10 @@ object NumberText {
             .distinct()
             .toList()
 
-    /** [raw] as dialled: without the national "(0)" after a country code, and only digits and + * #. */
-    fun clean(raw: String): String = FritzDialer.sanitizeNumber(NATIONAL_ZERO.replace(raw.trim(), "$1"))
+    /**
+     * [raw] as dialled: without the national "(0)" after a country code, and only digits and + * # –
+     * followed by ",", and the digits to type once connected, if it has some ("030 1234567 x 42" →
+     * "0301234567,42"; see [FritzDialer.splitExtension]).
+     */
+    fun clean(raw: String): String = FritzDialer.splitExtension(NATIONAL_ZERO.replace(raw.trim(), "$1")).written
 }

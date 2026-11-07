@@ -39,4 +39,12 @@ class NumberTextTest {
         assertEquals("*21#", NumberText.clean(" *21# "))
         assertEquals("+4930123", NumberText.clean("+49 (0) 30 123"))
     }
+
+    @Test
+    fun `keeps what is typed once connected after a comma`() {
+        assertEquals("0301234567,42#", NumberText.clean("030 1234567 x 42#"))
+        assertEquals("+49301234567,42", NumberText.clean("+49 (0)30 1234567;postd=42"))
+        // Cleaning twice changes nothing (Redial cleans the number kept from the last call again).
+        assertEquals("0301234567,42,1", NumberText.clean(NumberText.clean("0301234567p42w1")))
+    }
 }

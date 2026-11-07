@@ -315,6 +315,22 @@ from there, and with **Check again**. Mind that the call monitor needs no login 
 once it is on, any device in the home network can follow the box' calls, numbers included. It is
 reachable in the home network and usually through a VPN, not through MyFRITZ.
 
+### Extensions, PINs and phone menus
+
+Digits to be typed once the call is connected – an extension, a conference PIN, a choice in a phone
+menu – follow the number after a pause: a **long press on `*`** puts in a `,`. Numbers from
+contacts, tel: links and shared text bring theirs along, written `,` `;` `p` `w` or `x`
+(`030 1234567 x 42`) or as `;postd=` / `;ext=` in a tel: link; in the dialer they stand as
+`0301234567,42#`.
+
+The box' dial help cannot send them: it dials only, sends no tones once connected, and drops the
+pause – it would dial all digits as one number (tested on a 7530 AX: `0171…,,42` was dialled as
+`0171…42`). So Pickelhaube gives the box only the number and says what to type on the phone
+yourself: under the dialer before the call (*Calls 0301234567 – once connected, type 42# on the
+phone*), while picking up and dialling, and – with the live call status – in bold once the call is
+connected (*Now type 42# on the phone*). Further pauses in them are shown as `…`. Redial brings them
+back as well.
+
 ### Own numbers
 
 Along with their registration (below), the app reads the box' own numbers (`X_VoIP`

@@ -7,18 +7,26 @@ import java.util.Locale
  * box' call monitor (see [org.rustygnome.pickelhaube.tr064.CallMonitor]), if that is on.
  */
 sealed interface CallProgress {
+    /** What is typed on the phone once the call is connected, as shown (see [org.rustygnome.pickelhaube.tr064.DialSplit]); null: nothing. */
+    val extension: String? get() = null
+
     /**
      * The box rings [phone] (null: whichever phone is set up for dial help) and dials [number] once
      * it is picked up. [monitorOff]: the box' call monitor just turned out to be off, so nothing more
      * will be known – shown with how to switch it on.
      */
-    data class PickUp(val phone: String?, val number: String, val monitorOff: Boolean = false) : CallProgress
+    data class PickUp(
+        val phone: String?,
+        val number: String,
+        val monitorOff: Boolean = false,
+        override val extension: String? = null,
+    ) : CallProgress
 
     /** Picked up: the box dials [number], from its own number [from] (if it said). */
-    data class Dialling(val number: String, val from: String?) : CallProgress
+    data class Dialling(val number: String, val from: String?, override val extension: String? = null) : CallProgress
 
     /** The other side answered, at [since] ([android.os.SystemClock.elapsedRealtime]). */
-    data class Connected(val number: String, val since: Long) : CallProgress
+    data class Connected(val number: String, val since: Long, override val extension: String? = null) : CallProgress
 
     /** The call ended after [seconds] talking. */
     data class Ended(val seconds: Int) : CallProgress

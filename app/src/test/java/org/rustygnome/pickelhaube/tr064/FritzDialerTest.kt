@@ -71,4 +71,32 @@ class FritzDialerTest {
         assertEquals("**610", FritzDialer.withheld("**610"))
         assertEquals("#96*5*", FritzDialer.withheld("#96*5*"))
     }
+
+    @Test
+    fun `splits off what is typed once connected`() {
+        assertEquals(DialSplit("0301234567", "42#"), FritzDialer.splitExtension("030 1234567,,42#"))
+        assertEquals(DialSplit("0301234567", "42"), FritzDialer.splitExtension("0301234567p42"))
+        assertEquals(DialSplit("0301234567", "42"), FritzDialer.splitExtension("0301234567W42"))
+        assertEquals(DialSplit("0301234567", "42"), FritzDialer.splitExtension("030 1234567 x 42"))
+        assertEquals(DialSplit("+4930123", "42,1#"), FritzDialer.splitExtension("+49 30 123,42,,p1#"))
+        assertEquals(DialSplit("0301234567", "42"), FritzDialer.splitExtension("0301234567;42"))
+        assertEquals(DialSplit("0301234567", null), FritzDialer.splitExtension("0301234567,"))
+    }
+
+    @Test
+    fun `takes the later digits from tel link parameters, and only those`() {
+        assertEquals(DialSplit("+4930123", "42"), FritzDialer.splitExtension("+4930123;postd=42"))
+        assertEquals(DialSplit("+4930123", "7"), FritzDialer.splitExtension("+4930123;ext=7"))
+        assertEquals(DialSplit("7042", null), FritzDialer.splitExtension("7042;phone-context=example.com"))
+        assertEquals(DialSplit("7042", "1"), FritzDialer.splitExtension("7042;phone-context=+4930;ext=1"))
+    }
+
+    @Test
+    fun `never merges the later digits into the number`() {
+        // The box would dial "030123456742" – a wrong number.
+        assertEquals("0301234567", FritzDialer.sanitizeNumber("0301234567,,42"))
+        assertEquals("*21#", FritzDialer.sanitizeNumber("*21#"))
+        assertEquals("0301234567,42#", DialSplit("0301234567", "42#").written)
+        assertEquals("42 … 1#", DialSplit("0301234567", "42,1#").shownExtension)
+    }
 }

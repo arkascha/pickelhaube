@@ -431,6 +431,12 @@
     <string name="call_dialling_from">Chiamata a %1$s da %2$s…</string>
     <string name="call_connected">Connesso con %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Riaggancia sull’apparecchio stesso</string>
+    <string name="dialer_insert_pause">Inserisci pausa</string>
+    <string name="dialer_extension_hint">Chiama %1$s – una volta connesso, digita %2$s sul telefono</string>
+    <string name="status_pick_up_extension">Rispondi su %1$s – la box chiama %2$s, poi digita %3$s</string>
+    <string name="status_pick_up_any_extension">Rispondi al telefono – la box chiama %1$s, poi digita %2$s</string>
+    <string name="call_type_then">Appena rispondono, digita %1$s sul telefono</string>
+    <string name="call_type_now">Digita ora %1$s sul telefono – riaggancia anche lì</string>
     <string name="call_ended">Chiamata terminata · %1$s</string>
     <string name="call_not_answered">Nessuna risposta, o occupato</string>
     <string name="call_not_picked_up">Nessuna risposta al telefono</string>
