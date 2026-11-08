@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -136,6 +137,8 @@ fun SettingsScreen(
     onEditProfile: (String) -> Unit,
     onActivateProfile: (String) -> Unit,
     onAddProfile: () -> Unit,
+    /** Starts the welcome tour again: a guided way to add another box. */
+    onStartWelcomeTour: () -> Unit,
     onBack: () -> Unit,
     onOpenLanguage: () -> Unit,
     deviceContactsEnabled: Boolean,
@@ -230,6 +233,12 @@ fun SettingsScreen(
                 headlineContent = { Text(stringResource(R.string.settings_add_box)) },
                 leadingContent = { MarkSlot { Icon(Icons.Default.Add, contentDescription = null) } },
                 modifier = Modifier.clickable(onClick = onAddProfile),
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_welcome_tour)) },
+                supportingContent = { Text(stringResource(R.string.settings_welcome_tour_hint), style = TextRoles.hint) },
+                leadingContent = { MarkSlot { Icon(Icons.Default.Star, contentDescription = null) } },
+                modifier = Modifier.clickable(onClick = onStartWelcomeTour),
             )
 
             HorizontalDivider()
@@ -552,7 +561,7 @@ private fun ConfirmDeleteDialog(name: String, onConfirm: () -> Unit, onDismiss: 
  * checking –, or a new one is set up already – it can be added anyway.
  */
 @Composable
-private fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSaveAnyway: () -> Unit, onDismiss: () -> Unit) {
+internal fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSaveAnyway: () -> Unit, onDismiss: () -> Unit) {
     val (title, text) = when (val found = check.check) {
         is HostCheck.OtherBox -> R.string.save_check_other_title to stringResource(R.string.save_check_other_text, check.host, found.name, check.name)
         is HostCheck.AlreadySetUp -> R.string.save_check_known_title to stringResource(R.string.save_check_known_text, check.host, found.name)
@@ -983,7 +992,7 @@ private const val USER_LOOKUP_DELAY_MILLIS = 800L
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UserField(
+internal fun UserField(
     value: String,
     onValueChange: (String) -> Unit,
     users: List<BoxUser>,

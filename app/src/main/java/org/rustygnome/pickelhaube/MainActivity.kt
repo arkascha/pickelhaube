@@ -41,6 +41,7 @@ import org.rustygnome.pickelhaube.ui.SettingsScreen
 import org.rustygnome.pickelhaube.ui.WidgetSetupScreen
 import org.rustygnome.pickelhaube.ui.SecondFactorDialog
 import org.rustygnome.pickelhaube.ui.SpeedDialTab
+import org.rustygnome.pickelhaube.ui.WelcomeScreen
 import org.rustygnome.pickelhaube.ui.theme.PickelhaubeTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,7 +61,37 @@ class MainActivity : ComponentActivity() {
         setContent {
             PickelhaubeTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                if (state.showDeflections) {
+                if (state.showWelcome) {
+                    val firstStart = state.profiles.isEmpty()
+                    WelcomeScreen(
+                        firstStart = firstStart,
+                        box = state.welcomeBox,
+                        boxUsers = state.boxUsers,
+                        busy = state.busy,
+                        connected = state.welcomeConnected,
+                        ringPhone = state.selectedPhone,
+                        ringPhoneOnBox = state.dialPhoneOnBox,
+                        saveCheck = state.saveCheck,
+                        onSaveUnchecked = viewModel::saveUnchecked,
+                        onSaveAnyway = viewModel::saveAnyway,
+                        onDismissSaveCheck = viewModel::dismissSaveCheck,
+                        onFindBox = viewModel::findWelcomeBox,
+                        onConnect = viewModel::connectWelcomeBox,
+                        onDemo = viewModel::connectWelcomeDemo,
+                        onLeave = viewModel::leaveWelcome,
+                        onFinish = viewModel::finishWelcome,
+                        restoreOffer = {
+                            SettingsImportOffer(
+                                busy = state.transferBusy,
+                                pendingImport = state.pendingImport,
+                                importError = state.importError,
+                                onOpenImport = viewModel::openSettingsFile,
+                                onImport = ::importSettings,
+                                onCancelImport = viewModel::cancelImport,
+                            )
+                        },
+                    )
+                } else if (state.showDeflections) {
                     BackHandler { viewModel.closeDeflections() }
                     DeflectionsScreen(
                         boxName = state.activeProfile?.name,
@@ -261,6 +292,7 @@ class MainActivity : ComponentActivity() {
                         onEditProfile = viewModel::editProfile,
                         onActivateProfile = viewModel::activateProfile,
                         onAddProfile = viewModel::addProfile,
+                        onStartWelcomeTour = viewModel::startWelcomeTour,
                         onBack = viewModel::closeSettings,
                         onOpenLanguage = viewModel::openLanguage,
                         deviceContactsEnabled = state.deviceContactsEnabled,

@@ -45,6 +45,7 @@ import org.rustygnome.pickelhaube.tr064.CallMonitor
 import org.rustygnome.pickelhaube.tr064.BoxUser
 import org.rustygnome.pickelhaube.tr064.BoxUsers
 import org.rustygnome.pickelhaube.tr064.CertificateInfo
+import org.rustygnome.pickelhaube.tr064.DemoBox
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
@@ -156,6 +157,14 @@ data class UiState(
     val hostNote: HostNote? = null,
     /** Saving a connection waits for a decision: the box at its host is not (or not only) the one edited. */
     val saveCheck: SaveCheck? = null,
+    /** The welcome tour is shown: on first start, or started again from the settings (see [WelcomeScreen]). */
+    val showWelcome: Boolean = false,
+    /** The welcome tour asked which box answers at the entered host (null: not asked yet). */
+    val welcomeBox: WelcomeBox? = null,
+    /** The welcome tour connected its box: it now shows how to go on. */
+    val welcomeConnected: Boolean = false,
+    /** The box in use has a phone set for dial help ([selectedPhone] is the box' own choice, not the app's). */
+    val dialPhoneOnBox: Boolean = true,
     /**
      * Whether the box in use answered the last detection in the current network (null = not
      * detected yet), and whether the last request to it worked (null = none since it became active).
@@ -256,6 +265,18 @@ data class SecurityPort(val host: String, val port: Int)
 data class HostNote(val host: String, val check: HostCheck)
 
 /** Saving the connection named [name] to [host] is held up: [check] is not [HostCheck.Expected]. */
+/** What the welcome tour found at the host entered (see [DialerViewModel.findWelcomeBox]). */
+sealed interface WelcomeBox {
+    val host: String
+
+    data class Searching(override val host: String) : WelcomeBox
+
+    /** A FRITZ!Box answers, its [name] as it calls itself and its [model]; [setUpAs]: it is set up already, under that name. */
+    data class Found(override val host: String, val name: String?, val model: String?, val setUpAs: String?) : WelcomeBox
+
+    data class NotFound(override val host: String) : WelcomeBox
+}
+
 data class SaveCheck(val host: String, val name: String, val check: HostCheck)
 
 /**
@@ -331,6 +352,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             activeProfileId = settings.activeProfileId,
             showSettings = !settings.isConfigured(),
             showConnectionSettings = !settings.isConfigured(),
+            // Nothing set up yet: the welcome tour comes first, in front of the page for the first box.
+            showWelcome = !settings.isConfigured(),
             settingsSaved = settings.isConfigured(),
             deviceContactsEnabled = settings.deviceContactsEnabled,
             callLogEnabled = settings.callLogEnabled,
@@ -493,6 +516,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** From the error dialog: go to the settings of the box in use to fix the connection. */
     fun openSettingsFromError() {
         dismissError()
+        // From the welcome tour: on to the full connection page, with what was entered there.
+        if (_state.value.showWelcome) return leaveWelcome(toForm = true)
         val active = settings.activeProfile()
         if (active != null) {
             _state.update { it.copy(showSettings = true) }
@@ -503,6 +528,82 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     // --- settings ---------------------------------------------------------------------
+
+    // --- welcome tour -----------------------------------------------------------------
+
+    /** Starts the welcome tour again from the settings: its connect step adds another box. */
+    fun startWelcomeTour() {
+        addProfile()
+        _state.update { it.copy(showWelcome = true, welcomeBox = null, welcomeConnected = false) }
+    }
+
+    private var welcomeBoxJob: Job? = null
+
+    /**
+     * Asks, without logging in, which box answers at [host] – for the tour's "find your box" step –
+     * and the users it has, for the next one.
+     */
+    fun findWelcomeBox(host: String) {
+        val trimmed = host.trim()
+        welcomeBoxJob?.cancel()
+        if (trimmed.isEmpty()) return _state.update { it.copy(welcomeBox = null) }
+        _state.update { it.copy(welcomeBox = WelcomeBox.Searching(trimmed)) }
+        welcomeBoxJob = viewModelScope.launch {
+            val identity = withContext(Dispatchers.IO) { BoxDiscovery.identify(trimmed) }
+            val box = if (identity == null) {
+                WelcomeBox.NotFound(trimmed)
+            } else {
+                val setUpAs = settings.profiles().firstOrNull { it.deviceId == identity.udn }?.name
+                WelcomeBox.Found(trimmed, identity.friendlyName, identity.modelName, setUpAs)
+            }
+            _state.update { it.copy(welcomeBox = box) }
+        }
+        lookUpBoxUsers(FritzConfig(host = trimmed))
+    }
+
+    /** The tour's connect step: saves and connects the box entered, as "Save & connect" does. */
+    fun connectWelcomeBox(name: String, host: String, user: String, password: String) {
+        val config = FritzConfig(host = host.trim(), username = user.trim(), password = password)
+        _state.update { it.copy(editingName = name) }
+        saveSettings(config, name, phonebooksEnabled = true, callListEnabled = true, speedDialsEnabled = true, internalCallsEnabled = false)
+    }
+
+    /** The tour's demo link: the demo box, connected right away. */
+    fun connectWelcomeDemo() = connectWelcomeBox("Demo", DemoBox.HOST, DemoBox.USERNAME, DemoBox.PASSWORD)
+
+    /**
+     * Leaves the tour without having connected: to the connection page – with what was entered
+     * ([toForm], e.g. after a failure) or empty (skipped) – on first start; back to the settings
+     * when started from there, unless [toForm].
+     */
+    fun leaveWelcome(toForm: Boolean = false) {
+        welcomeBoxJob?.cancel()
+        val firstStart = !settings.isConfigured()
+        _state.update {
+            it.copy(
+                showWelcome = false,
+                welcomeBox = null,
+                welcomeConnected = false,
+                showSettings = true,
+                showConnectionSettings = firstStart || toForm,
+                editingProfileId = null,
+                editingName = if (toForm) it.editingName else "",
+                config = if (toForm) it.config else FritzConfig(),
+                saveCheck = null,
+            )
+        }
+    }
+
+    /** The tour's last page: on to the dialer. */
+    fun finishWelcome() = _state.update {
+        it.copy(
+            showWelcome = false,
+            welcomeBox = null,
+            welcomeConnected = false,
+            showSettings = false,
+            showConnectionSettings = false,
+        )
+    }
 
     /** Opens the settings; without any box configured directly on the "add" page. */
     fun openSettings() {
@@ -790,6 +891,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     showSettings = it.settingsSaved,
                     showConnectionSettings = false,
                     settingsSaved = true,
+                    // Connected from the welcome tour: it goes on to its last page.
+                    welcomeConnected = it.showWelcome,
                 )
             }
             message
@@ -1150,6 +1253,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 settingsSaved = settings.isConfigured(),
                 // Imported instead of entering the first box: on to the settings with the boxes now there.
                 showConnectionSettings = it.showConnectionSettings && !settings.isConfigured(),
+                showWelcome = it.showWelcome && !settings.isConfigured(),
                 editingProfileId = if (settings.isConfigured()) null else it.editingProfileId,
                 activeBoxSeen = null,
                 activeBoxWorking = null,
@@ -1720,6 +1824,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun loadPhones(dialer: FritzDialer, internal: Boolean = settings.activeProfile()?.internalCallsEnabled == true): UiText {
         val phones = dialer.listPhones()
         val current = dialer.getDialPhone()
+        _state.update { it.copy(dialPhoneOnBox = current != null) }
         // No internal phones is no reason for the phones to fail.
         val internalPhones = if (internal) runCatching { dialer.internalPhones(phones) }.getOrDefault(emptyList()) else emptyList()
         _state.update {
