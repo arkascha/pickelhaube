@@ -1,0 +1,10 @@
+<en-US>
+• Welcome tour: on first start, a friendly guide leads step by step to the connection with your FRITZ!Box – it looks for the box, asks for user and password, and says which phone will ring. Again any time under Settings › Welcome tour
+• Choosing a user from the list no longer brings up the keyboard
+• Lighter placeholder texts in empty fields
+</en-US>
+<de-DE>
+• Willkommens-Tour: Beim ersten Start führt ein freundlicher Begleiter Schritt für Schritt zur Verbindung mit deiner FRITZ!Box – er sucht die Box, fragt nach Benutzer und Kennwort und sagt, welches Telefon klingelt. Jederzeit wieder unter Einstellungen › Willkommens-Tour
+• Die Auswahl eines Benutzers aus der Liste öffnet keine Tastatur mehr
+• Hellere Platzhaltertexte in leeren Feldern
+</de-DE>
