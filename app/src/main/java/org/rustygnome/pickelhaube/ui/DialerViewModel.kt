@@ -36,6 +36,7 @@ import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
+import org.rustygnome.pickelhaube.tr064.AuthenticationException
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
 import org.rustygnome.pickelhaube.tr064.BoxInfo
@@ -161,6 +162,10 @@ data class UiState(
     val showWelcome: Boolean = false,
     /** The welcome tour asked which box answers at the entered host (null: not asked yet). */
     val welcomeBox: WelcomeBox? = null,
+    /** The last request failed because the box rejected user name or password (the tour offers changing them). */
+    val loginRejected: Boolean = false,
+    /** The error dialog of a rejected login asked the welcome tour to go back to the password. */
+    val welcomeChangePassword: Boolean = false,
     /** The welcome tour connected its box: it now shows how to go on. */
     val welcomeConnected: Boolean = false,
     /** The box in use has a phone set for dial help ([selectedPhone] is the box' own choice, not the app's). */
@@ -567,6 +572,15 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         _state.update { it.copy(editingName = name) }
         saveSettings(config, name, phonebooksEnabled = true, callListEnabled = true, speedDialsEnabled = true, internalCallsEnabled = false)
     }
+
+    /** The error dialog of a rejected login, in the tour: closes, and the tour goes back to the password. */
+    fun changeWelcomePassword() {
+        dismissError()
+        _state.update { it.copy(welcomeChangePassword = true) }
+    }
+
+    /** The tour went back to the password, as asked by [changeWelcomePassword]. */
+    fun welcomePasswordChangeShown() = _state.update { it.copy(welcomeChangePassword = false) }
 
     /** The tour's demo link: the demo box, connected right away. */
     fun connectWelcomeDemo() = connectWelcomeBox("Demo", DemoBox.HOST, DemoBox.USERNAME, DemoBox.PASSWORD)
@@ -2164,7 +2178,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun runOnBox(progress: UiText, block: BoxAction) {
         if (_state.value.busy) return
         failedAction = null
-        _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false) }
+        _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false, loginRejected = false) }
         viewModelScope.launch {
             val config = _state.value.config
             val result = runCatching {
@@ -2211,6 +2225,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                             status = null,
                             error = describeError(error, config, rights),
                             canRetry = true,
+                            loginRejected = error is AuthenticationException,
                             // A failed check of edited settings says nothing about the box in use.
                             activeBoxWorking = if (verifyingSettings) it.activeBoxWorking else false,
                         )
@@ -2270,6 +2285,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                         status = null,
                         error = describeError(shown, config),
                         canRetry = true,
+                        loginRejected = shown is AuthenticationException,
                         activeBoxWorking = if (verifyingSettings) it.activeBoxWorking else false,
                     )
                 }

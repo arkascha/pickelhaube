@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 108 108">
+  <path fill="#005EA2" d="M18.00,54.00a36.00,36.00 0 1,0 72.00,0a36.00,36.00 0 1,0 -72.00,0Z"/>
+  <path fill="#FEE400" d="M31.92,54.00C31.92,42.04 42.04,38.36 54.00,38.36C65.96,38.36 76.08,42.04 76.08,54.00Z"/>
+  <path fill="#F20400" d="M54.00,22.72L57.68,36.52L50.32,36.52Z"/>
+  <path fill="#F20400" d="M50.74,35.14H57.26Q59.06,35.14 59.06,36.94V37.94Q59.06,39.74 57.26,39.74H50.74Q48.94,39.74 48.94,37.94V36.94Q48.94,35.14 50.74,35.14Z"/>
+  <path fill="#F20400" d="M33.30,52.62H74.70A2.53,2.53 0 0,1 74.70,57.68H33.30A2.53,2.53 0 0,1 33.30,52.62Z"/>
+  <path fill="#FFFFFF" d="M45.85,77.16C51.13,78.88 56.86,78.87 62.15,77.16L62.15,71.72C62.15,71.05 62.54,70.44 63.12,70.16C64.96,69.23 66.71,67.98 68.24,66.44C68.92,65.76 70.04,65.76 70.72,66.44L75.04,70.76C75.72,71.44 75.72,72.56 75.04,73.24C63.42,84.86 44.58,84.86 32.96,73.24C32.28,72.56 32.28,71.44 32.96,70.76L37.29,66.43C37.98,65.75 39.09,65.75 39.77,66.43C41.32,67.98 43.05,69.22 44.89,70.14C45.46,70.44 45.85,71.02 45.85,71.72L45.85,77.16Z"/>
+  <path fill="none" stroke="#0B2540" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M43.30,63.50Q46.50,64.60 49.70,63.50"/>
+  <path fill="none" stroke="#0B2540" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M58.30,63.50Q61.50,64.60 64.70,63.50"/>
+  <path fill="#FFFFFF" d="M78,62H100Q102,62 102,64V96Q102,98 100,98H78Q76,98 76,96V64Q76,62 78,62Z"/>
+  <path fill="none" stroke="#005EA2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M78,62H100Q102,62 102,64V96Q102,98 100,98H78Q76,98 76,96V64Q76,62 78,62Z"/>
+  <path fill="#F20400" d="M84,59H94V65H84Z"/>
+  <path fill="none" stroke="#005EA2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M81,72H97M81,79H97M81,86H93"/>
+  <path fill="none" stroke="#F20400" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" d="M80,71.5l1.5,1.5 3,-3"/>
+  <path fill="#FFFFFF" d="M71.40,88.00a5.60,5.60 0 1,0 11.20,0a5.60,5.60 0 1,0 -11.20,0Z"/>
+  <path fill="none" stroke="#005EA2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M71.40,88.00a5.60,5.60 0 1,0 11.20,0a5.60,5.60 0 1,0 -11.20,0Z"/>
+</svg>

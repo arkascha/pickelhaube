@@ -135,6 +135,7 @@
     <string name="connection_user_current">Entered now</string>
     <string name="connection_user_taken_over">Taken over: the only user of this box</string>
     <string name="connection_user_hint">The user you log in to the FRITZ!Box with. If you log in with a password only, the box has still made a user for that, with a name of its own (e.g. fritz1234). You can also create a user just for Pickelhaube under System › FRITZ!Box Users – it needs the permission for telephony.</string>
+    <string name="connection_user_choose">Choose a user of the box</string>
     <string name="connection_password">Password</string>
     <string name="connection_phonebooks">Phone books</string>
     <string name="connection_phonebooks_hint">Shows the contacts stored in this FRITZ!Box’s phone books, including online phone books synced into it (e.g. CardDAV). They are read from the box when needed and not stored on the phone.</string>
@@ -500,7 +501,7 @@
     <string name="welcome_find_found">Found it: %1$s!</string>
     <string name="welcome_find_set_up">Found it: %1$s – it is set up already, as “%2$s”.</string>
     <string name="welcome_find_none">No answer from %1$s. Is this phone in the same Wi-Fi as the box? You can go on anyway, for example through a VPN.</string>
-    <string name="welcome_name_hint">How the box is called in the app, e.g. “Home”.</string>
+    <string name="welcome_name_hint">Your choice, e.g. “Home”. Left empty, the box is called “%1$s”.</string>
     <string name="welcome_login_title">Who are you on the box?</string>
     <string name="welcome_login">The user name and password you log in to your FRITZ!Box with.</string>
     <string name="welcome_login_tip">Tip: a user just for Pickelhaube, with telephony permission only, is the safest choice.</string>
@@ -510,6 +511,8 @@
     <string name="welcome_connect_button">Connect</string>
     <string name="welcome_connecting">Connecting…</string>
     <string name="welcome_connect_failed">Hm, that did not work – the message said why. Go back and change your entries, or open all settings.</string>
+    <string name="welcome_login_rejected">The box did not accept “%1$s” with this password. Please check it – after several wrong tries, the box makes you wait longer each time.</string>
+    <string name="welcome_change_password">Change password</string>
     <string name="welcome_all_settings">All settings</string>
     <string name="welcome_ready_title">All set!</string>
     <string name="welcome_ready_ring">When you dial, your FRITZ!Box first rings %1$s – pick it up, and the box dials the number.</string>
@@ -518,7 +521,7 @@
     <string name="welcome_ready_ring_change">You can choose another phone under “Ring phone” in the dialer – the box may ask you to confirm that.</string>
     <string name="welcome_ready_tips">Good to know</string>
     <string name="welcome_tip_picker">The address book button next to the number opens your recent calls and phone books.</string>
-    <string name="welcome_tip_long_press">A long press on the green button offers more: hide your number, and others.</string>
+    <string name="welcome_tip_long_press">A long press on the green button offers more – hiding your number, for example.</string>
     <string name="welcome_tip_tiles">Quick settings tiles and a home screen widget get you here faster – see the settings.</string>
     <string name="welcome_start_dialling">Start dialling</string>
     <string name="settings_welcome_tour">Welcome tour</string>

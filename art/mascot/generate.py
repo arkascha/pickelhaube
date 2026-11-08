@@ -102,7 +102,10 @@ def helmet():
 EYE_L, EYE_R, EYE_Y = 46.5, 61.5, 63.0
 
 
-def eyes(look=(0.0, 0.0), happy=False, squint_right=False):
+def eyes(look=(0.0, 0.0), happy=False, squint_right=False, closed=False):
+    if closed:  # a blink: both eyes a short line
+        line = lambda x: ("stroke", INK, f"M{x - 3.2:.2f},{EYE_Y + 0.5:.2f}Q{x:.2f},{EYE_Y + 1.6:.2f} {x + 3.2:.2f},{EYE_Y + 0.5:.2f}", 1.6)
+        return [line(EYE_L), line(EYE_R)]
     if happy:  # closed, smiling: ^ ^
         arc = lambda x: ("stroke", INK, f"M{x - 3.2:.2f},{EYE_Y + 1:.2f}Q{x:.2f},{EYE_Y - 3.2:.2f} {x + 3.2:.2f},{EYE_Y + 1:.2f}", 1.6)
         return [arc(EYE_L), arc(EYE_R)]
@@ -170,6 +173,18 @@ POSES = {
 }
 
 
+def blink(name):
+    """The pose [name] with its eyes closed – shown for a moment now and then (see Mascot in WelcomeScreen)."""
+    look = {"waving": (0.4, -0.3), "clipboard": (1.2, 0.8), "searching": (1.0, 0.0), "typing": (0.0, 1.6)}[name]
+    shapes = POSES[name]
+    open_eyes = eyes(look)
+    start = next(i for i in range(len(shapes)) if shapes[i:i + len(open_eyes)] == open_eyes)
+    return shapes[:start] + eyes(closed=True) + shapes[start + len(open_eyes):]
+
+
+BLINKING = ["waving", "clipboard", "searching", "typing"]
+
+
 def svg(shapes):
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 {SIZE} {SIZE}">']
     for s in shapes:
@@ -198,9 +213,11 @@ def vector(name, shapes):
 
 
 if __name__ == "__main__":
-    for name, shapes in POSES.items():
+    all_poses = dict(POSES)
+    all_poses.update({f"{name}_blink": blink(name) for name in BLINKING})
+    for name, shapes in all_poses.items():
         with open(f"art/mascot/{name}.svg", "w") as f:
             f.write(svg(shapes))
         with open(f"app/src/main/res/drawable/mascot_{name}.xml", "w") as f:
             f.write(vector(name, shapes))
-    print("written:", ", ".join(POSES))
+    print("written:", ", ".join(all_poses))

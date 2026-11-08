@@ -72,6 +72,8 @@ fun ErrorDialog(
     onRetry: () -> Unit,
     onOpenSettings: () -> Unit,
     onDismiss: () -> Unit,
+    /** What the button that closes the dialog says – e.g. where it leads instead of just closing. */
+    dismissLabel: String = stringResource(R.string.close),
 ) {
     val settingsButton = offerSettings && error.settingsRelated
     AlertDialog(
@@ -92,18 +94,18 @@ fun ErrorDialog(
                 Column(horizontalAlignment = Alignment.End) {
                     TextButton(onClick = onRetry) { Text(stringResource(R.string.retry)) }
                     TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.open_settings)) }
-                    TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+                    TextButton(onClick = onDismiss) { Text(dismissLabel) }
                 }
             } else {
                 when {
                     canRetry -> TextButton(onClick = onRetry) { Text(stringResource(R.string.retry)) }
                     settingsButton -> TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.open_settings)) }
-                    else -> TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+                    else -> TextButton(onClick = onDismiss) { Text(dismissLabel) }
                 }
             }
         },
         dismissButton = if ((settingsButton && canRetry) || (!canRetry && !settingsButton)) null else {
-            { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } }
+            { TextButton(onClick = onDismiss) { Text(dismissLabel) } }
         },
     )
 }

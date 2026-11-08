@@ -132,6 +132,7 @@
     <string name="connection_user_current">Introducido ahora</string>
     <string name="connection_user_taken_over">Rellenado: el único usuario de este router</string>
     <string name="connection_user_hint">El usuario con el que inicias sesión en la FRITZ!Box. Si inicias sesión solo con contraseña, el router ha creado igualmente un usuario para ello, con un nombre propio (p. ej. fritz1234). También puedes crear un usuario solo para Pickelhaube en Sistema › Usuarios de FRITZ!Box; necesita el permiso de telefonía.</string>
+    <string name="connection_user_choose">Elegir un usuario de la box</string>
     <string name="connection_password">Contraseña</string>
     <string name="connection_phonebooks">Agendas</string>
     <string name="connection_phonebooks_hint">Muestra los contactos guardados en las agendas de esta FRITZ!Box, incluidas las agendas en línea sincronizadas con ella (p. ej., CardDAV). Se leen de la FRITZ!Box cuando hace falta y no se guardan en el teléfono.</string>
@@ -505,7 +506,7 @@
     <string name="welcome_find_found">¡Encontrada: %1$s!</string>
     <string name="welcome_find_set_up">Encontrada: %1$s – ya está configurada, como «%2$s».</string>
     <string name="welcome_find_none">Sin respuesta de %1$s. ¿Está este teléfono en la misma Wi-Fi que la box? Puedes seguir igualmente, por ejemplo a través de una VPN.</string>
-    <string name="welcome_name_hint">Cómo se llama la box en la app, p. ej. «Casa».</string>
+    <string name="welcome_name_hint">Tú eliges, p. ej. «Casa». Si lo dejas vacío, la box se llama «%1$s».</string>
     <string name="welcome_login_title">¿Quién eres en la box?</string>
     <string name="welcome_login">El nombre de usuario y la contraseña con los que entras en tu FRITZ!Box.</string>
     <string name="welcome_login_tip">Consejo: un usuario solo para Pickelhaube, solo con permiso de telefonía, es lo más seguro.</string>
@@ -515,6 +516,8 @@
     <string name="welcome_connect_button">Conectar</string>
     <string name="welcome_connecting">Conectando…</string>
     <string name="welcome_connect_failed">Vaya, no ha funcionado – el mensaje decía por qué. Vuelve y cambia tus datos, o abre todos los ajustes.</string>
+    <string name="welcome_login_rejected">La box no aceptó «%1$s» con esta contraseña. Compruébala – tras varios intentos fallidos, la box te hace esperar cada vez más.</string>
+    <string name="welcome_change_password">Cambiar contraseña</string>
     <string name="welcome_all_settings">Todos los ajustes</string>
     <string name="welcome_ready_title">¡Todo listo!</string>
     <string name="welcome_ready_ring">Cuando marques, tu FRITZ!Box hará sonar primero %1$s – contesta, y la box marca el número.</string>
@@ -523,7 +526,7 @@
     <string name="welcome_ready_ring_change">Puedes elegir otro teléfono en «Hacer sonar» del marcador – la box quizá pida confirmarlo.</string>
     <string name="welcome_ready_tips">Bueno saber</string>
     <string name="welcome_tip_picker">El botón de la agenda junto al número abre tus llamadas recientes y agendas.</string>
-    <string name="welcome_tip_long_press">Una pulsación larga en el botón verde ofrece más: ocultar tu número, y otras cosas.</string>
+    <string name="welcome_tip_long_press">Una pulsación larga en el botón verde ofrece más: por ejemplo, ocultar tu número.</string>
     <string name="welcome_tip_tiles">Los mosaicos de ajustes rápidos y un widget en la pantalla de inicio te traen aquí más rápido – mira los ajustes.</string>
     <string name="welcome_start_dialling">A llamar</string>
     <string name="settings_welcome_tour">Tour de bienvenida</string>

@@ -3,6 +3,7 @@ package org.rustygnome.pickelhaube.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 
@@ -20,6 +21,15 @@ object TextRoles {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontStyle = FontStyle.Italic,
         )
+
+    /**
+     * The colour of a field's placeholder – what stands in an empty field until something is typed
+     * (e.g. the name taken when it stays empty): lighter than labels and hints, so it is not taken
+     * for an entry.
+     */
+    val placeholder: Color
+        @Composable @ReadOnlyComposable
+        get() = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
 
     /** What the app found out about a box (e.g. its users, its HTTPS port): the accent colour. */
     val finding: TextStyle

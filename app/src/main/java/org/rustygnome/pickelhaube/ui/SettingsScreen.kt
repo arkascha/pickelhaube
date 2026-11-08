@@ -79,6 +79,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -813,7 +818,7 @@ fun ConnectionSettingsScreen(
             OutlinedTextField(
                 value = name, onValueChange = { name = it },
                 label = { Text(stringResource(R.string.connection_name)) },
-                placeholder = { Text(stringResource(R.string.connection_name_placeholder), maxLines = 1) },
+                placeholder = { Text(stringResource(R.string.connection_name_placeholder), maxLines = 1, color = TextRoles.placeholder) },
                 // Only a label – the box is reached by its host, not looked for by this name.
                 trailingIcon = { HelpButton(stringResource(R.string.connection_name), listOf(stringResource(R.string.connection_name_hint))) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
@@ -872,12 +877,31 @@ fun ConnectionSettingsScreen(
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
-            UserField(value = user, onValueChange = { user = it }, users = boxUsers, takenOver = user == userTakenOver && user == boxUsers.singleOrNull()?.name)
+            // A user chosen from the list: the keyboard (if it was up) goes away, and the password field
+            // is scrolled into view – typing it is the next step, but tapping into it is left to the user.
+            val passwordInView = remember { BringIntoViewRequester() }
+            val focusManager = LocalFocusManager.current
+            val scope = rememberCoroutineScope()
+            UserField(
+                value = user,
+                onValueChange = { user = it },
+                users = boxUsers,
+                takenOver = user == userTakenOver && user == boxUsers.singleOrNull()?.name,
+                onChosen = {
+                    focusManager.clearFocus()
+                    scope.launch {
+                        delay(300) // until the keyboard is gone and the page has its full height again
+                        passwordInView.bringIntoView()
+                    }
+                },
+            )
             PasswordField(
                 value = password,
                 onValueChange = { password = it },
                 label = stringResource(R.string.connection_password),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .bringIntoViewRequester(passwordInView),
             )
             BoxFeatureSetting(
                 title = stringResource(R.string.connection_phonebooks),
@@ -998,9 +1022,23 @@ internal fun UserField(
     users: List<BoxUser>,
     /** [value] is the box' only user, entered by the app. */
     takenOver: Boolean,
+    /** A user was chosen from the list (not typed): e.g. on to the password. */
+    onChosen: () -> Unit = {},
 ) {
     var expanded by remember { mutableStateOf(false) }
     val canOpen = users.isNotEmpty()
+    // Choosing from the list needs no keyboard: the field – which the tap or the menu would focus –
+    // gives up the focus while the list is open, and the keyboard goes away.
+    val focusManager = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    LaunchedEffect(expanded) {
+        if (!expanded) return@LaunchedEffect
+        repeat(3) {
+            focusManager.clearFocus()
+            keyboard?.hide()
+            delay(120)
+        }
+    }
     ExposedDropdownMenuBox(expanded = expanded && canOpen, onExpandedChange = { if (canOpen) expanded = it }) {
         OutlinedTextField(
             value = value, onValueChange = onValueChange,
@@ -1019,18 +1057,24 @@ internal fun UserField(
                     HelpButton(stringResource(R.string.connection_user), listOf(stringResource(R.string.connection_user_hint)))
                     if (canOpen) {
                         // Only the arrow opens the list, so that tapping the help next to it does not.
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
-                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable, canOpen),
-                        )
-                        Spacer(Modifier.width(12.dp))
+                        // A plain button, not a menu anchor: an anchor of an editable field focuses it,
+                        // and the keyboard would come up just for choosing from the list.
+                        val chooseLabel = stringResource(R.string.connection_user_choose)
+                        IconButton(
+                            onClick = { expanded = !expanded },
+                            modifier = Modifier.semantics { contentDescription = chooseLabel },
+                        ) {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        }
                     }
                 }
             },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, enabled = false),
+                // Only where the list hangs: as "not editable", opening the list does not focus the field
+                // (and bring up the keyboard just for choosing); tapping the field still lets you type.
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = false),
         )
         ExposedDropdownMenu(expanded = expanded && canOpen, onDismissRequest = { expanded = false }) {
             users.forEach { candidate ->
@@ -1059,6 +1103,7 @@ internal fun UserField(
                     onClick = {
                         expanded = false
                         onValueChange(candidate.name)
+                        onChosen()
                     },
                 )
             }

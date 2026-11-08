@@ -57,6 +57,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.tr064.DialingCodes
@@ -232,7 +233,7 @@ fun PhonebookTab(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             singleLine = true,
-            placeholder = { Text(stringResource(R.string.phonebook_search)) },
+            placeholder = { Text(stringResource(R.string.phonebook_search), color = TextRoles.placeholder) },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             trailingIcon = {
                 if (query.isNotEmpty()) {

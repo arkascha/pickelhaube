@@ -4,6 +4,7 @@ import org.rustygnome.pickelhaube.ui.onlineCopies
 import org.rustygnome.pickelhaube.ui.numberKey
 import org.rustygnome.pickelhaube.ui.deviceCountryIso
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.appwidget.AppWidgetManager
 import android.content.Intent
@@ -69,6 +70,9 @@ class MainActivity : ComponentActivity() {
                         boxUsers = state.boxUsers,
                         busy = state.busy,
                         connected = state.welcomeConnected,
+                        changePasswordRequest = state.welcomeChangePassword,
+                        onChangePasswordShown = viewModel::welcomePasswordChangeShown,
+                        loginRejected = state.loginRejected,
                         ringPhone = state.selectedPhone,
                         ringPhoneOnBox = state.dialPhoneOnBox,
                         saveCheck = state.saveCheck,
@@ -348,7 +352,11 @@ class MainActivity : ComponentActivity() {
                         offerSettings = !state.showSettings,
                         onRetry = viewModel::retry,
                         onOpenSettings = viewModel::openSettingsFromError,
-                        onDismiss = viewModel::dismissError,
+                        // In the welcome tour, a rejected login leads back to the password instead of just closing.
+                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel::changeWelcomePassword else viewModel::dismissError,
+                        dismissLabel = stringResource(
+                            if (state.showWelcome && state.loginRejected) R.string.welcome_change_password else R.string.close,
+                        ),
                     )
                 }
                 state.secondFactor?.let { challenge ->

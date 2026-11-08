@@ -132,6 +132,7 @@
     <string name="connection_user_current">Wpisany teraz</string>
     <string name="connection_user_taken_over">Wpisano: jedyny użytkownik tego routera</string>
     <string name="connection_user_hint">Użytkownik, którym logujesz się do FRITZ!Box. Jeśli logujesz się tylko hasłem, urządzenie i tak utworzyło do tego użytkownika z własną nazwą (np. fritz1234). Możesz też utworzyć użytkownika tylko dla Pickelhaube w System › Użytkownicy FRITZ!Box; potrzebuje on uprawnienia do telefonii.</string>
+    <string name="connection_user_choose">Wybierz użytkownika urządzenia</string>
     <string name="connection_password">Hasło</string>
     <string name="connection_phonebooks">Książki telefoniczne</string>
     <string name="connection_phonebooks_hint">Pokazuje kontakty zapisane w książkach telefonicznych tego FRITZ!Box, w tym zsynchronizowane z nim książki online (np. CardDAV). Są odczytywane z FRITZ!Box w razie potrzeby i nie są zapisywane na telefonie.</string>
@@ -514,7 +515,7 @@
     <string name="welcome_find_found">Znaleziono: %1$s!</string>
     <string name="welcome_find_set_up">Znaleziono: %1$s – jest już skonfigurowany, jako „%2$s”.</string>
     <string name="welcome_find_none">Brak odpowiedzi od %1$s. Czy ten telefon jest w tej samej sieci Wi-Fi co urządzenie? Możesz kontynuować mimo to, np. przez VPN.</string>
-    <string name="welcome_name_hint">Jak urządzenie nazywa się w aplikacji, np. „Dom”.</string>
+    <string name="welcome_name_hint">Twój wybór, np. „Dom”. Jeśli pozostanie puste, urządzenie nazywa się „%1$s”.</string>
     <string name="welcome_login_title">Kim jesteś na urządzeniu?</string>
     <string name="welcome_login">Nazwa użytkownika i hasło, którymi logujesz się do FRITZ!Box.</string>
     <string name="welcome_login_tip">Wskazówka: osobny użytkownik tylko dla Pickelhaube, tylko z uprawnieniem do telefonii, jest najbezpieczniejszy.</string>
@@ -524,6 +525,8 @@
     <string name="welcome_connect_button">Połącz</string>
     <string name="welcome_connecting">Łączenie…</string>
     <string name="welcome_connect_failed">Hm, nie udało się – komunikat mówił dlaczego. Wróć i zmień dane albo otwórz wszystkie ustawienia.</string>
+    <string name="welcome_login_rejected">Urządzenie nie przyjęło „%1$s” z tym hasłem. Sprawdź je – po kilku błędnych próbach urządzenie każe czekać coraz dłużej.</string>
+    <string name="welcome_change_password">Zmień hasło</string>
     <string name="welcome_all_settings">Wszystkie ustawienia</string>
     <string name="welcome_ready_title">Gotowe!</string>
     <string name="welcome_ready_ring">Gdy wybierasz numer, FRITZ!Box najpierw dzwoni na %1$s – odbierz, a urządzenie wybierze numer.</string>
@@ -532,7 +535,7 @@
     <string name="welcome_ready_ring_change">Inny telefon wybierzesz w polu „Dzwoń na” w wybieraniu – urządzenie może poprosić o potwierdzenie.</string>
     <string name="welcome_ready_tips">Dobrze wiedzieć</string>
     <string name="welcome_tip_picker">Przycisk książki adresowej obok numeru otwiera ostatnie połączenia i książki telefoniczne.</string>
-    <string name="welcome_tip_long_press">Długie naciśnięcie zielonego przycisku daje więcej: ukrycie numeru i inne.</string>
+    <string name="welcome_tip_long_press">Długie naciśnięcie zielonego przycisku daje więcej, np. ukrycie numeru.</string>
     <string name="welcome_tip_tiles">Kafelki szybkich ustawień i widżet na ekranie głównym szybciej cię tu przyprowadzą – zobacz ustawienia.</string>
     <string name="welcome_start_dialling">Zacznij dzwonić</string>
     <string name="settings_welcome_tour">Powitalny przewodnik</string>

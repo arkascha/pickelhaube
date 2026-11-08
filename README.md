@@ -48,7 +48,26 @@ Without them, release builds are not signed; with only some of them, Gradle warn
 
 ## Using the app
 
-1. On first start, enter host (`fritz.box` or `192.168.178.1`), user and password. Optionally switch on
+### Welcome tour
+
+On first start – while no FRITZ!Box is set up – a short tour leads to the first connection, with a
+mascot: the app icon's helmet with eyes, its handset worn as a grin (drawn in `art/mascot/generate.py`,
+which writes the poses as SVGs and as vector drawables). Six pages: hello (with small links to the
+demo box and to restoring a backup), what the FRITZ!Box needs (with a link to the guide on the web
+page), where the box is (`fritz.box` is asked right away, without logging in; the display name is
+left to you – empty, the box' own name is taken), user and password (the only user of a box is
+filled in; choosing one from the list moves on to the password), connect (the same save
+path as the connection page below: the "already set up" question, the error message, and then
+**All settings** – the full connection page with the entries; after a rejected login, **Change password**
+next to **Connect** leads back to the password) and ready (which phone the box rings
+for dial help – its own setting, read and not changed, as changing it may need a confirmation on the
+box – and three tips). **Skip** leads to the connection page. **Settings › Welcome tour** starts it
+again; from there, its connect step adds another box. The mascot bobs, blinks and wiggles when
+something worked; pages slide – all of it only while Android's animations are on.
+
+### The connection page
+
+1. On the connection page (after **Skip** in the welcome tour, or **Settings › Add FRITZ!Box**), enter host (`fritz.box` or `192.168.178.1`), user and password. Optionally switch on
    **Use HTTPS**: the port changes from `49000` to the box' HTTPS port – the one the box reports
    (TR-064 `DeviceInfo` `GetSecurityPort`, asked over plain HTTP without login), else the usual `49443`.
    A port entered by hand is kept.

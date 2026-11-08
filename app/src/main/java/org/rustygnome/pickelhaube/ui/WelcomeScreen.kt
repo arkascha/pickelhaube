@@ -1,5 +1,25 @@
 package org.rustygnome.pickelhaube.ui
 
+import android.provider.Settings
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import kotlin.random.Random
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +50,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,6 +65,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -84,6 +112,11 @@ fun WelcomeScreen(
     busy: Boolean,
     /** The tour's box is connected: it shows its last page. */
     connected: Boolean,
+    /** The last attempt failed because the box rejected user name or password. */
+    loginRejected: Boolean,
+    /** The error dialog asked to go back to the password (see [changePassword] below); then [onChangePasswordShown]. */
+    changePasswordRequest: Boolean,
+    onChangePasswordShown: () -> Unit,
     /** The phone the box rings for dial help, as the box' phone name; null: none known. */
     ringPhone: String?,
     /** The box has [ringPhone] set itself (false: the app's choice, written on the first call). */
@@ -104,13 +137,15 @@ fun WelcomeScreen(
     var stepIndex by rememberSaveable { mutableIntStateOf(0) }
     val step = if (connected) WelcomeStep.READY else WelcomeStep.entries[stepIndex.coerceAtMost(WelcomeStep.CONNECT.ordinal)]
     var host by rememberSaveable { mutableStateOf("fritz.box") }
+    // Left to the user; empty, the box' own name (or its address) is taken.
     var name by rememberSaveable { mutableStateOf("") }
-    // The name as taken from the box: replaced when another box is found, unless typed over.
-    var nameTakenOver by rememberSaveable { mutableStateOf<String?>(null) }
     var user by rememberSaveable { mutableStateOf("") }
     var userTakenOver by rememberSaveable { mutableStateOf<String?>(null) }
     var password by rememberSaveable { mutableStateOf("") }
     var attempted by rememberSaveable { mutableStateOf(false) }
+    // What the last connect attempt was made with (address, user, password): failed, it is not offered as the next step again.
+    var attemptedLogin by rememberSaveable { mutableStateOf<List<String>?>(null) }
+    var focusPassword by rememberSaveable { mutableStateOf(false) }
 
     // The box at the address: asked right away (so it is known by the time its page shows), and
     // again a moment after the address was changed.
@@ -119,15 +154,28 @@ fun WelcomeScreen(
         if (box != null) delay(600)
         onFindBox(host)
     }
-    // A connect attempt that ended without connecting – and without a question pending – failed.
-    val failed = attempted && !busy && !connected && saveCheck == null
-    // Its name for the display name, unless one was typed.
-    LaunchedEffect(box) {
-        val found = (box as? WelcomeBox.Found)?.let { it.name ?: it.model } ?: return@LaunchedEffect
-        if (name.isBlank() || name == nameTakenOver) {
-            name = found
-            nameTakenOver = found
-        }
+    // A connect attempt that ended without connecting – and without a question pending – failed;
+    // shown as such until the entries are changed.
+    val entries = listOf(host.trim(), user.trim(), password)
+    val failed = attempted && !busy && !connected && saveCheck == null && attemptedLogin == entries
+    // The box said no to these very entries: correcting them comes first (see ConnectPage).
+    val rejected = failed && loginRejected
+    val changePassword = {
+        password = ""
+        focusPassword = true
+        stepIndex = WelcomeStep.LOGIN.ordinal
+    }
+    LaunchedEffect(changePasswordRequest) {
+        if (!changePasswordRequest) return@LaunchedEffect
+        changePassword()
+        onChangePasswordShown()
+    }
+    val fallbackName = (box as? WelcomeBox.Found)?.takeIf { it.host == host.trim() }?.let { it.name ?: it.model } ?: host.trim()
+    val displayName = name.trim().ifEmpty { fallbackName }
+    val connect = {
+        attempted = true
+        attemptedLogin = entries
+        onConnect(displayName, host, user, password)
     }
     // A box with a single user gets it entered (as on the connection page).
     LaunchedEffect(boxUsers) {
@@ -173,48 +221,67 @@ fun WelcomeScreen(
                 .fillMaxSize()
                 .imePadding(),
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                when (step) {
-                    WelcomeStep.HELLO -> HelloPage(
-                        firstStart = firstStart,
-                        onStart = { stepIndex = WelcomeStep.PREPARE.ordinal },
-                        onDemo = { attempted = true; onDemo() },
-                        busy = busy,
-                        restoreOffer = restoreOffer,
-                    )
-                    WelcomeStep.PREPARE -> PreparePage()
-                    WelcomeStep.FIND -> FindPage(
-                        host = host,
-                        onHostChange = { host = it },
-                        name = name,
-                        onNameChange = { name = it },
-                        box = box,
-                    )
-                    WelcomeStep.LOGIN -> LoginPage(
-                        user = user,
-                        onUserChange = { user = it },
-                        users = boxUsers,
-                        userTakenOver = user == userTakenOver && user == boxUsers.singleOrNull()?.name,
-                        password = password,
-                        onPasswordChange = { password = it },
-                    )
-                    WelcomeStep.CONNECT -> ConnectPage(
-                        name = name.ifBlank { host.trim() },
-                        host = host.trim(),
-                        user = user.trim(),
-                        busy = busy,
-                        failed = attempted && failed,
-                        onAllSettings = { onLeave(true) },
-                    )
-                    WelcomeStep.READY -> ReadyPage(ringPhone, ringPhoneOnBox)
+            // Pages slide in from the side they lie on – unless Android's animations are off.
+            val animate = rememberAnimationsOn()
+            AnimatedContent(
+                targetState = step,
+                transitionSpec = {
+                    if (!animate) {
+                        EnterTransition.None togetherWith ExitTransition.None
+                    } else {
+                        val forward = targetState.ordinal > initialState.ordinal
+                        (slideInHorizontally { if (forward) it / 3 else -it / 3 } + fadeIn()) togetherWith
+                            (slideOutHorizontally { if (forward) -it / 3 else it / 3 } + fadeOut())
+                    }
+                },
+                modifier = Modifier.weight(1f),
+                label = "page",
+            ) { page ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    when (page) {
+                        WelcomeStep.HELLO -> HelloPage(
+                            firstStart = firstStart,
+                            onStart = { stepIndex = WelcomeStep.PREPARE.ordinal },
+                            onDemo = { attempted = true; onDemo() },
+                            busy = busy,
+                            restoreOffer = restoreOffer,
+                        )
+                        WelcomeStep.PREPARE -> PreparePage()
+                        WelcomeStep.FIND -> FindPage(
+                            host = host,
+                            onHostChange = { host = it },
+                            name = name,
+                            onNameChange = { name = it },
+                            fallbackName = fallbackName,
+                            box = box,
+                        )
+                        WelcomeStep.LOGIN -> LoginPage(
+                            user = user,
+                            onUserChange = { user = it },
+                            users = boxUsers,
+                            userTakenOver = user == userTakenOver && user == boxUsers.singleOrNull()?.name,
+                            password = password,
+                            onPasswordChange = { password = it },
+                            focusPassword = focusPassword,
+                            onPasswordFocused = { focusPassword = false },
+                        )
+                        WelcomeStep.CONNECT -> ConnectPage(
+                            name = displayName,
+                            host = host.trim(),
+                            user = user.trim(),
+                            busy = busy,
+                            failed = attempted && failed,
+                            rejectedUser = user.trim().takeIf { rejected },
+                        )
+                        WelcomeStep.READY -> ReadyPage(ringPhone, ringPhoneOnBox)
+                    }
                 }
             }
 
@@ -233,17 +300,26 @@ fun WelcomeScreen(
                     WelcomeStep.LOGIN -> NextButton(enabled = user.isNotBlank() && password.isNotEmpty()) {
                         stepIndex = WelcomeStep.CONNECT.ordinal
                     }
-                    WelcomeStep.CONNECT -> Button(
-                        onClick = {
-                            attempted = true
-                            onConnect(name.ifBlank { host.trim() }, host, user, password)
-                        },
-                        enabled = !busy,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) { Text(stringResource(if (busy) R.string.welcome_connecting else R.string.welcome_connect_button)) }
+                    WelcomeStep.CONNECT -> {
+                        // Rejected: changing the password is offered as plainly as trying again.
+                        if (rejected) {
+                            OutlinedButton(onClick = changePassword, modifier = Modifier.fillMaxWidth()) {
+                                Text(stringResource(R.string.welcome_change_password))
+                            }
+                        }
+                        Button(
+                            onClick = connect,
+                            enabled = !busy,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(stringResource(if (busy) R.string.welcome_connecting else R.string.welcome_connect_button)) }
+                    }
                     WelcomeStep.READY -> Button(onClick = onFinish, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.welcome_start_dialling))
                     }
+                }
+                // After a failure, the full connection page as well – right below the button, not scrolled away.
+                if (step == WelcomeStep.CONNECT && failed) {
+                    TextButton(onClick = { onLeave(true) }) { Text(stringResource(R.string.welcome_all_settings)) }
                 }
                 StepDots(step)
             }
@@ -274,15 +350,51 @@ private fun StepDots(step: WelcomeStep) {
     }
 }
 
-/** The mascot in [pose] (drawn by art/mascot/generate.py), saying [text] in a bubble. */
+/**
+ * The mascot in [pose] (drawn by art/mascot/generate.py), saying [text] in a bubble. It bobs gently
+ * and blinks now and then; cheering, it wiggles once. All of that stays still while Android's
+ * animations are switched off (accessibility, developer options).
+ */
 @Composable
 private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
+    val animate = rememberAnimationsOn()
+    val bob = if (animate) {
+        val transition = rememberInfiniteTransition(label = "bob")
+        transition.animateFloat(
+            initialValue = -2f,
+            targetValue = 2f,
+            animationSpec = infiniteRepeatable(tween(1400, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+            label = "bob",
+        ).value
+    } else 0f
+    var blinking by remember { mutableStateOf(false) }
+    LaunchedEffect(pose, animate) {
+        blinking = false
+        if (!animate || pose.blinkDrawable == null) return@LaunchedEffect
+        while (true) {
+            delay(Random.nextLong(2500, 5500))
+            blinking = true
+            delay(140)
+            blinking = false
+        }
+    }
+    val wiggle = remember { Animatable(0f) }
+    LaunchedEffect(pose, animate) {
+        wiggle.snapTo(0f)
+        if (!animate || pose != MascotPose.CHEERING) return@LaunchedEffect
+        for (angle in listOf(-7f, 6f, -4f, 2f, 0f)) wiggle.animateTo(angle, tween(110))
+    }
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Image(
-            painterResource(pose.drawable),
+            painterResource(if (blinking) pose.blinkDrawable ?: pose.drawable else pose.drawable),
             contentDescription = null,
             // The drawings leave room around the head for hands and things: the head itself is about [size].
-            modifier = Modifier.size(size * 1.5f),
+            modifier = Modifier
+                .size(size * 1.5f)
+                .graphicsLayer {
+                    translationY = bob.dp.toPx()
+                    rotationZ = wiggle.value
+                },
         )
         if (text != null) {
             Card(shape = RoundedCornerShape(16.dp)) {
@@ -297,6 +409,15 @@ private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
     }
 }
 
+/** Whether Android plays animations (its animator duration scale is not off). */
+@Composable
+private fun rememberAnimationsOn(): Boolean {
+    val context = LocalContext.current
+    return remember {
+        Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
+    }
+}
+
 private val MascotPose.drawable: Int
     get() = when (this) {
         MascotPose.WAVING -> R.drawable.mascot_waving
@@ -305,6 +426,16 @@ private val MascotPose.drawable: Int
         MascotPose.TYPING -> R.drawable.mascot_typing
         MascotPose.PUZZLED -> R.drawable.mascot_puzzled
         MascotPose.CHEERING -> R.drawable.mascot_cheering
+    }
+
+/** The pose with its eyes closed, for a blink; null: the pose does not blink (its eyes are closed or squinted already). */
+private val MascotPose.blinkDrawable: Int?
+    get() = when (this) {
+        MascotPose.WAVING -> R.drawable.mascot_waving_blink
+        MascotPose.CLIPBOARD -> R.drawable.mascot_clipboard_blink
+        MascotPose.SEARCHING -> R.drawable.mascot_searching_blink
+        MascotPose.TYPING -> R.drawable.mascot_typing_blink
+        MascotPose.PUZZLED, MascotPose.CHEERING -> null
     }
 
 @Composable
@@ -320,8 +451,7 @@ private fun HelloPage(
     busy: Boolean,
     restoreOffer: @Composable () -> Unit,
 ) {
-    Spacer(Modifier.height(8.dp))
-    Mascot(MascotPose.WAVING, stringResource(R.string.welcome_hello), size = 140.dp)
+    Mascot(MascotPose.WAVING, stringResource(R.string.welcome_hello), size = 112.dp)
     Text(stringResource(R.string.welcome_hello_next), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
     Button(onClick = onStart, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.welcome_start)) }
     // Small on purpose: whoever installs Pickelhaube usually has a FRITZ!Box.
@@ -374,6 +504,8 @@ private fun FindPage(
     onHostChange: (String) -> Unit,
     name: String,
     onNameChange: (String) -> Unit,
+    /** The name taken when [name] is left empty: the box' own, or its address. */
+    fallbackName: String,
     box: WelcomeBox?,
 ) {
     PageTitle(stringResource(R.string.welcome_find_title))
@@ -402,7 +534,8 @@ private fun FindPage(
         value = name,
         onValueChange = onNameChange,
         label = { Text(stringResource(R.string.connection_name)) },
-        supportingText = { Text(stringResource(R.string.welcome_name_hint)) },
+        placeholder = { Text(fallbackName, color = TextRoles.placeholder) },
+        supportingText = { Text(stringResource(R.string.welcome_name_hint, fallbackName)) },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )
@@ -416,25 +549,67 @@ private fun LoginPage(
     userTakenOver: Boolean,
     password: String,
     onPasswordChange: (String) -> Unit,
+    /** Coming back to correct a rejected password: the cursor goes into the (emptied) password field. */
+    focusPassword: Boolean,
+    onPasswordFocused: () -> Unit,
 ) {
     PageTitle(stringResource(R.string.welcome_login_title))
     Mascot(MascotPose.TYPING, stringResource(R.string.welcome_login), size = 96.dp)
-    UserField(value = user, onValueChange = onUserChange, users = users, takenOver = userTakenOver)
+    // A user chosen from the list: the keyboard (if it was up) goes away, and the password field
+    // is scrolled into view – typing it is the next step, but tapping into it is left to the user.
+    val passwordInView = remember { BringIntoViewRequester() }
+    val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    val passwordFocus = remember { FocusRequester() }
+    LaunchedEffect(focusPassword) {
+        if (!focusPassword) return@LaunchedEffect
+        delay(350) // until the page has slid in
+        passwordFocus.requestFocus()
+        onPasswordFocused()
+    }
+    UserField(
+        value = user,
+        onValueChange = onUserChange,
+        users = users,
+        takenOver = userTakenOver,
+        onChosen = {
+            focusManager.clearFocus()
+            scope.launch {
+                delay(300) // until the keyboard is gone and the page has its full height again
+                passwordInView.bringIntoView()
+            }
+        },
+    )
     PasswordField(
         value = password,
         onValueChange = onPasswordChange,
         label = stringResource(R.string.connection_password),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .bringIntoViewRequester(passwordInView)
+            .focusRequester(passwordFocus),
     )
     Text(stringResource(R.string.welcome_login_tip), style = TextRoles.hint)
 }
 
 @Composable
-private fun ConnectPage(name: String, host: String, user: String, busy: Boolean, failed: Boolean, onAllSettings: () -> Unit) {
+private fun ConnectPage(
+    name: String,
+    host: String,
+    user: String,
+    busy: Boolean,
+    failed: Boolean,
+    /** The box rejected this user with the password entered (null: it did not, or the entries changed since). */
+    rejectedUser: String?,
+) {
     PageTitle(stringResource(R.string.welcome_connect_title))
     Mascot(
         if (failed && !busy) MascotPose.PUZZLED else MascotPose.TYPING,
-        stringResource(if (failed && !busy) R.string.welcome_connect_failed else R.string.welcome_connect),
+        when {
+            rejectedUser != null && !busy -> stringResource(R.string.welcome_login_rejected, rejectedUser)
+            failed && !busy -> stringResource(R.string.welcome_connect_failed)
+            else -> stringResource(R.string.welcome_connect)
+        },
         size = 96.dp,
     )
     Card(Modifier.fillMaxWidth()) {
@@ -445,9 +620,7 @@ private fun ConnectPage(name: String, host: String, user: String, busy: Boolean,
         }
     }
     if (busy) CircularProgressIndicator()
-    if (failed && !busy) {
-        TextButton(onClick = onAllSettings) { Text(stringResource(R.string.welcome_all_settings)) }
-    }
+
 }
 
 @Composable
@@ -469,7 +642,7 @@ private fun ReadyPage(ringPhone: String?, ringPhoneOnBox: Boolean) {
             ringPhoneOnBox -> stringResource(R.string.welcome_ready_ring, phone)
             else -> stringResource(R.string.welcome_ready_ring_unset, phone)
         },
-        size = 120.dp,
+        size = 104.dp,
     )
     if (phone != null) {
         Text(stringResource(R.string.welcome_ready_ring_change), style = TextRoles.hint, textAlign = TextAlign.Center)

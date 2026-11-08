@@ -76,7 +76,7 @@ fun WidgetSetupScreen(
                 value = list.title,
                 onValueChange = onTitleChange,
                 label = { Text(stringResource(R.string.widget_setup_name)) },
-                placeholder = { Text(stringResource(R.string.app_name)) },
+                placeholder = { Text(stringResource(R.string.app_name), color = TextRoles.placeholder) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )

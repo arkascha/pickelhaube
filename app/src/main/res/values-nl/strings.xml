@@ -132,6 +132,7 @@
     <string name="connection_user_current">Nu ingevuld</string>
     <string name="connection_user_taken_over">Overgenomen: de enige gebruiker van deze box</string>
     <string name="connection_user_hint">De gebruiker waarmee je op de FRITZ!Box inlogt. Log je alleen met een wachtwoord in, dan heeft de box daarvoor toch een gebruiker aangemaakt, met een eigen naam (bijv. fritz1234). Je kunt ook een gebruiker alleen voor Pickelhaube aanmaken onder Systeem › FRITZ!Box-gebruikers; die heeft het recht voor telefonie nodig.</string>
+    <string name="connection_user_choose">Een gebruiker van de box kiezen</string>
     <string name="connection_password">Wachtwoord</string>
     <string name="connection_phonebooks">Telefoonboeken</string>
     <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FRITZ!Box, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FRITZ!Box gelezen en niet op de telefoon opgeslagen.</string>
@@ -496,7 +497,7 @@
     <string name="welcome_find_found">Gevonden: %1$s!</string>
     <string name="welcome_find_set_up">Gevonden: %1$s – hij is al ingesteld, als ‘%2$s’.</string>
     <string name="welcome_find_none">Geen antwoord van %1$s. Zit deze telefoon in hetzelfde wifi als de box? Je kunt toch doorgaan, bijvoorbeeld via een VPN.</string>
-    <string name="welcome_name_hint">Hoe de box in de app heet, bijv. ‘Thuis’.</string>
+    <string name="welcome_name_hint">Jouw keuze, bijv. ‘Thuis’. Leeg gelaten heet de box ‘%1$s’.</string>
     <string name="welcome_login_title">Wie ben je op de box?</string>
     <string name="welcome_login">De gebruikersnaam en het wachtwoord waarmee je op je FRITZ!Box inlogt.</string>
     <string name="welcome_login_tip">Tip: een eigen gebruiker voor Pickelhaube, met alleen telefonierecht, is het veiligst.</string>
@@ -506,6 +507,8 @@
     <string name="welcome_connect_button">Verbinden</string>
     <string name="welcome_connecting">Verbinden…</string>
     <string name="welcome_connect_failed">Hm, dat lukte niet – de melding zei waarom. Ga terug en pas je gegevens aan, of open alle instellingen.</string>
+    <string name="welcome_login_rejected">De box accepteerde ‘%1$s’ niet met dit wachtwoord. Controleer het – na meerdere foute pogingen laat de box je steeds langer wachten.</string>
+    <string name="welcome_change_password">Wachtwoord wijzigen</string>
     <string name="welcome_all_settings">Alle instellingen</string>
     <string name="welcome_ready_title">Klaar!</string>
     <string name="welcome_ready_ring">Als je kiest, laat je FRITZ!Box eerst %1$s overgaan – neem op, en de box kiest het nummer.</string>
@@ -514,7 +517,7 @@
     <string name="welcome_ready_ring_change">Een andere telefoon kies je bij ‘Laten overgaan op’ in het kiesscherm – de box vraagt misschien om bevestiging.</string>
     <string name="welcome_ready_tips">Goed om te weten</string>
     <string name="welcome_tip_picker">De adresboekknop naast het nummer opent je recente gesprekken en telefoonboeken.</string>
-    <string name="welcome_tip_long_press">Lang drukken op de groene knop biedt meer: je nummer verbergen, en andere dingen.</string>
+    <string name="welcome_tip_long_press">Lang drukken op de groene knop biedt meer: bijvoorbeeld je nummer verbergen.</string>
     <string name="welcome_tip_tiles">Snelle-instellingentegels en een widget op het startscherm brengen je hier sneller – zie de instellingen.</string>
     <string name="welcome_start_dialling">Beginnen met bellen</string>
     <string name="settings_welcome_tour">Welkomstrondleiding</string>
