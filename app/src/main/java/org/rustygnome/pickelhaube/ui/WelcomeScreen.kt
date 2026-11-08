@@ -45,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,7 +63,7 @@ import org.rustygnome.pickelhaube.ui.theme.TextRoles
 /** The pages of the welcome tour, in their order. */
 enum class WelcomeStep { HELLO, PREPARE, FIND, LOGIN, CONNECT, READY }
 
-/** What the mascot does on a page – one picture each (placeholders until the mascot is drawn). */
+/** What the mascot does on a page – one picture each. */
 enum class MascotPose { WAVING, CLIPBOARD, SEARCHING, TYPING, PUZZLED, CHEERING }
 
 /** Where the guide explains how to prepare the FRITZ!Box. */
@@ -275,27 +274,16 @@ private fun StepDots(step: WelcomeStep) {
     }
 }
 
-/**
- * The mascot in [pose], saying [text] in a bubble. Until the mascot is drawn, every pose shows the
- * app icon's helmet.
- */
-@Suppress("UNUSED_PARAMETER")
+/** The mascot in [pose] (drawn by art/mascot/generate.py), saying [text] in a bubble. */
 @Composable
 private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(
-            Modifier
-                .size(size)
-                .clip(CircleShape)
-                .background(Color(0xFF005EA2)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painterResource(R.drawable.ic_launcher_foreground),
-                contentDescription = null,
-                modifier = Modifier.size(size * 1.5f),
-            )
-        }
+        Image(
+            painterResource(pose.drawable),
+            contentDescription = null,
+            // The drawings leave room around the head for hands and things: the head itself is about [size].
+            modifier = Modifier.size(size * 1.5f),
+        )
         if (text != null) {
             Card(shape = RoundedCornerShape(16.dp)) {
                 Text(
@@ -308,6 +296,16 @@ private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
         }
     }
 }
+
+private val MascotPose.drawable: Int
+    get() = when (this) {
+        MascotPose.WAVING -> R.drawable.mascot_waving
+        MascotPose.CLIPBOARD -> R.drawable.mascot_clipboard
+        MascotPose.SEARCHING -> R.drawable.mascot_searching
+        MascotPose.TYPING -> R.drawable.mascot_typing
+        MascotPose.PUZZLED -> R.drawable.mascot_puzzled
+        MascotPose.CHEERING -> R.drawable.mascot_cheering
+    }
 
 @Composable
 private fun PageTitle(text: String) {
