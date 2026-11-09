@@ -62,8 +62,9 @@ path as the connection page below: the "already set up" question, the error mess
 next to **Connect** leads back to the password) and ready (which phone the box rings
 for dial help – its own setting, read and not changed, as changing it may need a confirmation on the
 box – and three tips). **Skip** leads to the connection page. **Settings › Welcome tour** starts it
-again; from there, its connect step adds another box. The mascot bobs, blinks and wiggles when
-something worked; pages slide – all of it only while Android's animations are on.
+again; from there, its connect step adds another box. The mascot bobs and sways, blinks, pops up
+with each new pose, waves now and then on the first page, hops when something worked and tilts its
+head when it did not; pages slide – all of it only while Android's animations are on.
 
 ### The connection page
 

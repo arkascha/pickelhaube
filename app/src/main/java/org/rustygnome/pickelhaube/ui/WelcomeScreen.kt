@@ -11,6 +11,9 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import kotlinx.coroutines.coroutineScope
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -245,8 +248,8 @@ fun WelcomeScreen(
                         EnterTransition.None togetherWith ExitTransition.None
                     } else {
                         val forward = targetState.ordinal > initialState.ordinal
-                        (slideInHorizontally { if (forward) it / 3 else -it / 3 } + fadeIn()) togetherWith
-                            (slideOutHorizontally { if (forward) -it / 3 else it / 3 } + fadeOut())
+                        (slideInHorizontally { if (forward) it / 2 else -it / 2 } + fadeIn()) togetherWith
+                            (slideOutHorizontally { if (forward) -it / 2 else it / 2 } + fadeOut())
                     }
                 },
                 modifier = Modifier.weight(1f),
@@ -366,38 +369,74 @@ private fun StepDots(step: WelcomeStep) {
 }
 
 /**
- * The mascot in [pose] (drawn by art/mascot/generate.py), saying [text] in a bubble. It bobs gently
- * and blinks now and then; cheering, it wiggles once. All of that stays still while Android's
- * animations are switched off (accessibility, developer options).
+ * The mascot in [pose] (drawn by art/mascot/generate.py), saying [text] in a bubble. It bobs and
+ * sways, blinks now and then and pops up with each new pose; waving, it waves every few seconds;
+ * cheering, it hops and wiggles; puzzled, it tilts its head. All of that stays still while
+ * Android's animations are switched off (accessibility, developer options).
  */
 @Composable
 private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
     val animate = rememberAnimationsOn()
-    val bob = if (animate) {
-        val transition = rememberInfiniteTransition(label = "bob")
-        transition.animateFloat(
-            initialValue = -2f,
-            targetValue = 2f,
-            animationSpec = infiniteRepeatable(tween(1400, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+    // Always on: a bob up and down, and a slower sway from side to side – out of step, so it looks alive.
+    val (bob, sway) = if (animate) {
+        val transition = rememberInfiniteTransition(label = "idle")
+        val bob by transition.animateFloat(
+            initialValue = -5f,
+            targetValue = 5f,
+            animationSpec = infiniteRepeatable(tween(1100, easing = FastOutSlowInEasing), RepeatMode.Reverse),
             label = "bob",
-        ).value
-    } else 0f
+        )
+        val sway by transition.animateFloat(
+            initialValue = -3f,
+            targetValue = 3f,
+            animationSpec = infiniteRepeatable(tween(1900, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+            label = "sway",
+        )
+        bob to sway
+    } else 0f to 0f
     var blinking by remember { mutableStateOf(false) }
     LaunchedEffect(pose, animate) {
         blinking = false
         if (!animate || pose.blinkDrawable == null) return@LaunchedEffect
         while (true) {
-            delay(Random.nextLong(2500, 5500))
+            delay(Random.nextLong(2000, 4500))
             blinking = true
-            delay(140)
+            delay(160)
             blinking = false
         }
     }
+    // On each new pose: a little pop; cheering, a hop and a wiggle; waving, a wave now and then.
+    val pop = remember { Animatable(1f) }
+    val hop = remember { Animatable(0f) }
     val wiggle = remember { Animatable(0f) }
     LaunchedEffect(pose, animate) {
+        if (!animate) return@LaunchedEffect
+        pop.snapTo(0.8f)
+        pop.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMediumLow))
+    }
+    LaunchedEffect(pose, animate) {
         wiggle.snapTo(0f)
-        if (!animate || pose != MascotPose.CHEERING) return@LaunchedEffect
-        for (angle in listOf(-7f, 6f, -4f, 2f, 0f)) wiggle.animateTo(angle, tween(110))
+        hop.snapTo(0f)
+        if (!animate) return@LaunchedEffect
+        when (pose) {
+            MascotPose.CHEERING -> repeat(2) {
+                coroutineScope {
+                    launch {
+                        hop.animateTo(-18f, tween(180, easing = FastOutSlowInEasing))
+                        hop.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy))
+                    }
+                    for (angle in listOf(-12f, 10f, -7f, 4f, 0f)) wiggle.animateTo(angle, tween(90))
+                }
+                delay(250)
+            }
+            MascotPose.WAVING -> while (true) {
+                delay(600)
+                for (angle in listOf(8f, -6f, 8f, -6f, 0f)) wiggle.animateTo(angle, tween(140))
+                delay(2400)
+            }
+            MascotPose.PUZZLED -> for (angle in listOf(-10f, -10f, 0f)) wiggle.animateTo(angle, tween(260))
+            else -> Unit
+        }
     }
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Image(
@@ -407,8 +446,10 @@ private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
             modifier = Modifier
                 .size(size * 1.5f)
                 .graphicsLayer {
-                    translationY = bob.dp.toPx()
-                    rotationZ = wiggle.value
+                    translationY = (bob + hop.value).dp.toPx()
+                    rotationZ = sway + wiggle.value
+                    scaleX = pop.value
+                    scaleY = pop.value
                 },
         )
         if (text != null) {
