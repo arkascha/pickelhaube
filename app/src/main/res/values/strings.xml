@@ -503,8 +503,10 @@
     <string name="welcome_find_none">No answer from %1$s. Is this phone in the same Wi-Fi as the box? You can go on anyway, for example through a VPN.</string>
     <string name="welcome_name_hint">Your choice, e.g. “Home”. Left empty, the box is called “%1$s”.</string>
     <string name="welcome_login_title">Who are you on the box?</string>
-    <string name="welcome_login">The user name and password you log in to your FRITZ!Box with.</string>
-    <string name="welcome_login_tip">Tip: a user just for Pickelhaube, with telephony permission only, is the safest choice.</string>
+    <string name="welcome_login">Log in to your FRITZ!Box: with a user that exists on the box, and its password – the same ones you use for the box’s own web interface (fritz.box). You don’t choose a new password here.</string>
+    <string name="welcome_password_label">Password of this FRITZ!Box user</string>
+    <string name="welcome_password_factory">Not sure which one? Your box came with a password printed on a label, usually on its underside. It should have been changed when the box was first set up – then the one chosen then applies.</string>
+    <string name="welcome_login_tip">Tip: safest is a user just for Pickelhaube, with telephony permission only. Pickelhaube cannot create it – you set it up yourself in the box’s web interface (fritz.box) under System › FRITZ!Box Users, and then enter it here.</string>
     <string name="welcome_address">Address</string>
     <string name="welcome_connect_title">Ready to connect</string>
     <string name="welcome_connect">I log in to your FRITZ!Box now and look which phones it has.</string>
@@ -512,7 +514,7 @@
     <string name="welcome_connecting">Connecting…</string>
     <string name="welcome_connect_failed">Hm, that did not work – the message said why. Go back and change your entries, or open all settings.</string>
     <string name="welcome_login_rejected">The box did not accept “%1$s” with this password. Please check it – after several wrong tries, the box makes you wait longer each time.</string>
-    <string name="welcome_change_password">Change password</string>
+    <string name="welcome_change_password">Enter the password again</string>
     <string name="welcome_all_settings">All settings</string>
     <string name="welcome_ready_title">All set!</string>
     <string name="welcome_ready_ring">When you dial, your FRITZ!Box first rings %1$s – pick it up, and the box dials the number.</string>

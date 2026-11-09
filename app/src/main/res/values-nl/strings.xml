@@ -499,8 +499,10 @@
     <string name="welcome_find_none">Geen antwoord van %1$s. Zit deze telefoon in hetzelfde wifi als de box? Je kunt toch doorgaan, bijvoorbeeld via een VPN.</string>
     <string name="welcome_name_hint">Jouw keuze, bijv. ‘Thuis’. Leeg gelaten heet de box ‘%1$s’.</string>
     <string name="welcome_login_title">Wie ben je op de box?</string>
-    <string name="welcome_login">De gebruikersnaam en het wachtwoord waarmee je op je FRITZ!Box inlogt.</string>
-    <string name="welcome_login_tip">Tip: een eigen gebruiker voor Pickelhaube, met alleen telefonierecht, is het veiligst.</string>
+    <string name="welcome_login">Meld je aan bij je FRITZ!Box: met een gebruiker die op de box bestaat, en zijn wachtwoord – dezelfde als voor de webinterface van de box (fritz.box). Je kiest hier geen nieuw wachtwoord.</string>
+    <string name="welcome_password_label">Wachtwoord van deze FRITZ!Box-gebruiker</string>
+    <string name="welcome_password_factory">Niet zeker welk? Je box kwam met een wachtwoord op een sticker, meestal aan de onderkant. Het had bij de eerste installatie gewijzigd moeten worden – dan geldt het toen gekozen wachtwoord.</string>
+    <string name="welcome_login_tip">Tip: het veiligst is een eigen gebruiker voor Pickelhaube, met alleen telefonierecht. Pickelhaube kan hem niet aanmaken – je maakt hem zelf aan in de webinterface van de box (fritz.box), onder Systeem › FRITZ!Box-gebruikers, en voert hem dan hier in.</string>
     <string name="welcome_address">Adres</string>
     <string name="welcome_connect_title">Klaar om te verbinden</string>
     <string name="welcome_connect">Ik log nu in op je FRITZ!Box en kijk welke telefoons hij heeft.</string>
@@ -508,7 +510,7 @@
     <string name="welcome_connecting">Verbinden…</string>
     <string name="welcome_connect_failed">Hm, dat lukte niet – de melding zei waarom. Ga terug en pas je gegevens aan, of open alle instellingen.</string>
     <string name="welcome_login_rejected">De box accepteerde ‘%1$s’ niet met dit wachtwoord. Controleer het – na meerdere foute pogingen laat de box je steeds langer wachten.</string>
-    <string name="welcome_change_password">Wachtwoord wijzigen</string>
+    <string name="welcome_change_password">Wachtwoord opnieuw invoeren</string>
     <string name="welcome_all_settings">Alle instellingen</string>
     <string name="welcome_ready_title">Klaar!</string>
     <string name="welcome_ready_ring">Als je kiest, laat je FRITZ!Box eerst %1$s overgaan – neem op, en de box kiest het nummer.</string>

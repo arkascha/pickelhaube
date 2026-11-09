@@ -499,8 +499,10 @@
     <string name="welcome_find_none">Keine Antwort von %1$s. Ist dieses Telefon im selben WLAN wie die Box? Du kannst trotzdem weitermachen, zum Beispiel über VPN.</string>
     <string name="welcome_name_hint">Deine Wahl, z. B. „Zuhause“. Bleibt es leer, heißt die Box „%1$s“.</string>
     <string name="welcome_login_title">Wer bist du auf der Box?</string>
-    <string name="welcome_login">Der Benutzername und das Kennwort, mit denen du dich an deiner FRITZ!Box anmeldest.</string>
-    <string name="welcome_login_tip">Tipp: Ein eigener Benutzer nur für Pickelhaube, nur mit Berechtigung für Telefonie, ist am sichersten.</string>
+    <string name="welcome_login">Melde dich an deiner FRITZ!Box an: mit einem Benutzer, den es auf der Box gibt, und seinem Kennwort – denselben, mit denen du die Benutzeroberfläche der Box (fritz.box) öffnest. Ein neues Kennwort legst du hier nicht fest.</string>
+    <string name="welcome_password_label">Kennwort dieses FRITZ!Box-Benutzers</string>
+    <string name="welcome_password_factory">Nicht sicher, welches? Deine Box kam mit einem Kennwort auf einem Aufkleber, meist auf ihrer Unterseite. Es sollte bei der ersten Einrichtung geändert worden sein – dann gilt das damals gewählte.</string>
+    <string name="welcome_login_tip">Tipp: Am sichersten ist ein eigener Benutzer nur für Pickelhaube, nur mit Berechtigung für Telefonie. Pickelhaube kann ihn nicht anlegen – du richtest ihn selbst in der Benutzeroberfläche der Box (fritz.box) unter System › FRITZ!Box-Benutzer ein und trägst ihn dann hier ein.</string>
     <string name="welcome_address">Adresse</string>
     <string name="welcome_connect_title">Bereit zum Verbinden</string>
     <string name="welcome_connect">Ich melde mich jetzt an deiner FRITZ!Box an und schaue, welche Telefone sie hat.</string>
@@ -508,7 +510,7 @@
     <string name="welcome_connecting">Verbinde…</string>
     <string name="welcome_connect_failed">Hm, das hat nicht geklappt – die Meldung hat gesagt, warum. Geh zurück und ändere deine Angaben, oder öffne alle Einstellungen.</string>
     <string name="welcome_login_rejected">Die Box hat „%1$s“ mit diesem Kennwort nicht angenommen. Prüf es bitte – nach mehreren falschen Versuchen lässt dich die Box jedes Mal länger warten.</string>
-    <string name="welcome_change_password">Kennwort ändern</string>
+    <string name="welcome_change_password">Kennwort neu eingeben</string>
     <string name="welcome_all_settings">Alle Einstellungen</string>
     <string name="welcome_ready_title">Fertig!</string>
     <string name="welcome_ready_ring">Wenn du wählst, klingelt deine FRITZ!Box zuerst an %1$s – nimm ab, und die Box wählt die Nummer.</string>

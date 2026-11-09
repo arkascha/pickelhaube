@@ -508,8 +508,10 @@
     <string name="welcome_find_none">Sin respuesta de %1$s. ¿Está este teléfono en la misma Wi-Fi que la box? Puedes seguir igualmente, por ejemplo a través de una VPN.</string>
     <string name="welcome_name_hint">Tú eliges, p. ej. «Casa». Si lo dejas vacío, la box se llama «%1$s».</string>
     <string name="welcome_login_title">¿Quién eres en la box?</string>
-    <string name="welcome_login">El nombre de usuario y la contraseña con los que entras en tu FRITZ!Box.</string>
-    <string name="welcome_login_tip">Consejo: un usuario solo para Pickelhaube, solo con permiso de telefonía, es lo más seguro.</string>
+    <string name="welcome_login">Inicia sesión en tu FRITZ!Box: con un usuario que exista en la box y su contraseña – los mismos con los que abres la interfaz web de la box (fritz.box). Aquí no eliges una contraseña nueva.</string>
+    <string name="welcome_password_label">Contraseña de este usuario de la FRITZ!Box</string>
+    <string name="welcome_password_factory">¿No sabes cuál? Tu box venía con una contraseña impresa en una etiqueta, normalmente en su parte inferior. Debería haberse cambiado al configurarla por primera vez – entonces vale la elegida entonces.</string>
+    <string name="welcome_login_tip">Consejo: lo más seguro es un usuario solo para Pickelhaube, solo con permiso de telefonía. Pickelhaube no puede crearlo – lo creas tú en la interfaz web de la box (fritz.box), en Sistema › Usuarios de la FRITZ!Box, y luego lo introduces aquí.</string>
     <string name="welcome_address">Dirección</string>
     <string name="welcome_connect_title">Listo para conectar</string>
     <string name="welcome_connect">Ahora entro en tu FRITZ!Box y miro qué teléfonos tiene.</string>
@@ -517,7 +519,7 @@
     <string name="welcome_connecting">Conectando…</string>
     <string name="welcome_connect_failed">Vaya, no ha funcionado – el mensaje decía por qué. Vuelve y cambia tus datos, o abre todos los ajustes.</string>
     <string name="welcome_login_rejected">La box no aceptó «%1$s» con esta contraseña. Compruébala – tras varios intentos fallidos, la box te hace esperar cada vez más.</string>
-    <string name="welcome_change_password">Cambiar contraseña</string>
+    <string name="welcome_change_password">Volver a escribir la contraseña</string>
     <string name="welcome_all_settings">Todos los ajustes</string>
     <string name="welcome_ready_title">¡Todo listo!</string>
     <string name="welcome_ready_ring">Cuando marques, tu FRITZ!Box hará sonar primero %1$s – contesta, y la box marca el número.</string>

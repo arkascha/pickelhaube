@@ -639,12 +639,14 @@ private fun LoginPage(
     PasswordField(
         value = password,
         onValueChange = onPasswordChange,
-        label = stringResource(R.string.connection_password),
+        // Not one to make up here: the password the box' user already has.
+        label = stringResource(R.string.welcome_password_label),
         modifier = Modifier
             .fillMaxWidth()
             .bringIntoViewRequester(passwordInView)
             .focusRequester(passwordFocus),
     )
+    Text(stringResource(R.string.welcome_password_factory), style = TextRoles.hint)
     Text(stringResource(R.string.welcome_login_tip), style = TextRoles.hint)
 }
 
