@@ -1,0 +1,10 @@
+<en-US>
+• Help one tap away: "Guide on the web" and the privacy policy at the bottom of the settings, and a (?) on every page of the welcome tour
+• After an update, a short note says once what is new – again any time under Settings › What's new
+• A livelier welcome tour
+</en-US>
+<de-DE>
+• Hilfe nur einen Tipp entfernt: „Anleitung im Web“ und die Datenschutzerklärung unten in den Einstellungen, dazu ein (?) auf jeder Seite der Willkommens-Tour
+• Nach einem Update sagt eine kurze Notiz einmal, was neu ist – jederzeit wieder unter Einstellungen › Neuigkeiten
+• Eine lebhaftere Willkommens-Tour
+</de-DE>
