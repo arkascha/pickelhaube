@@ -101,6 +101,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.data.WhatsNew
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.SettingsFileInfo
@@ -144,6 +145,8 @@ fun SettingsScreen(
     onAddProfile: () -> Unit,
     /** Starts the welcome tour again: a guided way to add another box. */
     onStartWelcomeTour: () -> Unit,
+    /** Shows the "What's new" note of this version again. */
+    onShowWhatsNew: () -> Unit,
     onBack: () -> Unit,
     onOpenLanguage: () -> Unit,
     deviceContactsEnabled: Boolean,
@@ -329,7 +332,7 @@ fun SettingsScreen(
             }
 
             HorizontalDivider()
-            VersionInfo()
+            VersionInfo(onShowWhatsNew)
             Text(
                 stringResource(R.string.trademark_notice),
                 style = TextRoles.hint,
@@ -592,7 +595,7 @@ internal fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSa
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun VersionInfo() {
+private fun VersionInfo(onShowWhatsNew: () -> Unit) {
     val context = LocalContext.current
     val version = stringResource(R.string.settings_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
     Column(
@@ -613,6 +616,17 @@ private fun VersionInfo() {
             )
             Text(" · ", style = TextRoles.hint)
             WebLink(stringResource(R.string.settings_source_code), WebPages.SOURCE_CODE)
+        }
+        // The note shown after updating, again – if this version has one.
+        if (WhatsNew.latest(BuildConfig.VERSION_CODE) != null) {
+            Text(
+                stringResource(R.string.settings_whats_new),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clickable(role = Role.Button, onClick = onShowWhatsNew)
+                    .padding(vertical = 6.dp),
+            )
         }
         // The web page: help beyond the app's own explanations, and the privacy policy.
         Row(verticalAlignment = Alignment.CenterVertically) {

@@ -66,6 +66,17 @@ again; from there, its connect step adds another box. The mascot bobs and sways,
 with each new pose, waves now and then on the first page, hops when something worked and tilts its
 head when it did not; pages slide – all of it only while Android's animations are on.
 
+### What's new
+
+After an update, the app shows once what is new – a few points under the cheering mascot, over the
+dialer, when nothing else is open; not when it was opened for something particular (a shortcut, the
+widget, a link, a shared text), then at the next ordinary start. A new install shows nothing (the
+welcome tour explains everything); an update from a version before this note existed counts as an
+update when a box is set up. **What's new** at the bottom of the settings shows the note again. The
+notes are string arrays `whats_new_<version code>` in all languages, listed in `data/WhatsNew.kt`; a
+version without one shows nothing, skipped versions are shown together. The version last seen is kept
+on the device and not exported.
+
 ### The connection page
 
 1. On the connection page (after **Skip** in the welcome tour, or **Settings › Add FRITZ!Box**), enter host (`fritz.box` or `192.168.178.1`), user and password. Optionally switch on

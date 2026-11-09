@@ -525,4 +525,12 @@
     <string name="web_guide">Handleiding op het web (Engels)</string>
     <string name="web_privacy_policy">Privacybeleid (Engels)</string>
     <string name="welcome_ready_more">Al het andere – in de handleiding op het web (Engels) ›</string>
+    <string name="whats_new_title">Nieuw in %1$s</string>
+    <string name="whats_new_ok">Begrepen</string>
+    <string name="settings_whats_new">Wat is er nieuw</string>
+    <string-array name="whats_new_8">
+        <item>Hulp is nu één tik verwijderd: ‘Handleiding op het web’ en het privacybeleid staan onderaan de instellingen.</item>
+        <item>Nog een FRITZ!Box? Instellingen › Welkomstrondleiding stelt hem stap voor stap in – zoekt de box en controleert de aanmelding.</item>
+        <item>Een gebruiker kiezen uit de lijst op de verbindingspagina opent het toetsenbord niet meer.</item>
+    </string-array>
 </resources>

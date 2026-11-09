@@ -529,4 +529,12 @@
     <string name="web_guide">Guide on the web</string>
     <string name="web_privacy_policy">Privacy policy</string>
     <string name="welcome_ready_more">Everything else – in the guide on the web ›</string>
+    <string name="whats_new_title">What’s new in %1$s</string>
+    <string name="whats_new_ok">Got it</string>
+    <string name="settings_whats_new">What’s new</string>
+    <string-array name="whats_new_8">
+        <item>Help is now one tap away: “Guide on the web” and the privacy policy are at the bottom of the settings.</item>
+        <item>Another FRITZ!Box? Settings › Welcome tour sets it up step by step – it looks for the box and checks the login.</item>
+        <item>Choosing a user from the list on the connection page no longer brings up the keyboard.</item>
+    </string-array>
 </resources>

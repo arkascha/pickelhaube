@@ -43,6 +43,7 @@ import org.rustygnome.pickelhaube.ui.WidgetSetupScreen
 import org.rustygnome.pickelhaube.ui.SecondFactorDialog
 import org.rustygnome.pickelhaube.ui.SpeedDialTab
 import org.rustygnome.pickelhaube.ui.WelcomeScreen
+import org.rustygnome.pickelhaube.ui.WhatsNewDialog
 import org.rustygnome.pickelhaube.ui.theme.PickelhaubeTheme
 
 class MainActivity : ComponentActivity() {
@@ -297,6 +298,7 @@ class MainActivity : ComponentActivity() {
                         onActivateProfile = viewModel::activateProfile,
                         onAddProfile = viewModel::addProfile,
                         onStartWelcomeTour = viewModel::startWelcomeTour,
+                        onShowWhatsNew = viewModel::showWhatsNew,
                         onBack = viewModel::closeSettings,
                         onOpenLanguage = viewModel::openLanguage,
                         deviceContactsEnabled = state.deviceContactsEnabled,
@@ -369,6 +371,15 @@ class MainActivity : ComponentActivity() {
                         onReject = viewModel::rejectCertificate,
                     )
                 }
+                // After an update, once: over the dialer when nothing else is open; asked for in the settings, there.
+                state.whatsNew?.let { versions ->
+                    val onDialer = !state.showWelcome && !state.showSettings && !state.showPicker && !state.showDeflections &&
+                        state.widgetSetup == null
+                    val nothingElse = state.error == null && state.secondFactor == null && state.certificatePrompt == null
+                    if (nothingElse && (onDialer || state.whatsNewRequested)) {
+                        WhatsNewDialog(versions, onDismiss = viewModel::dismissWhatsNew)
+                    }
+                }
                 state.viewedCertificate?.let { info ->
                     ViewCertificateDialog(
                         info = info,
@@ -410,6 +421,8 @@ class MainActivity : ComponentActivity() {
      */
     private fun handleIntent(intent: Intent?) {
         if (intent == null) return
+        // Opened for something particular (shortcut, widget, link, shared text): "What's new" waits.
+        if (intent.action != Intent.ACTION_MAIN) viewModel.holdBackWhatsNew()
         if (intent.component?.className == LauncherShortcuts.ALIAS) {
             if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
             when (intent.action) {

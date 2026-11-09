@@ -534,4 +534,12 @@
     <string name="web_guide">Guide sur le web (en anglais)</string>
     <string name="web_privacy_policy">Politique de confidentialité (en anglais)</string>
     <string name="welcome_ready_more">Tout le reste – dans le guide sur le web (en anglais) ›</string>
+    <string name="whats_new_title">Nouveautés de %1$s</string>
+    <string name="whats_new_ok">Compris</string>
+    <string name="settings_whats_new">Nouveautés</string>
+    <string-array name="whats_new_8">
+        <item>L’aide est maintenant à un appui : « Guide sur le web » et la politique de confidentialité sont en bas des réglages.</item>
+        <item>Une autre FRITZ!Box ? Réglages › Visite de bienvenue la configure pas à pas – elle cherche la box et vérifie la connexion.</item>
+        <item>Choisir un utilisateur dans la liste de la page de connexion n’ouvre plus le clavier.</item>
+    </string-array>
 </resources>

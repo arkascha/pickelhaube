@@ -181,6 +181,14 @@ class SettingsRepository(context: Context) {
         get() = prefs.getString(KEY_LAST_DIALLED, null)
         set(value) = prefs.edit { if (value != null) putString(KEY_LAST_DIALLED, value) else remove(KEY_LAST_DIALLED) }
 
+    /**
+     * The version code the app last ran as, for the "What's new" note (see [WhatsNew]); null before it
+     * was first recorded. Belongs to this installation: not exported.
+     */
+    var lastSeenVersion: Int?
+        get() = if (prefs.contains(KEY_LAST_SEEN_VERSION)) prefs.getInt(KEY_LAST_SEEN_VERSION, 0) else null
+        set(value) = prefs.edit { if (value != null) putInt(KEY_LAST_SEEN_VERSION, value) else remove(KEY_LAST_SEEN_VERSION) }
+
     /** Whose number [lastDialledNumber] is, as the phone books said then; null if they did not know. */
     var lastDialledName: String?
         get() = prefs.getString(KEY_LAST_DIALLED_NAME, null)
@@ -303,6 +311,7 @@ class SettingsRepository(context: Context) {
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
         const val KEY_CALL_STATUS = "call_status_enabled"
         const val KEY_LAST_DIALLED = "last_dialled_number"
+        const val KEY_LAST_SEEN_VERSION = "last_seen_version"
         /** Followed by a connection's id. */
         const val KEY_MISSED_SEEN = "missed_seen_"
         const val KEY_LAST_DIALLED_NAME = "last_dialled_name"

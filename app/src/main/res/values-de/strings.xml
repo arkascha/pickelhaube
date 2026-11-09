@@ -525,4 +525,12 @@
     <string name="web_guide">Anleitung im Web (Englisch)</string>
     <string name="web_privacy_policy">Datenschutzerklärung (Englisch)</string>
     <string name="welcome_ready_more">Alles Weitere – in der Anleitung im Web (Englisch) ›</string>
+    <string name="whats_new_title">Neu in %1$s</string>
+    <string name="whats_new_ok">Alles klar</string>
+    <string name="settings_whats_new">Neuigkeiten</string>
+    <string-array name="whats_new_8">
+        <item>Hilfe ist jetzt nur einen Tipp entfernt: „Anleitung im Web“ und die Datenschutzerklärung stehen unten in den Einstellungen.</item>
+        <item>Noch eine FRITZ!Box? Einstellungen › Willkommens-Tour richtet sie Schritt für Schritt ein – sie sucht die Box und prüft die Anmeldung.</item>
+        <item>Die Auswahl eines Benutzers aus der Liste auf der Verbindungsseite öffnet keine Tastatur mehr.</item>
+    </string-array>
 </resources>

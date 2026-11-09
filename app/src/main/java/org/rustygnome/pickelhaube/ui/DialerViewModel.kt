@@ -13,6 +13,8 @@ import android.net.LinkProperties
 import android.net.Network
 import android.os.SystemClock
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.data.WhatsNew
+import org.rustygnome.pickelhaube.BuildConfig
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.HostCheck
 import org.rustygnome.pickelhaube.data.MissedCalls
@@ -158,6 +160,10 @@ data class UiState(
     val hostNote: HostNote? = null,
     /** Saving a connection waits for a decision: the box at its host is not (or not only) the one edited. */
     val saveCheck: SaveCheck? = null,
+    /** The versions whose "What's new" note is to be shown (newest first); null: none (see [WhatsNew]). */
+    val whatsNew: List<Int>? = null,
+    /** The note was asked for in the settings: shown there and then, not only over the dialer. */
+    val whatsNewRequested: Boolean = false,
     /** The welcome tour is shown: on first start, or started again from the settings (see [WelcomeScreen]). */
     val showWelcome: Boolean = false,
     /** The welcome tour asked which box answers at the entered host (null: not asked yet). */
@@ -581,6 +587,40 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The tour went back to the password, as asked by [changeWelcomePassword]. */
     fun welcomePasswordChangeShown() = _state.update { it.copy(welcomeChangePassword = false) }
+
+    // --- what's new --------------------------------------------------------------------
+
+    /** After an update, the note about what is new – shown over the dialer when there is room (see [WhatsNew]). */
+    private fun checkWhatsNew() {
+        val current = BuildConfig.VERSION_CODE
+        val versions = WhatsNew.toShow(settings.lastSeenVersion, current, settings.isConfigured())
+        if (versions.isEmpty()) {
+            settings.lastSeenVersion = current
+        } else {
+            _state.update { it.copy(whatsNew = versions, whatsNewRequested = false) }
+        }
+    }
+
+    /**
+     * The app was opened for something particular – a launcher shortcut, a widget, a tel: link, a
+     * shared text: the note waits for the next ordinary start.
+     */
+    fun holdBackWhatsNew() {
+        if (_state.value.whatsNewRequested) return
+        _state.update { it.copy(whatsNew = null) }
+    }
+
+    /** "What's new" in the settings: the note of the current version again. */
+    fun showWhatsNew() {
+        val latest = WhatsNew.latest(BuildConfig.VERSION_CODE) ?: return
+        _state.update { it.copy(whatsNew = listOf(latest), whatsNewRequested = true) }
+    }
+
+    /** The note was read: not shown again for this version. */
+    fun dismissWhatsNew() {
+        settings.lastSeenVersion = BuildConfig.VERSION_CODE
+        _state.update { it.copy(whatsNew = null, whatsNewRequested = false) }
+    }
 
     /** The tour's demo link: the demo box, connected right away. */
     fun connectWelcomeDemo() = connectWelcomeBox("Demo", DemoBox.HOST, DemoBox.USERNAME, DemoBox.PASSWORD)
@@ -2320,6 +2360,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             }
         watchNetwork()
         watchSuggestions()
+        checkWhatsNew()
     }
 }
 

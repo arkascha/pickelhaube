@@ -543,4 +543,12 @@
     <string name="web_guide">Przewodnik w sieci (po angielsku)</string>
     <string name="web_privacy_policy">Polityka prywatności (po angielsku)</string>
     <string name="welcome_ready_more">Wszystko inne – w przewodniku w sieci (po angielsku) ›</string>
+    <string name="whats_new_title">Nowości w %1$s</string>
+    <string name="whats_new_ok">Rozumiem</string>
+    <string name="settings_whats_new">Nowości</string>
+    <string-array name="whats_new_8">
+        <item>Pomoc jest teraz na jedno dotknięcie: „Przewodnik w sieci” i polityka prywatności są na dole ustawień.</item>
+        <item>Kolejny FRITZ!Box? Ustawienia › Powitalny przewodnik skonfiguruje go krok po kroku – znajdzie urządzenie i sprawdzi logowanie.</item>
+        <item>Wybór użytkownika z listy na stronie połączenia nie otwiera już klawiatury.</item>
+    </string-array>
 </resources>
