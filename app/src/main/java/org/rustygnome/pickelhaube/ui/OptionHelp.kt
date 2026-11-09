@@ -72,7 +72,7 @@ internal fun HelpButton(title: String, help: List<String>) {
 }
 
 /** Material "help_outline" glyph (question mark in a circle, Apache 2.0). */
-private val HelpOutlineIcon: ImageVector by lazy {
+internal val HelpOutlineIcon: ImageVector by lazy {
     ImageVector.Builder(
         name = "HelpOutline",
         defaultWidth = 24.dp,

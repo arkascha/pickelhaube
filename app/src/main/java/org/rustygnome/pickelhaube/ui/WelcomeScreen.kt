@@ -94,8 +94,14 @@ enum class WelcomeStep { HELLO, PREPARE, FIND, LOGIN, CONNECT, READY }
 /** What the mascot does on a page – one picture each. */
 enum class MascotPose { WAVING, CLIPBOARD, SEARCHING, TYPING, PUZZLED, CHEERING }
 
-/** Where the guide explains how to prepare the FRITZ!Box. */
-private const val GUIDE_PREPARE_URL = "https://www.rustygnome.org/pickelhaube/guide.html#prepare"
+/** The part of the web page that goes with a page of the tour – opened by the (?) in its top bar. */
+private val WelcomeStep.webPage: String
+    get() = when (this) {
+        WelcomeStep.HELLO -> WebPages.HOME
+        WelcomeStep.PREPARE -> WebPages.GUIDE_PREPARE
+        WelcomeStep.FIND, WelcomeStep.LOGIN, WelcomeStep.CONNECT -> WebPages.GUIDE_FIRST_START
+        WelcomeStep.READY -> WebPages.GUIDE_DIALLING
+    }
 
 /**
  * The welcome tour: on first start (nothing set up yet) or started again from the settings. It
@@ -208,6 +214,15 @@ fun WelcomeScreen(
                     }
                 },
                 actions = {
+                    // Help for this page: the part of the guide on the web that goes with it.
+                    val uriHandler = LocalUriHandler.current
+                    IconButton(onClick = { uriHandler.openUri(step.webPage) }) {
+                        Icon(
+                            HelpOutlineIcon,
+                            contentDescription = stringResource(R.string.web_guide),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                     if (step != WelcomeStep.READY) {
                         TextButton(onClick = { onLeave(false) }, enabled = !busy) { Text(stringResource(R.string.welcome_skip)) }
                     }
@@ -493,7 +508,7 @@ private fun PreparePage() {
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
-            .clickable(role = Role.Button) { uriHandler.openUri(GUIDE_PREPARE_URL) }
+            .clickable(role = Role.Button) { uriHandler.openUri(WebPages.GUIDE_PREPARE) }
             .padding(vertical = 8.dp),
     )
 }
@@ -654,4 +669,14 @@ private fun ReadyPage(ringPhone: String?, ringPhoneOnBox: Boolean) {
             Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)
         }
     }
+    val uriHandler = LocalUriHandler.current
+    Text(
+        stringResource(R.string.welcome_ready_more),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.Button) { uriHandler.openUri(WebPages.GUIDE) }
+            .padding(vertical = 8.dp),
+    )
 }

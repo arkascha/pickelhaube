@@ -526,4 +526,7 @@
     <string name="welcome_start_dialling">Start dialling</string>
     <string name="settings_welcome_tour">Welcome tour</string>
     <string name="settings_welcome_tour_hint">Step by step through the setup – adds another FRITZ!Box</string>
+    <string name="web_guide">Guide on the web</string>
+    <string name="web_privacy_policy">Privacy policy</string>
+    <string name="welcome_ready_more">Everything else – in the guide on the web ›</string>
 </resources>

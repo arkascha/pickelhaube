@@ -9,3 +9,7 @@
 
 The privacy policy (`web/privacy-policy.html`) has to match what the app does: when a release changes what the app stores,
 reads or sends, update it along with the code.
+
+The app links to these pages (see `WebPages` in the app): the home page, `guide.html` with its anchors
+`#prepare`, `#first-start` and `#dialling`, and `privacy-policy.html`. Installed versions keep opening
+them, so these file names and anchors must not change.

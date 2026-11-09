@@ -540,4 +540,7 @@
     <string name="welcome_start_dialling">Zacznij dzwonić</string>
     <string name="settings_welcome_tour">Powitalny przewodnik</string>
     <string name="settings_welcome_tour_hint">Krok po kroku przez konfigurację – dodaje kolejny FRITZ!Box</string>
+    <string name="web_guide">Przewodnik w sieci (po angielsku)</string>
+    <string name="web_privacy_policy">Polityka prywatności (po angielsku)</string>
+    <string name="welcome_ready_more">Wszystko inne – w przewodniku w sieci (po angielsku) ›</string>
 </resources>

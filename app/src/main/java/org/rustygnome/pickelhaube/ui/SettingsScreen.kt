@@ -594,7 +594,6 @@ internal fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSa
 @Composable
 private fun VersionInfo() {
     val context = LocalContext.current
-    val uriHandler = LocalUriHandler.current
     val version = stringResource(R.string.settings_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
     Column(
         Modifier
@@ -613,17 +612,30 @@ private fun VersionInfo() {
                 style = TextRoles.hint,
             )
             Text(" · ", style = TextRoles.hint)
-            Text(
-                stringResource(R.string.settings_source_code),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable(role = Role.Button) { uriHandler.openUri(SOURCE_CODE_URL) },
-            )
+            WebLink(stringResource(R.string.settings_source_code), WebPages.SOURCE_CODE)
+        }
+        // The web page: help beyond the app's own explanations, and the privacy policy.
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            WebLink(stringResource(R.string.web_guide), WebPages.GUIDE)
+            Text(" · ", style = TextRoles.hint)
+            WebLink(stringResource(R.string.web_privacy_policy), WebPages.PRIVACY_POLICY)
         }
     }
 }
 
-private const val SOURCE_CODE_URL = "https://github.com/arkascha/pickelhaube"
+/** A link to [url], opened in the browser. */
+@Composable
+private fun WebLink(text: String, url: String) {
+    val uriHandler = LocalUriHandler.current
+    Text(
+        text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .clickable(role = Role.Button) { uriHandler.openUri(url) }
+            .padding(vertical = 6.dp),
+    )
+}
 
 /** What the demo box is, and filling it in on the page for a new connection. */
 @Composable

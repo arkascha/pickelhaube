@@ -531,4 +531,7 @@
     <string name="welcome_start_dialling">Inizia a chiamare</string>
     <string name="settings_welcome_tour">Tour di benvenuto</string>
     <string name="settings_welcome_tour_hint">Passo dopo passo nella configurazione – aggiunge un’altra FRITZ!Box</string>
+    <string name="web_guide">Guida sul web (in inglese)</string>
+    <string name="web_privacy_policy">Informativa sulla privacy (in inglese)</string>
+    <string name="welcome_ready_more">Tutto il resto – nella guida sul web (in inglese) ›</string>
 </resources>

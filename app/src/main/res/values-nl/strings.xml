@@ -522,4 +522,7 @@
     <string name="welcome_start_dialling">Beginnen met bellen</string>
     <string name="settings_welcome_tour">Welkomstrondleiding</string>
     <string name="settings_welcome_tour_hint">Stap voor stap door de instelling – voegt nog een FRITZ!Box toe</string>
+    <string name="web_guide">Handleiding op het web (Engels)</string>
+    <string name="web_privacy_policy">Privacybeleid (Engels)</string>
+    <string name="welcome_ready_more">Al het andere – in de handleiding op het web (Engels) ›</string>
 </resources>
