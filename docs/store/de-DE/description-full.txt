@@ -4,15 +4,15 @@ NUMMER AUSWÄHLEN
 • Letzte Anrufe der FRITZ!Box – gewählt, angenommen und verpasst, von all ihren Telefonen
 • Die Telefonbücher der FRITZ!Box, mit Suche, A–Z-Leiste und Filter nach Telefonbuch
 • Auf Wunsch die Kontakte deines Smartphones gleich daneben
-• Kurzwahlen 1–9 auf dem Smartphone, gültig mit jeder Box, dazu die Kurzwahlen 00–99 der FRITZ!Box, die du auch in der App einrichten und ändern kannst
+• Kurzwahlen 1–9 auf dem Smartphone, gültig mit jeder Box, dazu die Kurzwahlen 00–99 der FRITZ!Box, auch in der App einrichtbar
 • Vorschläge beim Tippen: passende Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Buchstaben der Tasten
-• Einen Text an Pickelhaube teilen oder einfügen – die Telefonnummer darin wird herausgesucht und wählbar gemacht
+• Einen Text an Pickelhaube teilen oder einfügen – die Telefonnummer darin wird herausgesucht
 • Neue verpasste Anrufe der FRITZ!Box werden gezählt und markiert
 • Wähle, welches Telefon klingelt: ein einzelnes Telefon oder alle
 
 WÄHLEN
 • Die eigene Nummer für einen einzelnen Anruf unterdrücken
-• Mehrere eigene Nummern auf der FRITZ!Box: wähle, über welche ein Anruf geht, und sieh in den letzten Anrufen, über welche jeder lief
+• Mehrere eigene Nummern: wähle, über welche ein Anruf geht
 • Durchwahlen, Konferenz-PINs und Telefonmenüs: die Nummer wird gewählt, und die App sagt, was nach dem Verbinden zu tippen ist
 • Interne Gespräche zwischen den Telefonen deiner FRITZ!Box – die Küche vom Arbeitszimmer aus, kostenlos
 • Eine Warnung, wenn eine Internetrufnummer der FRITZ!Box nicht beim Anbieter registriert ist
@@ -50,5 +50,6 @@ DAS BRAUCHST DU
 • In der FRITZ!Box eingeschaltet: „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und „Wählhilfe verwenden“ (Telefonie › Anrufe › Wählhilfe)
 • Einen FRITZ!Box-Benutzer mit der Berechtigung für Telefonie
 • Für den Gesprächsstatus: den Anrufmonitor der Box, einmal eingeschaltet durch Wählen von #96*5* an einem angeschlossenen Telefon
+• Den Rest zeigt dir beim ersten Start die Willkommens-Tour, Schritt für Schritt – und eine Demo-Box lässt dich die App ohne FRITZ!Box ausprobieren
 
 Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH; sie werden hier nur genannt, um zu sagen, mit welchen Routern die App funktioniert.
