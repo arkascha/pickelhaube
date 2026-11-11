@@ -101,10 +101,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_dial" />
         </receiver>
-        <service
-            android:name=".widget.DialWidgetService"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <!-- Started by the launcher when the widget is placed: it has to be exported for that. -->
         <activity
             android:name=".widget.WidgetSetupActivity"
