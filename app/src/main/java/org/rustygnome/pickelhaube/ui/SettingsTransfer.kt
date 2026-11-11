@@ -129,7 +129,7 @@ private fun ExportDialog(onExport: (CharArray?) -> Unit, onDismiss: () -> Unit) 
     var repeated by remember { mutableStateOf("") }
     val problem = when {
         !withPasswords -> null
-        passphrase.length < MIN_PASSPHRASE -> stringResource(R.string.settings_passphrase_short, MIN_PASSPHRASE)
+        passphrase.length < MIN_PASSPHRASE -> pluralStringResource(R.plurals.settings_passphrase_short, MIN_PASSPHRASE, MIN_PASSPHRASE)
         repeated != passphrase -> stringResource(R.string.settings_passphrase_mismatch)
         else -> null
     }

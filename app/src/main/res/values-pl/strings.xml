@@ -371,7 +371,12 @@
     <string name="settings_export_passphrase_hint">Hasła są szyfrowane frazą hasła. Import jej wymaga – bez niej nie da się ich odzyskać.</string>
     <string name="settings_passphrase">Fraza hasła</string>
     <string name="settings_passphrase_repeat">Powtórz frazę hasła</string>
-    <string name="settings_passphrase_short">Co najmniej %1$d znaków</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">Co najmniej %d znak</item>
+        <item quantity="few">Co najmniej %d znaki</item>
+        <item quantity="many">Co najmniej %d znaków</item>
+        <item quantity="other">Co najmniej %d znaku</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">Frazy hasła się różnią</string>
     <string name="settings_export_save">Zapisz…</string>
     <string name="settings_exported">Ustawienia wyeksportowane</string>

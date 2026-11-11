@@ -363,7 +363,10 @@
     <string name="settings_export_passphrase_hint">De wachtwoorden worden versleuteld met een wachtzin. Het importeren heeft die nodig – zonder kunnen ze niet worden hersteld.</string>
     <string name="settings_passphrase">Wachtzin</string>
     <string name="settings_passphrase_repeat">Wachtzin herhalen</string>
-    <string name="settings_passphrase_short">Minstens %1$d tekens</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">Minstens %d teken</item>
+        <item quantity="other">Minstens %d tekens</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">De wachtzinnen komen niet overeen</string>
     <string name="settings_export_save">Opslaan…</string>
     <string name="settings_exported">Instellingen geëxporteerd</string>

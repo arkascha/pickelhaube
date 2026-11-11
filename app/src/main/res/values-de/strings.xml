@@ -363,7 +363,10 @@
     <string name="settings_export_passphrase_hint">Die Passwörter werden mit einer Passphrase verschlüsselt. Der Import braucht sie – ohne sie lassen sich die Passwörter nicht wiederherstellen.</string>
     <string name="settings_passphrase">Passphrase</string>
     <string name="settings_passphrase_repeat">Passphrase wiederholen</string>
-    <string name="settings_passphrase_short">Mindestens %1$d Zeichen</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">Mindestens %d Zeichen</item>
+        <item quantity="other">Mindestens %d Zeichen</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">Die Passphrasen stimmen nicht überein</string>
     <string name="settings_export_save">Speichern…</string>
     <string name="settings_exported">Einstellungen exportiert</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- To notice network changes and find the gateway (= the FritzBox of the current network). -->
@@ -8,6 +9,10 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- READ_CALL_LOG only in the "full" flavour, see src/full/AndroidManifest.xml. -->
 
+    <!-- tools:ignore UnusedAttribute: localeConfig (the in-app language list in Android's settings)
+         only takes effect from Android 13 on; older versions ignore it, which is fine.
+         tools:ignore DataExtractionRules: no fullBackupContent is needed for Android before 12,
+         allowBackup="false" rules out any backup there; from 12 on the extraction rules exclude everything. -->
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,7 +22,8 @@
         android:localeConfig="@xml/locales_config"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pickelhaube">
+        android:theme="@style/Theme.Pickelhaube"
+        tools:ignore="UnusedAttribute,DataExtractionRules">
 
         <activity
             android:name=".MainActivity"

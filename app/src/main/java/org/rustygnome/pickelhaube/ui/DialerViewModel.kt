@@ -1,6 +1,7 @@
 package org.rustygnome.pickelhaube.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -1125,6 +1126,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    // ViewModel.onCleared() is empty today (lint's EmptySuperCall), but called anyway in case it ever is not.
+    @SuppressLint("EmptySuperCall")
     override fun onCleared() {
         val cm = getApplication<Application>().getSystemService(ConnectivityManager::class.java)
         networkCallback?.let { cb -> runCatching { cm?.unregisterNetworkCallback(cb) } }

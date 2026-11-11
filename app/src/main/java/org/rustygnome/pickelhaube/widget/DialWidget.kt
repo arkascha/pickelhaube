@@ -6,9 +6,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
+import androidx.core.net.toUri
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
@@ -64,7 +64,7 @@ class DialWidget : AppWidgetProvider() {
             // The rows come from DialWidgetService; the data makes the adapter intent unique per widget.
             val adapter = Intent(context, DialWidgetService::class.java)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
-                .setData(Uri.parse("pickelhaube-widget://$id"))
+                .setData("pickelhaube-widget://$id".toUri())
             views.setRemoteAdapter(R.id.widget_list, adapter)
             views.setEmptyView(R.id.widget_list, R.id.widget_empty)
             // Mutable, as each row fills in which entry it is; the number itself is looked up in the

@@ -367,7 +367,11 @@
     <string name="settings_export_passphrase_hint">Le password vengono cifrate con una passphrase. L\'importazione ne ha bisogno: senza di essa non si possono recuperare.</string>
     <string name="settings_passphrase">Passphrase</string>
     <string name="settings_passphrase_repeat">Ripeti la passphrase</string>
-    <string name="settings_passphrase_short">Almeno %1$d caratteri</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">Almeno %d carattere</item>
+        <item quantity="many">Almeno %d caratteri</item>
+        <item quantity="other">Almeno %d caratteri</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">Le passphrase non coincidono</string>
     <string name="settings_export_save">Salva…</string>
     <string name="settings_exported">Impostazioni esportate</string>

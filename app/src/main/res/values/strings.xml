@@ -366,7 +366,10 @@
     <string name="settings_export_passphrase_hint">The passwords are encrypted with a passphrase. The import needs it – without it they cannot be recovered.</string>
     <string name="settings_passphrase">Passphrase</string>
     <string name="settings_passphrase_repeat">Repeat passphrase</string>
-    <string name="settings_passphrase_short">At least %1$d characters</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">At least %d character</item>
+        <item quantity="other">At least %d characters</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">The passphrases differ</string>
     <string name="settings_export_save">Save…</string>
     <string name="settings_exported">Settings exported</string>

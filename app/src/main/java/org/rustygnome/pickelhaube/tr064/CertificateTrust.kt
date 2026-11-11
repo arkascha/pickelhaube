@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.tr064
 
+import android.annotation.SuppressLint
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.security.MessageDigest
@@ -16,7 +17,11 @@ import javax.net.ssl.X509TrustManager
  * A server certificate is accepted only if it is byte-identical to the one the user
  * explicitly trusted ([pinnedDer]). Anything else is rejected, and the presented chain
  * is remembered in [rejectedChain] so the UI can show it and ask the user.
+ *
+ * A trust manager of its own on purpose (lint's CustomX509TrustManager): the box' certificate is
+ * self-signed, so the system's would reject it; this one is stricter, it trusts nothing but the pin.
  */
+@SuppressLint("CustomX509TrustManager")
 class PinningTrustManager(private val pinnedDer: ByteArray?) : X509TrustManager {
 
     @Volatile

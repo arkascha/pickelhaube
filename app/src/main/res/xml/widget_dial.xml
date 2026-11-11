@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    tools:ignore UnusedAttribute: targetCellWidth/Height (Android 12+) and widgetFeatures (Android 9+)
+    are ignored by older versions, which use minWidth/minHeight and have the widget set up anew instead.
+-->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:configure="org.rustygnome.pickelhaube.widget.WidgetSetupActivity"
     android:description="@string/widget_description"
     android:initialLayout="@layout/widget_dial"
@@ -12,4 +17,5 @@
     android:targetCellHeight="2"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
-    android:widgetFeatures="reconfigurable" />
+    android:widgetFeatures="reconfigurable"
+    tools:ignore="UnusedAttribute" />

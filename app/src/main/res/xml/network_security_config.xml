@@ -4,7 +4,10 @@
     (authentication uses HTTP digest, so the password is not sent in clear text).
     The router can be addressed by any host name or IP, so cleartext is allowed app-wide;
     the app talks to nothing but the router.
+    tools:ignore InsecureBaseConfiguration: intentional for exactly that reason.
 -->
-<network-security-config>
-    <base-config cleartextTrafficPermitted="true" />
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config
+        cleartextTrafficPermitted="true"
+        tools:ignore="InsecureBaseConfiguration" />
 </network-security-config>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A row of a wide dial widget: name on the left, the number right-aligned beside it. -->
+<!-- A row of a wide dial widget: name on the left, the number right-aligned beside it.
+     The outer frame makes the gap between rows: margins do not work on the rows of a widget's list,
+     and only the inner tile takes the tap, so the gap stays one (lint's UselessParent). -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="3dp"
@@ -8,6 +11,7 @@
 
     <LinearLayout
         android:id="@+id/row"
+        tools:ignore="UselessParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/widget_row"

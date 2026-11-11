@@ -367,7 +367,11 @@
     <string name="settings_export_passphrase_hint">Les mots de passe sont chiffrés avec une phrase secrète. L\'importation en a besoin : sans elle, ils ne peuvent pas être récupérés.</string>
     <string name="settings_passphrase">Phrase secrète</string>
     <string name="settings_passphrase_repeat">Répéter la phrase secrète</string>
-    <string name="settings_passphrase_short">Au moins %1$d caractères</string>
+    <plurals name="settings_passphrase_short">
+        <item quantity="one">Au moins %d caractère</item>
+        <item quantity="many">Au moins %d caractères</item>
+        <item quantity="other">Au moins %d caractères</item>
+    </plurals>
     <string name="settings_passphrase_mismatch">Les phrases secrètes diffèrent</string>
     <string name="settings_export_save">Enregistrer…</string>
     <string name="settings_exported">Réglages exportés</string>
