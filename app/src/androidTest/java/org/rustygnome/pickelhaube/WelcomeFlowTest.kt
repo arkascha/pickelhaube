@@ -1,51 +1,16 @@
 package org.rustygnome.pickelhaube
 
-import android.content.Context
-import android.content.Intent
-import androidx.annotation.StringRes
-import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.After
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 
-/**
- * The welcome tour on a fresh install, with the demo box built into the app – no FRITZ!Box needed.
- * Each test starts with the app's data cleared (see the orchestrator in app/build.gradle.kts).
- */
-@OptIn(ExperimentalTestApi::class)
+/** The welcome tour on a fresh install. */
 @RunWith(AndroidJUnit4::class)
-class WelcomeFlowTest {
-
-    @get:Rule
-    val compose = createEmptyComposeRule()
-
-    private val context: Context = ApplicationProvider.getApplicationContext()
-    private var scenario: ActivityScenario<MainActivity>? = null
-
-    private fun text(@StringRes id: Int) = context.getString(id)
-
-    /** Waits until [id]'s text is shown (also within a longer one) – connecting to the demo box takes a moment. */
-    private fun awaitText(@StringRes id: Int) =
-        compose.waitUntilAtLeastOneExists(hasText(text(id), substring = true), CONNECT_TIMEOUT_MILLIS)
-
-    private fun launch(intent: Intent? = null) {
-        scenario = if (intent == null) ActivityScenario.launch(MainActivity::class.java) else ActivityScenario.launch(intent)
-    }
-
-    @After
-    fun close() {
-        scenario?.close()
-    }
+class WelcomeFlowTest : FlowTest() {
 
     /** First start: the tour, its demo link, "All set!" – and the dialer with the demo box, still there after a new start. */
     @Test
@@ -56,12 +21,12 @@ class WelcomeFlowTest {
 
         compose.onNodeWithText(text(R.string.connection_demo)).performClick()
         awaitText(R.string.welcome_ready_title)
-        // The tour names the phone the box rings first: the demo box' first DECT handset.
-        compose.waitUntilAtLeastOneExists(hasText(DEMO_PHONE, substring = true), CONNECT_TIMEOUT_MILLIS)
+        // The tour names the phone the box rings first.
+        awaitText(DEMO_PHONE)
 
         compose.onNodeWithText(text(R.string.welcome_start_dialling)).performClick()
         awaitText(R.string.dialer_number_label)
-        compose.onNodeWithText(DEMO_PHONE).assertIsDisplayed()
+        awaitText(DEMO_PHONE)
 
         // Started anew (a new activity and view model): the box is stored, no tour again.
         scenario?.close()
@@ -95,10 +60,5 @@ class WelcomeFlowTest {
     private companion object {
         /** No widget has this id: an unknown one is just an empty list. */
         const val WIDGET_ID = 4711
-
-        /** The demo box' phone for dial help (see DemoBox). */
-        const val DEMO_PHONE = "Kitchen"
-
-        const val CONNECT_TIMEOUT_MILLIS = 15_000L
     }
 }
