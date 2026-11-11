@@ -7,10 +7,10 @@ the box dials the target number from that phone.
 
 ## Open in Android Studio
 
-*File › Open…* → select this folder. Studio downloads Gradle 8.14.3 and the
+*File › Open…* → select this folder. Studio downloads Gradle (the wrapper's version, 9.9.1) and the
 dependencies on first sync. If it offers an AGP / dependency upgrade, accepting is fine.
 
-- Kotlin + Jetpack Compose (Material 3), minSdk 26, target/compileSdk 36
+- Kotlin + Jetpack Compose (Material 3), minSdk 26, targetSdk 36, compileSdk 37
 - Only external library: OkHttp (TR-064 digest auth is implemented in-app)
 
 ### Build flavours
@@ -500,7 +500,8 @@ again.
 ### Home screen widget
 
 The widget **Numbers to dial** offers numbers chosen by hand, each widget its own list (e.g. "Family"
-and "Work"). Placing it opens its setup in the app: an optional title, and **Add number** opens the
+and "Work"). Placing it opens its setup in the app (with no box set up yet, the welcome tour or the page for the
+first box comes first, and the setup follows once a box is there): an optional title, and **Add number** opens the
 number picker (recent calls, speed dials, phone books) to add an entry with its name; entries can be
 moved up and down and removed. In the widget a tap on an entry puts its number into the dialer, with
 the name as the field's label – it is dialled with the green button only, as a tap on the home
@@ -511,6 +512,9 @@ have a dark tint of their own. Wide enough (from about 250 dp), a row has the nu
 beside the name rather than below it. The lists belong to this phone's home screen: they are kept apart
 from the settings and not exported. The widget's row only says which entry was tapped; the number is
 looked up in its stored list, so no other app can put another number into the dialer through it.
+The rows go to the launcher together with the widget itself (`RemoteCollectionItems` through AndroidX
+`RemoteViewsCompat`, which brings its own service before Android 12), so a change or a resize simply
+redraws the whole widget.
 
 ### Export and import of the settings
 

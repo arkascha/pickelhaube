@@ -1,0 +1,8 @@
+<en-US>
+• Fixed: when the widget was placed before setting up a FRITZ!Box, the welcome tour could not connect – now the tour comes first and the widget's setup follows
+• Under the hood: the widget shows its list the way newer Android versions ask for, updated build tools, small corrections
+</en-US>
+<de-DE>
+• Behoben: Wurde das Widget platziert, bevor eine FRITZ!Box eingerichtet war, konnte die Willkommens-Tour keine Verbindung herstellen – jetzt kommt die Tour zuerst, danach die Einrichtung des Widgets
+• Unter der Haube: Das Widget zeigt seine Liste so, wie es neuere Android-Versionen verlangen, aktuelle Build-Werkzeuge, kleine Korrekturen
+</de-DE>
