@@ -10,7 +10,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.rustygnome.pickelhaube.tr064.CallEvent
 import org.rustygnome.pickelhaube.tr064.CallMonitor
 import org.rustygnome.pickelhaube.tr064.FritzInternalPhones
 
@@ -78,8 +77,7 @@ internal class CallStatusPart(private val host: DialerHost) {
         monitorJob = host.scope.launch {
             val call = this
             var listening = false
-            var connection: String? = null
-            var connected = false
+            val follower = CallFollower(number, key)
             val pickUpTimeout = launch {
                 delay(PICK_UP_TIMEOUT_MILLIS)
                 showCallEnd(CallProgress.NotPickedUp)
@@ -92,31 +90,24 @@ internal class CallStatusPart(private val host: DialerHost) {
                     // From now on the monitor says how long the call can be cancelled.
                     dialTimeout?.cancel()
                 }.first { event ->
-                    when {
-                        connection == null -> {
-                            if (event is CallEvent.Call && isDialledNumber(event.called, number, key)) {
-                                connection = event.connection
-                                pickUpTimeout.cancel()
-                                state.update {
-                                    it.copy(callProgress = CallProgress.Dialling(number, event.caller.ifBlank { null }, extension))
-                                }
-                            }
+                    when (val step = follower.take(event)) {
+                        is CallFollower.Step.Dialling -> {
+                            pickUpTimeout.cancel()
+                            state.update { it.copy(callProgress = CallProgress.Dialling(number, step.from, extension)) }
                             false
                         }
-                        event.connection != connection -> false
-                        event is CallEvent.Connect -> {
-                            connected = true
+                        CallFollower.Step.Connected -> {
                             clearDialActive()
                             state.update {
                                 it.copy(callProgress = CallProgress.Connected(number, SystemClock.elapsedRealtime(), extension))
                             }
                             false
                         }
-                        event is CallEvent.Disconnect -> {
-                            showCallEnd(if (connected) CallProgress.Ended(event.seconds) else CallProgress.NotAnswered)
+                        is CallFollower.Step.Ended -> {
+                            showCallEnd(step.progress)
                             true
                         }
-                        else -> false
+                        CallFollower.Step.Ignored -> false
                     }
                 }
             } catch (e: CancellationException) {

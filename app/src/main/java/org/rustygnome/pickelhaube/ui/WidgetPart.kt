@@ -29,14 +29,10 @@ internal class WidgetPart(private val host: DialerHost) {
 
     fun setTransparent(transparent: Boolean) = edit { it.copy(transparent = transparent) }
 
-    fun remove(index: Int) = edit { it.copy(entries = it.entries.filterIndexed { i, _ -> i != index }) }
+    fun remove(index: Int) = edit { it.without(index) }
 
     /** Moves entry [index] up ([by] -1) or down (+1). */
-    fun move(index: Int, by: Int) = edit { list ->
-        val to = index + by
-        if (to !in list.entries.indices) list
-        else list.copy(entries = list.entries.toMutableList().apply { add(to, removeAt(index)) })
-    }
+    fun move(index: Int, by: Int) = edit { it.moved(index, by) }
 
     /** The number picker, to add a number to the widget being set up. */
     fun startAdding() {
@@ -46,9 +42,7 @@ internal class WidgetPart(private val host: DialerHost) {
 
     /** Back from the picker with [number] (and whose it is) – once only, the first place kept. */
     fun add(name: String, number: String) {
-        edit { list ->
-            if (list.entries.any { it.number == number }) list else list.copy(entries = list.entries + WidgetEntry(name, number))
-        }
+        edit { it.plus(WidgetEntry(name, number)) }
         state.update { it.copy(showPicker = false, addingToWidget = false) }
     }
 

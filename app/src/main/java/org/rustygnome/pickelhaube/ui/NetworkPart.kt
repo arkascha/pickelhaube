@@ -54,13 +54,13 @@ internal class NetworkPart(private val host: DialerHost) {
         val gateway = recognition.gateway
         val match = recognition.match
         lastFound = found
-        val unknown = if (match == null) found.firstOrNull { it.host == gateway } else null
+        val unknown = unknownGatewayBox(found, gateway, match)
         state.update {
             it.copy(
                 profiles = profiles,
                 activeBoxSeen = profiles.firstOrNull { p -> p.id == settings.activeProfileId }?.let(::seenInNetwork),
                 // By device id only: a connection without one is not known to be the box at its host.
-                boxesSeen = profiles.filter { p -> found.any { box -> box.udn == p.deviceId } }.map { p -> p.id }.toSet(),
+                boxesSeen = seenByDeviceId(profiles, found),
                 // A request that failed in the previous network says nothing about this one.
                 activeBoxWorking = null,
                 networkNotice = unknown?.let { box ->
@@ -99,10 +99,7 @@ internal class NetworkPart(private val host: DialerHost) {
      * Whether [profile]'s box answered the last detection – by its device id, or by its host for a
      * connection whose device id is not known yet. Null before the first detection.
      */
-    fun seenInNetwork(profile: BoxProfile): Boolean? = lastFound?.any { box ->
-        if (profile.deviceId != null) box.udn == profile.deviceId
-        else box.host.equals(profile.config.host, ignoreCase = true)
-    }
+    fun seenInNetwork(profile: BoxProfile): Boolean? = lastFound?.let { profile.answeredAmong(it) }
 
     /** Re-detects the box whenever the phone's network changes (e.g. Wi-Fi at home vs. office). */
     fun watch() {
@@ -156,3 +153,17 @@ internal class NetworkPart(private val host: DialerHost) {
         networkCallback?.let { cb -> runCatching { cm?.unregisterNetworkCallback(cb) } }
     }
 }
+
+/** Whether this box is among the [found] ones: by its device id, or by its host for a connection whose device id is not known yet. */
+internal fun BoxProfile.answeredAmong(found: List<BoxIdentity>): Boolean = found.any { box ->
+    if (deviceId != null) box.udn == deviceId
+    else box.host.equals(config.host, ignoreCase = true)
+}
+
+/** The [profiles] (ids) among the [found] boxes by device id only: a connection without one is not known to be the box at its host. */
+internal fun seenByDeviceId(profiles: List<BoxProfile>, found: List<BoxIdentity>): Set<String> =
+    profiles.filter { p -> found.any { box -> box.udn == p.deviceId } }.map { p -> p.id }.toSet()
+
+/** The box answering at the network's [gateway] when it is none of the configured ones ([match] null): to mention it. */
+internal fun unknownGatewayBox(found: List<BoxIdentity>, gateway: String?, match: BoxProfile?): BoxIdentity? =
+    if (match == null) found.firstOrNull { it.host == gateway } else null

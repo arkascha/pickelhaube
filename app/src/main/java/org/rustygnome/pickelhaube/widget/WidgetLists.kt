@@ -18,6 +18,20 @@ data class WidgetList(
     val transparent: Boolean = false,
 ) {
 
+    /** Without the entry at [index]. */
+    fun without(index: Int): WidgetList = copy(entries = entries.filterIndexed { i, _ -> i != index })
+
+    /** With the entry at [index] moved up ([by] -1) or down (+1); unchanged at either end. */
+    fun moved(index: Int, by: Int): WidgetList {
+        val to = index + by
+        if (index !in entries.indices || to !in entries.indices) return this
+        return copy(entries = entries.toMutableList().apply { add(to, removeAt(index)) })
+    }
+
+    /** With [entry] added at the end – unless its number is there already: once only, the first place kept. */
+    fun plus(entry: WidgetEntry): WidgetList =
+        if (entries.any { it.number == entry.number }) this else copy(entries = entries + entry)
+
     fun toJson(): String = JSONObject()
         .put("title", title)
         .put("transparent", transparent)

@@ -167,16 +167,6 @@ internal class ConnectionsPart(private val host: DialerHost) {
         }
     }
 
-    /** The connection page's entries, kept while [SaveCheck] waits for a decision. */
-    private data class SaveRequest(
-        val config: FritzConfig,
-        val name: String,
-        val phonebooksEnabled: Boolean,
-        val callListEnabled: Boolean,
-        val speedDialsEnabled: Boolean,
-        val internalCallsEnabled: Boolean,
-    )
-
     private var pendingSave: SaveRequest? = null
 
     /** [SaveCheck] answered with "save anyway": checked against the box there after all (a new connection only). */
@@ -195,16 +185,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
         val request = pendingSave ?: return
         dismissSaveCheck()
         val previous = settings.profiles().firstOrNull { it.id == state.value.editingProfileId } ?: return
-        val profile = previous.copy(
-            name = request.name.trim().ifEmpty { previous.name },
-            config = request.config,
-            // Rights read before belong to the user of then.
-            userRights = previous.userRights?.takeIf { previous.config.username == request.config.username },
-            phonebooksEnabled = request.phonebooksEnabled,
-            callListEnabled = request.callListEnabled,
-            speedDialsEnabled = request.speedDialsEnabled,
-            internalCallsEnabled = request.internalCallsEnabled,
-        )
+        val profile = uncheckedProfile(previous, request)
         settings.saveProfile(profile)
         LauncherShortcuts.publish(host.app)
         val active = settings.activeProfileId == profile.id
@@ -228,10 +209,6 @@ internal class ConnectionsPart(private val host: DialerHost) {
 
     private fun saveChecked(request: SaveRequest) {
         val config = request.config
-        val name = request.name
-        val phonebooksEnabled = request.phonebooksEnabled
-        val callListEnabled = request.callListEnabled
-        val speedDialsEnabled = request.speedDialsEnabled
         val editingId = state.value.editingProfileId
         host.verifyingSettings = true
         state.update { it.copy(config = config, error = null) }
@@ -243,23 +220,12 @@ internal class ConnectionsPart(private val host: DialerHost) {
             val codes = readDialingCodes(dialer)
             val rights = readUserRights(dialer)
             val previous = settings.profiles().firstOrNull { it.id == editingId }
-            val profile = BoxProfile(
+            val profile = checkedProfile(
                 id = editingId ?: java.util.UUID.randomUUID().toString(),
-                name = name.trim().ifEmpty { identity?.friendlyName ?: previous?.name ?: config.host },
+                request = request,
                 config = state.value.config,
-                deviceId = identity?.udn ?: previous?.deviceId,
-                model = info?.model ?: identity?.modelName ?: previous?.model,
-                // Without the rights for GetInfo, the public device description tells them as well.
-                softwareVersion = info?.softwareVersion ?: identity?.softwareVersion ?: previous?.softwareVersion,
-                serialNumber = info?.serialNumber ?: identity?.serialNumber ?: previous?.serialNumber,
-                dialingCodes = codes ?: previous?.dialingCodes,
-                // Rights read before belong to the user of then.
-                userRights = rights ?: previous?.userRights?.takeIf { previous.config.username == config.username },
-                phonebooksEnabled = phonebooksEnabled,
-                // Without the right the call list could only fail: off, the connection page says why.
-                callListEnabled = callListEnabled && rights?.phone != false,
-                speedDialsEnabled = speedDialsEnabled,
-                internalCallsEnabled = request.internalCallsEnabled,
+                previous = previous,
+                report = BoxReport(identity, info, codes, rights),
             )
             settings.saveProfile(profile)
             settings.activeProfileId = profile.id

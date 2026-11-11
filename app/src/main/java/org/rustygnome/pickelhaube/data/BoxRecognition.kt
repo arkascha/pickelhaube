@@ -31,9 +31,17 @@ object BoxRecognition {
         val gateway = BoxDiscovery.currentGateway(context)
         val local = listOfNotNull(gateway, LOCAL_BOX_NAME)
         val found = BoxDiscovery.identifyAll(local + profiles.map { it.config.host })
+        return Recognition(found, gateway, match(found, local, profiles))
+    }
+
+    /**
+     * The configured box among the [found] ones, by device id: one answering at a [local] host (the
+     * gateway, "fritz.box") wins over one answering only at its configured host.
+     */
+    internal fun match(found: List<BoxIdentity>, local: List<String>, profiles: List<BoxProfile>): BoxProfile? {
         fun matchIn(boxes: List<BoxIdentity>) =
             boxes.firstNotNullOfOrNull { identity -> profiles.firstOrNull { it.deviceId == identity.udn } }
-        return Recognition(found, gateway, matchIn(found.filter { it.host in local }) ?: matchIn(found))
+        return matchIn(found.filter { it.host in local }) ?: matchIn(found)
     }
 
     /**

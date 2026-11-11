@@ -1,6 +1,7 @@
 package org.rustygnome.pickelhaube.ui
 
 import java.util.Locale
+import org.rustygnome.pickelhaube.tr064.CallEvent
 
 /**
  * How the call placed last is going, as far as Pickelhaube knows: from its own request, then from the
@@ -57,4 +58,49 @@ internal fun formatDuration(seconds: Int): String {
     val h = s / 3600
     val m = s % 3600 / 60
     return if (h > 0) "%d:%02d:%02d".format(Locale.ROOT, h, m, s % 60) else "%d:%02d".format(Locale.ROOT, m, s % 60)
+}
+
+/**
+ * Follows the box' call monitor for the call to [number] Pickelhaube asked for: which of its reports
+ * belong to that call, and what each one means. Only the box' report of dialling [number] (compared
+ * by [key], see [isDialledNumber]) starts it; the other calls of the household are ignored.
+ */
+internal class CallFollower(private val number: String, private val key: (String) -> String) {
+
+    /** What a report of the call monitor meant for the call followed. */
+    sealed interface Step {
+        /** Not about this call, or nothing new. */
+        data object Ignored : Step
+
+        /** Picked up: the box dials, from its own number [from] (if it said). */
+        data class Dialling(val from: String?) : Step
+
+        /** The other side answered. */
+        data object Connected : Step
+
+        /** The call is over: how it ended. */
+        data class Ended(val progress: CallProgress) : Step
+    }
+
+    /** The box' id of the call followed, once it reported dialling it. */
+    private var connection: String? = null
+
+    private var connected = false
+
+    fun take(event: CallEvent): Step = when {
+        connection == null ->
+            if (event is CallEvent.Call && isDialledNumber(event.called, number, key)) {
+                connection = event.connection
+                Step.Dialling(event.caller.ifBlank { null })
+            } else {
+                Step.Ignored
+            }
+        event.connection != connection -> Step.Ignored
+        event is CallEvent.Connect -> {
+            connected = true
+            Step.Connected
+        }
+        event is CallEvent.Disconnect -> Step.Ended(if (connected) CallProgress.Ended(event.seconds) else CallProgress.NotAnswered)
+        else -> Step.Ignored
+    }
 }

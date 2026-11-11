@@ -105,16 +105,23 @@ internal class TransferPart(private val host: DialerHost) {
      */
     private fun apply(backup: SettingsBackup) {
         fun granted(permission: String) = ContextCompat.checkSelfPermission(host.app, permission) == PackageManager.PERMISSION_GRANTED
-        val options = backup.options.copy(
-            deviceContactsEnabled = backup.options.deviceContactsEnabled && granted(Manifest.permission.READ_CONTACTS),
-            callLogEnabled = backup.options.callLogEnabled && granted(Manifest.permission.READ_CALL_LOG),
-        )
-        settings.restore(backup.copy(options = options))
+        settings.restore(backup.limitedTo(granted(Manifest.permission.READ_CONTACTS), granted(Manifest.permission.READ_CALL_LOG)))
         host.startOver()
     }
 
     private fun toast(message: Int) = Toast.makeText(host.app, message, Toast.LENGTH_LONG).show()
 }
+
+/**
+ * The backup with the phone's contacts and call log switched off unless reading them is granted
+ * here ([contactsGranted], [callLogGranted]) – Android's permissions do not come along with a file.
+ */
+internal fun SettingsBackup.limitedTo(contactsGranted: Boolean, callLogGranted: Boolean): SettingsBackup = copy(
+    options = options.copy(
+        deviceContactsEnabled = options.deviceContactsEnabled && contactsGranted,
+        callLogEnabled = options.callLogEnabled && callLogGranted,
+    ),
+)
 
 /** Reads up to [limit] bytes (InputStream.readNBytes only exists from Android 13 on). */
 private fun InputStream.readNBytesCompat(limit: Int): ByteArray {
