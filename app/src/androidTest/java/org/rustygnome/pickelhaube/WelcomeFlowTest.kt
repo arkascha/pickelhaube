@@ -29,8 +29,7 @@ class WelcomeFlowTest : FlowTest() {
         awaitText(DEMO_PHONE)
 
         // Started anew (a new activity and view model): the box is stored, no tour again.
-        scenario?.close()
-        launch()
+        restart()
         awaitText(R.string.dialer_number_label)
         compose.onNodeWithText(text(R.string.welcome_hello)).assertDoesNotExist()
     }

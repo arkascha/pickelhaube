@@ -1,0 +1,144 @@
+package org.rustygnome.pickelhaube
+
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isToggleable
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Test
+import org.junit.runner.RunWith
+
+/** Speed dials: this phone's own (set from the phone books, used with a long press, removed) and the demo box' ones. */
+@RunWith(AndroidJUnit4::class)
+class SpeedDialFlowTest : FlowTest() {
+
+    /** A slot row of the speed dial tab, by its slot and what it shows (a name, or "Not set"). */
+    private fun slot(slot: String, shows: String) = hasText(slot) and hasText(shows)
+
+    private fun longPressKey(digit: Char) = compose.onNode(key(digit)).performTouchInput { longClick() }
+
+    private fun back() = compose.onNode(labelled(text(R.string.back))).performClick()
+
+    /** Slot 1 of this phone set to Anna from the phone books, used with a long press on "1" – also after a new start – and removed. */
+    @Test
+    fun phoneSpeedDialSetUsedAndRemoved() {
+        setUpDemoBox()
+        openPicker(R.string.speed_dial)
+        compose.onNode(slot("1", text(R.string.speed_dial_free))).performClick()
+
+        // The phone books, saying which slot the tapped number becomes.
+        notNowForContacts()
+        awaitText(text(R.string.speed_dial_choose_number, "1"))
+        awaitText(ANNA_HOME)
+        compose.onNodeWithText(ANNA_HOME).performClick()
+        awaitNode(slot("1", ANNA))
+        back()
+
+        // A long press on "1" in the dialer: Anna's number, the field saying whose it is.
+        awaitText(R.string.dialer_number_label)
+        longPressKey('1')
+        awaitText(ANNA_HOME)
+        awaitText(text(R.string.dialer_speed_dial_label, "1", ANNA))
+
+        // Stored on the phone: still there after a new start.
+        restart()
+        awaitText(DEMO_PHONE)
+        longPressKey('1')
+        awaitText(text(R.string.dialer_speed_dial_label, "1", ANNA))
+
+        // Removed with a long press on the slot.
+        openPicker(R.string.speed_dial)
+        compose.onNode(slot("1", ANNA)).performTouchInput { longClick() }
+        compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
+        awaitNode(slot("1", text(R.string.speed_dial_free)))
+    }
+
+    /**
+     * The demo box' speed dials: listed, "0" and a long "1" for its speed dial 01 – and a new one
+     * set up in its phone books for Ben, at slot 06, which is then listed and used.
+     */
+    @Test
+    fun boxSpeedDialsUsedAndSetUp() {
+        setUpDemoBox()
+        openPicker(R.string.speed_dial)
+        val list = compose.onNode(hasScrollToNodeAction())
+        list.performScrollToNode(slot("01", ANNA))
+        back()
+
+        compose.onNode(key('0')).performClick()
+        longPressKey('1')
+        awaitText(ANNA_MOBILE)
+        awaitText(text(R.string.dialer_speed_dial_label, "01", ANNA))
+
+        // A new one: Ben's number from the phone books, then its slot.
+        openPicker(R.string.speed_dial)
+        list.performScrollToNode(hasText(text(R.string.speed_dial_box_add)))
+        compose.onNodeWithText(text(R.string.speed_dial_box_add)).performClick()
+        notNowForContacts()
+        awaitText(R.string.speed_dial_choose_number_box_new)
+        awaitText(BEN_MOBILE)
+        compose.onNodeWithText(BEN_MOBILE).performClick()
+        awaitText(text(R.string.speed_dial_box_for, BEN))
+        compose.onNode(hasText(NEW_SLOT) and hasAnyAncestor(isDialog())).performClick()
+
+        // Written into the box' phone book entry, read anew: listed – and a tap takes it into the dialer.
+        compose.waitUntil(TIMEOUT_MILLIS) { runCatching { list.performScrollToNode(slot(NEW_SLOT, BEN)) }.isSuccess }
+        compose.onNode(slot(NEW_SLOT, BEN)).performClick()
+        // In the dialer, the field labelled with whose number it is.
+        awaitText(text(R.string.dialer_speed_dial_label, NEW_SLOT, BEN))
+        awaitText(BEN_MOBILE)
+    }
+
+    /** This phone's speed dials switched off in the settings: gone from the speed dial tab, also after a new start. */
+    @Test
+    fun phoneSpeedDialsSwitchedOff() {
+        setUpDemoBox()
+        compose.onNode(labelled(text(R.string.settings))).performClick()
+        val title = text(R.string.settings_phone_speed_dials)
+        compose.onNodeWithText(title).performScrollTo()
+        switchNextTo(title).performClick()
+        back()
+
+        restart()
+        awaitText(DEMO_PHONE)
+        openPicker(R.string.speed_dial)
+        // The box' speed dials only.
+        awaitNode(slot("01", ANNA))
+        compose.onNodeWithText(text(R.string.this_phone)).assertDoesNotExist()
+        compose.onAllNodesWithText(text(R.string.speed_dial_free)).fetchSemanticsNodes().let {
+            check(it.isEmpty()) { "no free slots of this phone are shown" }
+        }
+    }
+
+    /** The switch in the same row as [title]: the settings' rows have no node of their own to search within. */
+    private fun switchNextTo(title: String) = compose.onNodeWithText(title).fetchSemanticsNode().boundsInRoot.let { row ->
+        val switches = compose.onAllNodes(isToggleable())
+        val index = switches.fetchSemanticsNodes().indexOfFirst {
+            row.center.y in it.boundsInRoot.top..it.boundsInRoot.bottom
+        }
+        check(index >= 0) { "a switch next to \"$title\"" }
+        switches[index]
+    }
+
+    private companion object {
+        /** Contacts of the demo box' phone book "Family & friends" (see DemoBox). */
+        const val ANNA = "Anna Becker"
+        const val ANNA_HOME = "03023125101"
+
+        /** Anna's mobile number: the demo box' speed dial 01. */
+        const val ANNA_MOBILE = "017139200101"
+        const val BEN = "Ben Hoffmann"
+        const val BEN_MOBILE = "017604069002"
+
+        /** A slot the demo box does not use (it has 01–05). */
+        const val NEW_SLOT = "06"
+    }
+}

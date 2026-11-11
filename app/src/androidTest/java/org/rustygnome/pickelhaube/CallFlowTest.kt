@@ -1,8 +1,5 @@
 package org.rustygnome.pickelhaube
 
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
@@ -17,7 +14,7 @@ class CallFlowTest : FlowTest() {
         setUpDemoBox()
         // Typed on the keypad (the number field takes no keyboard input).
         NUMBER.forEach { digit ->
-            compose.onNode(hasText(digit.toString()) and SemanticsMatcher.keyNotDefined(SemanticsProperties.EditableText)).performClick()
+            compose.onNode(key(digit)).performClick()
         }
         awaitText(NUMBER)
         compose.onNode(labelled(text(R.string.dialer_dial))).performClick()

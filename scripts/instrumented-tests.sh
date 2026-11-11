@@ -7,6 +7,7 @@
 #
 #   scripts/instrumented-tests.sh                 # the only emulator running
 #   scripts/instrumented-tests.sh emulator-5556   # a given one
+#   scripts/instrumented-tests.sh emulator-5556 SpeedDialFlowTest   # one test class (or Class#method)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -14,6 +15,7 @@ sdk=$(sed -n 's/^sdk.dir=//p' local.properties 2>/dev/null || true)
 adb=${ADB:-${sdk:+$sdk/platform-tools/}adb}
 
 serial=${1:-}
+only=${2:-}
 if [[ -z $serial ]]; then
     mapfile -t emulators < <("$adb" devices | awk '$2 == "device" && $1 ~ /^emulator-/ { print $1 }')
     if (( ${#emulators[@]} != 1 )); then
@@ -31,7 +33,8 @@ echo "Instrumented tests on $serial (Android $("$adb" -s "$serial" shell getprop
 results=app/build/outputs/androidTest-results/connected/debug/flavors/full
 rm -rf "$results"
 status=0
-ANDROID_SERIAL=$serial ./gradlew connectedFullDebugAndroidTest || status=$?
+ANDROID_SERIAL=$serial ./gradlew connectedFullDebugAndroidTest \
+    ${only:+-Pandroid.testInstrumentationRunnerArguments.class=org.rustygnome.pickelhaube.$only} || status=$?
 
 # Gradle may report success for a run that broke off (e.g. the emulator went away): check the results.
 summary=$(cat "$results"/TEST-*.xml 2>/dev/null | grep -o '<testsuites [^>]*>' || true)

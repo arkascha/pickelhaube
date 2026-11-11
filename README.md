@@ -584,12 +584,16 @@ no FRITZ!Box needed: the welcome tour on first start – its demo link, and page
 box at its address `demo` as a real box would be entered, a wrong password corrected, an address where
 nothing answers, going back and skipping –, the widget placed before any box is set up
 (the 1.6.1 fix), a call followed on the call monitor to its end, and the settings exported with the
-passwords, the box deleted and the file imported again (the system file picker answered by the test). Each test starts like a fresh install (Android Test Orchestrator with
+passwords, the box deleted and the file imported again (the system file picker answered by the test),
+this phone's speed dials (set from the phone books, used with a long press on the keypad – also after a
+new start –, removed, switched off in the settings) and the box' ones (used, a new one set up in its
+phone books), the call forwardings switched on and off and the one for the tile chosen, and a widget's
+numbers added, moved, removed and saved. Each test starts like a fresh install (Android Test Orchestrator with
 `clearPackageData`), and animations are off for them. Run them with `scripts/instrumented-tests.sh`,
 on one emulator: a connected test run installs the app, clears its data and uninstalls it at the end –
 on a phone in use, that would remove Pickelhaube with its boxes and passwords, so the script refuses
 anything but an emulator, and checks the result files (Gradle can report success for a run that broke
-off).
+off). A second argument runs one test class or test: `scripts/instrumented-tests.sh emulator-5554 SpeedDialFlowTest`.
 
 ## Notes / ideas
 
