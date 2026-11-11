@@ -2,6 +2,7 @@ package org.rustygnome.pickelhaube.data
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WhatsNewTest {
@@ -40,5 +41,15 @@ class WhatsNewTest {
         assertEquals(10, WhatsNew.latest(current = 10, available = notes))
         assertEquals(8, WhatsNew.latest(current = 9, available = notes))
         assertNull(WhatsNew.latest(current = 7, available = notes))
+    }
+
+    @Test
+    fun `the title names the newest note shown, not the version installed`() {
+        val named = mapOf(8 to WhatsNew.Note("1.6.0", 0), 10 to WhatsNew.Note("1.8.0", 0))
+        assertEquals("1.6.0", WhatsNew.titleVersion(listOf(8), named))
+        assertEquals("1.8.0", WhatsNew.titleVersion(listOf(10, 8), named))
+        assertNull(WhatsNew.titleVersion(emptyList(), named))
+        // Every note has its version name.
+        assertTrue(WhatsNew.NOTES.values.all { it.versionName.matches(Regex("""\d+\.\d+\.\d+""")) })
     }
 }

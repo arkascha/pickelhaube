@@ -1,18 +1,22 @@
 package org.rustygnome.pickelhaube.data
 
+import androidx.annotation.ArrayRes
 import org.rustygnome.pickelhaube.R
 
 /**
  * The "What's new" note: a few lines about a version, shown once after updating to it (see
  * [toShow]) and on request from the settings. Each version that has something to say gets a string
- * array `whats_new_<version code>` in all languages and an entry in [NOTES]; a version without one
- * shows nothing.
+ * array `whats_new_<version code>` in all languages and an entry in [NOTES], with its version name;
+ * a version without one shows nothing.
  */
 object WhatsNew {
 
+    /** A version's note: its [versionName] (for the title) and its [points], a string array. */
+    data class Note(val versionName: String, @ArrayRes val points: Int)
+
     /** The notes by version code. */
-    val NOTES: Map<Int, Int> = mapOf(
-        8 to R.array.whats_new_8,
+    val NOTES: Map<Int, Note> = mapOf(
+        8 to Note("1.6.0", R.array.whats_new_8),
     )
 
     /** At most this many points at once, when several versions were skipped. */
@@ -32,6 +36,13 @@ object WhatsNew {
         }
         return available.filter { it in (after + 1)..current }.sortedDescending()
     }
+
+    /**
+     * The version the note's title names, of the [versions] shown (newest first): the newest of them –
+     * not necessarily the one installed, which may have no note of its own. Null: none known.
+     */
+    fun titleVersion(versions: List<Int>, notes: Map<Int, Note> = NOTES): String? =
+        versions.maxOrNull()?.let { notes[it]?.versionName }
 
     /** The newest version up to [current] that has a note – for "What's new" in the settings; null: none. */
     fun latest(current: Int, available: Set<Int> = NOTES.keys): Int? = available.filter { it <= current }.maxOrNull()

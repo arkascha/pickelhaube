@@ -73,8 +73,9 @@ dialer, when nothing else is open; not when it was opened for something particul
 widget, a link, a shared text), then at the next ordinary start. A new install shows nothing (the
 welcome tour explains everything); an update from a version before this note existed counts as an
 update when a box is set up. **What's new** at the bottom of the settings shows the note again. The
-notes are string arrays `whats_new_<version code>` in all languages, listed in `data/WhatsNew.kt`; a
-version without one shows nothing, skipped versions are shown together. The version last seen is kept
+notes are string arrays `whats_new_<version code>` in all languages, listed in `data/WhatsNew.kt` with
+their version name; a version without one shows nothing, skipped versions are shown together. The title
+names the newest note shown – not the version installed, which may have no note of its own. The version last seen is kept
 on the device and not exported.
 
 ### The connection page

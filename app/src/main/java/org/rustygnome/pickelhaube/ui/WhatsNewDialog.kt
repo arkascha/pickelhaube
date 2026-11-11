@@ -29,18 +29,18 @@ import org.rustygnome.pickelhaube.data.WhatsNew
 
 /**
  * What is new in the [versions] (version codes, newest first – see [WhatsNew]): their points,
- * under the cheering mascot, at most [WhatsNew.MAX_POINTS] of them.
+ * under the cheering mascot, at most [WhatsNew.MAX_POINTS] of them; the title names the newest of them.
  */
 @Composable
 fun WhatsNewDialog(versions: List<Int>, onDismiss: () -> Unit) {
     val points = versions.flatMap { version ->
-        WhatsNew.NOTES[version]?.let { stringArrayResource(it).toList() }.orEmpty()
+        WhatsNew.NOTES[version]?.let { stringArrayResource(it.points).toList() }.orEmpty()
     }.take(WhatsNew.MAX_POINTS)
     val uriHandler = LocalUriHandler.current
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Image(painterResource(R.drawable.mascot_cheering), contentDescription = null, modifier = Modifier.size(96.dp)) },
-        title = { Text(stringResource(R.string.whats_new_title, BuildConfig.VERSION_NAME)) },
+        title = { Text(stringResource(R.string.whats_new_title, WhatsNew.titleVersion(versions) ?: BuildConfig.VERSION_NAME)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 points.forEach { point ->
