@@ -571,12 +571,21 @@ report.
 | `data/HostCheck.kt` | Which box answers at the host of a connection being saved, compared with the boxes set up |
 | `data/SettingsRepository.kt` | FRITZ!Box connections (passwords encrypted via Android Keystore) and options |
 | `data/SettingsFile.kt` | Settings file for export and import (passwords optionally under a passphrase) |
-| `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources |
+| `ui/` | ViewModel and Compose screens (dialer, settings, certificate dialogs); `UiText` carries ViewModel texts as resources. `DialerViewModel` keeps the core (number input, dialling, `runOnBox`); each other area is a part of its own (`WidgetPart`, `TransferPart`, `WelcomePart`, `WhatsNewPart`, `CallStatusPart`, `NetworkPart`, `ConnectionsPart`, `DeflectionsPart`, `SpeedDialsPart`, `CallsPart`), reached from the screens as `viewModel.widget`, `viewModel.connections`, …, and sharing state and helpers through `DialerHost` |
 | `ui/theme/TextRoles.kt` | How hints (grey italic) and findings about a box (accent colour) look, on every page |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
 Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, withholding the own number, picking numbers out of text, the new missed calls,
-the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, the box' VoIP numbers and their state, recognising the dialled number in them and the demo box.
+the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, the box' VoIP numbers and their state, recognising the dialled number in them, following a call on the call monitor, how a saved connection merges what the box told, which box counts as the one of the network, editing a widget's list, an import without Android's permissions and the demo box.
+
+Instrumented tests (`app/src/androidTest`) run flows in the real app on an emulator, with the demo box –
+no FRITZ!Box needed: the welcome tour on first start, and the widget placed before any box is set up
+(the 1.6.1 fix). Each test starts like a fresh install (Android Test Orchestrator with
+`clearPackageData`), and animations are off for them. Run them with `scripts/instrumented-tests.sh`,
+on one emulator: a connected test run installs the app, clears its data and uninstalls it at the end –
+on a phone in use, that would remove Pickelhaube with its boxes and passwords, so the script refuses
+anything but an emulator, and checks the result files (Gradle can report success for a run that broke
+off).
 
 ## Notes / ideas
 

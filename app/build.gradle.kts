@@ -25,6 +25,17 @@ android {
         targetSdk = 36
         versionCode = 9
         versionName = "1.6.1"
+
+        // Instrumented tests (src/androidTest): each test starts like a fresh install – the orchestrator
+        // clears the app's data before it. Run them on an emulator only, see scripts/instrumented-tests.sh.
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        // Without animations the welcome tour's mascot stands still: Compose tests wait for an idle screen.
+        animationsDisabled = true
     }
 
     // "play" is the build for Google Play, which allows reading the call log only for the default
@@ -113,4 +124,13 @@ dependencies {
     testImplementation(libs.kxml2)
     // org.json implementation for the settings file tests (Android's own is only a stub on the JVM).
     testImplementation(libs.org.json)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestUtil(libs.androidx.test.services)
 }
