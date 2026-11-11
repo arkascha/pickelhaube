@@ -219,7 +219,7 @@ class MainActivity : ComponentActivity() {
                         },
                         showInternal = state.activeProfile?.internalCallsEnabled == true,
                     )
-                } else if (state.widgetSetup != null) {
+                } else if (state.widgetSetup != null && state.profiles.isNotEmpty()) {
                     val setup = state.widgetSetup!!
                     // Done or not: back to where the widget was placed or tapped.
                     val leave = { moveTaskToBack(true) }

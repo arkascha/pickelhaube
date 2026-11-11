@@ -1510,9 +1510,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     // --- dial widget -----------------------------------------------------------------
 
-    /** Opens the setup of the dial widget [id] (placed just now, or its title tapped). */
+    /**
+     * Opens the setup of the dial widget [id] (placed just now, or its title tapped). With no box set
+     * up yet, the welcome tour – or the page for the first box – stays in front: the setup follows
+     * once there is a box (see MainActivity).
+     */
     fun openWidgetSetup(id: Int) {
-        showDialer()
+        if (settings.isConfigured()) showDialer()
         _state.update { it.copy(widgetSetup = WidgetSetup(id, WidgetLists.get(getApplication(), id))) }
     }
 
@@ -1561,7 +1565,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun showFromWidget(id: Int, index: Int) {
         val entry = WidgetLists.get(getApplication(), id).entries.getOrNull(index) ?: return
-        showDialer()
+        if (settings.isConfigured()) showDialer()
         _state.update {
             it.copy(number = NumberText.clean(entry.number), numberLabel = entry.name.takeIf(String::isNotBlank)?.let(UiText::Raw))
         }
