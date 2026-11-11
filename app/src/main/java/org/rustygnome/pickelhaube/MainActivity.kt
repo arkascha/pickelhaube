@@ -72,41 +72,41 @@ class MainActivity : ComponentActivity() {
                         busy = state.busy,
                         connected = state.welcomeConnected,
                         changePasswordRequest = state.welcomeChangePassword,
-                        onChangePasswordShown = viewModel::welcomePasswordChangeShown,
+                        onChangePasswordShown = viewModel.welcome::passwordChangeShown,
                         loginRejected = state.loginRejected,
                         ringPhone = state.selectedPhone,
                         ringPhoneOnBox = state.dialPhoneOnBox,
                         saveCheck = state.saveCheck,
-                        onSaveUnchecked = viewModel::saveUnchecked,
-                        onSaveAnyway = viewModel::saveAnyway,
-                        onDismissSaveCheck = viewModel::dismissSaveCheck,
-                        onFindBox = viewModel::findWelcomeBox,
-                        onConnect = viewModel::connectWelcomeBox,
-                        onDemo = viewModel::connectWelcomeDemo,
-                        onLeave = viewModel::leaveWelcome,
-                        onFinish = viewModel::finishWelcome,
+                        onSaveUnchecked = viewModel.connections::saveUnchecked,
+                        onSaveAnyway = viewModel.connections::saveAnyway,
+                        onDismissSaveCheck = viewModel.connections::dismissSaveCheck,
+                        onFindBox = viewModel.welcome::find,
+                        onConnect = viewModel.welcome::connect,
+                        onDemo = viewModel.welcome::connectDemo,
+                        onLeave = viewModel.welcome::leave,
+                        onFinish = viewModel.welcome::finish,
                         restoreOffer = {
                             SettingsImportOffer(
                                 busy = state.transferBusy,
                                 pendingImport = state.pendingImport,
                                 importError = state.importError,
-                                onOpenImport = viewModel::openSettingsFile,
+                                onOpenImport = viewModel.transfer::openFile,
                                 onImport = ::importSettings,
-                                onCancelImport = viewModel::cancelImport,
+                                onCancelImport = viewModel.transfer::cancelImport,
                             )
                         },
                     )
                 } else if (state.showDeflections) {
-                    BackHandler { viewModel.closeDeflections() }
+                    BackHandler { viewModel.deflections.close() }
                     DeflectionsScreen(
                         boxName = state.activeProfile?.name,
                         deflections = state.deflections,
                         busy = state.busy,
                         tileDeflection = state.tileDeflection,
-                        onChooseTile = { viewModel.chooseTileDeflection(it.id) },
-                        onToggle = { deflection, enabled -> viewModel.setDeflectionEnabled(deflection.id, enabled) },
-                        onReload = viewModel::loadDeflections,
-                        onBack = viewModel::closeDeflections,
+                        onChooseTile = { viewModel.deflections.chooseTile(it.id) },
+                        onToggle = { deflection, enabled -> viewModel.deflections.setEnabled(deflection.id, enabled) },
+                        onReload = viewModel.deflections::load,
+                        onBack = viewModel.deflections::close,
                     )
                 } else if (state.showLanguage && state.showSettings) {
                     BackHandler { viewModel.closeLanguage() }
@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
                     }
                     // While setting up a speed dial, "back" only cancels that.
                     BackHandler {
-                        if (state.assigningSpeedDial != null) viewModel.cancelAssigningSpeedDial() else viewModel.closePicker()
+                        if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.closePicker()
                     }
                     NumberPickerScreen(
                         tab = state.pickerTab,
@@ -158,11 +158,11 @@ class MainActivity : ComponentActivity() {
                                 boxBooks = boxBooks,
                                 onHandOver = viewModel::handOverToBox,
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                onSetSpeedDial = viewModel::setPhoneSpeedDial,
+                                onSetSpeedDial = viewModel.speedDials::setPhone,
                                 boxSpeedDials = editableBoxSpeedDials,
-                                onSetBoxSpeedDial = viewModel::setBoxSpeedDial,
-                                onReloadCallLog = viewModel::loadCallLog,
-                                onDisableCallLog = viewModel::disableCallLog,
+                                onSetBoxSpeedDial = viewModel.speedDials::setBox,
+                                onReloadCallLog = viewModel.calls::loadPhoneCalls,
+                                onDisableCallLog = viewModel.calls::disablePhoneCalls,
                             )
                         },
                         phonebooks = {
@@ -177,13 +177,13 @@ class MainActivity : ComponentActivity() {
                                 busy = state.busy,
                                 onPick = viewModel::pickContactNumber,
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                onSetSpeedDial = viewModel::setPhoneSpeedDial,
+                                onSetSpeedDial = viewModel.speedDials::setPhone,
                                 assigningSpeedDial = state.assigningSpeedDial,
                                 boxSpeedDials = editableBoxSpeedDials,
-                                onSetBoxSpeedDial = viewModel::setBoxSpeedDial,
+                                onSetBoxSpeedDial = viewModel.speedDials::setBox,
                                 onlineCopies = onlineCopies,
-                                onDeleteCopy = viewModel::deleteOnlineCopy,
-                                onCancelAssigning = viewModel::cancelAssigningSpeedDial,
+                                onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
+                                onCancelAssigning = viewModel.speedDials::cancelAssigning,
                                 boxBooks = boxBooks,
                                 boxName = state.activeProfile?.name,
                                 onHandOver = viewModel::handOverToBox,
@@ -200,14 +200,14 @@ class MainActivity : ComponentActivity() {
                                 boxName = state.activeProfile?.name,
                                 boxLoaded = state.phonebooksLoaded,
                                 busy = state.busy,
-                                onPick = { if (state.addingToWidget) viewModel.addToWidget(it.name, it.number) else viewModel.useSpeedDial(it) },
-                                onAssign = viewModel::startAssigningSpeedDial,
-                                onRemove = viewModel::removePhoneSpeedDial,
+                                onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.useSpeedDial(it) },
+                                onAssign = viewModel.speedDials::startAssigning,
+                                onRemove = viewModel.speedDials::removePhone,
                                 boxEditable = editableBoxSpeedDials != null,
-                                onAssignBox = viewModel::startAssigningBoxSpeedDial,
-                                onRemoveBox = viewModel::removeBoxSpeedDial,
+                                onAssignBox = viewModel.speedDials::startAssigningBox,
+                                onRemoveBox = viewModel.speedDials::removeBox,
                                 onlineCopies = onlineCopies,
-                                onDeleteCopy = viewModel::deleteOnlineCopy,
+                                onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
                             )
                         },
                         internal = {
@@ -223,20 +223,20 @@ class MainActivity : ComponentActivity() {
                     val setup = state.widgetSetup!!
                     // Done or not: back to where the widget was placed or tapped.
                     val leave = { moveTaskToBack(true) }
-                    BackHandler { viewModel.cancelWidgetSetup(); leave() }
+                    BackHandler { viewModel.widget.cancel(); leave() }
                     WidgetSetupScreen(
                         list = setup.list,
-                        onTitleChange = viewModel::setWidgetTitle,
-                        onTransparentChange = viewModel::setWidgetTransparent,
-                        onAdd = viewModel::startAddingToWidget,
-                        onRemove = viewModel::removeFromWidget,
-                        onMove = viewModel::moveInWidget,
-                        onSave = { viewModel.saveWidget(); leave() },
-                        onCancel = { viewModel.cancelWidgetSetup(); leave() },
+                        onTitleChange = viewModel.widget::setTitle,
+                        onTransparentChange = viewModel.widget::setTransparent,
+                        onAdd = viewModel.widget::startAdding,
+                        onRemove = viewModel.widget::remove,
+                        onMove = viewModel.widget::move,
+                        onSave = { viewModel.widget.save(); leave() },
+                        onCancel = { viewModel.widget.cancel(); leave() },
                     )
                 } else if (state.showSettings && state.showConnectionSettings) {
                     val canGoBack = state.settingsSaved
-                    BackHandler(enabled = canGoBack) { viewModel.closeConnectionSettings() }
+                    BackHandler(enabled = canGoBack) { viewModel.connections.close() }
                     // A fresh form for every box being edited (or added).
                     key(state.editingProfileId ?: "new") {
                         val edited = state.profiles.firstOrNull { it.id == state.editingProfileId }
@@ -257,16 +257,16 @@ class MainActivity : ComponentActivity() {
                             userRights = edited?.userRights,
                             boxUsers = state.boxUsers,
                             securityPort = state.securityPort,
-                            onLookUpSecurityPort = viewModel::lookUpSecurityPort,
-                            onLookUpUsers = viewModel::lookUpBoxUsers,
+                            onLookUpSecurityPort = viewModel.connections::lookUpSecurityPort,
+                            onLookUpUsers = viewModel.connections::lookUpUsers,
                             hostNote = state.hostNote,
                             saveCheck = state.saveCheck,
-                            onSaveUnchecked = viewModel::saveUnchecked,
-                            onSaveAnyway = viewModel::saveAnyway,
-                            onDismissSaveCheck = viewModel::dismissSaveCheck,
-                            onSave = viewModel::saveSettings,
-                            onBack = viewModel::closeConnectionSettings,
-                            onDelete = state.editingProfileId?.let { id -> { viewModel.deleteProfile(id) } },
+                            onSaveUnchecked = viewModel.connections::saveUnchecked,
+                            onSaveAnyway = viewModel.connections::saveAnyway,
+                            onDismissSaveCheck = viewModel.connections::dismissSaveCheck,
+                            onSave = viewModel.connections::save,
+                            onBack = viewModel.connections::close,
+                            onDelete = state.editingProfileId?.let { id -> { viewModel.connections.delete(id) } },
                             onShowCertificate = viewModel::showTrustedCertificate,
                             onForgetCertificate = viewModel::forgetCertificate,
                             // Nothing set up yet (e.g. just installed): the settings may come from a file instead.
@@ -276,9 +276,9 @@ class MainActivity : ComponentActivity() {
                                         busy = state.transferBusy,
                                         pendingImport = state.pendingImport,
                                         importError = state.importError,
-                                        onOpenImport = viewModel::openSettingsFile,
+                                        onOpenImport = viewModel.transfer::openFile,
                                         onImport = ::importSettings,
-                                        onCancelImport = viewModel::cancelImport,
+                                        onCancelImport = viewModel.transfer::cancelImport,
                                     )
                                 }
                             } else null,
@@ -294,32 +294,32 @@ class MainActivity : ComponentActivity() {
                         noBoxReachable = state.noBoxReachable,
                         busy = state.busy,
                         networkNotice = state.networkNotice,
-                        onEditProfile = viewModel::editProfile,
+                        onEditProfile = viewModel.connections::edit,
                         onActivateProfile = viewModel::activateProfile,
-                        onAddProfile = viewModel::addProfile,
-                        onStartWelcomeTour = viewModel::startWelcomeTour,
-                        onShowWhatsNew = viewModel::showWhatsNew,
+                        onAddProfile = viewModel.connections::add,
+                        onStartWelcomeTour = viewModel.welcome::start,
+                        onShowWhatsNew = viewModel.whatsNew::show,
                         onBack = viewModel::closeSettings,
                         onOpenLanguage = viewModel::openLanguage,
                         deviceContactsEnabled = state.deviceContactsEnabled,
                         onDeviceContactsChange = viewModel::setDeviceContactsEnabled,
                         callLogEnabled = state.callLogEnabled,
                         callLogProblem = state.callLogProblem,
-                        onEnableCallLog = viewModel::enableCallLog,
-                        onDisableCallLog = viewModel::disableCallLog,
+                        onEnableCallLog = viewModel.calls::enablePhoneCalls,
+                        onDisableCallLog = viewModel.calls::disablePhoneCalls,
                         phoneSpeedDialsEnabled = state.phoneSpeedDialsEnabled,
-                        onPhoneSpeedDialsChange = viewModel::setPhoneSpeedDialsEnabled,
+                        onPhoneSpeedDialsChange = viewModel.speedDials::setPhoneEnabled,
                         callStatusEnabled = state.callStatusEnabled,
-                        onCallStatusChange = viewModel::setCallStatusEnabled,
+                        onCallStatusChange = viewModel.callStatus::setEnabled,
                         checkingCallMonitors = state.checkingCallMonitors,
-                        onCheckCallMonitors = viewModel::checkCallMonitors,
+                        onCheckCallMonitors = viewModel.callStatus::checkMonitors,
                         transferBusy = state.transferBusy,
                         pendingImport = state.pendingImport,
                         importError = state.importError,
-                        onExportSettings = viewModel::exportSettings,
-                        onOpenSettingsFile = viewModel::openSettingsFile,
+                        onExportSettings = viewModel.transfer::export,
+                        onOpenSettingsFile = viewModel.transfer::openFile,
                         onImportSettings = ::importSettings,
-                        onCancelImport = viewModel::cancelImport,
+                        onCancelImport = viewModel.transfer::cancelImport,
                     )
                 } else {
                     DialerScreen(
@@ -338,8 +338,8 @@ class MainActivity : ComponentActivity() {
                         onPaste = { viewModel.takeNumbersFrom(it, fromClipboard = true) },
                         onChooseNumber = viewModel::chooseNumber,
                         onDismissNumberChoice = viewModel::dismissNumberChoice,
-                        onOpenDeflections = viewModel::openDeflections,
-                        onCheckLines = viewModel::checkLines,
+                        onOpenDeflections = viewModel.deflections::open,
+                        onCheckLines = viewModel.calls::checkLines,
                         onDialFrom = { viewModel.dial(from = it) },
                         onSuggestion = viewModel::takeSuggestion,
                     )
@@ -355,7 +355,7 @@ class MainActivity : ComponentActivity() {
                         onRetry = viewModel::retry,
                         onOpenSettings = viewModel::openSettingsFromError,
                         // In the welcome tour, a rejected login leads back to the password instead of just closing.
-                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel::changeWelcomePassword else viewModel::dismissError,
+                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel.welcome::changePassword else viewModel::dismissError,
                         dismissLabel = stringResource(
                             if (state.showWelcome && state.loginRejected) R.string.welcome_change_password else R.string.close,
                         ),
@@ -377,7 +377,7 @@ class MainActivity : ComponentActivity() {
                         state.widgetSetup == null
                     val nothingElse = state.error == null && state.secondFactor == null && state.certificatePrompt == null
                     if (nothingElse && (onDialer || state.whatsNewRequested)) {
-                        WhatsNewDialog(versions, onDismiss = viewModel::dismissWhatsNew)
+                        WhatsNewDialog(versions, onDismiss = viewModel.whatsNew::dismiss)
                     }
                 }
                 state.viewedCertificate?.let { info ->
@@ -408,7 +408,7 @@ class MainActivity : ComponentActivity() {
 
     /** Imports the opened settings file; then switches to the file's language, if it is not the one in use. */
     private fun importSettings(passphrase: CharArray?) {
-        viewModel.importSettings(passphrase) { language ->
+        viewModel.transfer.import(passphrase) { language ->
             if (language != AppLanguage.current(this)) AppLanguage.set(this, language)
         }
     }
@@ -422,16 +422,16 @@ class MainActivity : ComponentActivity() {
     private fun handleIntent(intent: Intent?) {
         if (intent == null) return
         // Opened for something particular (shortcut, widget, link, shared text): "What's new" waits.
-        if (intent.action != Intent.ACTION_MAIN) viewModel.holdBackWhatsNew()
+        if (intent.action != Intent.ACTION_MAIN) viewModel.whatsNew.holdBack()
         if (intent.component?.className == LauncherShortcuts.ALIAS) {
             if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
             when (intent.action) {
                 LauncherShortcuts.ACTION_DIAL_NOW ->
                     intent.data?.takeIf { it.scheme == "tel" }?.schemeSpecificPart?.let(viewModel::dialFromShortcut)
                 LauncherShortcuts.ACTION_PICKER -> viewModel.openPickerFromShortcut()
-                LauncherShortcuts.ACTION_WIDGET_SETUP -> intent.widgetId()?.let(viewModel::openWidgetSetup)
+                LauncherShortcuts.ACTION_WIDGET_SETUP -> intent.widgetId()?.let(viewModel.widget::open)
                 LauncherShortcuts.ACTION_WIDGET_DIAL -> intent.widgetId()?.let { id ->
-                    viewModel.showFromWidget(id, intent.getIntExtra(LauncherShortcuts.EXTRA_WIDGET_ENTRY, -1))
+                    viewModel.widget.showEntry(id, intent.getIntExtra(LauncherShortcuts.EXTRA_WIDGET_ENTRY, -1))
                 }
             }
             return

@@ -1,39 +1,14 @@
 package org.rustygnome.pickelhaube.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import android.net.ConnectivityManager
-import android.net.LinkProperties
-import android.net.Network
-import android.os.SystemClock
 import org.rustygnome.pickelhaube.R
-import org.rustygnome.pickelhaube.data.WhatsNew
-import org.rustygnome.pickelhaube.BuildConfig
 import org.rustygnome.pickelhaube.data.BoxProfile
-import org.rustygnome.pickelhaube.data.HostCheck
-import org.rustygnome.pickelhaube.data.MissedCalls
 import org.rustygnome.pickelhaube.data.NumberText
-import org.rustygnome.pickelhaube.widget.DialWidget
-import org.rustygnome.pickelhaube.widget.WidgetEntry
-import org.rustygnome.pickelhaube.widget.WidgetList
-import org.rustygnome.pickelhaube.widget.WidgetLists
-import org.rustygnome.pickelhaube.data.BoxRecognition
-import org.rustygnome.pickelhaube.data.DeviceCallLog
 import org.rustygnome.pickelhaube.data.DeviceContacts
-import org.rustygnome.pickelhaube.data.AppLanguage
-import org.rustygnome.pickelhaube.data.InvalidSettingsFileException
-import org.rustygnome.pickelhaube.data.SettingsBackup
-import org.rustygnome.pickelhaube.data.SettingsFile
-import org.rustygnome.pickelhaube.data.SettingsFileInfo
 import org.rustygnome.pickelhaube.data.SettingsRepository
-import org.rustygnome.pickelhaube.data.WrongPassphraseException
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
@@ -41,37 +16,21 @@ import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.AuthenticationException
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
-import org.rustygnome.pickelhaube.tr064.BoxIdentity
-import org.rustygnome.pickelhaube.tr064.BoxInfo
-import org.rustygnome.pickelhaube.tr064.CallDeflection
-import org.rustygnome.pickelhaube.tr064.CallEvent
-import org.rustygnome.pickelhaube.tr064.CallMonitor
-import org.rustygnome.pickelhaube.tr064.BoxUser
-import org.rustygnome.pickelhaube.tr064.BoxUsers
 import org.rustygnome.pickelhaube.tr064.CertificateInfo
-import org.rustygnome.pickelhaube.tr064.DemoBox
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.Phonebook
-import org.rustygnome.pickelhaube.tr064.FritzInternalPhones
 import org.rustygnome.pickelhaube.tr064.InternalPhone
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
-import org.rustygnome.pickelhaube.tr064.SecondFactorChallenge
 import org.rustygnome.pickelhaube.tr064.Tr064Exception
 import org.rustygnome.pickelhaube.tr064.UntrustedCertificateException
-import org.rustygnome.pickelhaube.tr064.UserRights
 import org.rustygnome.pickelhaube.tr064.OwnNumber
-import org.rustygnome.pickelhaube.tr064.VoipLine
-import org.rustygnome.pickelhaube.tr064.forTile
-import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
@@ -85,273 +44,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** The box presented a certificate that needs the user's decision. */
-data class CertificatePrompt(
-    val certificate: CertificateInfo,
-    /** A different certificate had been trusted before – the certificate changed. */
-    val changed: Boolean,
-)
-
-/** The tabs of the number picker, in their order. */
-enum class PickerTab { RECENT, SPEED_DIALS, PHONEBOOKS, INTERNAL }
-
-/** What the number tapped next in the phone books becomes. */
-sealed interface SpeedDialAssignment {
-    /** This phone's speed dial [slot] (1–9). */
-    data class Phone(val slot: String) : SpeedDialAssignment
-
-    /** The box' speed dial [slot] (00–99); null: a new one, its slot still to be chosen. */
-    data class Box(val slot: String?) : SpeedDialAssignment
-}
-
-data class UiState(
-    val number: String = "",
-    /** Who the number is, when it came from a speed dial ("Speed dial 2: Office"); shown as the field's label. */
-    val numberLabel: UiText? = null,
-    val phones: List<String> = emptyList(),
-    /** The box' phones with their internal numbers, read with [phones] (empty: none known). */
-    val internalPhones: List<InternalPhone> = emptyList(),
-    val selectedPhone: String? = null,
-    /** Progress / success information (not an error). */
-    val status: UiText? = null,
-    /** The last failure, shown prominently until dismissed or the next action starts. */
-    val error: BoxError? = null,
-    /** The failed action can be retried as-is. */
-    val canRetry: Boolean = false,
-    val busy: Boolean = false,
-    /**
-     * A dial-help call was started and may still be ringing / being set up, so it can be
-     * cancelled. TR-064 does not report the call's progress: this ends on hang-up, when the box'
-     * call monitor reports the call connected or ended – or, without it, after [DIAL_ACTIVE_MILLIS].
-     */
-    val dialActive: Boolean = false,
-    /** How the call placed last is going; null: nothing to show. */
-    val callProgress: CallProgress? = null,
-    /** Optional feature, switched in the settings: follow the calls placed on the box' call monitor. */
-    val callStatusEnabled: Boolean = true,
-    /** The settings are asking the boxes whether their call monitor is on. */
-    val checkingCallMonitors: Boolean = false,
-    /** Connection in use – or, while the connection page is open, the one being edited. */
-    val config: FritzConfig = FritzConfig(),
-    /** All configured FritzBoxes; [activeProfileId] is the one in use. */
-    val profiles: List<BoxProfile> = emptyList(),
-    val activeProfileId: String? = null,
-    /** Connection page: the box being edited, or null when adding a new one. */
-    val editingProfileId: String? = null,
-    val editingName: String = "",
-    /** Connection page: the users of the box at the entered address, to choose from (empty = none known). */
-    val boxUsers: List<BoxUser> = emptyList(),
-    /** Missed calls in the call list of the box in use since it was last looked at in "Recent". */
-    val newMissedCalls: Int = 0,
-    /** The internet numbers of the box in use and whether they are registered with their provider (empty = not known). */
-    val lines: List<VoipLine> = emptyList(),
-    /** The own numbers of the box in use (empty = not known). */
-    val ownNumbers: List<OwnNumber> = emptyList(),
-    /** While the picker is open: its box calls after this time (ms) are marked as new; null: none. */
-    val newCallsSince: Long? = null,
-    /** The setup of a dial widget is open: which widget, and its list as being edited. */
-    val widgetSetup: WidgetSetup? = null,
-    /** The number picker is open to add a number to [widgetSetup]. */
-    val addingToWidget: Boolean = false,
-    /** Several numbers came in a shared or pasted text: the one to dial is chosen from these. */
-    val numberChoice: List<String>? = null,
-    /** Connection page: the HTTPS port the box at the entered host reported (null = not known). */
-    val securityPort: SecurityPort? = null,
-    /** Connection page: the entered host leads to another box than the one edited, or to one set up already (null: neither). */
-    val hostNote: HostNote? = null,
-    /** Saving a connection waits for a decision: the box at its host is not (or not only) the one edited. */
-    val saveCheck: SaveCheck? = null,
-    /** The versions whose "What's new" note is to be shown (newest first); null: none (see [WhatsNew]). */
-    val whatsNew: List<Int>? = null,
-    /** The note was asked for in the settings: shown there and then, not only over the dialer. */
-    val whatsNewRequested: Boolean = false,
-    /** The welcome tour is shown: on first start, or started again from the settings (see [WelcomeScreen]). */
-    val showWelcome: Boolean = false,
-    /** The welcome tour asked which box answers at the entered host (null: not asked yet). */
-    val welcomeBox: WelcomeBox? = null,
-    /** The last request failed because the box rejected user name or password (the tour offers changing them). */
-    val loginRejected: Boolean = false,
-    /** The error dialog of a rejected login asked the welcome tour to go back to the password. */
-    val welcomeChangePassword: Boolean = false,
-    /** The welcome tour connected its box: it now shows how to go on. */
-    val welcomeConnected: Boolean = false,
-    /** The box in use has a phone set for dial help ([selectedPhone] is the box' own choice, not the app's). */
-    val dialPhoneOnBox: Boolean = true,
-    /**
-     * Whether the box in use answered the last detection in the current network (null = not
-     * detected yet), and whether the last request to it worked (null = none since it became active).
-     */
-    val activeBoxSeen: Boolean? = null,
-    val activeBoxWorking: Boolean? = null,
-    /** The configured boxes (ids) that answered the last detection by their device id; null before the first one. */
-    val boxesSeen: Set<String>? = null,
-    /** Note about the current network, e.g. an unknown FritzBox was found there. */
-    val networkNotice: UiText? = null,
-    val showSettings: Boolean = false,
-    /** The connection sub-page of the settings is open. */
-    val showConnectionSettings: Boolean = false,
-    /** A working configuration has been saved before, so the settings screen may be left. */
-    val settingsSaved: Boolean = false,
-    /** Non-null while the "trust this certificate?" dialog is shown. */
-    val certificatePrompt: CertificatePrompt? = null,
-    /** Non-null while the trusted certificate is shown read-only. */
-    val viewedCertificate: CertificateInfo? = null,
-    /** The language screen is open. */
-    val showLanguage: Boolean = false,
-    /** The call deflections screen is open. */
-    val showDeflections: Boolean = false,
-    /** The call deflections of the box in use, as last read (null: not read, or reading failed). */
-    val deflections: List<CallDeflection>? = null,
-    /** The call deflection the quick settings tile switches for the box in use, as chosen (null: not chosen). */
-    val tileDeflection: Int? = null,
-    /** The number picker (tabs "Recent", "Speed dial" and "Phone books") is open. */
-    val showPicker: Boolean = false,
-    val pickerTab: PickerTab = PickerTab.RECENT,
-    /** Choosing the number for a speed dial in the phone books tab. */
-    val assigningSpeedDial: SpeedDialAssignment? = null,
-    /** Phone books of the box, loaded on first use of the number picker (cached). */
-    val phonebooks: List<Phonebook> = emptyList(),
-    val phonebooksLoaded: Boolean = false,
-    /** Optional feature, switched in the settings: include the phone's own contacts. */
-    val deviceContactsEnabled: Boolean = false,
-    /**
-     * Ask (when opening the phone books) whether to include the phone's contacts: every time,
-     * as long as the feature is off and the user did not choose "Don't ask again".
-     */
-    val askForDeviceContacts: Boolean = false,
-    /** Contacts stored on this device, once enabled and allowed (null = not loaded). */
-    val deviceContacts: Phonebook? = null,
-    /** Non-null while the box waits for a second-factor confirmation (error 866). */
-    val secondFactor: SecondFactorChallenge? = null,
-    /** Numbers of the phone books and recent calls the number being typed may be heading for (see [suggestions]). */
-    val suggestions: List<Suggestion> = emptyList(),
-    /** Dialled, received and missed calls from the box' call list, loaded whenever the picker is opened. */
-    val boxCalls: List<RecentCall> = emptyList(),
-    val boxCallsLoaded: Boolean = false,
-    /** Optional feature, switched in the settings: include the phone's own calls. */
-    val callLogEnabled: Boolean = false,
-    /** Dialled, received and missed calls from the phone's call log, once enabled (null = not loaded). */
-    val phoneCalls: List<RecentCall>? = null,
-    /** Why the phone's call log could not be read (on enabling the feature, or later). */
-    val callLogProblem: UiText? = null,
-    /** Optional feature, switched in the settings: this phone's own speed dials 1–9. */
-    val phoneSpeedDialsEnabled: Boolean = true,
-    val phoneSpeedDials: List<SpeedDial> = emptyList(),
-    /** A settings file opened for import, waiting to be confirmed (and unlocked). */
-    val pendingImport: SettingsFileInfo? = null,
-    /** Why the opened settings file could not be imported (e.g. wrong passphrase). */
-    val importError: UiText? = null,
-    /** A settings file is being written or read. */
-    val transferBusy: Boolean = false,
-)
-
-/** The FritzBox in use, if any. */
-val UiState.activeProfile: BoxProfile?
-    get() = profiles.firstOrNull { it.id == activeProfileId }
-
-/** This phone's speed dials, if switched on. */
-val UiState.usablePhoneSpeedDials: List<SpeedDial>
-    get() = if (phoneSpeedDialsEnabled) phoneSpeedDials else emptyList()
-
-/** The speed dials of the box in use (from its phone books, once loaded), if switched on for it. */
-val UiState.usableBoxSpeedDials: List<SpeedDial>
-    get() = if (activeProfile?.speedDialsEnabled != false) SpeedDials.fromPhonebooks(phonebooks) else emptyList()
-
-/** Why the box in use does not meet the expectations, if it does not; a failed request weighs more. */
-val UiState.activeBoxIssue: ActiveBoxIssue?
-    get() = when {
-        activeBoxWorking == false -> ActiveBoxIssue.NOT_WORKING
-        activeBoxSeen == false -> ActiveBoxIssue.NOT_FOUND
-        else -> null
-    }
-
-enum class ActiveBoxIssue { NOT_FOUND, NOT_WORKING }
-
-/** The dial widget [id] being set up, with its [list] as edited so far. */
-data class WidgetSetup(val id: Int, val list: WidgetList)
-
-/** The HTTPS port the box at [host] reported. */
-data class SecurityPort(val host: String, val port: Int)
-
-/** What answers at the entered [host] on the connection page: [check] is [HostCheck.OtherBox] or [HostCheck.AlreadySetUp]. */
-data class HostNote(val host: String, val check: HostCheck)
-
-/** Saving the connection named [name] to [host] is held up: [check] is not [HostCheck.Expected]. */
-/** What the welcome tour found at the host entered (see [DialerViewModel.findWelcomeBox]). */
-sealed interface WelcomeBox {
-    val host: String
-
-    data class Searching(override val host: String) : WelcomeBox
-
-    /** A FRITZ!Box answers, its [name] as it calls itself and its [model]; [setUpAs]: it is set up already, under that name. */
-    data class Found(override val host: String, val name: String?, val model: String?, val setUpAs: String?) : WelcomeBox
-
-    data class NotFound(override val host: String) : WelcomeBox
-}
-
-data class SaveCheck(val host: String, val name: String, val check: HostCheck)
-
-/**
- * The last detection found none of the configured boxes (e.g. on mobile data, or via VPN): the box
- * in use is only tried, and only now can one be chosen by hand.
- */
-val UiState.noKnownBoxFound: Boolean
-    get() = boxesSeen?.isEmpty() == true
-
-/**
- * Not even the box in use answered at its configured host: nothing is loaded from it on its own
- * (each request would only run into a timeout), and dialling is not possible.
- */
-val UiState.noBoxReachable: Boolean
-    get() = noKnownBoxFound && activeBoxSeen != true
-
-/** The internet numbers of the box in use that are switched on but not registered with their provider. */
-val UiState.linesDown: List<VoipLine>
-    get() = if (noBoxReachable) emptyList() else lines.filter { it.down }
-
-/**
- * The box' internet numbers a call can be placed from by their code (see [OwnNumber.selectCode]) –
- * offered only when there are several to choose from, and not one that is known to be down.
- */
-val UiState.dialFromNumbers: List<OwnNumber>
-    get() {
-        val down = linesDown.map { it.index }.toSet()
-        val selectable = ownNumbers.filter { it.selectCode != null }
-        return if (selectable.size < 2) emptyList() else selectable.filter { it.index !in down }
-    }
-
-/** The box answering at the configured address is not the stored one: its serial number differs. */
-class OtherBoxException(val host: String, val boxName: String) :
-    IOException("The FRITZ!Box at $host is not $boxName")
-
 /** How long to wait for the user to confirm on the box before giving up. */
 private const val SECOND_FACTOR_TIMEOUT_MILLIS = 120_000L
-
-/** The user did not confirm on the box in time. */
-class SecondFactorNotConfirmedException : IOException("The action was not confirmed on the FRITZ!Box")
-
-/** Second detection after one that found none of the configured boxes. */
-private const val DETECT_RETRY_MILLIS = 4_000L
-
-/** Bigger than any settings file (they take a few kilobytes): such a file is not read. */
-private const val MAX_SETTINGS_FILE = 1_000_000
-
-/** Coming to the foreground detects again only if the last detection is at least this old. */
-private const val DETECT_MIN_INTERVAL_MILLIS = 10_000L
-
-/** How long a started dial-help call counts as "cancellable" (the handset rings about this long). */
-private const val DIAL_ACTIVE_MILLIS = 30_000L
-
-/** How long the box rings the phone for dial help before giving up (a little longer, to be safe). */
-private const val PICK_UP_TIMEOUT_MILLIS = 45_000L
-
-/** How long the end of a call stays shown. */
-private const val CALL_END_SHOWN_MILLIS = 20_000L
-
-/** Answers to the "include this phone's contacts?" question. */
-enum class DeviceContactsAnswer { ALLOWED, NOT_NOW, NEVER }
-
-private typealias BoxAction = suspend (FritzDialer) -> UiText
 
 class DialerViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -376,11 +70,62 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     )
     val state: StateFlow<UiState> = _state.asStateFlow()
 
+    /** What the parts below share with the view model. */
+    private val host = object : DialerHost {
+        override val app: Application get() = getApplication()
+        override val settings get() = this@DialerViewModel.settings
+        override val state get() = _state
+        override val scope get() = viewModelScope
+        override var verifyingSettings
+            get() = this@DialerViewModel.verifyingSettings
+            set(value) { this@DialerViewModel.verifyingSettings = value }
+        override fun showDialer() = this@DialerViewModel.showDialer()
+        override fun openPicker() = this@DialerViewModel.openPicker()
+        override fun startOver() = this@DialerViewModel.startOver()
+        override fun dismissError() = this@DialerViewModel.dismissError()
+        override fun numberKeys() = this@DialerViewModel.numberKeys()
+        override fun activateProfile(id: String) = this@DialerViewModel.activateProfile(id)
+        override fun refreshPhones() = this@DialerViewModel.refreshPhones()
+        override fun runOnBox(progress: UiText, block: BoxAction) = this@DialerViewModel.runOnBox(progress, block)
+        override fun loadPhones(dialer: FritzDialer, internal: Boolean) = this@DialerViewModel.loadPhones(dialer, internal)
+        override fun preloadFromBox() = this@DialerViewModel.preloadFromBox()
+        override fun runWhenIdle(key: String, action: () -> Unit) = this@DialerViewModel.runWhenIdle(key, action)
+        override fun startQueuedRequests() = this@DialerViewModel.startQueuedRequests()
+        override fun reloadRouterPhonebooks() = this@DialerViewModel.reloadRouterPhonebooks()
+    }
+
+    /** The home screen widget's setup, and a tap on one of its rows. */
+    internal val widget = WidgetPart(host)
+
+    /** Export and import of the settings. */
+    internal val transfer = TransferPart(host)
+
+    /** The connection page: adding, editing and deleting a box. */
+    internal val connections = ConnectionsPart(host)
+
+    /** The welcome tour. */
+    internal val welcome = WelcomePart(host, connections)
+
+    /** The "What's new" note after an update. */
+    internal val whatsNew = WhatsNewPart(host)
+
+    /** The call just placed, followed on the box' call monitor. */
+    internal val callStatus = CallStatusPart(host)
+
+    /** The box of the network the phone is in. */
+    private val network = NetworkPart(host)
+
+    /** The call deflections of the box in use. */
+    internal val deflections = DeflectionsPart(host)
+
+    /** This phone's and the box' speed dials. */
+    internal val speedDials = SpeedDialsPart(host)
+
+    /** The box' calls and this phone's, missed calls and line status. */
+    internal val calls = CallsPart(host)
+
     /** Action interrupted by an untrusted certificate; re-run once the user trusts it. */
     private var pendingAction: Pair<UiText, BoxAction>? = null
-
-    /** Ends [UiState.dialActive] after [DIAL_ACTIVE_MILLIS]. */
-    private var dialTimeout: Job? = null
 
     /** The last action that failed, for "Retry". */
     private var failedAction: Pair<UiText, BoxAction>? = null
@@ -401,7 +146,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
     fun pickInternalPhone(number: String, label: String) {
-        if (_state.value.addingToWidget) return addToWidget(label, number)
+        if (_state.value.addingToWidget) return widget.add(label, number)
         _state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false) }
     }
 
@@ -529,11 +274,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun openSettingsFromError() {
         dismissError()
         // From the welcome tour: on to the full connection page, with what was entered there.
-        if (_state.value.showWelcome) return leaveWelcome(toForm = true)
+        if (_state.value.showWelcome) return welcome.leave(toForm = true)
         val active = settings.activeProfile()
         if (active != null) {
             _state.update { it.copy(showSettings = true) }
-            editProfile(active.id)
+            connections.edit(active.id)
         } else {
             openSettings()
         }
@@ -541,235 +286,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     // --- settings ---------------------------------------------------------------------
 
-    // --- welcome tour -----------------------------------------------------------------
-
-    /** Starts the welcome tour again from the settings: its connect step adds another box. */
-    fun startWelcomeTour() {
-        addProfile()
-        _state.update { it.copy(showWelcome = true, welcomeBox = null, welcomeConnected = false) }
-    }
-
-    private var welcomeBoxJob: Job? = null
-
-    /**
-     * Asks, without logging in, which box answers at [host] – for the tour's "find your box" step –
-     * and the users it has, for the next one.
-     */
-    fun findWelcomeBox(host: String) {
-        val trimmed = host.trim()
-        welcomeBoxJob?.cancel()
-        if (trimmed.isEmpty()) return _state.update { it.copy(welcomeBox = null) }
-        _state.update { it.copy(welcomeBox = WelcomeBox.Searching(trimmed)) }
-        welcomeBoxJob = viewModelScope.launch {
-            val identity = withContext(Dispatchers.IO) { BoxDiscovery.identify(trimmed) }
-            val box = if (identity == null) {
-                WelcomeBox.NotFound(trimmed)
-            } else {
-                val setUpAs = settings.profiles().firstOrNull { it.deviceId == identity.udn }?.name
-                WelcomeBox.Found(trimmed, identity.friendlyName, identity.modelName, setUpAs)
-            }
-            _state.update { it.copy(welcomeBox = box) }
-        }
-        lookUpBoxUsers(FritzConfig(host = trimmed))
-    }
-
-    /** The tour's connect step: saves and connects the box entered, as "Save & connect" does. */
-    fun connectWelcomeBox(name: String, host: String, user: String, password: String) {
-        val config = FritzConfig(host = host.trim(), username = user.trim(), password = password)
-        _state.update { it.copy(editingName = name) }
-        saveSettings(config, name, phonebooksEnabled = true, callListEnabled = true, speedDialsEnabled = true, internalCallsEnabled = false)
-    }
-
-    /** The error dialog of a rejected login, in the tour: closes, and the tour goes back to the password. */
-    fun changeWelcomePassword() {
-        dismissError()
-        _state.update { it.copy(welcomeChangePassword = true) }
-    }
-
-    /** The tour went back to the password, as asked by [changeWelcomePassword]. */
-    fun welcomePasswordChangeShown() = _state.update { it.copy(welcomeChangePassword = false) }
-
-    // --- what's new --------------------------------------------------------------------
-
-    /** After an update, the note about what is new – shown over the dialer when there is room (see [WhatsNew]). */
-    private fun checkWhatsNew() {
-        val current = BuildConfig.VERSION_CODE
-        val versions = WhatsNew.toShow(settings.lastSeenVersion, current, settings.isConfigured())
-        if (versions.isEmpty()) {
-            settings.lastSeenVersion = current
-        } else {
-            _state.update { it.copy(whatsNew = versions, whatsNewRequested = false) }
-        }
-    }
-
-    /**
-     * The app was opened for something particular – a launcher shortcut, a widget, a tel: link, a
-     * shared text: the note waits for the next ordinary start.
-     */
-    fun holdBackWhatsNew() {
-        if (_state.value.whatsNewRequested) return
-        _state.update { it.copy(whatsNew = null) }
-    }
-
-    /** "What's new" in the settings: the note of the current version again. */
-    fun showWhatsNew() {
-        val latest = WhatsNew.latest(BuildConfig.VERSION_CODE) ?: return
-        _state.update { it.copy(whatsNew = listOf(latest), whatsNewRequested = true) }
-    }
-
-    /** The note was read: not shown again for this version. */
-    fun dismissWhatsNew() {
-        settings.lastSeenVersion = BuildConfig.VERSION_CODE
-        _state.update { it.copy(whatsNew = null, whatsNewRequested = false) }
-    }
-
-    /** The tour's demo link: the demo box, connected right away. */
-    fun connectWelcomeDemo() = connectWelcomeBox("Demo", DemoBox.HOST, DemoBox.USERNAME, DemoBox.PASSWORD)
-
-    /**
-     * Leaves the tour without having connected: to the connection page – with what was entered
-     * ([toForm], e.g. after a failure) or empty (skipped) – on first start; back to the settings
-     * when started from there, unless [toForm].
-     */
-    fun leaveWelcome(toForm: Boolean = false) {
-        welcomeBoxJob?.cancel()
-        val firstStart = !settings.isConfigured()
-        _state.update {
-            it.copy(
-                showWelcome = false,
-                welcomeBox = null,
-                welcomeConnected = false,
-                showSettings = true,
-                showConnectionSettings = firstStart || toForm,
-                editingProfileId = null,
-                editingName = if (toForm) it.editingName else "",
-                config = if (toForm) it.config else FritzConfig(),
-                saveCheck = null,
-            )
-        }
-    }
-
-    /** The tour's last page: on to the dialer. */
-    fun finishWelcome() = _state.update {
-        it.copy(
-            showWelcome = false,
-            welcomeBox = null,
-            welcomeConnected = false,
-            showSettings = false,
-            showConnectionSettings = false,
-        )
-    }
-
     /** Opens the settings; without any box configured directly on the "add" page. */
     fun openSettings() {
         _state.update { it.copy(showSettings = true) }
-        if (!settings.isConfigured()) addProfile()
-    }
-
-    /** Connection page for a new FritzBox. */
-    fun addProfile() = _state.update {
-        it.copy(
-            showConnectionSettings = true,
-            editingProfileId = null,
-            editingName = "",
-            config = FritzConfig(),
-            boxUsers = emptyList(),
-            securityPort = null,
-            hostNote = null,
-            saveCheck = null,
-        )
-    }
-
-    /** Connection page for an existing FritzBox. */
-    fun editProfile(id: String) {
-        val profile = settings.profiles().firstOrNull { it.id == id } ?: return
-        _state.update {
-            it.copy(
-                showConnectionSettings = true,
-                editingProfileId = id,
-                editingName = profile.name,
-                config = profile.config,
-                boxUsers = emptyList(),
-                securityPort = null,
-                hostNote = null,
-                saveCheck = null,
-            )
-        }
-        refreshUserRights(profile)
-    }
-
-    private var rightsJob: Job? = null
-
-    /**
-     * Asks the box again what [profile]'s user may do, so the connection page shows the rights as
-     * they are now – they may have been changed on the box since they were last read.
-     */
-    private fun refreshUserRights(profile: BoxProfile) {
-        rightsJob?.cancel()
-        rightsJob = viewModelScope.launch {
-            val rights = withContext(Dispatchers.IO) { readUserRights(FritzDialer(profile.config)) } ?: return@launch
-            settings.updateUserRights(profile.id, rights)
-            _state.update { it.copy(profiles = settings.profiles()) }
-        }
-    }
-
-    private var usersJob: Job? = null
-
-    /**
-     * Asks the box at the address entered on the connection page ([edited]: host, port, HTTPS) for
-     * its users. Only a suggestion, so a failure – e.g. an older FRITZ!OS, or no box there – just
-     * leaves the list empty.
-     */
-    fun lookUpBoxUsers(edited: FritzConfig) {
-        usersJob?.cancel()
-        _state.update { it.copy(boxUsers = emptyList(), hostNote = null) }
-        val config = edited.copy(trustedCertDer = _state.value.config.trustedCertDer)
-        usersJob = viewModelScope.launch {
-            // Another box there would offer its own users – and they would mean nothing for this one.
-            val check = checkHost(config.host)
-            if (!_state.value.showConnectionSettings) return@launch
-            if (check is HostCheck.OtherBox || check is HostCheck.AlreadySetUp) {
-                _state.update { it.copy(hostNote = HostNote(config.host, check)) }
-            }
-            if (check is HostCheck.OtherBox) return@launch
-            val users = withContext(Dispatchers.IO) { runCatching { BoxUsers.list(config) }.getOrNull() }
-            if (users != null && _state.value.showConnectionSettings) _state.update { it.copy(boxUsers = users) }
-        }
-    }
-
-    private var securityPortJob: Job? = null
-
-    /** Asks the box at [host] (entered on the connection page) on which port it talks HTTPS. */
-    fun lookUpSecurityPort(host: String) {
-        securityPortJob?.cancel()
-        securityPortJob = viewModelScope.launch {
-            if (checkHost(host) is HostCheck.OtherBox) return@launch
-            val port = withContext(Dispatchers.IO) { BoxDiscovery.securityPort(host) } ?: return@launch
-            if (_state.value.showConnectionSettings) _state.update { it.copy(securityPort = SecurityPort(host, port)) }
-        }
-    }
-
-    /** Which box answers at [host], compared with the connection being edited and the others (see [HostCheck]). */
-    private suspend fun checkHost(host: String): HostCheck {
-        val identity = withContext(Dispatchers.IO) { BoxDiscovery.identify(host) }
-        val profiles = settings.profiles()
-        return HostCheck.of(identity, profiles.firstOrNull { it.id == _state.value.editingProfileId }, profiles)
-    }
-
-    /** Leaves the connection page without saving: back to the connection in use. */
-    fun closeConnectionSettings() {
-        verifyingSettings = false
-        pendingSave = null
-        _state.update {
-            it.copy(
-                showConnectionSettings = false,
-                editingProfileId = null,
-                hostNote = null,
-                saveCheck = null,
-                config = activeConfig(),
-                error = null,
-            )
-        }
+        if (!settings.isConfigured()) connections.add()
     }
 
     /** Leaves the settings without saving: back to the connection in use. */
@@ -787,177 +307,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    /**
-     * Tries the edited connection against the router. Only if that works it is saved – and made
-     * the active one, since the box evidently is reachable from here; otherwise the error is shown.
-     * [phonebooksEnabled], [callListEnabled], [speedDialsEnabled]: whether this box' phone books, call
-     * list and speed dials are used; [internalCallsEnabled]: whether its phones are offered for
-     * internal calls.
-     */
-    fun saveSettings(
-        edited: FritzConfig,
-        name: String,
-        phonebooksEnabled: Boolean,
-        callListEnabled: Boolean,
-        speedDialsEnabled: Boolean,
-        internalCallsEnabled: Boolean,
-    ) {
-        if (_state.value.busy) return
-        val request = SaveRequest(
-            edited.copy(trustedCertDer = _state.value.config.trustedCertDer),
-            name, phonebooksEnabled, callListEnabled, speedDialsEnabled, internalCallsEnabled,
-        )
-        // First, without logging in, which box answers there: logging in to another one would hand it
-        // this box' credentials, and take over its certificate and device id.
-        _state.update { it.copy(busy = true, status = uiText(R.string.status_connecting, request.config.host), error = null) }
-        viewModelScope.launch {
-            val check = checkHost(request.config.host)
-            _state.update { it.copy(busy = false, status = null) }
-            if (!_state.value.showConnectionSettings) return@launch
-            if (check == HostCheck.Expected) {
-                saveChecked(request)
-            } else {
-                pendingSave = request
-                val editing = settings.profiles().firstOrNull { it.id == _state.value.editingProfileId }
-                val shown = request.name.trim().ifEmpty { editing?.name ?: request.config.host }
-                _state.update { it.copy(saveCheck = SaveCheck(request.config.host, shown, check)) }
-            }
-        }
-    }
-
-    /** The connection page's entries, kept while [SaveCheck] waits for a decision. */
-    private data class SaveRequest(
-        val config: FritzConfig,
-        val name: String,
-        val phonebooksEnabled: Boolean,
-        val callListEnabled: Boolean,
-        val speedDialsEnabled: Boolean,
-        val internalCallsEnabled: Boolean,
-    )
-
-    private var pendingSave: SaveRequest? = null
-
-    /** [SaveCheck] answered with "save anyway": checked against the box there after all (a new connection only). */
-    fun saveAnyway() {
-        val request = pendingSave ?: return
-        dismissSaveCheck()
-        saveChecked(request)
-    }
-
-    /**
-     * [SaveCheck] answered with "save without checking": the entries are stored as they are, while
-     * all the box told about itself before – device id, details, certificate – stays. The box in use
-     * stays as well: this one was not found here.
-     */
-    fun saveUnchecked() {
-        val request = pendingSave ?: return
-        dismissSaveCheck()
-        val previous = settings.profiles().firstOrNull { it.id == _state.value.editingProfileId } ?: return
-        val profile = previous.copy(
-            name = request.name.trim().ifEmpty { previous.name },
-            config = request.config,
-            // Rights read before belong to the user of then.
-            userRights = previous.userRights?.takeIf { previous.config.username == request.config.username },
-            phonebooksEnabled = request.phonebooksEnabled,
-            callListEnabled = request.callListEnabled,
-            speedDialsEnabled = request.speedDialsEnabled,
-            internalCallsEnabled = request.internalCallsEnabled,
-        )
-        settings.saveProfile(profile)
-        LauncherShortcuts.publish(getApplication())
-        val active = settings.activeProfileId == profile.id
-        _state.update {
-            it.copy(
-                profiles = settings.profiles(),
-                editingProfileId = null,
-                showSettings = it.settingsSaved,
-                showConnectionSettings = false,
-                config = activeConfig(),
-            )
-        }
-        // Chosen by hand while elsewhere: its changed entries are to be used from now on.
-        if (active) activateProfile(profile.id)
-    }
-
-    fun dismissSaveCheck() {
-        pendingSave = null
-        _state.update { it.copy(saveCheck = null) }
-    }
-
-    private fun saveChecked(request: SaveRequest) {
-        val config = request.config
-        val name = request.name
-        val phonebooksEnabled = request.phonebooksEnabled
-        val callListEnabled = request.callListEnabled
-        val speedDialsEnabled = request.speedDialsEnabled
-        val editingId = _state.value.editingProfileId
-        verifyingSettings = true
-        _state.update { it.copy(config = config, error = null) }
-        runOnBox(uiText(R.string.status_connecting, config.host)) { dialer ->
-            val message = loadPhones(dialer, request.internalCallsEnabled)
-            // Learn the box' device id, so it can be recognised automatically later.
-            val identity = BoxDiscovery.identify(config.host)
-            val info = readBoxInfo(dialer)
-            val codes = readDialingCodes(dialer)
-            val rights = readUserRights(dialer)
-            val previous = settings.profiles().firstOrNull { it.id == editingId }
-            val profile = BoxProfile(
-                id = editingId ?: java.util.UUID.randomUUID().toString(),
-                name = name.trim().ifEmpty { identity?.friendlyName ?: previous?.name ?: config.host },
-                config = _state.value.config,
-                deviceId = identity?.udn ?: previous?.deviceId,
-                model = info?.model ?: identity?.modelName ?: previous?.model,
-                // Without the rights for GetInfo, the public device description tells them as well.
-                softwareVersion = info?.softwareVersion ?: identity?.softwareVersion ?: previous?.softwareVersion,
-                serialNumber = info?.serialNumber ?: identity?.serialNumber ?: previous?.serialNumber,
-                dialingCodes = codes ?: previous?.dialingCodes,
-                // Rights read before belong to the user of then.
-                userRights = rights ?: previous?.userRights?.takeIf { previous.config.username == config.username },
-                phonebooksEnabled = phonebooksEnabled,
-                // Without the right the call list could only fail: off, the connection page says why.
-                callListEnabled = callListEnabled && rights?.phone != false,
-                speedDialsEnabled = speedDialsEnabled,
-                internalCallsEnabled = request.internalCallsEnabled,
-            )
-            settings.saveProfile(profile)
-            settings.activeProfileId = profile.id
-            verifyingSettings = false
-            LauncherShortcuts.publish(getApplication())
-            // It just answered, so it is the one reachable – under the name it has now.
-            LauncherShortcuts.updateBox(getApplication(), profile)
-            // First setup: straight to the dialer. Later changes: back to the settings overview.
-            _state.update {
-                it.copy(
-                    profiles = settings.profiles(),
-                    activeProfileId = profile.id,
-                    // It just answered its device description (if not: it is not a FritzBox we can recognise).
-                    activeBoxSeen = identity != null,
-                    boxesSeen = if (identity != null) it.boxesSeen.orEmpty() + profile.id else it.boxesSeen,
-                    editingProfileId = null,
-                    networkNotice = null,
-                    phonebooks = emptyList(),
-                    phonebooksLoaded = false,
-                    boxCalls = emptyList(),
-                    newMissedCalls = 0,
-                    lines = emptyList(),
-                    ownNumbers = emptyList(),
-                    boxCallsLoaded = false,
-                    deflections = null,
-                    showSettings = it.settingsSaved,
-                    showConnectionSettings = false,
-                    settingsSaved = true,
-                    // Connected from the welcome tour: it goes on to its last page.
-                    welcomeConnected = it.showWelcome,
-                )
-            }
-            message
-        }
-        preloadBoxSpeedDials()
-        preloadDeflections()
-        preloadMissedCalls()
-        preloadLines()
-    }
-
     /** Switches to another configured FritzBox (manually, or after automatic recognition). */
     fun activateProfile(id: String) {
         val profile = settings.profiles().firstOrNull { it.id == id } ?: return
@@ -966,7 +315,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             it.copy(
                 activeProfileId = id,
                 // Chosen by hand, it may well not be the box of this network.
-                activeBoxSeen = seenInNetwork(profile),
+                activeBoxSeen = network.seenInNetwork(profile),
                 activeBoxWorking = null,
                 config = if (it.showConnectionSettings) it.config else profile.config,
                 phones = emptyList(),
@@ -986,89 +335,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         refreshPhones()
     }
 
-    fun deleteProfile(id: String) {
-        val wasActive = settings.activeProfileId == id
-        settings.deleteProfile(id)
-        val remaining = settings.profiles()
-        _state.update {
-            it.copy(
-                profiles = remaining,
-                activeProfileId = settings.activeProfileId,
-                boxesSeen = it.boxesSeen?.minus(id),
-                settingsSaved = remaining.isNotEmpty(),
-                showConnectionSettings = if (it.editingProfileId == id) false else it.showConnectionSettings,
-                editingProfileId = if (it.editingProfileId == id) null else it.editingProfileId,
-            )
-        }
-        when {
-            remaining.isEmpty() -> {
-                LauncherShortcuts.removeAll(getApplication())
-                _state.update { it.copy(phones = emptyList(), internalPhones = emptyList(), selectedPhone = null, config = FritzConfig(), deflections = null) }
-                addProfile()
-            }
-            wasActive -> activateProfile(remaining.first().id)
-        }
-    }
-
     private fun activeConfig(): FritzConfig = settings.activeProfile()?.config ?: FritzConfig()
 
-    // --- recognising the FritzBox of the current network -------------------------------
-
-    private var detectJob: Job? = null
-
-    /** The first detection and loading, at start. */
-    private var startupJob: Job? = null
-
-    /** When the last detection started ([SystemClock.elapsedRealtime]), to skip needless repeats. */
-    private var lastDetection = 0L
-
-    /** What a detection found: the configured box of this network, if any, and whether it switched to it. */
-    private data class Detection(val match: BoxProfile?, val switched: Boolean)
-
-    /**
-     * Looks for the configured boxes in the current network (see [BoxRecognition.recognise]) and
-     * switches to the one found. A connection without device id learns it only once logged in (see
-     * verifyAndLearn).
-     */
-    private suspend fun detectBox(): Detection {
-        lastDetection = SystemClock.elapsedRealtime()
-        val profiles = settings.profiles()
-        if (profiles.isEmpty()) return Detection(null, false)
-        val recognition = BoxRecognition.recognise(getApplication(), profiles)
-        val found = recognition.found
-        val gateway = recognition.gateway
-        val match = recognition.match
-        lastFound = found
-        val unknown = if (match == null) found.firstOrNull { it.host == gateway } else null
-        _state.update {
-            it.copy(
-                profiles = profiles,
-                activeBoxSeen = profiles.firstOrNull { p -> p.id == settings.activeProfileId }?.let(::seenInNetwork),
-                // By device id only: a connection without one is not known to be the box at its host.
-                boxesSeen = profiles.filter { p -> found.any { box -> box.udn == p.deviceId } }.map { p -> p.id }.toSet(),
-                // A request that failed in the previous network says nothing about this one.
-                activeBoxWorking = null,
-                networkNotice = unknown?.let { box ->
-                    (box.friendlyName ?: box.modelName)?.let { uiText(R.string.notice_unknown_box, it) }
-                        ?: uiText(R.string.notice_unknown_box_generic)
-                },
-            )
-        }
-        if (match != null && match.id != settings.activeProfileId) {
-            activateProfile(match.id)
-            LauncherShortcuts.updateBox(getApplication(), match)
-            return Detection(match, true)
-        }
-        LauncherShortcuts.updateBox(getApplication(), _state.value.activeProfile.takeIf { !_state.value.noBoxReachable })
-        return Detection(match, false)
-    }
-
-    /** Right after a network change the box often does not answer yet: one more try a little later. */
-    private suspend fun detectAgainIfNotFound(detection: Detection) {
-        if (detection.match != null) return
-        delay(DETECT_RETRY_MILLIS)
-        detectBox()
-    }
+    // --- the box of the current network (see NetworkPart) ----------------------------
 
     /**
      * The app came to the foreground: the network may have changed meanwhile without the callback
@@ -1077,60 +346,17 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun onForeground() {
         if (!settings.isConfigured()) return
         // Possibly switched meanwhile – from the quick settings tile, or on the box.
-        if (_state.value.deflections != null) preloadDeflections()
+        if (_state.value.deflections != null) deflections.preload()
         // Calls may have been missed while the app was in the background.
-        preloadMissedCalls()
-        preloadLines()
-        detectIfStale()
-    }
-
-    /** Detects the box again – unless that just happened, or is happening. */
-    private fun detectIfStale() {
-        if (SystemClock.elapsedRealtime() - lastDetection < DETECT_MIN_INTERVAL_MILLIS) return
-        if (detectJob?.isActive == true) return
-        detectJob = viewModelScope.launch { detectAgainIfNotFound(detectBox()) }
-    }
-
-    /** The boxes that answered the last detection; null before the first one. */
-    private var lastFound: List<BoxIdentity>? = null
-
-    /**
-     * Whether [profile]'s box answered the last detection – by its device id, or by its host for a
-     * connection whose device id is not known yet. Null before the first detection.
-     */
-    private fun seenInNetwork(profile: BoxProfile): Boolean? = lastFound?.any { box ->
-        if (profile.deviceId != null) box.udn == profile.deviceId
-        else box.host.equals(profile.config.host, ignoreCase = true)
-    }
-
-    /** Re-detects the box whenever the phone's network changes (e.g. Wi-Fi at home vs. office). */
-    private fun watchNetwork() {
-        val cm = getApplication<Application>().getSystemService(ConnectivityManager::class.java) ?: return
-        val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) = scheduleDetect()
-            override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) =
-                scheduleDetect()
-        }
-        runCatching { cm.registerDefaultNetworkCallback(callback) }
-        networkCallback = callback
-    }
-
-    private var networkCallback: ConnectivityManager.NetworkCallback? = null
-
-    private fun scheduleDetect() {
-        if (!settings.isConfigured()) return
-        detectJob?.cancel()
-        detectJob = viewModelScope.launch {
-            delay(1_500) // let the network settle (DHCP, routes)
-            detectAgainIfNotFound(detectBox())
-        }
+        calls.preloadMissed()
+        calls.preloadLines()
+        network.detectIfStale()
     }
 
     // ViewModel.onCleared() is empty today (lint's EmptySuperCall), but called anyway in case it ever is not.
     @SuppressLint("EmptySuperCall")
     override fun onCleared() {
-        val cm = getApplication<Application>().getSystemService(ConnectivityManager::class.java)
-        networkCallback?.let { cb -> runCatching { cm?.unregisterNetworkCallback(cb) } }
+        network.stopWatching()
         super.onCleared()
     }
 
@@ -1200,9 +426,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     !settings.deviceContactsNeverAsk,
             )
         }
-        markMissedSeen()
+        calls.markMissedSeen()
         // Without a reachable box only the phone's own sources; "reload" still tries the box.
-        if (_state.value.noBoxReachable) loadCallLog() else reloadRecents()
+        if (_state.value.noBoxReachable) calls.loadPhoneCalls() else calls.reloadRecents()
         if (!_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
         if (_state.value.deviceContacts == null) loadDeviceContacts()
     }
@@ -1211,97 +437,19 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun selectPickerTab(tab: PickerTab) {
         _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
-        markMissedSeen()
+        calls.markMissedSeen()
     }
 
     fun openLanguage() = _state.update { it.copy(showLanguage = true) }
 
-    // --- settings export and import ---------------------------------------------------
-
-    /** Writes the settings to [uri]; with [passphrase] the passwords too, encrypted with it. */
-    fun exportSettings(uri: Uri, passphrase: CharArray?) {
-        val app = getApplication<Application>()
-        _state.update { it.copy(transferBusy = true) }
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                runCatching {
-                    val text = SettingsFile.write(settings.backup(AppLanguage.current(app)), passphrase)
-                    val out = app.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Not writable: $uri")
-                    out.use { it.write(text.toByteArray(Charsets.UTF_8)) }
-                }
-            }
-            passphrase?.fill('\u0000')
-            _state.update { it.copy(transferBusy = false) }
-            toast(if (result.isSuccess) R.string.settings_exported else R.string.settings_export_failed)
-        }
-    }
-
-    /** The text of the settings file waiting for [importSettings]. */
-    private var importText: String? = null
-
-    /** Opens the settings file at [uri] for import: says what it holds, so the import can be confirmed. */
-    fun openSettingsFile(uri: Uri) {
-        val app = getApplication<Application>()
-        _state.update { it.copy(transferBusy = true) }
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                runCatching {
-                    val text = app.contentResolver.openInputStream(uri)?.use { input ->
-                        // A settings file is a few kilobytes; anything far bigger is something else.
-                        val bytes = input.readNBytesCompat(MAX_SETTINGS_FILE + 1)
-                        if (bytes.size > MAX_SETTINGS_FILE) throw InvalidSettingsFileException("Too big")
-                        String(bytes, Charsets.UTF_8)
-                    } ?: throw IOException("Not readable: $uri")
-                    text to SettingsFile.inspect(text)
-                }
-            }
-            val (text, info) = result.getOrNull() ?: (null to null)
-            importText = text
-            _state.update { it.copy(transferBusy = false, pendingImport = info, importError = null) }
-            if (info == null) toast(R.string.settings_file_invalid)
-        }
-    }
+    // --- starting over -----------------------------------------------------------------
 
     /**
-     * Imports the opened settings file, replacing all connections and options; with [passphrase]
-     * its passwords as well. [onLanguage] then gets the file's language, for the activity to switch.
+     * Starts over with the settings stored now (after an import), as on a fresh start: nothing of
+     * the boxes before is kept, and the box of this network is looked for again.
      */
-    fun importSettings(passphrase: CharArray?, onLanguage: (String?) -> Unit) {
-        val text = importText ?: return
-        _state.update { it.copy(transferBusy = true, importError = null) }
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) { runCatching { SettingsFile.read(text, passphrase) } }
-            passphrase?.fill('\u0000')
-            val backup = result.getOrElse { error ->
-                val message = if (error is WrongPassphraseException) R.string.settings_wrong_passphrase else R.string.settings_file_invalid
-                _state.update { it.copy(transferBusy = false, importError = uiText(message)) }
-                return@launch
-            }
-            importText = null
-            applyImport(backup)
-            _state.update { it.copy(transferBusy = false, pendingImport = null) }
-            toast(R.string.settings_imported)
-            onLanguage(backup.options.language)
-        }
-    }
-
-    fun cancelImport() {
-        importText = null
-        _state.update { it.copy(pendingImport = null, importError = null) }
-    }
-
-    /**
-     * Stores [backup] and starts over with it, as on a fresh start. The phone's contacts and call
-     * log stay off unless Android already grants reading them here.
-     */
-    private fun applyImport(backup: SettingsBackup) {
+    private fun startOver() {
         val app = getApplication<Application>()
-        fun granted(permission: String) = ContextCompat.checkSelfPermission(app, permission) == PackageManager.PERMISSION_GRANTED
-        val options = backup.options.copy(
-            deviceContactsEnabled = backup.options.deviceContactsEnabled && granted(Manifest.permission.READ_CONTACTS),
-            callLogEnabled = backup.options.callLogEnabled && granted(Manifest.permission.READ_CALL_LOG),
-        )
-        settings.restore(backup.copy(options = options))
         _state.update {
             it.copy(
                 config = settings.activeProfile()?.config ?: FritzConfig(),
@@ -1327,96 +475,34 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 ownNumbers = emptyList(),
                 boxCallsLoaded = false,
                 deflections = null,
-                deviceContactsEnabled = options.deviceContactsEnabled,
+                deviceContactsEnabled = settings.deviceContactsEnabled,
                 deviceContacts = null,
-                callLogEnabled = options.callLogEnabled,
+                callLogEnabled = settings.callLogEnabled,
                 phoneCalls = null,
                 callLogProblem = null,
-                phoneSpeedDialsEnabled = options.phoneSpeedDialsEnabled,
+                phoneSpeedDialsEnabled = settings.phoneSpeedDialsEnabled,
                 phoneSpeedDials = settings.phoneSpeedDials,
-                callStatusEnabled = options.callStatusEnabled,
+                callStatusEnabled = settings.callStatusEnabled,
             )
         }
-        if (options.deviceContactsEnabled) loadDeviceContacts()
-        if (options.callLogEnabled) loadCallLog()
+        if (settings.deviceContactsEnabled) loadDeviceContacts()
+        if (settings.callLogEnabled) calls.loadPhoneCalls()
         DeflectionTileService.refresh(app)
         RedialTileService.refresh(app)
         LauncherShortcuts.removeAll(app)
         LauncherShortcuts.publish(app)
         if (settings.isConfigured()) {
-            viewModelScope.launch {
-                val detection = detectBox()
-                if (!detection.switched && !_state.value.noBoxReachable) refreshPhones()
-                detectAgainIfNotFound(detection)
-            }
+            network.detectAndLoad()
         }
     }
-
-    private fun toast(message: Int) = Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show()
 
     fun closeLanguage() = _state.update { it.copy(showLanguage = false) }
-
-    // --- call deflections -------------------------------------------------------------
-
-    /** Opens the call deflections of the box in use, read anew. */
-    fun openDeflections() {
-        _state.update {
-            it.copy(showDeflections = true, tileDeflection = settings.activeProfileId?.let(settings::tileDeflection))
-        }
-        loadDeflections()
-    }
-
-    /** Makes call deflection [id] the one the quick settings tile switches, for the box in use. */
-    fun chooseTileDeflection(id: Int) {
-        val profileId = settings.activeProfileId ?: return
-        settings.setTileDeflection(profileId, id)
-        _state.update { it.copy(tileDeflection = id) }
-        DeflectionTileService.refresh(getApplication())
-        _state.value.deflections?.let(::publishDeflectionShortcut)
-    }
-
-    /**
-     * Reads the call deflections of the box in use in the background, so the dialer can show whether
-     * one is switched on. Quietly: a box whose user may not read them just shows none.
-     */
-    private fun preloadDeflections() = runWhenIdle("deflections") {
-        if (_state.value.noBoxReachable) return@runWhenIdle
-        val config = _state.value.config
-        viewModelScope.launch {
-            val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadDeflections() }.getOrNull() }
-            // Unless the box in use changed meanwhile.
-            if (deflections != null && _state.value.config == config) {
-                _state.update { it.copy(deflections = deflections) }
-                publishDeflectionShortcut(deflections)
-            }
-        }
-    }
-
-    fun closeDeflections() = _state.update { it.copy(showDeflections = false) }
-
-    fun loadDeflections() = runOnBox(uiText(R.string.status_loading_deflections)) { dialer ->
-        val deflections = dialer.loadDeflections()
-        _state.update { it.copy(deflections = deflections) }
-        publishDeflectionShortcut(deflections)
-        uiText(R.string.status_deflections_loaded)
-    }
-
-    /** Switches call deflection [id] on or off on the box, then reads them anew to show what the box did. */
-    fun setDeflectionEnabled(id: Int, enabled: Boolean) =
-        runOnBox(uiText(if (enabled) R.string.status_deflection_on else R.string.status_deflection_off)) { dialer ->
-            dialer.setDeflectionEnabled(id, enabled)
-            val deflections = dialer.loadDeflections()
-            _state.update { it.copy(deflections = deflections) }
-            DeflectionTileService.refresh(getApplication())
-            publishDeflectionShortcut(deflections)
-            uiText(if (enabled) R.string.status_deflection_on_done else R.string.status_deflection_off_done)
-        }
 
     /** The picker's reload button: recent calls and phone books. */
     fun reloadPicker() {
         // The box' phones come with the list of phones for dial help.
         if (_state.value.pickerTab == PickerTab.INTERNAL) refreshPhones()
-        reloadRecents()
+        calls.reloadRecents()
         loadDeviceContacts()
         reloadRouterPhonebooks()
     }
@@ -1491,161 +577,21 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** A number was tapped in the picker (recent calls or phone books): put it into the dialer and go back. */
     fun pickNumber(number: String) {
-        if (_state.value.addingToWidget) return addToWidget(nameFor(number).orEmpty(), number)
+        if (_state.value.addingToWidget) return widget.add(nameFor(number).orEmpty(), number)
         _state.update { it.copy(number = number, numberLabel = null, showPicker = false) }
     }
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
     fun pickContactNumber(name: String, number: String) {
         when (val assignment = _state.value.assigningSpeedDial) {
-            null -> if (_state.value.addingToWidget) addToWidget(name, number) else pickNumber(number)
+            null -> if (_state.value.addingToWidget) widget.add(name, number) else pickNumber(number)
             is SpeedDialAssignment.Phone -> {
-                setPhoneSpeedDial(assignment.slot, name, number)
+                speedDials.setPhone(assignment.slot, name, number)
                 _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
             }
             // The phone book tab asks what is still open, then calls setBoxSpeedDial.
             is SpeedDialAssignment.Box -> Unit
         }
-    }
-
-    // --- dial widget -----------------------------------------------------------------
-
-    /**
-     * Opens the setup of the dial widget [id] (placed just now, or its title tapped). With no box set
-     * up yet, the welcome tour – or the page for the first box – stays in front: the setup follows
-     * once there is a box (see MainActivity).
-     */
-    fun openWidgetSetup(id: Int) {
-        if (settings.isConfigured()) showDialer()
-        _state.update { it.copy(widgetSetup = WidgetSetup(id, WidgetLists.get(getApplication(), id))) }
-    }
-
-    private fun editWidget(change: (WidgetList) -> WidgetList) =
-        _state.update { state -> state.copy(widgetSetup = state.widgetSetup?.let { it.copy(list = change(it.list)) }) }
-
-    fun setWidgetTitle(title: String) = editWidget { it.copy(title = title) }
-
-    fun setWidgetTransparent(transparent: Boolean) = editWidget { it.copy(transparent = transparent) }
-
-    fun removeFromWidget(index: Int) = editWidget { it.copy(entries = it.entries.filterIndexed { i, _ -> i != index }) }
-
-    /** Moves entry [index] up ([by] -1) or down (+1). */
-    fun moveInWidget(index: Int, by: Int) = editWidget { list ->
-        val to = index + by
-        if (to !in list.entries.indices) list
-        else list.copy(entries = list.entries.toMutableList().apply { add(to, removeAt(index)) })
-    }
-
-    /** The number picker, to add a number to the widget being set up. */
-    fun startAddingToWidget() {
-        openPicker()
-        _state.update { it.copy(addingToWidget = true) }
-    }
-
-    /** Back from the picker with [number] (and whose it is) – once only, the first place kept. */
-    fun addToWidget(name: String, number: String) {
-        editWidget { list ->
-            if (list.entries.any { it.number == number }) list else list.copy(entries = list.entries + WidgetEntry(name, number))
-        }
-        _state.update { it.copy(showPicker = false, addingToWidget = false) }
-    }
-
-    fun saveWidget() {
-        val setup = _state.value.widgetSetup ?: return
-        WidgetLists.set(getApplication(), setup.id, setup.list.copy(title = setup.list.title.trim()))
-        DialWidget.update(getApplication(), setup.id)
-        _state.update { it.copy(widgetSetup = null) }
-    }
-
-    fun cancelWidgetSetup() = _state.update { it.copy(widgetSetup = null) }
-
-    /**
-     * A row of the dial widget [id] was tapped: its number into the dialer, with whose it is as the
-     * field's label – dialled only with the green button, as a tap on the home screen is easily made.
-     */
-    fun showFromWidget(id: Int, index: Int) {
-        val entry = WidgetLists.get(getApplication(), id).entries.getOrNull(index) ?: return
-        if (settings.isConfigured()) showDialer()
-        _state.update {
-            it.copy(number = NumberText.clean(entry.number), numberLabel = entry.name.takeIf(String::isNotBlank)?.let(UiText::Raw))
-        }
-    }
-
-    // --- speed dials ------------------------------------------------------------------
-
-    /** Opens the phone books to choose the number for this phone's speed dial [slot]. */
-    fun startAssigningSpeedDial(slot: String) =
-        _state.update { it.copy(assigningSpeedDial = SpeedDialAssignment.Phone(slot), pickerTab = PickerTab.PHONEBOOKS) }
-
-    /** Opens the phone books to choose the number for the box' speed dial [slot] (null: a new one). */
-    fun startAssigningBoxSpeedDial(slot: String?) =
-        _state.update { it.copy(assigningSpeedDial = SpeedDialAssignment.Box(slot), pickerTab = PickerTab.PHONEBOOKS) }
-
-    fun cancelAssigningSpeedDial() =
-        _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
-
-    /** Sets (or replaces) this phone's speed dial [slot]. */
-    fun setPhoneSpeedDial(slot: String, name: String, number: String) {
-        settings.phoneSpeedDials = settings.phoneSpeedDials.filterNot { it.slot == slot } + SpeedDial(slot, name, number)
-        _state.update { it.copy(phoneSpeedDials = settings.phoneSpeedDials) }
-    }
-
-    fun removePhoneSpeedDial(slot: String) {
-        settings.phoneSpeedDials = settings.phoneSpeedDials.filterNot { it.slot == slot }
-        _state.update { it.copy(phoneSpeedDials = settings.phoneSpeedDials) }
-    }
-
-    /**
-     * Makes [number] the box' speed dial [slot]: in the entry of the box' phone books that has the
-     * number – or, if none of its own (not online) ones has, in a new entry for [name] in phone book
-     * [newEntryBook] (null: the first of its own). Wherever else the slot was used, it is taken away. Then the phone books are read anew.
-     */
-    fun setBoxSpeedDial(slot: String, name: String, number: String, type: String, newEntryBook: Int?) {
-        val assigning = _state.value.assigningSpeedDial is SpeedDialAssignment.Box
-        runOnBox(uiText(R.string.status_setting_speed_dial, slot)) { dialer ->
-            val key = numberKeys()
-            // Only the box' own phone books can be changed, not the online ones it syncs.
-            val localBooks = _state.value.phonebooks.filterNot { it.online }
-            val contacts = localBooks.flatMap { it.contacts }.filter { it.bookId != null && it.uid != null }
-            val target = contacts.firstOrNull { c -> c.numbers.any { key(it.number) == key(number) } }
-            contacts.filter { c -> c != target && c.numbers.any { it.speedDial == slot } }
-                .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
-            if (target != null) {
-                val written = target.numbers.first { key(it.number) == key(number) }.number
-                dialer.setSpeedDial(target.bookId!!, target.uid!!, slot, written)
-            } else {
-                val book = newEntryBook ?: localBooks.first().id
-                dialer.addToPhonebook(book, PhonebookContact(name, listOf(PhonebookNumber(number, type, slot)), ""))
-            }
-            val books = dialer.loadPhonebooks()
-            _state.update {
-                it.copy(
-                    phonebooks = books,
-                    phonebooksLoaded = true,
-                    assigningSpeedDial = if (assigning) null else it.assigningSpeedDial,
-                    pickerTab = if (assigning) PickerTab.SPEED_DIALS else it.pickerTab,
-                )
-            }
-            uiText(R.string.status_speed_dial_set, slot, target?.name ?: name)
-        }
-    }
-
-    /** Deletes [copy], an entry copying a contact of an online phone book, from the box; then reads the phone books anew. */
-    fun deleteOnlineCopy(copy: OnlineCopy) = runOnBox(uiText(R.string.status_deleting_copy, copy.entry.name)) { dialer ->
-        dialer.deletePhonebookEntry(copy.entry.bookId!!, copy.entry.uid!!)
-        val books = dialer.loadPhonebooks()
-        _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-        uiText(R.string.status_copy_deleted, copy.entry.name)
-    }
-
-    /** Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books anew. */
-    fun removeBoxSpeedDial(slot: String) = runOnBox(uiText(R.string.status_removing_speed_dial, slot)) { dialer ->
-        _state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }
-            .filter { c -> c.bookId != null && c.uid != null && c.numbers.any { it.speedDial == slot } }
-            .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
-        val books = dialer.loadPhonebooks()
-        _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-        uiText(R.string.status_speed_dial_removed, slot)
     }
 
     /** Compares numbers however they are written, by the rules of the box in use (see [numberKey]). */
@@ -1654,152 +600,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         val codes = _state.value.activeProfile?.dialingCodes
         return { numberKey(it, countryIso, codes) }
     }
-
-    /** Switches this phone's speed dials on or off; switched off, they are kept, just not used. */
-    fun setPhoneSpeedDialsEnabled(enabled: Boolean) {
-        settings.phoneSpeedDialsEnabled = enabled
-        _state.update { it.copy(phoneSpeedDialsEnabled = enabled) }
-    }
-
-    /**
-     * Reads the phone books of the box in use in the background, so its speed dials and the
-     * suggestions while typing work right away in the dialer – not only once the picker was opened.
-     * Checked when it is its turn, as the box in use may change until then.
-     */
-    private fun preloadBoxSpeedDials() = runWhenIdle("speedDials") {
-        val profile = settings.activeProfile()
-        if (profile != null && (profile.speedDialsEnabled || profile.phonebooksEnabled) && !_state.value.phonebooksLoaded &&
-            !_state.value.noBoxReachable
-        ) {
-            reloadRouterPhonebooks()
-        }
-    }
-
-    // --- recent calls -----------------------------------------------------------------
-
-    private fun reloadRecents() {
-        loadCallLog()
-        if (settings.activeProfile()?.callListEnabled == false) return
-        if (_state.value.busy) return runWhenIdle("recents") { if (_state.value.showPicker) reloadRecents() }
-        runOnBox(uiText(R.string.recents_loading)) { dialer ->
-            val calls = dialer.loadRecentCalls()
-            _state.update { it.copy(boxCalls = calls, boxCallsLoaded = true) }
-            markMissedSeen()
-            UiText.Plural(R.plurals.status_calls_loaded, calls.size)
-        }
-    }
-
-    /**
-     * Reads the box' call list in the background – when the app comes up, or the box in use changed
-     * –, to count its missed calls not looked at yet (and to have it ready for "Recent"). The first
-     * time for a box, its list counts as seen: only calls after that are new.
-     */
-    private fun preloadMissedCalls() = runWhenIdle("missedCalls") {
-        val profile = settings.activeProfile() ?: return@runWhenIdle
-        if (_state.value.noBoxReachable || !profile.callListEnabled) return@runWhenIdle
-        val config = _state.value.config
-        viewModelScope.launch {
-            val calls = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadRecentCalls() }.getOrNull() }
-            // Unless the box in use changed meanwhile.
-            if (calls == null || _state.value.config != config) return@launch
-            val seen = settings.missedSeenUntil(profile.id)
-                ?: MissedCalls.seenUntil(calls, 0).also { settings.setMissedSeenUntil(profile.id, it) }
-            // With the phone's calls, as one returned from the mobile settles a missed one as well.
-            val phoneCalls = if (_state.value.callLogEnabled) {
-                withContext(Dispatchers.IO) { runCatching { DeviceCallLog.load(getApplication()) }.getOrNull() }
-            } else null
-            val all = calls + phoneCalls.orEmpty()
-            val missed = MissedCalls.newSince(all, seen, numberKeys()).size
-            _state.update { it.copy(boxCalls = calls, boxCallsLoaded = true, newMissedCalls = missed) }
-            markMissedSeen()
-        }
-    }
-
-    /**
-     * Asks the box in the background – when the app comes up, or the box in use changed – for its own
-     * numbers, and whether its internet numbers are registered with their provider, so the dialer can
-     * warn before a call fails for that, and offer to call from another of them. Nothing is shown if the box does not say (rights, older FRITZ!OS).
-     */
-    private fun preloadLines() = runWhenIdle("lines") {
-        if (_state.value.noBoxReachable) return@runWhenIdle
-        val config = _state.value.config
-        viewModelScope.launch {
-            val numbers = withContext(Dispatchers.IO) { runCatching { FritzDialer(config).loadNumbers() }.getOrNull() }
-            // Unless the box in use changed meanwhile.
-            if (numbers != null && _state.value.config == config) {
-                _state.update { it.copy(lines = numbers.lines, ownNumbers = numbers.numbers) }
-            }
-        }
-    }
-
-    /** The warning about lines not registered was tapped: ask the box again. */
-    fun checkLines() {
-        preloadLines()
-        startQueuedRequests()
-    }
-
-    /** "Recent" shows the box' calls: they count as seen from now on (marked as new while it stays open). */
-    private fun markMissedSeen() {
-        val state = _state.value
-        if (!state.showPicker || state.pickerTab != PickerTab.RECENT || !state.boxCallsLoaded) return
-        val id = settings.activeProfileId ?: return
-        val seen = settings.missedSeenUntil(id) ?: 0L
-        settings.setMissedSeenUntil(id, MissedCalls.seenUntil(state.boxCalls, seen))
-        _state.update { it.copy(newMissedCalls = 0, newCallsSince = it.newCallsSince ?: seen) }
-    }
-
-    /** (Re)reads the phone's calls, if the feature is on. A failure is shown, not thrown. */
-    fun loadCallLog() {
-        if (!_state.value.callLogEnabled) return
-        val app = getApplication<Application>()
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) { runCatching { DeviceCallLog.load(app) } }
-            _state.update {
-                it.copy(
-                    phoneCalls = result.getOrNull() ?: it.phoneCalls,
-                    callLogProblem = result.exceptionOrNull()?.let(::describeCallLogProblem),
-                )
-            }
-        }
-    }
-
-    /**
-     * Turns the "this phone's calls" feature on – but only if reading the call log actually works
-     * ([granted]: Android's answer to the permission request). Otherwise it stays off and the
-     * settings explain why.
-     */
-    fun enableCallLog(granted: Boolean) {
-        if (!granted) {
-            _state.update {
-                it.copy(callLogProblem = uiText(R.string.call_log_denied))
-            }
-            return
-        }
-        val app = getApplication<Application>()
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) { runCatching { DeviceCallLog.load(app) } }
-            val calls = result.getOrNull()
-            settings.callLogEnabled = calls != null
-            _state.update {
-                it.copy(
-                    callLogEnabled = calls != null,
-                    phoneCalls = calls,
-                    callLogProblem = result.exceptionOrNull()?.let(::describeCallLogProblem),
-                )
-            }
-        }
-    }
-
-    fun disableCallLog() {
-        settings.callLogEnabled = false
-        _state.update { it.copy(callLogEnabled = false, phoneCalls = null, callLogProblem = null) }
-    }
-
-    /** No access / no call log say enough as they are; other failures add their (technical) message. */
-    private fun describeCallLogProblem(error: Throwable): UiText =
-        error.message?.takeIf { error !is SecurityException && error !is IllegalStateException }
-            ?.let { uiText(R.string.call_log_failed, it) }
-            ?: uiText(R.string.call_log_failed_plain)
 
     // --- router actions ---------------------------------------------------------------
 
@@ -1812,10 +612,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             profile?.let { verifyAndLearn(dialer, it) }
             loadPhones(dialer)
         }
-        preloadBoxSpeedDials()
-        preloadDeflections()
-        preloadMissedCalls()
-        preloadLines()
+        preloadFromBox()
     }
 
     /**
@@ -1845,22 +642,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun sameSerial(a: String, b: String) =
         a.filter(Char::isLetterOrDigit).equals(b.filter(Char::isLetterOrDigit), ignoreCase = true)
 
-    /** Model, FRITZ!OS version and serial number: optional, so a failure (e.g. missing rights) is ignored. */
-    private fun readBoxInfo(dialer: FritzDialer): BoxInfo? = runCatching { dialer.deviceInfo() }.getOrNull()
-
-    /** Country and area code: only for comparing numbers, so a failure is ignored as well. */
-    private fun readDialingCodes(dialer: FritzDialer): DialingCodes? = runCatching { dialer.dialingCodes() }.getOrNull()
-
-    /**
-     * The user's rights: for explaining refusals, so a failure is ignored as well – except a refusal
-     * to tell them, which makes the ones read before unknown: none (not shown) instead of outdated.
-     */
-    private fun readUserRights(dialer: FritzDialer): UserRights? = try {
-        dialer.userRights()
-    } catch (e: Tr064Exception) {
-        if (e.errorCode == Tr064Exception.NOT_AUTHORIZED) UserRights(null, emptyMap()) else null
-    } catch (_: Exception) {
-        null
+    /** Loads in the background what else the box offers: speed dials, call deflections, missed calls, line status. */
+    private fun preloadFromBox() {
+        speedDials.preload()
+        deflections.preload()
+        calls.preloadMissed()
+        calls.preloadLines()
     }
 
     /**
@@ -1951,9 +738,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         runOnBox(uiText(R.string.status_dialling, number)) { dialer ->
             // Only changes the box setting if needed: a change may require confirmation on the box.
             if (phone != null) dialer.ensureDialPhone(phone)
-            markDialActive()
+            callStatus.markDialActive()
             // Listening before the box dials, so its report of the call is not missed.
-            followCall(number, phone, split.shownExtension)
+            callStatus.follow(number, phone, split.shownExtension)
             try {
                 dialer.dial(
                     when {
@@ -1963,8 +750,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     },
                 )
             } catch (e: Exception) {
-                stopFollowingCall()
-                clearDialActive()
+                callStatus.stopFollowing()
+                callStatus.clearDialActive()
                 throw e
             }
             val name = nameFor(number)
@@ -2002,10 +789,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         prefill(number)
         viewModelScope.launch {
             // Where are we? The app may have been in the background for long (onStart comes after this).
-            startupJob?.join()
-            detectIfStale()
-            // A network change restarts the detection: until one has run to its end.
-            while (detectJob?.isActive == true) detectJob?.join()
+            network.awaitDetection()
             // Changed meanwhile by hand, or no box to dial through.
             if (_state.value.number != number || _state.value.noBoxReachable) return@launch
             if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
@@ -2048,178 +832,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    /** The launcher shortcut "Call forwarding" switches the one the tile switches: says which, and its state. */
-    private fun publishDeflectionShortcut(deflections: List<CallDeflection>) {
-        val id = settings.activeProfileId ?: return
-        LauncherShortcuts.updateDeflection(getApplication(), deflections.forTile(settings.tileDeflection(id)))
-    }
-
-    /** Without the call monitor: the call counts as cancellable (and "pick up" as shown) for a while. */
-    private fun markDialActive() {
-        dialTimeout?.cancel()
-        _state.update { it.copy(dialActive = true) }
-        dialTimeout = viewModelScope.launch {
-            delay(DIAL_ACTIVE_MILLIS)
-            _state.update { it.copy(dialActive = false, callProgress = it.callProgress.takeUnless { p -> p is CallProgress.PickUp }) }
-        }
-    }
-
-    private fun clearDialActive() {
-        dialTimeout?.cancel()
-        dialTimeout = null
-        _state.update { it.copy(dialActive = false) }
-    }
-
     fun hangup() = runOnBox(uiText(R.string.status_hanging_up)) { dialer ->
         dialer.hangup()
-        stopFollowingCall()
-        clearDialActive()
+        callStatus.stopFollowing()
+        callStatus.clearDialActive()
         _state.update { it.copy(callProgress = null) }
         uiText(R.string.status_call_cancelled)
-    }
-
-    // --- call status ------------------------------------------------------------------
-
-    /** Follows the call placed last on the box' call monitor. */
-    private var monitorJob: Job? = null
-
-    /** Clears the end of a call from the dialer after [CALL_END_SHOWN_MILLIS]. */
-    private var callEndJob: Job? = null
-
-    /**
-     * Shows that the box rings [phone] to dial [number], and – if the feature is on – follows the call
-     * on the call monitor of the box in use: dialling once picked up (or not picked up in time), then
-     * connected, ended or not answered. Only the box' report of dialling [number] counts; the other
-     * calls of the household are ignored. A box with the monitor off is noted for the settings and,
-     * the first time, the dialer says how to switch it on. [extension]: the digits to type once
-     * connected, shown all along.
-     */
-    private fun followCall(number: String, phone: String?, extension: String?) {
-        stopFollowingCall()
-        _state.update { it.copy(callProgress = CallProgress.PickUp(phone, number, extension = extension)) }
-        if (!_state.value.callStatusEnabled) return
-        // Not known yet whether the call monitor reports internal calls: rather than saying
-        // "not picked up" after a while, such a call is not followed – as without the monitor.
-        if (FritzInternalPhones.isInternal(number)) return
-        val profile = settings.activeProfile() ?: return
-        val host = _state.value.config.host
-        val key = numberKeys()
-        monitorJob = viewModelScope.launch {
-            val call = this
-            var listening = false
-            var connection: String? = null
-            var connected = false
-            val pickUpTimeout = launch {
-                delay(PICK_UP_TIMEOUT_MILLIS)
-                showCallEnd(CallProgress.NotPickedUp)
-                call.cancel()
-            }
-            try {
-                CallMonitor.events(host) {
-                    listening = true
-                    noteCallMonitor(profile.id, true)
-                    // From now on the monitor says how long the call can be cancelled.
-                    dialTimeout?.cancel()
-                }.first { event ->
-                    when {
-                        connection == null -> {
-                            if (event is CallEvent.Call && isDialledNumber(event.called, number, key)) {
-                                connection = event.connection
-                                pickUpTimeout.cancel()
-                                _state.update {
-                                    it.copy(callProgress = CallProgress.Dialling(number, event.caller.ifBlank { null }, extension))
-                                }
-                            }
-                            false
-                        }
-                        event.connection != connection -> false
-                        event is CallEvent.Connect -> {
-                            connected = true
-                            clearDialActive()
-                            _state.update {
-                                it.copy(callProgress = CallProgress.Connected(number, SystemClock.elapsedRealtime(), extension))
-                            }
-                            false
-                        }
-                        event is CallEvent.Disconnect -> {
-                            showCallEnd(if (connected) CallProgress.Ended(event.seconds) else CallProgress.NotAnswered)
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (_: Exception) {
-                pickUpTimeout.cancel()
-                if (!listening) {
-                    // Refused: the monitor is off. Said once in the dialer; the settings keep saying it.
-                    val knownOff = profile.callMonitor == false
-                    noteCallMonitor(profile.id, false)
-                    if (!knownOff) {
-                        _state.update {
-                            val shown = it.callProgress
-                            if (shown is CallProgress.PickUp) it.copy(callProgress = shown.copy(monitorOff = true)) else it
-                        }
-                    }
-                } else {
-                    // Lost during the call (network change, box restarted): nothing more is known.
-                    clearDialActive()
-                    _state.update { it.copy(callProgress = null) }
-                }
-            }
-        }
-    }
-
-    private fun stopFollowingCall() {
-        monitorJob?.cancel()
-        monitorJob = null
-        callEndJob?.cancel()
-        callEndJob = null
-    }
-
-    /** The call is over: shows how it ended for a while. */
-    private fun showCallEnd(end: CallProgress) {
-        clearDialActive()
-        _state.update { it.copy(callProgress = end) }
-        callEndJob?.cancel()
-        callEndJob = viewModelScope.launch {
-            delay(CALL_END_SHOWN_MILLIS)
-            _state.update { if (it.callProgress == end) it.copy(callProgress = null) else it }
-        }
-    }
-
-    private fun noteCallMonitor(profileId: String, available: Boolean) {
-        settings.updateCallMonitor(profileId, available)
-        _state.update { it.copy(profiles = settings.profiles()) }
-    }
-
-    /** Switches following the calls on the box' call monitor on or off. */
-    fun setCallStatusEnabled(enabled: Boolean) {
-        settings.callStatusEnabled = enabled
-        if (!enabled) {
-            stopFollowingCall()
-            clearDialActive()
-        }
-        _state.update { it.copy(callStatusEnabled = enabled, callProgress = if (enabled) it.callProgress else null) }
-        if (enabled) checkCallMonitors()
-    }
-
-    /**
-     * Asks the boxes that answered the last detection whether their call monitor is on (the others
-     * keep what was known: they could not tell).
-     */
-    fun checkCallMonitors() {
-        if (_state.value.checkingCallMonitors) return
-        val seen = _state.value.boxesSeen.orEmpty()
-        val profiles = settings.profiles().filter { it.id in seen }
-        if (profiles.isEmpty()) return
-        _state.update { it.copy(checkingCallMonitors = true) }
-        viewModelScope.launch {
-            profiles.map { p -> async { p.id to CallMonitor.isAvailable(p.config.host) } }.awaitAll()
-                .forEach { (id, available) -> settings.updateCallMonitor(id, available) }
-            _state.update { it.copy(profiles = settings.profiles(), checkingCallMonitors = false) }
-        }
     }
 
     private fun runOnBox(progress: UiText, block: BoxAction) {
@@ -2355,30 +973,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     init {
         if (settings.isConfigured()) {
             // Pick the box of the current network first; if that did not switch (and load), load now.
-            // Not the detectJob: a network change right at the start (Android reports the current network
-            // at once) restarts that, and would take the loading with it.
-            startupJob = viewModelScope.launch {
-                val detection = detectBox()
-                if (!detection.switched && !_state.value.noBoxReachable) refreshPhones()
-                detectAgainIfNotFound(detection)
-            }
+            network.startup()
             // Their texts in the language of now.
             LauncherShortcuts.publish(getApplication())
             }
-        watchNetwork()
+        network.watch()
         watchSuggestions()
-        checkWhatsNew()
+        whatsNew.check()
     }
-}
-
-/** Reads up to [limit] bytes (InputStream.readNBytes only exists from Android 13 on). */
-private fun java.io.InputStream.readNBytesCompat(limit: Int): ByteArray {
-    val out = java.io.ByteArrayOutputStream()
-    val buffer = ByteArray(8192)
-    while (out.size() < limit) {
-        val n = read(buffer, 0, minOf(buffer.size, limit - out.size()))
-        if (n < 0) break
-        out.write(buffer, 0, n)
-    }
-    return out.toByteArray()
 }
