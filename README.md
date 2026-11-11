@@ -579,7 +579,9 @@ Unit tests (`./gradlew test`) cover digest computation, envelope building, numbe
 the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, the box' VoIP numbers and their state, recognising the dialled number in them, following a call on the call monitor, how a saved connection merges what the box told, which box counts as the one of the network, editing a widget's list, an import without Android's permissions and the demo box.
 
 Instrumented tests (`app/src/androidTest`) run flows in the real app on an emulator, with the demo box –
-no FRITZ!Box needed: the welcome tour on first start, the widget placed before any box is set up
+no FRITZ!Box needed: the welcome tour on first start – its demo link, and page by page with the demo
+box at its address `demo` as a real box would be entered, a wrong password corrected, an address where
+nothing answers, going back and skipping –, the widget placed before any box is set up
 (the 1.6.1 fix), a call followed on the call monitor to its end, and the settings exported with the
 passwords, the box deleted and the file imported again (the system file picker answered by the test). Each test starts like a fresh install (Android Test Orchestrator with
 `clearPackageData`), and animations are off for them. Run them with `scripts/instrumented-tests.sh`,

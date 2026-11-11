@@ -37,6 +37,10 @@ abstract class FlowTest {
 
     protected fun awaitText(@StringRes id: Int) = awaitText(text(id))
 
+    /** Waits until a node matching [matcher] is shown. */
+    protected fun awaitNode(matcher: SemanticsMatcher, timeoutMillis: Long = TIMEOUT_MILLIS) =
+        compose.waitUntilAtLeastOneExists(matcher, timeoutMillis)
+
     /** A node with [label] as its text or its content description (icon buttons have only the latter). */
     protected fun labelled(label: String): SemanticsMatcher = hasText(label) or hasContentDescription(label)
 
