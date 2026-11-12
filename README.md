@@ -68,7 +68,8 @@ head when it did not; pages slide – all of it only while Android's animations 
 
 The mascot also turns up elsewhere: with a short cheerful line when a list in the number picker or the
 call forwarding page is empty (*All quiet on the line.*), searching while something loads, puzzled when
-it failed. In the dialer it sits in the title, beside the app's name: it blinks now and then, rocks
+it failed. In the dialer it stands in the title for the app's name, beside the box in use (which is the
+title now, or in its place a note about the network; screen readers hear the helmet as "Pickelhaube"): it blinks now and then, rocks
 its spike while the app talks to the box (the progress bar below still says so too, also with
 animations off), and spins once on a long press on the title. **Pulling the dialer down** reads
 everything it shows from the box anew – which box is reachable, its phones, missed calls, whether its

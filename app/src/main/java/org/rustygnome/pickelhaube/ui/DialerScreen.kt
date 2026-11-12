@@ -162,7 +162,7 @@ fun DialerScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    // The helmet, the app name, and below it the FritzBox in use – or a note about the network.
+                    // The helmet and the FritzBox in use – the helmet stands for the app's name.
                     // The helmet rocks while the app talks to the box; a long press on the title spins it (just for fun).
                     val box = state.profiles.firstOrNull { it.id == state.activeProfileId }?.name
                     val spin = rememberHelmetSpin()
@@ -176,22 +176,28 @@ fun DialerScreen(
                             })
                         },
                     ) {
-                        TitleHelmet(busy = state.busy, spin = spin, pull = pull.value)
+                        TitleHelmet(
+                            busy = state.busy,
+                            spin = spin,
+                            pull = pull.value,
+                            // The app's name, no longer written beside it: for accessibility services.
+                            description = stringResource(R.string.app_name),
+                        )
                         Spacer(Modifier.width(12.dp))
-                        Column {
-                            Text(stringResource(R.string.app_name))
-                            val notice = state.networkNotice?.asString()
-                                ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null
-                            val subtitle = notice ?: box
-                            if (subtitle != null) {
-                                Text(
-                                    subtitle,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = if (notice != null) MaterialTheme.colorScheme.error
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                )
-                            }
+                        // The box in use as the title, centred beside the helmet – or, in its place, a note
+                        // about the network (smaller, in up to two lines, as it is longer).
+                        val notice = state.networkNotice?.asString()
+                            ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null
+                        if (notice != null) {
+                            Text(
+                                notice,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.error,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        } else {
+                            Text(box ?: stringResource(R.string.app_name), maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 },

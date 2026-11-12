@@ -19,11 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 /**
- * The helmet in the dialer's title, beside the app's name: at rest it just looks out and blinks now
- * and then; while the app talks to the box ([busy]) it rocks its spike from side to side; and when
- * [spin] is started (a long press on the title), it turns once around; pulled down for a refresh,
- * it nods forward as far as pulled. Still while Android's
- * animations are switched off – the progress bar below the title says that the app is busy all the same.
+ * The helmet in the dialer's title, in place of the app's name (beside the box in use): at rest it
+ * just looks out and blinks now and then; while the app talks to the box ([busy]) it rocks its spike
+ * from side to side; when [spin] is started (a long press on the title), it turns once around; and
+ * pulled down for a refresh, it nods forward as far as pulled. Still while Android's animations are
+ * switched off – the progress bar below the title says that the app is busy all the same.
  */
 @Composable
 fun TitleHelmet(
@@ -32,6 +32,8 @@ fun TitleHelmet(
     modifier: Modifier = Modifier,
     /** How far the dialer is pulled down for a refresh (1: letting go refreshes): it tips its spike forward that far. */
     pull: Float = 0f,
+    /** What accessibility services say for it; null: nothing (decoration). */
+    description: String? = null,
 ) {
     val animate = rememberAnimationsOn()
     val blinking = rememberBlinking(MascotPose.IDLE, animate)
@@ -65,7 +67,7 @@ fun TitleHelmet(
                     else -> MascotPose.IDLE.drawable
                 },
             ),
-            contentDescription = null,
+            contentDescription = description,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
