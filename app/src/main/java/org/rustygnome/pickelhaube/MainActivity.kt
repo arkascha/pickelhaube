@@ -344,6 +344,7 @@ class MainActivity : ComponentActivity() {
                         onCheckLines = viewModel.calls::checkLines,
                         onDialFrom = { viewModel.dial(from = it) },
                         onSuggestion = viewModel::takeSuggestion,
+                        onPullRefresh = viewModel::refresh,
                     )
                 }
 

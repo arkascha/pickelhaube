@@ -53,6 +53,7 @@
     <string name="dialer_choose_phone">Choose phone</string>
     <string name="dialer_ring_phone">Ring phone</string>
     <string name="dialer_reload_phones">Reload phones from the router</string>
+    <string name="dialer_refresh">Read everything from the FRITZ!Box again</string>
 
     <!-- number picker -->
     <string name="picker_title">Choose number</string>

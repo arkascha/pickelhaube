@@ -358,6 +358,22 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         network.detectIfStale()
     }
 
+    /**
+     * Pull to refresh in the dialer: which box is reachable from here, and everything the dialer shows
+     * read from it anew – its phones, missed calls, whether its numbers are registered, its call
+     * forwardings and phone books. As when the app comes back to the foreground, but all of it, now.
+     */
+    fun refresh() {
+        if (!settings.isConfigured()) return
+        // These wait for the box to be free – after the detection and the phones below.
+        deflections.preload()
+        calls.preloadMissed()
+        calls.preloadLines()
+        if (_state.value.phonebooksLoaded) reloadRouterPhonebooks() else speedDials.preload()
+        // Which box, then its phones – or, if another one is reachable now, everything of that one.
+        network.detectAndLoad()
+    }
+
     // ViewModel.onCleared() is empty today (lint's EmptySuperCall), but called anyway in case it ever is not.
     @SuppressLint("EmptySuperCall")
     override fun onCleared() {

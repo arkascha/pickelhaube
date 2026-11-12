@@ -70,7 +70,11 @@ The mascot also turns up elsewhere: with a short cheerful line when a list in th
 call forwarding page is empty (*All quiet on the line.*), searching while something loads, puzzled when
 it failed. In the dialer it sits in the title, beside the app's name: it blinks now and then, rocks
 its spike while the app talks to the box (the progress bar below still says so too, also with
-animations off), and spins once on a long press on the title. A long press on the version line in the
+animations off), and spins once on a long press on the title. **Pulling the dialer down** reads
+everything it shows from the box anew – which box is reachable, its phones, missed calls, whether its
+numbers are registered, call forwardings and phone books –; the helmet tips its spike forward as far as
+it is pulled, and rocks while the box answers. A tap on a key stays a tap; for accessibility services the
+same is offered as an action of the dialer. A long press on the version line in the
 settings makes it pop up and spin as well (and copies the version, as before).
 
 ### What's new

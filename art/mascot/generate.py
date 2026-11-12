@@ -172,6 +172,8 @@ POSES = {
     ] + hand(89, 42),
     # At rest, in the dialer's title: just the head, eyes front.
     "idle": head() + eyes((0.0, 0.0)),
+    # Nodding, as the dialer is pulled down: eyes down.
+    "nodding": head() + eyes((0.0, 1.9)),
     # The box rings your phone: eyes down to the phone, ringing marks on both sides of the head.
     "ringing": head() + eyes((-0.8, 1.4)) + [
         ("stroke", BLUE, "M13,40Q8,47 10,55", 1.6), ("stroke", BLUE, "M7,36Q1,46 4,58", 1.6),

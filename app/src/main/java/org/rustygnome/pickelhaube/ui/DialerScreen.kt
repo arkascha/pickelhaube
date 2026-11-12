@@ -57,6 +57,10 @@ import androidx.compose.material3.ripple
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -142,9 +146,19 @@ fun DialerScreen(
     /** Places the call from another own number of the box (long press on the green button). */
     onDialFrom: (OwnNumber) -> Unit,
     onSuggestion: (Suggestion) -> Unit,
+    /** Pulled down: read everything the dialer shows from the box anew. */
+    onPullRefresh: () -> Unit,
 ) {
+    // Pull to refresh: how far the dialer is pulled down (1: letting go refreshes) – shown by the helmet.
+    val pull = remember { Animatable(0f) }
+    val pullScope = rememberCoroutineScope()
+    val pullHaptics = LocalHapticFeedback.current
+    val pullDistance = with(LocalDensity.current) { PULL_DISTANCE_DP.dp.toPx() }
+    val refreshLabel = stringResource(R.string.dialer_refresh)
     state.numberChoice?.let { NumberChoiceDialog(it, onChooseNumber, onDismissNumberChoice) }
     Scaffold(
+        // Pulled down anywhere – the title included – the dialer reads the box anew.
+        modifier = Modifier.pullToRefresh(pull, pullDistance, pullScope, pullHaptics, onPullRefresh),
         topBar = {
             TopAppBar(
                 title = {
@@ -162,7 +176,7 @@ fun DialerScreen(
                             })
                         },
                     ) {
-                        TitleHelmet(busy = state.busy, spin = spin)
+                        TitleHelmet(busy = state.busy, spin = spin, pull = pull.value)
                         Spacer(Modifier.width(12.dp))
                         Column {
                             Text(stringResource(R.string.app_name))
@@ -213,7 +227,11 @@ fun DialerScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                // The gesture's way for accessibility services.
+                .semantics {
+                    customActions = listOf(CustomAccessibilityAction(refreshLabel) { onPullRefresh(); true })
+                },
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Activity indicator with a fixed height, so the layout never jumps.

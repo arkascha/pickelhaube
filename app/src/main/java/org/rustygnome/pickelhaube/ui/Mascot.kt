@@ -31,6 +31,9 @@ enum class MascotPose {
 
     /** At rest, in the dialer's title. */
     IDLE,
+
+    /** Nodding, in the dialer's title, as the dialer is pulled down: eyes down. */
+    NODDING,
 }
 
 @get:DrawableRes
@@ -46,6 +49,7 @@ val MascotPose.drawable: Int
         MascotPose.LISTENING -> R.drawable.mascot_listening
         MascotPose.TALKING -> R.drawable.mascot_talking
         MascotPose.IDLE -> R.drawable.mascot_idle
+        MascotPose.NODDING -> R.drawable.mascot_nodding
     }
 
 /** The pose with its eyes closed, for a blink; null: the pose does not blink (its eyes are closed or squinted already). */
@@ -59,7 +63,7 @@ val MascotPose.blinkDrawable: Int?
         MascotPose.RINGING -> R.drawable.mascot_ringing_blink
         MascotPose.LISTENING -> R.drawable.mascot_listening_blink
         MascotPose.IDLE -> R.drawable.mascot_idle_blink
-        MascotPose.PUZZLED, MascotPose.CHEERING, MascotPose.TALKING -> null
+        MascotPose.PUZZLED, MascotPose.CHEERING, MascotPose.TALKING, MascotPose.NODDING -> null
     }
 
 /** Whether Android plays animations (its animator duration scale is not off). */

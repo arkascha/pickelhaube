@@ -50,6 +50,7 @@
     <string name="dialer_choose_phone">Elegir teléfono</string>
     <string name="dialer_ring_phone">Hacer sonar</string>
     <string name="dialer_reload_phones">Volver a cargar los teléfonos del router</string>
+    <string name="dialer_refresh">Volver a leer todo de la FRITZ!Box</string>
 
     <!-- number picker -->
     <string name="picker_title">Elegir número</string>
