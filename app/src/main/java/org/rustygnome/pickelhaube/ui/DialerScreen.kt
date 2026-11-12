@@ -55,6 +55,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.material3.ripple
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -147,8 +149,20 @@ fun DialerScreen(
             TopAppBar(
                 title = {
                     // App name, and below it the FritzBox in use – or a note about the network.
+                    // A long press on it: the helmet spins once (just for fun).
                     val box = state.profiles.firstOrNull { it.id == state.activeProfileId }?.name
-                    Column {
+                    val spin = rememberHelmetSpin()
+                    val haptics = LocalHapticFeedback.current
+                    // Below the title, over the number field.
+                    HelmetSpinPopup(spin, Alignment.BottomCenter, offsetY = 104.dp)
+                    Column(
+                        Modifier.pointerInput(Unit) {
+                            detectTapGestures(onLongPress = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                spin.start()
+                            })
+                        },
+                    ) {
                         Text(stringResource(R.string.app_name))
                         val notice = state.networkNotice?.asString()
                             ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null

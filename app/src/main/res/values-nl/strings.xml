@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Telefoonboeken laden…</string>
     <string name="phonebook_load_failed">De telefoonboeken konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="phonebook_empty">De telefoonboeken zijn leeg.</string>
+    <string name="phonebook_empty_headline">Nog geen enkele naam.</string>
     <string name="phonebook_no_match">Geen passende contacten.</string>
+    <string name="phonebook_no_match_headline">Overal gezocht.</string>
     <string name="phonebook_none_enabled">Er zijn geen telefoonboeken ingeschakeld. Je kunt ze in de instellingen inschakelen.</string>
     <string name="device_contacts_question_title">Contacten van deze telefoon opnemen?</string>
     <string name="device_contacts_question_text">Pickelhaube kan naast de telefoonboeken van de FRITZ!Box ook de contacten tonen die op deze telefoon zijn opgeslagen. Daarvoor vraagt Android toegang tot je contacten – ze verlaten de telefoon nooit. Je kunt dit later in de instellingen wijzigen.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Gesprekkenlijst laden…</string>
     <string name="recents_load_failed">De gesprekkenlijst kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_empty">Nog geen recente gesprekken.</string>
+    <string name="recents_empty_headline">Alles stil op de lijn.</string>
     <string name="recents_none_enabled">Er is geen gesprekkenlijst ingeschakeld. Je kunt deze in de instellingen inschakelen.</string>
     <string name="recents_box_load_failed">De gesprekkenlijst van de FRITZ!Box kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_recorded_by_box">Vastgelegd door %1$s</string>
@@ -304,6 +307,7 @@
     <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld, zoals ze op de telefoons met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
     <string name="speed_dial_box_failed">De snelkeuzes van de FRITZ!Box konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="speed_dial_box_none">In de telefoonboeken van deze FRITZ!Box zijn geen snelkeuzes ingesteld.</string>
+    <string name="speed_dial_box_none_headline">Nog geen favorieten op de FRITZ!Box.</string>
     <string name="speed_dial_free">Niet ingesteld</string>
     <string name="speed_dial_change_or_remove">Wijzigen of verwijderen</string>
     <string name="speed_dial_set_up">Instellen</string>
@@ -402,6 +406,7 @@
     <string name="deflections_loading">Doorschakelingen worden gelezen…</string>
     <string name="deflections_failed">De doorschakelingen konden niet worden gelezen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="deflections_none">Op deze FRITZ!Box is geen doorschakeling ingesteld.</string>
+    <string name="deflections_none_headline">Elk gesprek komt rechtstreeks bij jou.</string>
     <string name="deflections_tile_hint">De tegel ‘Doorschakeling’ in de snelle instellingen schakelt de gemarkeerde.</string>
     <string name="deflection_all">Alle oproepen</string>
     <string name="deflection_from">Oproepen van %1$s</string>

@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Wczytywanie książek telefonicznych…</string>
     <string name="phonebook_load_failed">Nie udało się wczytać książek telefonicznych. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="phonebook_empty">Książki telefoniczne są puste.</string>
+    <string name="phonebook_empty_headline">Jeszcze żadnego kontaktu.</string>
     <string name="phonebook_no_match">Brak pasujących kontaktów.</string>
+    <string name="phonebook_no_match_headline">Szukano wszędzie.</string>
     <string name="phonebook_none_enabled">Żadna książka telefoniczna nie jest włączona. Możesz je włączyć w ustawieniach.</string>
     <string name="device_contacts_question_title">Uwzględnić kontakty z tego telefonu?</string>
     <string name="device_contacts_question_text">Pickelhaube może też pokazywać kontakty zapisane na tym telefonie obok książek telefonicznych FRITZ!Box. W tym celu Android poprosi o dostęp do Twoich kontaktów – nigdy nie opuszczają telefonu. Możesz to później zmienić w ustawieniach.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Wczytywanie listy połączeń…</string>
     <string name="recents_load_failed">Nie udało się wczytać listy połączeń. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_empty">Brak ostatnich połączeń.</string>
+    <string name="recents_empty_headline">Na linii cisza i spokój.</string>
     <string name="recents_none_enabled">Żadna lista połączeń nie jest włączona. Możesz ją włączyć w ustawieniach.</string>
     <string name="recents_box_load_failed">Nie udało się wczytać listy połączeń FRITZ!Box. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_recorded_by_box">Zarejestrowane przez %1$s</string>
@@ -312,6 +315,7 @@
     <string name="speed_dial_box_help">Szybkie wybieranie ustawione w książkach telefonicznych tego FRITZ!Box, wybierane na jego telefonach przez **7. Na klawiaturze dotknij pierwszej cyfry i przytrzymaj drugą – albo wpisz **7 i numer. Na dole dodasz nowe; długie naciśnięcie zmienia je lub usuwa.</string>
     <string name="speed_dial_box_failed">Nie udało się wczytać szybkiego wybierania z FRITZ!Box. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="speed_dial_box_none">W książkach telefonicznych tego FRITZ!Box nie ustawiono szybkiego wybierania.</string>
+    <string name="speed_dial_box_none_headline">Na FRITZ!Box nie ma jeszcze ulubionych.</string>
     <string name="speed_dial_free">Wolne</string>
     <string name="speed_dial_change_or_remove">Zmień lub usuń</string>
     <string name="speed_dial_set_up">Ustaw</string>
@@ -414,6 +418,7 @@
     <string name="deflections_loading">Odczytywanie przekierowań…</string>
     <string name="deflections_failed">Nie udało się odczytać przekierowań. Dotknij „Odśwież”, aby spróbować ponownie.</string>
     <string name="deflections_none">Na tym FRITZ!Box nie ustawiono żadnego przekierowania.</string>
+    <string name="deflections_none_headline">Każde połączenie trafia prosto do ciebie.</string>
     <string name="deflections_tile_hint">Kafelek „Przekierowanie” w szybkich ustawieniach przełącza zaznaczone.</string>
     <string name="deflection_all">Wszystkie połączenia</string>
     <string name="deflection_from">Połączenia od %1$s</string>

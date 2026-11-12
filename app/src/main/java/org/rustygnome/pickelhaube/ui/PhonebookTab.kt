@@ -37,6 +37,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -264,12 +268,12 @@ fun PhonebookTab(
         }
 
         when {
-            !routerBooksEnabled && !deviceContactsEnabled -> Message(stringResource(R.string.phonebook_none_enabled))
-            phonebooks.isEmpty() && busy -> Message(stringResource(R.string.phonebook_loading))
+            !routerBooksEnabled && !deviceContactsEnabled -> Message(stringResource(R.string.phonebook_none_enabled), MascotPose.CLIPBOARD)
+            phonebooks.isEmpty() && busy -> Message(stringResource(R.string.phonebook_loading), MascotPose.SEARCHING)
             phonebooks.isEmpty() && routerBooksEnabled && !loaded ->
-                Message(stringResource(R.string.phonebook_load_failed))
-            phonebooks.all { it.contacts.isEmpty() } -> Message(stringResource(R.string.phonebook_empty))
-            filtered.isEmpty() -> Message(stringResource(R.string.phonebook_no_match))
+                Message(stringResource(R.string.phonebook_load_failed), MascotPose.PUZZLED)
+            phonebooks.all { it.contacts.isEmpty() } -> Message(stringResource(R.string.phonebook_empty), MascotPose.CLIPBOARD, stringResource(R.string.phonebook_empty_headline))
+            filtered.isEmpty() -> Message(stringResource(R.string.phonebook_no_match), MascotPose.SEARCHING, stringResource(R.string.phonebook_no_match_headline))
             else -> Row(Modifier.fillMaxSize()) {
                 LazyColumn(
                     state = listState,
@@ -405,12 +409,36 @@ private fun ContactsRevokedCard(
 }
 
 @Composable
-internal fun Message(text: String) {
-    Text(
-        text,
-        modifier = Modifier.padding(24.dp),
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+internal fun Message(text: String, pose: MascotPose? = null, headline: String? = null) {
+    if (pose == null && headline == null) {
+        Text(
+            text,
+            modifier = Modifier.padding(24.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        return
+    }
+    // With the mascot: in [pose], above a short cheerful [headline] and the [text] that explains.
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        if (pose != null) {
+            val blinking = rememberBlinking(pose, rememberAnimationsOn())
+            Image(
+                painterResource(if (blinking) pose.blinkDrawable ?: pose.drawable else pose.drawable),
+                contentDescription = null,
+                modifier = Modifier.size(88.dp),
+            )
+        }
+        if (headline != null) {
+            Text(headline, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+        }
+        Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+    }
 }
 
 /** Says that the next tapped number becomes speed dial [slot], with a way to cancel. */

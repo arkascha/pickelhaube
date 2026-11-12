@@ -79,7 +79,7 @@ fun SpeedDialTab(
         )
     }
     if (phoneSpeedDials == null && boxSpeedDials == null) {
-        Message(stringResource(R.string.speed_dial_none_enabled))
+        Message(stringResource(R.string.speed_dial_none_enabled), MascotPose.CLIPBOARD)
         return
     }
     LazyColumn(Modifier.fillMaxSize()) {
@@ -109,9 +109,9 @@ fun SpeedDialTab(
                 )
             }
             when {
-                boxSpeedDials.isEmpty() && busy -> item { Message(stringResource(R.string.phonebook_loading)) }
-                boxSpeedDials.isEmpty() && !boxLoaded -> item { Message(stringResource(R.string.speed_dial_box_failed)) }
-                boxSpeedDials.isEmpty() -> item { Message(stringResource(R.string.speed_dial_box_none)) }
+                boxSpeedDials.isEmpty() && busy -> item { Message(stringResource(R.string.phonebook_loading), MascotPose.SEARCHING) }
+                boxSpeedDials.isEmpty() && !boxLoaded -> item { Message(stringResource(R.string.speed_dial_box_failed), MascotPose.PUZZLED) }
+                boxSpeedDials.isEmpty() -> item { Message(stringResource(R.string.speed_dial_box_none), MascotPose.WAVING, stringResource(R.string.speed_dial_box_none_headline)) }
                 else -> items(boxSpeedDials, key = { "box-${it.slot}" }) { speedDial ->
                     val copy = onlineCopies.firstOrNull { c -> c.entry.numbers.any { it.speedDial == speedDial.slot } }
                     BoxSlotRow(

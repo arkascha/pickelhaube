@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Chargement des répertoires…</string>
     <string name="phonebook_load_failed">Impossible de charger les répertoires. Touchez Recharger pour réessayer.</string>
     <string name="phonebook_empty">Les répertoires sont vides.</string>
+    <string name="phonebook_empty_headline">Pas encore un seul nom.</string>
     <string name="phonebook_no_match">Aucun contact correspondant.</string>
+    <string name="phonebook_no_match_headline">Cherché partout.</string>
     <string name="phonebook_none_enabled">Aucun répertoire n’est activé. Vous pouvez les activer dans les paramètres.</string>
     <string name="device_contacts_question_title">Inclure les contacts de ce téléphone ?</string>
     <string name="device_contacts_question_text">Pickelhaube peut aussi afficher les contacts enregistrés sur ce téléphone à côté des répertoires de la FRITZ!Box. Pour cela, Android demande l’accès à vos contacts – ils ne quittent jamais le téléphone. Vous pourrez modifier ce choix plus tard dans les paramètres.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Chargement de la liste d’appels…</string>
     <string name="recents_load_failed">Impossible de charger la liste d’appels. Touchez Recharger pour réessayer.</string>
     <string name="recents_empty">Aucun appel récent pour l’instant.</string>
+    <string name="recents_empty_headline">Calme plat sur la ligne.</string>
     <string name="recents_none_enabled">Aucune liste d’appels n’est activée. Vous pouvez l’activer dans les paramètres.</string>
     <string name="recents_box_load_failed">Impossible de charger la liste d’appels de la FRITZ!Box. Touchez Recharger pour réessayer.</string>
     <string name="recents_recorded_by_box">Enregistré par %1$s</string>
@@ -308,6 +311,7 @@
     <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box, tels qu’ils se composent sur ses téléphones avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
     <string name="speed_dial_box_failed">Les numéros abrégés de la FRITZ!Box n’ont pas pu être chargés. Touchez Recharger pour réessayer.</string>
     <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FRITZ!Box.</string>
+    <string name="speed_dial_box_none_headline">Pas encore de favoris sur la FRITZ!Box.</string>
     <string name="speed_dial_free">Libre</string>
     <string name="speed_dial_change_or_remove">Modifier ou supprimer</string>
     <string name="speed_dial_set_up">Configurer</string>
@@ -408,6 +412,7 @@
     <string name="deflections_loading">Lecture des renvois d’appel…</string>
     <string name="deflections_failed">Impossible de lire les renvois d’appel. Touchez Recharger pour réessayer.</string>
     <string name="deflections_none">Aucun renvoi d’appel n’est configuré sur cette FRITZ!Box.</string>
+    <string name="deflections_none_headline">Chaque appel arrive directement chez toi.</string>
     <string name="deflections_tile_hint">La vignette « Renvoi d’appel » des réglages rapides commute celui qui est coché.</string>
     <string name="deflection_all">Tous les appels</string>
     <string name="deflection_from">Appels de %1$s</string>

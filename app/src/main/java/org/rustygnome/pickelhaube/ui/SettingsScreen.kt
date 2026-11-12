@@ -399,10 +399,15 @@ private fun ProfileRow(
 private fun VersionInfo(onShowWhatsNew: () -> Unit) {
     val context = LocalContext.current
     val version = stringResource(R.string.settings_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+    // A long press copies the version (for a bug report) – and the helmet spins once, just for fun.
+    val spin = rememberHelmetSpin()
+    // Above the version.
+    HelmetSpinPopup(spin, Alignment.TopCenter, offsetY = (-120).dp)
     Column(
         Modifier
             .fillMaxWidth()
             .combinedClickable(onClick = {}, onLongClick = {
+                spin.start()
                 context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(
                     ClipData.newPlainText(version, "$version, ${BuildConfig.FLAVOR}")
                 )

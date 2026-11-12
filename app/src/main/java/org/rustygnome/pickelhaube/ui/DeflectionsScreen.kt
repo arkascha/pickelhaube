@@ -88,9 +88,9 @@ fun DeflectionsScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             )
             when {
-                deflections == null && busy -> Message(stringResource(R.string.deflections_loading))
-                deflections == null -> Message(stringResource(R.string.deflections_failed))
-                deflections.isEmpty() -> Message(stringResource(R.string.deflections_none))
+                deflections == null && busy -> Message(stringResource(R.string.deflections_loading), MascotPose.SEARCHING)
+                deflections == null -> Message(stringResource(R.string.deflections_failed), MascotPose.PUZZLED)
+                deflections.isEmpty() -> Message(stringResource(R.string.deflections_none), MascotPose.CHEERING, stringResource(R.string.deflections_none_headline))
                 else -> {
                     val forTile = deflections.forTile(tileDeflection)?.takeIf { deflections.size > 1 }
                     if (forTile != null) {

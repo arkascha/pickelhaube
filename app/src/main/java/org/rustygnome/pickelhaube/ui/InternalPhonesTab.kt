@@ -28,7 +28,8 @@ fun InternalPhonesTab(
     onPick: (number: String, name: String) -> Unit,
 ) {
     if (phones.isEmpty()) {
-        Message(stringResource(if (busy) R.string.internal_loading else R.string.internal_none))
+        if (busy) Message(stringResource(R.string.internal_loading), MascotPose.SEARCHING)
+        else Message(stringResource(R.string.internal_none), MascotPose.PUZZLED)
         return
     }
     LazyColumn(Modifier.fillMaxSize()) {

@@ -67,7 +67,9 @@
     <string name="phonebook_loading">Loading phone books…</string>
     <string name="phonebook_load_failed">Phone books could not be loaded. Tap reload to try again.</string>
     <string name="phonebook_empty">The phone books are empty.</string>
+    <string name="phonebook_empty_headline">Not a single name yet.</string>
     <string name="phonebook_no_match">No matching contacts.</string>
+    <string name="phonebook_no_match_headline">Searched high and low.</string>
     <string name="phonebook_none_enabled">No phone books are switched on. You can switch them on in the settings.</string>
     <string name="device_contacts_question_title">Include this phone’s contacts?</string>
     <string name="device_contacts_question_text">Pickelhaube can also show the contacts stored on this phone next to the FRITZ!Box phone books. For that, Android asks for access to your contacts – they never leave the phone. You can change this later in the settings.</string>
@@ -84,6 +86,7 @@
     <string name="recents_loading">Loading call list…</string>
     <string name="recents_load_failed">The call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_empty">No recent calls yet.</string>
+    <string name="recents_empty_headline">All quiet on the line.</string>
     <string name="recents_none_enabled">No call list is switched on. You can switch one on in the settings.</string>
     <string name="recents_box_load_failed">The FRITZ!Box call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_recorded_by_box">Recorded by %1$s</string>
@@ -307,6 +310,7 @@
     <string name="speed_dial_box_help">The speed dials set up in this FRITZ!Box’s phone books, as dialled on its phones with **7. In the dialer, tap the first digit and long-press the second – or enter **7 and the number. Below, set up a new one; long-press one to change or remove it.</string>
     <string name="speed_dial_box_failed">The speed dials of the FRITZ!Box could not be loaded. Tap reload to try again.</string>
     <string name="speed_dial_box_none">No speed dials are set up in the phone books of this FRITZ!Box.</string>
+    <string name="speed_dial_box_none_headline">No favourites on the FRITZ!Box yet.</string>
     <string name="speed_dial_free">Not set</string>
     <string name="speed_dial_change_or_remove">Change or remove</string>
     <string name="speed_dial_set_up">Set up</string>
@@ -405,6 +409,7 @@
     <string name="deflections_loading">Reading the call forwardings…</string>
     <string name="deflections_failed">The call forwardings could not be read. Tap reload to try again.</string>
     <string name="deflections_none">No call forwarding is set up on this FRITZ!Box.</string>
+    <string name="deflections_none_headline">Every call comes straight to you.</string>
     <string name="deflections_tile_hint">The quick settings tile “Call forwarding” switches the one marked.</string>
     <string name="deflection_all">All calls</string>
     <string name="deflection_from">Calls from %1$s</string>

@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Cargando agendas…</string>
     <string name="phonebook_load_failed">No se pudieron cargar las agendas. Toca Volver a cargar para intentarlo de nuevo.</string>
     <string name="phonebook_empty">Las agendas están vacías.</string>
+    <string name="phonebook_empty_headline">Todavía ni un solo nombre.</string>
     <string name="phonebook_no_match">No hay contactos que coincidan.</string>
+    <string name="phonebook_no_match_headline">Buscado por todas partes.</string>
     <string name="phonebook_none_enabled">No hay ninguna agenda activada. Puedes activarlas en los ajustes.</string>
     <string name="device_contacts_question_title">¿Incluir los contactos de este teléfono?</string>
     <string name="device_contacts_question_text">Pickelhaube también puede mostrar los contactos guardados en este teléfono junto a las agendas de la FRITZ!Box. Para ello, Android pide acceso a tus contactos; nunca salen del teléfono. Puedes cambiarlo más tarde en los ajustes.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Cargando lista de llamadas…</string>
     <string name="recents_load_failed">No se pudo cargar la lista de llamadas. Toca Volver a cargar para intentarlo de nuevo.</string>
     <string name="recents_empty">Aún no hay llamadas recientes.</string>
+    <string name="recents_empty_headline">Todo tranquilo en la línea.</string>
     <string name="recents_none_enabled">No hay ninguna lista de llamadas activada. Puedes activarla en los ajustes.</string>
     <string name="recents_box_load_failed">No se pudo cargar la lista de llamadas de la FRITZ!Box. Toca Volver a cargar para intentarlo de nuevo.</string>
     <string name="recents_recorded_by_box">Registrada por %1$s</string>
@@ -308,6 +311,7 @@
     <string name="speed_dial_box_help">Las marcaciones rápidas configuradas en las agendas de esta FRITZ!Box, como se marcan en sus teléfonos con **7. En el teclado, toca la primera cifra y mantén pulsada la segunda, o introduce **7 y el número. Abajo puedes crear una nueva; mantén pulsada una para cambiarla o quitarla.</string>
     <string name="speed_dial_box_failed">No se pudieron cargar las marcaciones rápidas de la FRITZ!Box. Toca Volver a cargar para intentarlo de nuevo.</string>
     <string name="speed_dial_box_none">No hay marcaciones rápidas configuradas en las agendas de esta FRITZ!Box.</string>
+    <string name="speed_dial_box_none_headline">Aún no hay favoritos en la FRITZ!Box.</string>
     <string name="speed_dial_free">Libre</string>
     <string name="speed_dial_change_or_remove">Cambiar o quitar</string>
     <string name="speed_dial_set_up">Configurar</string>
@@ -408,6 +412,7 @@
     <string name="deflections_loading">Leyendo los desvíos de llamadas…</string>
     <string name="deflections_failed">No se pudieron leer los desvíos de llamadas. Toca recargar para volver a intentarlo.</string>
     <string name="deflections_none">No hay ningún desvío de llamadas configurado en esta FRITZ!Box.</string>
+    <string name="deflections_none_headline">Cada llamada llega directamente a ti.</string>
     <string name="deflections_tile_hint">El mosaico «Desvío de llamadas» de los ajustes rápidos cambia el marcado.</string>
     <string name="deflection_all">Todas las llamadas</string>
     <string name="deflection_from">Llamadas de %1$s</string>

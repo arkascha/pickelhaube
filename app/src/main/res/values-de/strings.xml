@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Telefonbücher werden geladen …</string>
     <string name="phonebook_load_failed">Die Telefonbücher konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="phonebook_empty">Die Telefonbücher sind leer.</string>
+    <string name="phonebook_empty_headline">Noch kein einziger Name.</string>
     <string name="phonebook_no_match">Keine passenden Kontakte.</string>
+    <string name="phonebook_no_match_headline">Überall gesucht.</string>
     <string name="phonebook_none_enabled">Keine Telefonbücher eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
     <string name="device_contacts_question_title">Kontakte dieses Telefons einbeziehen?</string>
     <string name="device_contacts_question_text">Pickelhaube kann zusätzlich zu den Telefonbüchern der FRITZ!Box auch die auf diesem Telefon gespeicherten Kontakte anzeigen. Dafür fragt Android nach dem Zugriff auf deine Kontakte – sie verlassen das Telefon nie. Du kannst das später in den Einstellungen ändern.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Anrufliste wird geladen …</string>
     <string name="recents_load_failed">Die Anrufliste konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_empty">Noch keine Anrufe.</string>
+    <string name="recents_empty_headline">Alles ruhig in der Leitung.</string>
     <string name="recents_none_enabled">Keine Anrufliste eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
     <string name="recents_box_load_failed">Die Anrufliste der FRITZ!Box konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_recorded_by_box">Aufgezeichnet von %1$s</string>
@@ -304,6 +307,7 @@
     <string name="speed_dial_box_help">Die in den Telefonbüchern dieser FRITZ!Box eingerichteten Kurzwahlen, wie an ihren Telefonen mit **7 gewählt. Im Wählfeld die erste Ziffer antippen und die zweite lange drücken – oder **7 und die Nummer eingeben. Unten legst du eine neue an; ein langer Druck auf eine ändert oder entfernt sie.</string>
     <string name="speed_dial_box_failed">Die Kurzwahlen der FRITZ!Box konnten nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="speed_dial_box_none">In den Telefonbüchern dieser FRITZ!Box sind keine Kurzwahlen eingerichtet.</string>
+    <string name="speed_dial_box_none_headline">Noch keine Lieblinge auf der FRITZ!Box.</string>
     <string name="speed_dial_free">Nicht belegt</string>
     <string name="speed_dial_change_or_remove">Ändern oder entfernen</string>
     <string name="speed_dial_set_up">Einrichten</string>
@@ -402,6 +406,7 @@
     <string name="deflections_loading">Lese die Rufumleitungen…</string>
     <string name="deflections_failed">Die Rufumleitungen konnten nicht gelesen werden. Zum erneuten Versuch auf Neu laden tippen.</string>
     <string name="deflections_none">Auf dieser FRITZ!Box ist keine Rufumleitung eingerichtet.</string>
+    <string name="deflections_none_headline">Jeder Anruf kommt direkt zu dir.</string>
     <string name="deflections_tile_hint">Die Kachel „Rufumleitung“ in den Schnelleinstellungen schaltet die markierte.</string>
     <string name="deflection_all">Alle Anrufe</string>
     <string name="deflection_from">Anrufe von %1$s</string>

@@ -66,6 +66,11 @@ again; from there, its connect step adds another box. The mascot bobs and sways,
 with each new pose, waves now and then on the first page, hops when something worked and tilts its
 head when it did not; pages slide – all of it only while Android's animations are on.
 
+The mascot also turns up elsewhere: with a short cheerful line when a list in the number picker or the
+call forwarding page is empty (*All quiet on the line.*), searching while something loads, puzzled when
+it failed – and, as a little surprise, it spins once on a long press on the dialer's title or on the
+version line in the settings (which also copies the version, as before).
+
 ### What's new
 
 After an update, the app shows once what is new – a few points under the cheering mascot, over the

@@ -182,11 +182,11 @@ fun RecentsTab(
         }
 
         when {
-            !boxCallsEnabled && !callLogEnabled -> Message(stringResource(R.string.recents_none_enabled))
-            calls.isEmpty() && busy -> Message(stringResource(R.string.recents_loading))
+            !boxCallsEnabled && !callLogEnabled -> Message(stringResource(R.string.recents_none_enabled), MascotPose.CLIPBOARD)
+            calls.isEmpty() && busy -> Message(stringResource(R.string.recents_loading), MascotPose.SEARCHING)
             calls.isEmpty() && boxCallsEnabled && !boxCallsLoaded ->
-                Message(stringResource(R.string.recents_load_failed))
-            calls.isEmpty() -> Message(stringResource(R.string.recents_empty))
+                Message(stringResource(R.string.recents_load_failed), MascotPose.PUZZLED)
+            calls.isEmpty() -> Message(stringResource(R.string.recents_empty), MascotPose.LISTENING, stringResource(R.string.recents_empty_headline))
             else -> {
                 // Only the phone's calls are shown: say so, rather than silently leave the box' out.
                 if (boxCallsEnabled && !boxCallsLoaded && !busy) {

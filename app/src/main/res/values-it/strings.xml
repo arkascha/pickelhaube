@@ -64,7 +64,9 @@
     <string name="phonebook_loading">Caricamento rubriche…</string>
     <string name="phonebook_load_failed">Impossibile caricare le rubriche. Tocca Ricarica per riprovare.</string>
     <string name="phonebook_empty">Le rubriche sono vuote.</string>
+    <string name="phonebook_empty_headline">Ancora nessun nome.</string>
     <string name="phonebook_no_match">Nessun contatto corrispondente.</string>
+    <string name="phonebook_no_match_headline">Cercato dappertutto.</string>
     <string name="phonebook_none_enabled">Nessuna rubrica attivata. Puoi attivarle nelle impostazioni.</string>
     <string name="device_contacts_question_title">Includere i contatti di questo telefono?</string>
     <string name="device_contacts_question_text">Pickelhaube può mostrare anche i contatti salvati su questo telefono accanto alle rubriche della FRITZ!Box. Per farlo, Android chiede l’accesso ai tuoi contatti – non lasciano mai il telefono. Puoi cambiare questa scelta più tardi nelle impostazioni.</string>
@@ -81,6 +83,7 @@
     <string name="recents_loading">Caricamento elenco chiamate…</string>
     <string name="recents_load_failed">Impossibile caricare l’elenco chiamate. Tocca Ricarica per riprovare.</string>
     <string name="recents_empty">Ancora nessuna chiamata recente.</string>
+    <string name="recents_empty_headline">Tutto tranquillo sulla linea.</string>
     <string name="recents_none_enabled">Nessun elenco chiamate attivato. Puoi attivarlo nelle impostazioni.</string>
     <string name="recents_box_load_failed">Impossibile caricare l’elenco chiamate della FRITZ!Box. Tocca Ricarica per riprovare.</string>
     <string name="recents_recorded_by_box">Registrata da %1$s</string>
@@ -308,6 +311,7 @@
     <string name="speed_dial_box_help">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box, come si compongono sui suoi telefoni con **7. Nel tastierino, tocca la prima cifra e tieni premuta la seconda, oppure inserisci **7 e il numero. In basso puoi crearne una nuova; tieni premuta una per modificarla o rimuoverla.</string>
     <string name="speed_dial_box_failed">Non è stato possibile caricare le selezioni rapide della FRITZ!Box. Tocca Ricarica per riprovare.</string>
     <string name="speed_dial_box_none">Nelle rubriche di questa FRITZ!Box non sono impostate selezioni rapide.</string>
+    <string name="speed_dial_box_none_headline">Ancora nessun preferito sulla FRITZ!Box.</string>
     <string name="speed_dial_free">Libera</string>
     <string name="speed_dial_change_or_remove">Modifica o rimuovi</string>
     <string name="speed_dial_set_up">Imposta</string>
@@ -408,6 +412,7 @@
     <string name="deflections_loading">Lettura dei trasferimenti di chiamata…</string>
     <string name="deflections_failed">Impossibile leggere i trasferimenti di chiamata. Tocca Ricarica per riprovare.</string>
     <string name="deflections_none">Su questa FRITZ!Box non è configurato alcun trasferimento di chiamata.</string>
+    <string name="deflections_none_headline">Ogni chiamata arriva dritta a te.</string>
     <string name="deflections_tile_hint">Il riquadro «Trasferimento» delle impostazioni rapide attiva o disattiva quello selezionato.</string>
     <string name="deflection_all">Tutte le chiamate</string>
     <string name="deflection_from">Chiamate da %1$s</string>
