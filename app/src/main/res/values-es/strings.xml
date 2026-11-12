@@ -345,6 +345,9 @@
     <string name="dialer_speed_dial_label">Marcación rápida %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Marcaciones rápidas de este teléfono</string>
     <string name="settings_phone_speed_dials_hint">Marcaciones rápidas 1 a 9, elegidas de las agendas y guardadas en este teléfono, por lo que funcionan con cualquier FRITZ!Box. Para usar una, mantén pulsada su cifra en el teclado.</string>
+    <string name="settings_keypad">Teclado</string>
+    <string name="settings_key_tones">Tonos del teclado</string>
+    <string name="settings_key_tones_hint">Un tono breve con cada tecla, como en el teclado de un teléfono. Suena solo en este teléfono y no pasa a la llamada. En silencio mientras el teléfono está en modo silencio o vibración.</string>
     <string name="connection_speed_dials">Marcaciones rápidas</string>
     <string name="connection_speed_dials_hint">Las marcaciones rápidas configuradas en las agendas de esta FRITZ!Box (00 a 99, como se marcan en sus teléfonos con **7). Para usar una, toca la primera cifra en el teclado y mantén pulsada la segunda. Funciona también con las agendas desactivadas.</string>
     <string name="connection_internal_calls">Llamadas internas</string>

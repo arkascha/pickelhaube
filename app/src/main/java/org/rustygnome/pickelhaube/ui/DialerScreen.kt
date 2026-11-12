@@ -267,9 +267,10 @@ fun DialerScreen(
                 SuggestionRow(state.suggestions, onSuggestion)
 
                 // Takes all remaining height; keys shrink on small screens / in landscape.
+                val tones = rememberKeyTones(state.keyTonesEnabled)
                 DialPad(
-                    onDigit = onDigit,
-                    onLongDigit = onLongDigit,
+                    onDigit = { tones?.play(it); onDigit(it) },
+                    onLongDigit = { tones?.play(it); onLongDigit(it) },
                     speedDials = state.usablePhoneSpeedDials,
                     modifier = Modifier
                         .weight(1f)

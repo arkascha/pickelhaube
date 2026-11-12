@@ -4,7 +4,6 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
@@ -116,16 +115,6 @@ class SpeedDialFlowTest : FlowTest() {
         compose.onAllNodesWithText(text(R.string.speed_dial_free)).fetchSemanticsNodes().let {
             check(it.isEmpty()) { "no free slots of this phone are shown" }
         }
-    }
-
-    /** The switch in the same row as [title]: the settings' rows have no node of their own to search within. */
-    private fun switchNextTo(title: String) = compose.onNodeWithText(title).fetchSemanticsNode().boundsInRoot.let { row ->
-        val switches = compose.onAllNodes(isToggleable())
-        val index = switches.fetchSemanticsNodes().indexOfFirst {
-            row.center.y in it.boundsInRoot.top..it.boundsInRoot.bottom
-        }
-        check(index >= 0) { "a switch next to \"$title\"" }
-        switches[index]
     }
 
     private companion object {

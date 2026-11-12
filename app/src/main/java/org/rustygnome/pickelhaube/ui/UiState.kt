@@ -170,6 +170,8 @@ data class UiState(
     val callLogProblem: UiText? = null,
     /** Optional feature, switched in the settings: this phone's own speed dials 1–9. */
     val phoneSpeedDialsEnabled: Boolean = true,
+    /** Switched in the settings: the keypad plays a tone for each key. */
+    val keyTonesEnabled: Boolean = false,
     val phoneSpeedDials: List<SpeedDial> = emptyList(),
     /** A settings file opened for import, waiting to be confirmed (and unlocked). */
     val pendingImport: SettingsFileInfo? = null,

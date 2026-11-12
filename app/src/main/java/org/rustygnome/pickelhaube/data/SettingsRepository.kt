@@ -164,6 +164,11 @@ class SettingsRepository(context: Context) {
         get() = prefs.getBoolean(KEY_PHONE_SPEED_DIALS_ENABLED, true)
         set(value) = prefs.edit { putBoolean(KEY_PHONE_SPEED_DIALS_ENABLED, value) }
 
+    /** Optional: the keypad plays a tone for each key. Off by default. */
+    var keyTonesEnabled: Boolean
+        get() = prefs.getBoolean(KEY_KEY_TONES, false)
+        set(value) = prefs.edit { putBoolean(KEY_KEY_TONES, value) }
+
     /** Optional feature: follow the calls placed on the box' call monitor. On by default. */
     var callStatusEnabled: Boolean
         get() = prefs.getBoolean(KEY_CALL_STATUS, true)
@@ -239,6 +244,7 @@ class SettingsRepository(context: Context) {
                 callStatusEnabled = callStatusEnabled,
                 tileDeflections = profiles.mapNotNull { p -> tileDeflection(p.id)?.let { p.id to it } }.toMap(),
                 language = language,
+                keyTonesEnabled = keyTonesEnabled,
             ),
         )
     }
@@ -265,6 +271,7 @@ class SettingsRepository(context: Context) {
         phoneSpeedDialsEnabled = backup.options.phoneSpeedDialsEnabled
         phoneSpeedDials = backup.options.phoneSpeedDials
         callStatusEnabled = backup.options.callStatusEnabled
+        keyTonesEnabled = backup.options.keyTonesEnabled
     }
 
     // --- storage ----------------------------------------------------------------------
@@ -310,6 +317,7 @@ class SettingsRepository(context: Context) {
         const val KEY_PHONE_SPEED_DIALS_ENABLED = "phone_speed_dials_enabled"
         const val KEY_PHONE_SPEED_DIALS = "phone_speed_dials"
         const val KEY_CALL_STATUS = "call_status_enabled"
+        const val KEY_KEY_TONES = "key_tones_enabled"
         const val KEY_LAST_DIALLED = "last_dialled_number"
         const val KEY_LAST_SEEN_VERSION = "last_seen_version"
         /** Followed by a connection's id. */

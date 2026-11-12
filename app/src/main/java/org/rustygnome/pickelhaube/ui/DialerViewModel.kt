@@ -66,6 +66,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             phoneSpeedDialsEnabled = settings.phoneSpeedDialsEnabled,
             phoneSpeedDials = settings.phoneSpeedDials,
             callStatusEnabled = settings.callStatusEnabled,
+            keyTonesEnabled = settings.keyTonesEnabled,
         )
     )
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -489,6 +490,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 phoneSpeedDialsEnabled = settings.phoneSpeedDialsEnabled,
                 phoneSpeedDials = settings.phoneSpeedDials,
                 callStatusEnabled = settings.callStatusEnabled,
+                keyTonesEnabled = settings.keyTonesEnabled,
             )
         }
         if (settings.deviceContactsEnabled) loadDeviceContacts()
@@ -534,6 +536,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      * once Android granted the contacts permission. Disabling stops reading the contacts at once
      * (the permission itself can only be revoked in the Android settings).
      */
+    /** Switches the keypad's tones on or off. */
+    fun setKeyTonesEnabled(enabled: Boolean) {
+        settings.keyTonesEnabled = enabled
+        _state.update { it.copy(keyTonesEnabled = enabled) }
+    }
+
     fun setDeviceContactsEnabled(enabled: Boolean) {
         settings.deviceContactsEnabled = enabled
         // Switching it off on purpose also means: don't keep asking about it.

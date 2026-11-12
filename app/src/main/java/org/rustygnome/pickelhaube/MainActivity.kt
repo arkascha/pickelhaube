@@ -309,6 +309,8 @@ class MainActivity : ComponentActivity() {
                         onDisableCallLog = viewModel.calls::disablePhoneCalls,
                         phoneSpeedDialsEnabled = state.phoneSpeedDialsEnabled,
                         onPhoneSpeedDialsChange = viewModel.speedDials::setPhoneEnabled,
+                        keyTonesEnabled = state.keyTonesEnabled,
+                        onKeyTonesChange = viewModel::setKeyTonesEnabled,
                         callStatusEnabled = state.callStatusEnabled,
                         onCallStatusChange = viewModel.callStatus::setEnabled,
                         checkingCallMonitors = state.checkingCallMonitors,

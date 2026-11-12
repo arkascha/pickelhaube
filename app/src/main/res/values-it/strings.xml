@@ -345,6 +345,9 @@
     <string name="dialer_speed_dial_label">Selezione rapida %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Selezioni rapide di questo telefono</string>
     <string name="settings_phone_speed_dials_hint">Selezioni rapide da 1 a 9, scelte dalle rubriche e salvate su questo telefono, quindi funzionano con ogni FRITZ!Box. Per usarne una, tieni premuta la sua cifra nel tastierino.</string>
+    <string name="settings_keypad">Tastierino</string>
+    <string name="settings_key_tones">Toni dei tasti</string>
+    <string name="settings_key_tones_hint">Un breve tono a ogni tasto, come sul tastierino di un telefono. Suona solo su questo telefono e non passa nella chiamata. Muto finché il telefono è in modalità silenziosa o vibrazione.</string>
     <string name="connection_speed_dials">Selezioni rapide</string>
     <string name="connection_speed_dials_hint">Le selezioni rapide impostate nelle rubriche di questa FRITZ!Box (da 00 a 99, come si compongono sui suoi telefoni con **7). Per usarne una, tocca la prima cifra nel tastierino e tieni premuta la seconda. Funziona anche con le rubriche disattivate.</string>
     <string name="connection_internal_calls">Chiamate interne</string>

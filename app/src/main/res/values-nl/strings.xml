@@ -341,6 +341,9 @@
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Snelkeuzes van deze telefoon</string>
     <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
+    <string name="settings_keypad">Kiesscherm</string>
+    <string name="settings_key_tones">Toetstonen</string>
+    <string name="settings_key_tones_hint">Een korte toon bij elke toets, zoals bij het kiesscherm van een telefoon. Alleen op deze telefoon te horen, hij gaat niet mee in het gesprek. Stil zolang de telefoon op stil of trillen staat.</string>
     <string name="connection_speed_dials">Snelkeuzes</string>
     <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld (00 tot 99, zoals ze op de telefoons met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
     <string name="connection_internal_calls">Interne gesprekken</string>

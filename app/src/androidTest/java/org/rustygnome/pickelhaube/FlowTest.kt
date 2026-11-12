@@ -11,6 +11,7 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -99,6 +100,16 @@ abstract class FlowTest {
         awaitText(R.string.dialer_number_label)
         // The phones are loaded: the demo box' phone for dial help is offered.
         awaitText(DEMO_PHONE)
+    }
+
+    /** The switch in the same row as [title]: the settings' rows have no node of their own to search within. */
+    protected fun switchNextTo(title: String) = compose.onNodeWithText(title).fetchSemanticsNode().boundsInRoot.let { row ->
+        val switches = compose.onAllNodes(isToggleable())
+        val index = switches.fetchSemanticsNodes().indexOfFirst {
+            row.center.y in it.boundsInRoot.top..it.boundsInRoot.bottom
+        }
+        check(index >= 0) { "a switch next to \"$title\"" }
+        switches[index]
     }
 
     @After

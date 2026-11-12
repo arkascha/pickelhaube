@@ -349,6 +349,9 @@
     <string name="dialer_speed_dial_label">Szybkie wybieranie %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Szybkie wybieranie tego telefonu</string>
     <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FRITZ!Box. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>
+    <string name="settings_keypad">Klawiatura</string>
+    <string name="settings_key_tones">Dźwięki klawiszy</string>
+    <string name="settings_key_tones_hint">Krótki dźwięk przy każdym klawiszu, jak na klawiaturze telefonu. Słychać go tylko na tym telefonie, nie trafia do rozmowy. Wyciszony, gdy telefon jest w trybie cichym lub wibracji.</string>
     <string name="connection_speed_dials">Szybkie wybieranie</string>
     <string name="connection_speed_dials_hint">Szybkie wybieranie ustawione w książkach telefonicznych tego FRITZ!Box (00–99, wybierane na jego telefonach przez **7). Aby go użyć, dotknij pierwszej cyfry na klawiaturze i przytrzymaj drugą. Działa także przy wyłączonych książkach telefonicznych.</string>
     <string name="connection_internal_calls">Rozmowy wewnętrzne</string>

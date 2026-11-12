@@ -34,6 +34,7 @@ class SettingsFileTest {
             callStatusEnabled = false,
             tileDeflections = mapOf("a" to 2),
             language = "de",
+            keyTonesEnabled = true,
         ),
     )
     private val passphrase = "richtig lang"
@@ -92,6 +93,7 @@ class SettingsFileTest {
         val read = SettingsFile.read("""{"format":"pickelhaube-settings","version":1,"boxes":[]}""", null)
         assertTrue(read.profiles.isEmpty())
         assertTrue(read.options.phoneSpeedDialsEnabled)
+        assertFalse(read.options.keyTonesEnabled)
         assertTrue(read.options.callStatusEnabled)
         assertFalse(read.options.deviceContactsEnabled)
         assertEquals(null, read.options.language)

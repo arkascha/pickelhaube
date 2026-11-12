@@ -345,6 +345,9 @@
     <string name="dialer_speed_dial_label">Numéro abrégé %1$s : %2$s</string>
     <string name="settings_phone_speed_dials">Numéros abrégés de ce téléphone</string>
     <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>
+    <string name="settings_keypad">Clavier</string>
+    <string name="settings_key_tones">Tonalités du clavier</string>
+    <string name="settings_key_tones_hint">Une courte tonalité à chaque touche, comme sur le clavier d’un téléphone. Elle n’est jouée que sur ce téléphone et ne passe pas dans l’appel. Muette tant que le téléphone est en mode silencieux ou vibreur.</string>
     <string name="connection_speed_dials">Numéros abrégés</string>
     <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses téléphones avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
     <string name="connection_internal_calls">Appels internes</string>

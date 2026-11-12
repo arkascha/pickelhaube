@@ -341,6 +341,9 @@
     <string name="dialer_speed_dial_label">Kurzwahl %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Kurzwahlen dieses Telefons</string>
     <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FRITZ!Box. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>
+    <string name="settings_keypad">Wähltastatur</string>
+    <string name="settings_key_tones">Tastentöne</string>
+    <string name="settings_key_tones_hint">Ein kurzer Ton bei jeder Taste, wie bei der Wähltastatur eines Telefons. Er erklingt nur auf diesem Telefon und geht nicht in den Anruf. Stumm, solange das Telefon auf lautlos oder Vibration steht.</string>
     <string name="connection_speed_dials">Kurzwahlen</string>
     <string name="connection_speed_dials_hint">Die in den Telefonbüchern dieser FRITZ!Box eingerichteten Kurzwahlen (00 bis 99, wie an ihren Telefonen mit **7 gewählt). Zum Verwenden im Wählfeld die erste Ziffer antippen und die zweite lange drücken. Funktioniert auch, wenn die Telefonbücher ausgeschaltet sind.</string>
     <string name="connection_internal_calls">Interne Gespräche</string>

@@ -95,6 +95,9 @@ on the device and not exported.
 2. The app reads the phones the box knows (FON / DECT / IP) and the one currently configured
    for dial help. Choose your phone in **Ring phone**.
 3. Enter a number (long-press **0** for **+**) and tap the green button → the phone rings → take the call → the call is placed.
+   With **Key tones** switched on in the settings (section *Keypad*, off by default), each key plays its
+   tone, as on a phone's dial pad – on this phone only, not into the call, and not while the phone is
+   set to silent or vibrate.
    The red button cancels a dial-help call that is still being set up.
    A **long press on the green button** offers *Hide my number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
@@ -596,7 +599,7 @@ passwords, the box deleted and the file imported again (the system file picker a
 this phone's speed dials (set from the phone books, used with a long press on the keypad – also after a
 new start –, removed, switched off in the settings) and the box' ones (used, a new one set up in its
 phone books), the call forwardings switched on and off and the one for the tile chosen, and a widget's
-numbers added, moved, removed and saved. Each test starts like a fresh install (Android Test Orchestrator with
+numbers added, moved, removed and saved, and the keypad's tones switched on. Each test starts like a fresh install (Android Test Orchestrator with
 `clearPackageData`), and animations are off for them. Run them with `scripts/instrumented-tests.sh`,
 on one emulator: a connected test run installs the app, clears its data and uninstalls it at the end –
 on a phone in use, that would remove Pickelhaube with its boxes and passwords, so the script refuses

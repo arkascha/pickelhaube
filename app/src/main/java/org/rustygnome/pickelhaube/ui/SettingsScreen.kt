@@ -96,6 +96,8 @@ fun SettingsScreen(
     onDisableCallLog: () -> Unit,
     phoneSpeedDialsEnabled: Boolean,
     onPhoneSpeedDialsChange: (Boolean) -> Unit,
+    keyTonesEnabled: Boolean,
+    onKeyTonesChange: (Boolean) -> Unit,
     callStatusEnabled: Boolean,
     onCallStatusChange: (Boolean) -> Unit,
     checkingCallMonitors: Boolean,
@@ -224,6 +226,20 @@ fun SettingsScreen(
                     hint = stringResource(R.string.settings_phone_speed_dials_hint),
                     enabled = phoneSpeedDialsEnabled,
                     onChange = onPhoneSpeedDialsChange,
+                )
+            }
+
+            HorizontalDivider()
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(stringResource(R.string.settings_keypad), style = MaterialTheme.typography.titleSmall)
+                BoxFeatureSetting(
+                    title = stringResource(R.string.settings_key_tones),
+                    hint = stringResource(R.string.settings_key_tones_hint),
+                    enabled = keyTonesEnabled,
+                    onChange = onKeyTonesChange,
                 )
             }
 

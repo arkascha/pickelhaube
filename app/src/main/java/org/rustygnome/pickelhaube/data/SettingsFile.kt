@@ -26,6 +26,8 @@ data class AppOptions(
     val tileDeflections: Map<String, Int>,
     /** The chosen language tag; null for the system language. */
     val language: String?,
+    /** The keypad plays a tone for each key. */
+    val keyTonesEnabled: Boolean = false,
 )
 
 /**
@@ -124,6 +126,7 @@ object SettingsFile {
         put("callStatus", options.callStatusEnabled)
         put("tileDeflections", JSONObject(options.tileDeflections))
         options.language?.let { put("language", it) }
+        put("keyTones", options.keyTonesEnabled)
     }
 
     private fun optionsFromJson(o: JSONObject): AppOptions {
@@ -136,6 +139,7 @@ object SettingsFile {
             callStatusEnabled = o.optBoolean("callStatus", true),
             tileDeflections = deflections?.keys()?.asSequence()?.associateWith { deflections.getInt(it) }.orEmpty(),
             language = o.optString("language").takeIf { it.isNotEmpty() },
+            keyTonesEnabled = o.optBoolean("keyTones", false),
         )
     }
 
