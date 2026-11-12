@@ -330,8 +330,10 @@ fun DialerScreen(
                         },
                         // Only when there is something dialable (same check the dial action uses).
                         // No box to dial through: entering a number still works, dialling does not.
+                        // Not for the number of the call under way: dialling it again would only ring the phone again.
                         enabled = !state.busy && !state.noBoxReachable &&
-                            FritzDialer.sanitizeNumber(state.number).isNotEmpty(),
+                            FritzDialer.sanitizeNumber(state.number).isNotEmpty() &&
+                            FritzDialer.splitExtension(state.number).number != state.callUnderway,
                         color = CallGreen,
                     ) {
                         Icon(Icons.Default.Call, contentDescription = stringResource(R.string.dialer_dial), modifier = Modifier.size(30.dp))
@@ -592,6 +594,19 @@ private fun CallStatusLine(
         progress is CallProgress.Dialling && extension != null -> stringResource(R.string.call_type_then, extension)
         else -> null
     }
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        // The mascot acts the call out – at the height of the two lines, so nothing moves when it comes.
+        if (progress != null) {
+            CallMascot(progress, Modifier.size(40.dp))
+            Spacer(Modifier.width(12.dp))
+        }
+        CallStatusText(text, hint, progress, extension, Modifier.weight(1f))
+    }
+}
+
+/** The call's status in up to two lines: what happens, and what to do. */
+@Composable
+private fun CallStatusText(text: String, hint: String?, progress: CallProgress?, extension: String?, modifier: Modifier) {
     Text(
         buildAnnotatedString {
             append(text)
@@ -611,7 +626,7 @@ private fun CallStatusLine(
         minLines = 2,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
     )
 }
 

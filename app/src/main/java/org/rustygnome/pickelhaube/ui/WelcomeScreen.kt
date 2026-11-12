@@ -1,6 +1,5 @@
 package org.rustygnome.pickelhaube.ui
 
-import android.provider.Settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -22,7 +21,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import kotlin.random.Random
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -95,8 +93,6 @@ import org.rustygnome.pickelhaube.ui.theme.TextRoles
 enum class WelcomeStep { HELLO, PREPARE, FIND, LOGIN, CONNECT, READY }
 
 /** What the mascot does on a page – one picture each. */
-enum class MascotPose { WAVING, CLIPBOARD, SEARCHING, TYPING, PUZZLED, CHEERING }
-
 /** The part of the web page that goes with a page of the tour – opened by the (?) in its top bar. */
 private val WelcomeStep.webPage: String
     get() = when (this) {
@@ -394,17 +390,7 @@ private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
         )
         bob to sway
     } else 0f to 0f
-    var blinking by remember { mutableStateOf(false) }
-    LaunchedEffect(pose, animate) {
-        blinking = false
-        if (!animate || pose.blinkDrawable == null) return@LaunchedEffect
-        while (true) {
-            delay(Random.nextLong(2000, 4500))
-            blinking = true
-            delay(160)
-            blinking = false
-        }
-    }
+    val blinking = rememberBlinking(pose, animate)
     // On each new pose: a little pop; cheering, a hop and a wiggle; waving, a wave now and then.
     val pop = remember { Animatable(1f) }
     val hop = remember { Animatable(0f) }
@@ -464,35 +450,6 @@ private fun Mascot(pose: MascotPose, text: String?, size: Dp = 120.dp) {
         }
     }
 }
-
-/** Whether Android plays animations (its animator duration scale is not off). */
-@Composable
-private fun rememberAnimationsOn(): Boolean {
-    val context = LocalContext.current
-    return remember {
-        Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
-    }
-}
-
-private val MascotPose.drawable: Int
-    get() = when (this) {
-        MascotPose.WAVING -> R.drawable.mascot_waving
-        MascotPose.CLIPBOARD -> R.drawable.mascot_clipboard
-        MascotPose.SEARCHING -> R.drawable.mascot_searching
-        MascotPose.TYPING -> R.drawable.mascot_typing
-        MascotPose.PUZZLED -> R.drawable.mascot_puzzled
-        MascotPose.CHEERING -> R.drawable.mascot_cheering
-    }
-
-/** The pose with its eyes closed, for a blink; null: the pose does not blink (its eyes are closed or squinted already). */
-private val MascotPose.blinkDrawable: Int?
-    get() = when (this) {
-        MascotPose.WAVING -> R.drawable.mascot_waving_blink
-        MascotPose.CLIPBOARD -> R.drawable.mascot_clipboard_blink
-        MascotPose.SEARCHING -> R.drawable.mascot_searching_blink
-        MascotPose.TYPING -> R.drawable.mascot_typing_blink
-        MascotPose.PUZZLED, MascotPose.CHEERING -> null
-    }
 
 @Composable
 private fun PageTitle(text: String) {

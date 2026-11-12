@@ -376,6 +376,11 @@ up within 45 seconds – *the phone was not picked up*. The red button stays usa
 the call is still being set up: the box' hang-up (`X_AVM-DE_DialHangup`) only cancels the dial help and
 does not end a connected call – tested on a 7530 AX –, so while connected the dialer says to hang up on
 the device itself (handset, headset or speakerphone). The end stays shown for 20 seconds.
+Beside it, the mascot acts the call out: while the box rings your phone, rings spread from it and it
+shakes like a bell; while the other side is called, it listens with a hand behind its ear, its spike
+rocking; connected, it nods; at the end it bows and waves; not answered, it tilts its head. It stays
+still while Android's animations are switched off. Its poses are drawn by `art/mascot/generate.py`,
+like those of the welcome tour.
 
 TR-064 does not report any of this. It comes from the box' **call monitor**: a plain TCP connection to
 port 1012, on which the box reports every call as it happens (`CALL`, `CONNECT`, `DISCONNECT`, `RING`).

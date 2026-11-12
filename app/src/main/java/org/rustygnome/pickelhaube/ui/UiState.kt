@@ -189,6 +189,15 @@ val UiState.activeProfile: BoxProfile?
 val UiState.usablePhoneSpeedDials: List<SpeedDial>
     get() = if (phoneSpeedDialsEnabled) phoneSpeedDials else emptyList()
 
+/** The number of the call under way – the box rings the phone for it, dials it, or it is connected; null otherwise. */
+val UiState.callUnderway: String?
+    get() = when (val progress = callProgress) {
+        is CallProgress.PickUp -> progress.number
+        is CallProgress.Dialling -> progress.number
+        is CallProgress.Connected -> progress.number
+        else -> null
+    }
+
 /** The speed dials of the box in use (from its phone books, once loaded), if switched on for it. */
 val UiState.usableBoxSpeedDials: List<SpeedDial>
     get() = if (activeProfile?.speedDialsEnabled != false) SpeedDials.fromPhonebooks(phonebooks) else emptyList()
