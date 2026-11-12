@@ -569,4 +569,10 @@
         <item>Kolejny FRITZ!Box? Ustawienia › Powitalny przewodnik skonfiguruje go krok po kroku – znajdzie urządzenie i sprawdzi logowanie.</item>
         <item>Wybór użytkownika z listy na stronie połączenia nie otwiera już klawiatury.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Przeciągnij ekran wybierania w dół, aby ponownie wczytać wszystko z FRITZ!Box – na przykład po zmianie czegoś na nim.</item>
+        <item>Hełm się przyłącza: stoi obok nazwy twojego urządzenia, odgrywa twoje rozmowy i kołysze się, gdy aplikacja rozmawia z FRITZ!Box.</item>
+        <item>Dźwięki klawiszy jak na klawiaturze telefonu – włącz je w Ustawienia › Klawiatura.</item>
+        <item>Książki telefoniczne zmienione na samym FRITZ!Box nie przeszkadzają już szybkiemu wybieraniu ani przekazywaniu kontaktów.</item>
+    </string-array>
 </resources>

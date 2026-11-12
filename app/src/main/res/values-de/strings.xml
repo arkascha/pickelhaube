@@ -549,4 +549,10 @@
         <item>Noch eine FRITZ!Box? Einstellungen › Willkommens-Tour richtet sie Schritt für Schritt ein – sie sucht die Box und prüft die Anmeldung.</item>
         <item>Die Auswahl eines Benutzers aus der Liste auf der Verbindungsseite öffnet keine Tastatur mehr.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Zieh die Wählansicht nach unten, um alles neu von deiner FRITZ!Box zu lesen – etwa nachdem du dort etwas geändert hast.</item>
+        <item>Der Helm macht mit: Er steht neben dem Namen deiner Box, spielt deine Anrufe mit und wippt, während die App mit der Box spricht.</item>
+        <item>Tastentöne wie bei der Wähltastatur eines Telefons – einschalten unter Einstellungen › Wähltastatur.</item>
+        <item>Auf der FRITZ!Box selbst geänderte Telefonbücher stören Kurzwahlen und die Übergabe von Kontakten nicht mehr.</item>
+    </string-array>
 </resources>

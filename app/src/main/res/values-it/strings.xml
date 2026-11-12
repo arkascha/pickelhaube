@@ -559,4 +559,10 @@
         <item>Un’altra FRITZ!Box? Impostazioni › Tour di benvenuto la configura passo dopo passo – cerca la box e verifica l’accesso.</item>
         <item>Scegliere un utente dall’elenco nella pagina di connessione non apre più la tastiera.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Trascina in giù il tastierino per rileggere tutto dalla tua FRITZ!Box – per esempio dopo averci cambiato qualcosa.</item>
+        <item>L’elmo partecipa: sta accanto al nome della tua box, recita le tue chiamate e dondola mentre l’app parla con la box.</item>
+        <item>Toni dei tasti come sul tastierino di un telefono – attivali in Impostazioni › Tastierino.</item>
+        <item>Le rubriche cambiate sulla FRITZ!Box stessa non intralciano più le selezioni rapide né il trasferimento dei contatti.</item>
+    </string-array>
 </resources>

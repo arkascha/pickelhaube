@@ -1,0 +1,14 @@
+<en-US>
+• Pull the dialer down to read everything from your FRITZ!Box again
+• The helmet joins in: beside your box's name in the dialer, acting out your calls, and in empty lists
+• Optional key tones, and keys that spring back with a light vibration
+• Fixed: phone books changed on the FRITZ!Box itself got in the way of speed dials and handing over contacts
+• Fixed: taps while the app was talking to the box were lost
+</en-US>
+<de-DE>
+• Zieh die Wählansicht nach unten, um alles neu von deiner FRITZ!Box zu lesen
+• Der Helm macht mit: neben dem Namen deiner Box, bei deinen Anrufen und in leeren Listen
+• Tastentöne auf Wunsch, und Tasten, die mit leichter Vibration zurückfedern
+• Behoben: Auf der FRITZ!Box selbst geänderte Telefonbücher störten Kurzwahlen und die Übergabe von Kontakten
+• Behoben: Tipps, während die App mit der Box sprach, gingen verloren
+</de-DE>

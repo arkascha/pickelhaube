@@ -112,7 +112,8 @@ on the device and not exported.
    set to silent or vibrate. A key gives way a little under the finger and springs back, with a tiny tap
    of vibration – as far as the system's touch feedback is on, and without the movement when the system's
    animations are switched off.
-   The red button cancels a dial-help call that is still being set up.
+   The red button cancels a dial-help call that is still being set up. While a call is under way, the green
+   button is off for its number – dialling it again would only ring the phone again; another number can be dialled.
    A **long press on the green button** offers *Hide my number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
    With several internet numbers on the box, it also offers *From <number>* for each (see
@@ -162,7 +163,7 @@ a box (reachable, its users, its HTTPS port, …) is in the accent colour, value
 colour. **Add FRITZ!Box** adds one; tap an entry to edit (or delete) it. Each entry says whether the
 box is *reachable* (it answered the last detection: in this network, or at its configured host),
 *not reachable* or *not recognised yet* (its device id is not known yet, see below). The box in use is
-chosen automatically and marked with a check mark, and shown under the app name on the dialer. The mark
+chosen automatically and marked with a check mark, and shown as the dialer's title, beside the helmet. The mark
 turns into a red warning triangle when that box was not found by the last detection, or when the last
 request to it failed; a network change clears the latter until the next request. Only when none of the
 boxes is reachable (e.g. on mobile data without VPN) does an empty circle appear in front of the boxes,

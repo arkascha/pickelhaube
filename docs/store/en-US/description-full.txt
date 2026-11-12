@@ -6,6 +6,7 @@ CHOOSE A NUMBER
 • Optionally your smartphone's own contacts next to them
 • Speed dials 1–9 on your smartphone, valid with every box, plus the FRITZ!Box speed dials 00–99, also set up in the app
 • Suggestions while typing: matching numbers and names from your phone books and recent calls, also by the letters on the keys
+• Optional key tones
 • Share a text to Pickelhaube or paste it – the phone number in it is picked out and cleaned for dialling
 • New missed calls of the FRITZ!Box are counted and marked
 • Choose which phone rings: a single phone or all of them
@@ -29,6 +30,7 @@ QUICK ACCESS
 • Quick settings tiles: open the dialer, redial the last number, switch call forwarding
 • Long press on the app icon: redial, call forwarding, choose a number, look for the FRITZ!Box
 • Home screen widget with your own list of numbers – as many widgets as you like
+• Pull down to read everything from the FRITZ!Box again
 
 SEVERAL FRITZ!BOXES
 • Home, office, holiday flat: set up as many boxes as you like

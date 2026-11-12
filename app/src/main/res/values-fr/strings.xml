@@ -559,4 +559,10 @@
         <item>Une autre FRITZ!Box ? Réglages › Visite de bienvenue la configure pas à pas – elle cherche la box et vérifie la connexion.</item>
         <item>Choisir un utilisateur dans la liste de la page de connexion n’ouvre plus le clavier.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Tire le clavier vers le bas pour tout relire depuis ta FRITZ!Box – par exemple après y avoir changé quelque chose.</item>
+        <item>Le casque s’y met : il se tient à côté du nom de ta box, joue tes appels et se balance pendant que l’appli parle à la box.</item>
+        <item>Des tonalités de clavier comme sur un téléphone – à activer dans Réglages › Clavier.</item>
+        <item>Les répertoires modifiés sur la FRITZ!Box elle-même ne gênent plus les numéros abrégés ni la transmission de contacts.</item>
+    </string-array>
 </resources>

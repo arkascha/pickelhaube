@@ -549,4 +549,10 @@
         <item>Nog een FRITZ!Box? Instellingen › Welkomstrondleiding stelt hem stap voor stap in – zoekt de box en controleert de aanmelding.</item>
         <item>Een gebruiker kiezen uit de lijst op de verbindingspagina opent het toetsenbord niet meer.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Trek het kiesscherm omlaag om alles opnieuw van je FRITZ!Box te lezen – bijvoorbeeld nadat je daar iets hebt veranderd.</item>
+        <item>De helm doet mee: hij staat naast de naam van je box, speelt je gesprekken na en wiebelt terwijl de app met de box praat.</item>
+        <item>Toetstonen zoals bij het kiesscherm van een telefoon – zet ze aan via Instellingen › Kiesscherm.</item>
+        <item>Telefoonboeken die op de FRITZ!Box zelf zijn gewijzigd, zitten snelkeuzes en het overdragen van contacten niet meer in de weg.</item>
+    </string-array>
 </resources>

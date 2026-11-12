@@ -17,6 +17,7 @@ object WhatsNew {
     /** The notes by version code. */
     val NOTES: Map<Int, Note> = mapOf(
         8 to Note("1.6.0", R.array.whats_new_8),
+        11 to Note("1.7.0", R.array.whats_new_11),
     )
 
     /** At most this many points at once, when several versions were skipped. */

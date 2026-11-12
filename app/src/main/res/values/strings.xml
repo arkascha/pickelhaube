@@ -553,4 +553,10 @@
         <item>Another FRITZ!Box? Settings › Welcome tour sets it up step by step – it looks for the box and checks the login.</item>
         <item>Choosing a user from the list on the connection page no longer brings up the keyboard.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Pull the dialer down to read everything from your FRITZ!Box again – after changing something there, say.</item>
+        <item>The helmet joins in: it stands beside your box’s name, acts out your calls and rocks while the app talks to the box.</item>
+        <item>Key tones like on a phone’s keypad – switch them on in Settings › Keypad.</item>
+        <item>Phone books changed on the FRITZ!Box itself no longer get in the way of speed dials or handing over contacts.</item>
+    </string-array>
 </resources>

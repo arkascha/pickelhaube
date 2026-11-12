@@ -559,4 +559,10 @@
         <item>¿Otra FRITZ!Box? Ajustes › Tour de bienvenida la configura paso a paso – busca la box y comprueba el inicio de sesión.</item>
         <item>Elegir un usuario de la lista en la página de conexión ya no abre el teclado.</item>
     </string-array>
+    <string-array name="whats_new_11">
+        <item>Desliza el marcador hacia abajo para volver a leer todo de tu FRITZ!Box – por ejemplo, después de cambiar algo allí.</item>
+        <item>El casco se une: está junto al nombre de tu box, interpreta tus llamadas y se balancea mientras la app habla con la box.</item>
+        <item>Tonos del teclado como en un teléfono – actívalos en Ajustes › Teclado.</item>
+        <item>Las agendas cambiadas en la propia FRITZ!Box ya no estorban a las marcaciones rápidas ni al traspaso de contactos.</item>
+    </string-array>
 </resources>
