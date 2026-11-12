@@ -330,6 +330,7 @@
     <string name="status_speed_dial_set">FRITZ!Box speed dial %1$s: %2$s</string>
     <string name="status_removing_speed_dial">Removing speed dial %1$s from the FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Speed dial %1$s removed from the FRITZ!Box.</string>
+    <string name="status_phonebook_changed_on_box">The phone books were changed on the FRITZ!Box meanwhile and have been read again.</string>
     <string name="contact_to_phone">Add to this phone’s contacts</string>
     <string name="contact_to_box">Hand over to the FRITZ!Box</string>
     <string name="hand_over_text">“%1$s” goes into this phone book of the FRITZ!Box “%2$s”:</string>

@@ -347,6 +347,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!settings.isConfigured()) return
         // Possibly switched meanwhile – from the quick settings tile, or on the box.
         if (_state.value.deflections != null) deflections.preload()
+        // The phone books (and the box' speed dials in them) may have been changed on the box meanwhile.
+        if (_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
         // Calls may have been missed while the app was in the background.
         calls.preloadMissed()
         calls.preloadLines()

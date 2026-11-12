@@ -29,6 +29,12 @@ if [[ $serial != emulator-* ]]; then
     exit 1
 fi
 
+# A serial that is not attached would leave Gradle to pick the devices itself – the phone among them.
+if ! "$adb" devices | awk -v s="$serial" '$1 == s && $2 == "device" { found = 1 } END { exit !found }'; then
+    echo "Not running: $serial is not attached ($("$adb" devices | awk 'NR > 1 && $2 == "device" { printf "%s ", $1 }'))." >&2
+    exit 1
+fi
+
 echo "Instrumented tests on $serial (Android $("$adb" -s "$serial" shell getprop ro.build.version.release | tr -d '\r'))"
 results=app/build/outputs/androidTest-results/connected/debug/flavors/full
 rm -rf "$results"

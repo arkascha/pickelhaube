@@ -327,6 +327,7 @@
     <string name="status_speed_dial_set">Snelkeuze %1$s van de FRITZ!Box: %2$s</string>
     <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FRITZ!Box verwijderd…</string>
     <string name="status_speed_dial_removed">Snelkeuze %1$s van de FRITZ!Box verwijderd.</string>
+    <string name="status_phonebook_changed_on_box">De telefoonboeken zijn intussen op de FRITZ!Box gewijzigd en opnieuw gelezen.</string>
     <string name="contact_to_phone">Overnemen in de contacten</string>
     <string name="contact_to_box">Doorgeven aan de FRITZ!Box</string>
     <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FRITZ!Box ‘%2$s’:</string>

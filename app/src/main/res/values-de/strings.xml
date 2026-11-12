@@ -327,6 +327,7 @@
     <string name="status_speed_dial_set">FRITZ!Box-Kurzwahl %1$s: %2$s</string>
     <string name="status_removing_speed_dial">Entferne Kurzwahl %1$s von der FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Kurzwahl %1$s von der FRITZ!Box entfernt.</string>
+    <string name="status_phonebook_changed_on_box">Die Telefonbücher wurden inzwischen auf der FRITZ!Box geändert und neu gelesen.</string>
     <string name="contact_to_phone">In die Kontakte übernehmen</string>
     <string name="contact_to_box">An die FRITZ!Box übergeben</string>
     <string name="hand_over_text">„%1$s“ kommt in dieses Telefonbuch der FRITZ!Box „%2$s“:</string>

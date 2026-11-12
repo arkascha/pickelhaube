@@ -331,6 +331,7 @@
     <string name="status_speed_dial_set">Selezione rapida %1$s della FRITZ!Box: %2$s</string>
     <string name="status_removing_speed_dial">Rimozione della selezione rapida %1$s dalla FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Selezione rapida %1$s rimossa dalla FRITZ!Box.</string>
+    <string name="status_phonebook_changed_on_box">Le rubriche sono state modificate nel frattempo sulla FRITZ!Box e sono state rilette.</string>
     <string name="contact_to_phone">Aggiungi ai contatti del telefono</string>
     <string name="contact_to_box">Passa alla FRITZ!Box</string>
     <string name="hand_over_text">«%1$s» va in questa rubrica della FRITZ!Box «%2$s»:</string>

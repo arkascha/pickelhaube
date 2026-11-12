@@ -41,6 +41,27 @@ data class Phonebook(
     val online: Boolean = false,
 )
 
+/** Entry [uid] is no longer in phone book [bookId] of the box: changed there since it was read. */
+class PhonebookEntryGoneException(val bookId: Int, val uid: String) : IOException("Phone book entry $uid not found in phone book $bookId")
+
+/**
+ * Whether this failure may come from phone books changed on the box since they were read – an entry
+ * deleted in its web interface, on a handset, by another app. The box does not say so in one way:
+ * 714 (no such entry) or 713 (no such phone book) by the book, 820 (internal error) on a 7530 AX, or
+ * an empty entry. So any fault of the box counts, except those that mean something else for sure
+ * (missing rights, a second factor): reading the phone books again tells whether they changed.
+ */
+val IOException.mayBeStalePhonebook: Boolean
+    get() = this is PhonebookEntryGoneException ||
+        (this is Tr064Exception && errorCode != null && errorCode !in NOT_ABOUT_ENTRIES)
+
+private val NOT_ABOUT_ENTRIES = setOf(
+    Tr064Exception.NOT_AUTHORIZED,
+    Tr064Exception.SECOND_FACTOR_REQUIRED,
+    Tr064Exception.SECOND_FACTOR_BLOCKED,
+    Tr064Exception.SECOND_FACTOR_BUSY,
+)
+
 /**
  * Reads the phone books of the box via the TR-064 X_AVM-DE_OnTel service: the list of
  * phone book ids, then per id a download URL for an XML export of its contacts.
@@ -82,7 +103,7 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
     @Throws(IOException::class)
     fun setSpeedDial(id: Int, uid: String, slot: String, number: String?) {
         val entry = call("GetPhonebookEntryUID", mapOf("NewPhonebookID" to id.toString(), "NewPhonebookEntryUniqueID" to uid))
-        val xml = entry["NewPhonebookEntryData"].orEmpty().ifBlank { throw IOException("Phone book entry $uid not found") }
+        val xml = entry["NewPhonebookEntryData"].orEmpty().ifBlank { throw PhonebookEntryGoneException(id, uid) }
         call(
             "SetPhonebookEntryUID",
             mapOf("NewPhonebookID" to id.toString(), "NewPhonebookEntryData" to withSpeedDial(xml, uid, slot, number)),

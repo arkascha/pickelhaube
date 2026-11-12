@@ -331,6 +331,7 @@
     <string name="status_speed_dial_set">Numéro abrégé %1$s de la FRITZ!Box : %2$s</string>
     <string name="status_removing_speed_dial">Suppression du numéro abrégé %1$s de la FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Numéro abrégé %1$s supprimé de la FRITZ!Box.</string>
+    <string name="status_phonebook_changed_on_box">Les répertoires ont été modifiés entre-temps sur la FRITZ!Box et ont été relus.</string>
     <string name="contact_to_phone">Ajouter aux contacts du téléphone</string>
     <string name="contact_to_box">Transmettre à la FRITZ!Box</string>
     <string name="hand_over_text">« %1$s » sera ajouté à ce répertoire de la FRITZ!Box « %2$s » :</string>
