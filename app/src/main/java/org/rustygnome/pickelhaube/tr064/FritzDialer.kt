@@ -115,9 +115,10 @@ class FritzDialer(
     @Throws(IOException::class)
     fun loadPhonebooks(): List<Phonebook> = FritzPhonebooks(config, authToken).loadAll()
 
-    /** Adds [contact] as a new entry to the box' phone book [bookId] (see [FritzPhonebooks.add]). */
+    /** Adds [contact] as a new entry to the box' phone book [bookId], if that is still [bookName] (see [FritzPhonebooks.add]). */
     @Throws(IOException::class)
-    fun addToPhonebook(bookId: Int, contact: PhonebookContact) = FritzPhonebooks(config, authToken).add(bookId, contact)
+    fun addToPhonebook(bookId: Int, bookName: String, contact: PhonebookContact) =
+        FritzPhonebooks(config, authToken).add(bookId, bookName, contact)
 
     /** Deletes an entry of the box' phone books (see [FritzPhonebooks.delete]). */
     @Throws(IOException::class)

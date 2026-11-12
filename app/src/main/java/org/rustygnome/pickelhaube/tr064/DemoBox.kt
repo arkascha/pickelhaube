@@ -98,8 +98,12 @@ object DemoBox {
     private var dialPhone = phones[1]
     private var nextUid = 100
 
-    private val books: Map<Int, Book> = mapOf(
-        0 to Book(
+    /**
+     * The phone books. Like a real box (seen on a 7530 AX), it numbers them by their place in its
+     * list, so one added (`AddPhonebook`, here put in by name) can move the others to new ids.
+     */
+    private val bookList: MutableList<Book> = mutableListOf(
+        Book(
             "Family & friends",
             mutableListOf(
                 contact("Anna Becker", home("03023125101"), mobile("017139200101", "01")),
@@ -118,7 +122,7 @@ object DemoBox {
                 contact("Sophie Braun", mobile("017139200114")),
             ),
         ),
-        1 to Book(
+        Book(
             "Services",
             mutableListOf(
                 contact("Dr. Weber, dentist", work("03023125201")),
@@ -128,6 +132,9 @@ object DemoBox {
             ),
         ),
     )
+
+    /** Phone book [id] – its place in [bookList]. */
+    private val books: Map<Int, Book> get() = bookList.withIndex().associate { (i, book) -> i to book }
 
     private val calls: MutableList<Call> = System.currentTimeMillis().let { now ->
         val min = 60_000L
@@ -327,6 +334,12 @@ object DemoBox {
         "X_AVM-DE_GetVoIPStatus" -> mapOf(
             "NewX_AVM-DE_VoIPStatus" to if (args["NewVoIPAccountIndex"] in setOf("0", "1")) "registered" else throw Fault(713, "SpecifiedArrayIndexInvalid"),
         )
+        "AddPhonebook" -> {
+            val name = args["NewPhonebookName"].orEmpty().ifBlank { throw Fault(402, "Invalid Args") }
+            bookList += Book(name, mutableListOf())
+            bookList.sortBy { it.name.lowercase() }
+            emptyMap()
+        }
         "GetPhonebookList" -> mapOf("NewPhonebookList" to books.keys.joinToString(","))
         "GetPhonebook" -> {
             val id = args["NewPhonebookID"]?.toIntOrNull()

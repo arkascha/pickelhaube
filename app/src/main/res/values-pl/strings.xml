@@ -336,6 +336,7 @@
     <string name="status_removing_speed_dial">Usuwanie szybkiego wybierania %1$s z FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Usunięto szybkie wybieranie %1$s z FRITZ!Box.</string>
     <string name="status_phonebook_changed_on_box">Książki telefoniczne zostały w międzyczasie zmienione na FRITZ!Box i wczytane ponownie.</string>
+    <string name="status_phonebook_gone">„%1$s” nie należy już do książek telefonicznych FRITZ!Box – nie przekazano: %2$s.</string>
     <string name="contact_to_phone">Dodaj do kontaktów telefonu</string>
     <string name="contact_to_box">Przekaż do FRITZ!Box</string>
     <string name="hand_over_text">„%1$s” trafi do tej książki telefonicznej FRITZ!Box „%2$s”:</string>

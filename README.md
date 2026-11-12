@@ -210,10 +210,13 @@ Search by name or number, choose above the list whether all phone books are show
 them, and tap a number to put it into the dialer.
 The books are loaded when the app starts and again whenever it comes back to the foreground (they may
 have been changed on the box meanwhile); the reload button at the top fetches them again. A change of
-the box' entries – a speed dial set or removed, a copy deleted – that the box refuses because the entry
-was changed or deleted on the box (a 7530 AX answers 820, others 713 or 714) is no error: the phone books
-are read again, a short note says so, and a speed dial is set or removed on what is there now. If they
-did not change, the refusal is shown as an error.
+the box' entries – a speed dial set or removed, a copy deleted, a contact handed over – that the box refuses
+because the entry was changed or deleted on the box (a 7530 AX answers 820, others 713 or 714) is no error:
+the phone books are read again, a short note says so, and a speed dial is set or removed, or the contact
+handed over, on what is there now. If they did not change, the refusal is shown as an error. The box numbers
+its phone books by their place in its list, so a phone book added or deleted on the box gives the others
+new ids: before a new entry goes in, the app checks that the id still stands for the phone book chosen –
+otherwise the contact would land in another one.
 Whether a box' phone books are used is set per FRITZ!Box, on its connection page
 (**Settings › FRITZ!Box connections › <box> › Phone books**, on by default).
 

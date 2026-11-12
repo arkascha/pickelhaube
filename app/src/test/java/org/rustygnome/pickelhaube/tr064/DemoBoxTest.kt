@@ -71,10 +71,24 @@ class DemoBoxTest {
         dialer.setSpeedDial(book.id, garage.uid, "07", null)
         assertEquals(null, speedDialOf("Garage Krüger"))
 
-        dialer.addToPhonebook(book.id, PhonebookContact("Taxi", listOf(PhonebookNumber("03023125299", "work")), book.name))
+        dialer.addToPhonebook(book.id, book.name, PhonebookContact("Taxi", listOf(PhonebookNumber("03023125299", "work")), book.name))
         val taxi = dialer.loadPhonebooks().first { it.id == book.id }.contacts.first { it.name == "Taxi" }
         dialer.deletePhonebookEntry(book.id, taxi.uid!!)
         assertTrue(dialer.loadPhonebooks().first { it.id == book.id }.contacts.none { it.name == "Taxi" })
+    }
+
+    /** A phone book's id is its place in the box' list: a new entry goes in only while the id is still the book named. */
+    @Test
+    fun `adds an entry only to the phone book named`() {
+        val books = dialer.loadPhonebooks()
+        val services = books.first { it.name == "Services" }
+        val taxi = PhonebookContact("Taxi", listOf(PhonebookNumber("03023125299", "work")), services.name)
+        val result = runCatching { dialer.addToPhonebook(services.id, "Family & friends", taxi) }
+        assertTrue(result.exceptionOrNull() is PhonebookMovedException)
+        assertTrue(result.exceptionOrNull()!!.let { it is java.io.IOException && it.mayBeStalePhonebook })
+        assertEquals(books, dialer.loadPhonebooks())
+        // A phone book the box does not have at all.
+        assertTrue(runCatching { dialer.addToPhonebook(7, "Services", taxi) }.exceptionOrNull() is PhonebookMovedException)
     }
 
     private fun speedDialOf(name: String): String? =

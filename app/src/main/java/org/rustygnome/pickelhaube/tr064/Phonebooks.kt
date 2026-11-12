@@ -45,6 +45,13 @@ data class Phonebook(
 class PhonebookEntryGoneException(val bookId: Int, val uid: String) : IOException("Phone book entry $uid not found in phone book $bookId")
 
 /**
+ * Phone book [bookId] of the box is no longer [name]: the box numbers its phone books by their place
+ * in its list, so with one added or deleted on the box since they were read, the id may stand for
+ * another one – or none.
+ */
+class PhonebookMovedException(val bookId: Int, val name: String) : IOException("Phone book $bookId is no longer \"$name\"")
+
+/**
  * Whether this failure may come from phone books changed on the box since they were read – an entry
  * deleted in its web interface, on a handset, by another app. The box does not say so in one way:
  * 714 (no such entry) or 713 (no such phone book) by the book, 820 (internal error) on a 7530 AX, or
@@ -52,7 +59,7 @@ class PhonebookEntryGoneException(val bookId: Int, val uid: String) : IOExceptio
  * (missing rights, a second factor): reading the phone books again tells whether they changed.
  */
 val IOException.mayBeStalePhonebook: Boolean
-    get() = this is PhonebookEntryGoneException ||
+    get() = this is PhonebookEntryGoneException || this is PhonebookMovedException ||
         (this is Tr064Exception && errorCode != null && errorCode !in NOT_ABOUT_ENTRIES)
 
 private val NOT_ABOUT_ENTRIES = setOf(
@@ -90,9 +97,16 @@ class FritzPhonebooks(config: FritzConfig, authToken: String? = null) {
         return Phonebook(id, name, parseContacts(xml, name, id), isOnline(xml))
     }
 
-    /** Adds [contact] with its numbers as a new entry to phone book [id] (`SetPhonebookEntryUID`). */
+    /**
+     * Adds [contact] with its numbers as a new entry to phone book [id] (`SetPhonebookEntryUID`) –
+     * only if that is still the phone book [name]: its id is its place in the box' list, which
+     * changes with phone books added or deleted on the box (see [PhonebookMovedException]).
+     */
     @Throws(IOException::class)
-    fun add(id: Int, contact: PhonebookContact) {
+    fun add(id: Int, name: String, contact: PhonebookContact) {
+        val current = runCatching { call("GetPhonebook", mapOf("NewPhonebookID" to id.toString()))["NewPhonebookName"] }
+            .getOrElse { if (it is Tr064Exception && it.errorCode != null) null else throw it }
+        if (current != name) throw PhonebookMovedException(id, name)
         call("SetPhonebookEntryUID", mapOf("NewPhonebookID" to id.toString(), "NewPhonebookEntryData" to entryXml(contact)))
     }
 

@@ -17,6 +17,7 @@ class PhonebookChangedTest {
         // A 7530 AX on removing a speed dial of an entry deleted in its web interface.
         assertTrue(fault(820).mayBeStalePhonebook)
         assertTrue(PhonebookEntryGoneException(0, "17").mayBeStalePhonebook)
+        assertTrue(PhonebookMovedException(1, "Services").mayBeStalePhonebook)
     }
 
     @Test

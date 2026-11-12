@@ -559,11 +559,17 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Hands [contact] over to the box' phone book [book] as a new entry, then reads the phone books anew. */
     fun handOverToBox(book: Phonebook, contact: PhonebookContact) =
-        runOnBox(uiText(R.string.status_handing_over, contact.name)) { dialer ->
-            dialer.addToPhonebook(book.id, contact)
-            val books = dialer.loadPhonebooks()
-            _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-            uiText(R.string.status_handed_over, contact.name, book.name)
+        host.runOnBoxEntries(uiText(R.string.status_handing_over, contact.name), retry = true) { dialer ->
+            // Looked for by its name: read again, its id may have changed – or it is gone.
+            val target = _state.value.phonebooks.firstOrNull { !it.online && it.name == book.name }
+            if (target == null) {
+                uiText(R.string.status_phonebook_gone, book.name, contact.name).also { host.toast(it) }
+            } else {
+                dialer.addToPhonebook(target.id, target.name, contact)
+                val books = dialer.loadPhonebooks()
+                _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+                uiText(R.string.status_handed_over, contact.name, target.name)
+            }
         }
 
     /** Answer to the "include this phone's contacts?" question on the picker's phone book tab. */

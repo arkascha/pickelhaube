@@ -6,7 +6,9 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
@@ -46,6 +48,12 @@ abstract class FlowTest {
     /** Waits until no node matches [matcher] any more. */
     protected fun awaitGone(matcher: SemanticsMatcher, timeoutMillis: Long = TIMEOUT_MILLIS) =
         compose.waitUntilDoesNotExist(matcher, timeoutMillis)
+
+    /**
+     * Waits until the box is not busy (no progress bar): an action started meanwhile would be
+     * dropped, as the app runs one request to the box at a time.
+     */
+    protected fun awaitBoxIdle() = awaitGone(hasProgressBarRangeInfo(ProgressBarRangeInfo.Indeterminate))
 
     /** A node with [label] as its text or its content description (icon buttons have only the latter). */
     protected fun labelled(label: String): SemanticsMatcher = hasText(label) or hasContentDescription(label)

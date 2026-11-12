@@ -332,6 +332,7 @@
     <string name="status_removing_speed_dial">Quitando la marcación rápida %1$s de la FRITZ!Box…</string>
     <string name="status_speed_dial_removed">Marcación rápida %1$s quitada de la FRITZ!Box.</string>
     <string name="status_phonebook_changed_on_box">Las agendas se han modificado mientras tanto en la FRITZ!Box y se han vuelto a leer.</string>
+    <string name="status_phonebook_gone">«%1$s» ya no está entre las agendas de la FRITZ!Box: %2$s no se ha transferido.</string>
     <string name="contact_to_phone">Añadir a los contactos del teléfono</string>
     <string name="contact_to_box">Pasar a la FRITZ!Box</string>
     <string name="hand_over_text">«%1$s» se guardará en esta agenda de la FRITZ!Box «%2$s»:</string>

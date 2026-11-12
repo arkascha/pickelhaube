@@ -1,14 +1,10 @@
 package org.rustygnome.pickelhaube.ui
 
-import android.widget.Toast
-import java.io.IOException
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.PhonebookNumber
-import org.rustygnome.pickelhaube.tr064.mayBeStalePhonebook
 
 /**
  * Speed dials: this phone's own (1–9) and the box' (in its phone books) – setting them from the
@@ -48,7 +44,7 @@ internal class SpeedDialsPart(private val host: DialerHost) {
      */
     fun setBox(slot: String, name: String, number: String, type: String, newEntryBook: Int?) {
         val assigning = state.value.assigningSpeedDial is SpeedDialAssignment.Box
-        onBoxEntries(uiText(R.string.status_setting_speed_dial, slot), retry = true) { dialer ->
+        host.runOnBoxEntries(uiText(R.string.status_setting_speed_dial, slot), retry = true) { dialer ->
             val key = host.numberKeys()
             // Only the box' own phone books can be changed, not the online ones it syncs.
             val localBooks = state.value.phonebooks.filterNot { it.online }
@@ -60,8 +56,8 @@ internal class SpeedDialsPart(private val host: DialerHost) {
                 val written = target.numbers.first { key(it.number) == key(number) }.number
                 dialer.setSpeedDial(target.bookId!!, target.uid!!, slot, written)
             } else {
-                val book = newEntryBook ?: localBooks.first().id
-                dialer.addToPhonebook(book, PhonebookContact(name, listOf(PhonebookNumber(number, type, slot)), ""))
+                val book = localBooks.firstOrNull { it.id == newEntryBook } ?: localBooks.first()
+                dialer.addToPhonebook(book.id, book.name, PhonebookContact(name, listOf(PhonebookNumber(number, type, slot)), ""))
             }
             val books = dialer.loadPhonebooks()
             state.update {
@@ -77,7 +73,7 @@ internal class SpeedDialsPart(private val host: DialerHost) {
     }
 
     /** Deletes [copy], an entry copying a contact of an online phone book, from the box; then reads the phone books anew. */
-    fun deleteOnlineCopy(copy: OnlineCopy) = onBoxEntries(uiText(R.string.status_deleting_copy, copy.entry.name), retry = false) { dialer ->
+    fun deleteOnlineCopy(copy: OnlineCopy) = host.runOnBoxEntries(uiText(R.string.status_deleting_copy, copy.entry.name), retry = false) { dialer ->
         dialer.deletePhonebookEntry(copy.entry.bookId!!, copy.entry.uid!!)
         val books = dialer.loadPhonebooks()
         state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
@@ -85,37 +81,13 @@ internal class SpeedDialsPart(private val host: DialerHost) {
     }
 
     /** Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books anew. */
-    fun removeBox(slot: String) = onBoxEntries(uiText(R.string.status_removing_speed_dial, slot), retry = true) { dialer ->
+    fun removeBox(slot: String) = host.runOnBoxEntries(uiText(R.string.status_removing_speed_dial, slot), retry = true) { dialer ->
         state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }
             .filter { c -> c.bookId != null && c.uid != null && c.numbers.any { it.speedDial == slot } }
             .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
         val books = dialer.loadPhonebooks()
         state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
         uiText(R.string.status_speed_dial_removed, slot)
-    }
-
-    /**
-     * [block], a change of entries in the box' phone books as read last. If the box refuses it, the
-     * phone books may have been changed on the box meanwhile (an entry deleted in its web interface):
-     * they are read again. If they did change, that is no error to show – the user is told why the
-     * list changed (in a toast, as the picker shows no status line), and with [retry] the change is
-     * made once more on what is there now (a speed dial set or taken away still makes sense; a copy
-     * deleted on the box is simply gone). If they did not, the refusal was meant: it is shown.
-     */
-    private fun onBoxEntries(progress: UiText, retry: Boolean, block: BoxAction) = host.runOnBox(progress) { dialer ->
-        val before = state.value.phonebooks
-        try {
-            block(dialer)
-        } catch (e: IOException) {
-            if (!e.mayBeStalePhonebook) throw e
-            val books = dialer.loadPhonebooks()
-            state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-            if (books == before) throw e
-            host.scope.launch {
-                Toast.makeText(host.app, R.string.status_phonebook_changed_on_box, Toast.LENGTH_LONG).show()
-            }
-            if (retry) block(dialer) else uiText(R.string.status_phonebook_changed_on_box)
-        }
     }
 
     /** Switches this phone's speed dials on or off; switched off, they are kept, just not used. */
