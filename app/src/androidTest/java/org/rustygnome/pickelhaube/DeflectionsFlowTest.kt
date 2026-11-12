@@ -31,6 +31,8 @@ class DeflectionsFlowTest : FlowTest() {
         awaitText(text(R.string.deflection_to, OWN_NUMBER))
         awaitText(R.string.deflection_all)
         awaitText(R.string.deflection_anonymous)
+        // Shown from before while read anew – the switches are off until it is done.
+        awaitBoxIdle()
     }
 
     private fun back() = compose.onNode(labelled(text(R.string.back))).performClick()
