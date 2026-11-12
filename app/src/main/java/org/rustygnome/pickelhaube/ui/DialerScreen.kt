@@ -45,6 +45,16 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.material3.ripple
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -792,15 +802,27 @@ private fun DialKey(
             onLongDigit(key.main)
         }
     } else null
+    val interaction = remember { MutableInteractionSource() }
+    val scale = rememberKeyBounce(interaction)
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(size)
+            .graphicsLayer {
+                scaleX = scale.value
+                scaleY = scale.value
+            }
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.secondaryContainer)
             .combinedClickable(
+                interactionSource = interaction,
+                indication = ripple(),
                 role = Role.Button,
-                onClick = { onDigit(key.main) },
+                onClick = {
+                    // A tiny tap, as on a phone's dial pad (as far as the system's touch feedback is on).
+                    haptics.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                    onDigit(key.main)
+                },
                 onLongClickLabel = if (key.main == '*') stringResource(R.string.dialer_insert_pause)
                 else speedDial?.let {
                     stringResource(R.string.dialer_speed_dial_label, it.slot, it.name)
@@ -839,3 +861,30 @@ private fun DialKey(
         }
     }
 }
+
+/** How far a key gives way under the finger. */
+private const val KEY_PRESSED_SCALE = 0.9f
+
+/**
+ * A key's size while pressed: it gives way under the finger and springs back with a little
+ * overshoot when let go. A tap is often over before it has given way much – then it dips first, so
+ * each key press is seen. Animations switched off in the system (developer options, accessibility)
+ * leave it at its size.
+ */
+@Composable
+private fun rememberKeyBounce(interaction: InteractionSource): Animatable<Float, AnimationVector1D> {
+    val scale = remember { Animatable(1f) }
+    val pressed by interaction.collectIsPressedAsState()
+    LaunchedEffect(pressed) {
+        if (pressed) {
+            scale.animateTo(KEY_PRESSED_SCALE, spring(stiffness = Spring.StiffnessHigh))
+        } else {
+            if (scale.value > (1f + KEY_PRESSED_SCALE) / 2) scale.animateTo(KEY_PRESSED_SCALE, tween(KEY_DIP_MILLIS))
+            scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+        }
+    }
+    return scale
+}
+
+/** How long a tap's dip takes, when the key had hardly given way. */
+private const val KEY_DIP_MILLIS = 50

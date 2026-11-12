@@ -97,7 +97,9 @@ on the device and not exported.
 3. Enter a number (long-press **0** for **+**) and tap the green button → the phone rings → take the call → the call is placed.
    With **Key tones** switched on in the settings (section *Keypad*, off by default), each key plays its
    tone, as on a phone's dial pad – on this phone only, not into the call, and not while the phone is
-   set to silent or vibrate.
+   set to silent or vibrate. A key gives way a little under the finger and springs back, with a tiny tap
+   of vibration – as far as the system's touch feedback is on, and without the movement when the system's
+   animations are switched off.
    The red button cancels a dial-help call that is still being set up.
    A **long press on the green button** offers *Hide my number*: your own number is withheld
    for that call (the box' code `*31#` before the number; not for internal numbers and service codes).
