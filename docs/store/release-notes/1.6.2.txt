@@ -1,0 +1,10 @@
+<en-US>
+• Fixed: a speed dial whose entry was deleted in the FRITZ!Box web interface could no longer be changed or removed until the app was restarted – the app now reads the phone books again and carries out the change
+• Phone books are read again when the app comes back to the foreground
+• "What's new" in the settings names the version its notes belong to
+</en-US>
+<de-DE>
+• Behoben: Eine Kurzwahl, deren Eintrag in der Weboberfläche der FRITZ!Box gelöscht wurde, ließ sich bis zum Neustart der App nicht mehr ändern oder entfernen – jetzt liest die App die Telefonbücher neu und führt die Änderung aus
+• Die Telefonbücher werden neu gelesen, wenn die App wieder in den Vordergrund kommt
+• „Neuigkeiten“ in den Einstellungen nennt die Version, zu der die Hinweise gehören
+</de-DE>
