@@ -15,7 +15,7 @@ import org.rustygnome.pickelhaube.R
 
 /**
  * The poses of the mascot, the app icon's helmet as a little character (drawn by
- * art/mascot/generate.py): the welcome tour's, and those of a call in the dialer.
+ * art/mascot/generate.py): the welcome tour's, the dialer title's, and those of a call in the dialer.
  */
 enum class MascotPose {
     WAVING, CLIPBOARD, SEARCHING, TYPING, PUZZLED, CHEERING,
@@ -28,6 +28,9 @@ enum class MascotPose {
 
     /** Connected. */
     TALKING,
+
+    /** At rest, in the dialer's title. */
+    IDLE,
 }
 
 @get:DrawableRes
@@ -42,6 +45,7 @@ val MascotPose.drawable: Int
         MascotPose.RINGING -> R.drawable.mascot_ringing
         MascotPose.LISTENING -> R.drawable.mascot_listening
         MascotPose.TALKING -> R.drawable.mascot_talking
+        MascotPose.IDLE -> R.drawable.mascot_idle
     }
 
 /** The pose with its eyes closed, for a blink; null: the pose does not blink (its eyes are closed or squinted already). */
@@ -54,6 +58,7 @@ val MascotPose.blinkDrawable: Int?
         MascotPose.TYPING -> R.drawable.mascot_typing_blink
         MascotPose.RINGING -> R.drawable.mascot_ringing_blink
         MascotPose.LISTENING -> R.drawable.mascot_listening_blink
+        MascotPose.IDLE -> R.drawable.mascot_idle_blink
         MascotPose.PUZZLED, MascotPose.CHEERING, MascotPose.TALKING -> null
     }
 

@@ -68,8 +68,10 @@ head when it did not; pages slide – all of it only while Android's animations 
 
 The mascot also turns up elsewhere: with a short cheerful line when a list in the number picker or the
 call forwarding page is empty (*All quiet on the line.*), searching while something loads, puzzled when
-it failed – and, as a little surprise, it spins once on a long press on the dialer's title or on the
-version line in the settings (which also copies the version, as before).
+it failed. In the dialer it sits in the title, beside the app's name: it blinks now and then, rocks
+its spike while the app talks to the box (the progress bar below still says so too, also with
+animations off), and spins once on a long press on the title. A long press on the version line in the
+settings makes it pop up and spin as well (and copies the version, as before).
 
 ### What's new
 

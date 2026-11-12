@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The mascot of the welcome tour and of a call in the dialer: the app icon's helmet as a little character – the round icon with eyes,
+The mascot of the welcome tour, of the dialer's title and of a call in the dialer: the app icon's helmet as a little character – the round icon with eyes,
 its handset worn as a moustache, and white cartoon hands. One shape list per pose is written as an
 SVG (art/mascot/*.svg, to look at) and as an Android vector drawable (res/drawable/mascot_*.xml).
 Only plain shapes, no transforms: what ImageMagick renders is what Android draws.
@@ -170,6 +170,8 @@ POSES = {
         ("stroke", RED, "M90,8Q90,3 95,3Q100,3 100,8Q100,12 95,14V18", 2.4),
         ("fill", RED, circle(95, 23.5, 1.6)),
     ] + hand(89, 42),
+    # At rest, in the dialer's title: just the head, eyes front.
+    "idle": head() + eyes((0.0, 0.0)),
     # The box rings your phone: eyes down to the phone, ringing marks on both sides of the head.
     "ringing": head() + eyes((-0.8, 1.4)) + [
         ("stroke", BLUE, "M13,40Q8,47 10,55", 1.6), ("stroke", BLUE, "M7,36Q1,46 4,58", 1.6),
@@ -189,14 +191,14 @@ POSES = {
 def blink(name):
     """The pose [name] with its eyes closed – shown for a moment now and then (see Mascot in WelcomeScreen)."""
     look = {"waving": (0.4, -0.3), "clipboard": (1.2, 0.8), "searching": (1.0, 0.0), "typing": (0.0, 1.6),
-            "ringing": (-0.8, 1.4), "listening": (-1.4, -0.2)}[name]
+            "ringing": (-0.8, 1.4), "listening": (-1.4, -0.2), "idle": (0.0, 0.0)}[name]
     shapes = POSES[name]
     open_eyes = eyes(look)
     start = next(i for i in range(len(shapes)) if shapes[i:i + len(open_eyes)] == open_eyes)
     return shapes[:start] + eyes(closed=True) + shapes[start + len(open_eyes):]
 
 
-BLINKING = ["waving", "clipboard", "searching", "typing", "ringing", "listening"]
+BLINKING = ["waving", "clipboard", "searching", "typing", "ringing", "listening", "idle"]
 
 
 def svg(shapes):

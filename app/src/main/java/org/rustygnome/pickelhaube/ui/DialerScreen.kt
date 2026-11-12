@@ -148,33 +148,36 @@ fun DialerScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    // App name, and below it the FritzBox in use – or a note about the network.
-                    // A long press on it: the helmet spins once (just for fun).
+                    // The helmet, the app name, and below it the FritzBox in use – or a note about the network.
+                    // The helmet rocks while the app talks to the box; a long press on the title spins it (just for fun).
                     val box = state.profiles.firstOrNull { it.id == state.activeProfileId }?.name
                     val spin = rememberHelmetSpin()
                     val haptics = LocalHapticFeedback.current
-                    // Below the title, over the number field.
-                    HelmetSpinPopup(spin, Alignment.BottomCenter, offsetY = 104.dp)
-                    Column(
-                        Modifier.pointerInput(Unit) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.pointerInput(Unit) {
                             detectTapGestures(onLongPress = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 spin.start()
                             })
                         },
                     ) {
-                        Text(stringResource(R.string.app_name))
-                        val notice = state.networkNotice?.asString()
-                            ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null
-                        val subtitle = notice ?: box
-                        if (subtitle != null) {
-                            Text(
-                                subtitle,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = if (notice != null) MaterialTheme.colorScheme.error
-                                else MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                            )
+                        TitleHelmet(busy = state.busy, spin = spin)
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(stringResource(R.string.app_name))
+                            val notice = state.networkNotice?.asString()
+                                ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null
+                            val subtitle = notice ?: box
+                            if (subtitle != null) {
+                                Text(
+                                    subtitle,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (notice != null) MaterialTheme.colorScheme.error
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                )
+                            }
                         }
                     }
                 },
