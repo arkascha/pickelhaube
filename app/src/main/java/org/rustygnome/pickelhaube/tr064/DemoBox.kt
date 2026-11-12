@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.tr064
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -48,6 +49,11 @@ object DemoBox {
 
     /** How long the box takes to answer – long enough to see that something is loading. */
     private const val LATENCY_MILLIS = 150L
+
+    /** How long it takes to answer now; tests make it slower, to tap something while it is busy. */
+    @VisibleForTesting
+    @Volatile
+    internal var latencyMillis = LATENCY_MILLIS
 
     /** The steps of a call: the phone rings until picked up, the other side answers, they talk. */
     private const val RING_MILLIS = 3_000L
@@ -242,7 +248,7 @@ object DemoBox {
 
         override fun intercept(chain: okhttp3.Interceptor.Chain): Response {
             val request = chain.request()
-            Thread.sleep(LATENCY_MILLIS)
+            Thread.sleep(latencyMillis)
             val loggedIn = config.username == USERNAME && config.password == PASSWORD
             val (code, body) = if (request.method == "GET") {
                 if (loggedIn) download(request.url.encodedPath) else 401 to ""

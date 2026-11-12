@@ -262,6 +262,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun dismissError() {
         failedAction = null
         _state.update { it.copy(error = null, canRetry = false) }
+        // Tapped while the failed one was running: its turn now that the error has been read.
+        startQueuedAction()
     }
 
     fun retry() {
@@ -373,12 +375,14 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         _state.update { it.copy(config = config, certificatePrompt = null) }
         val action = pendingAction
         pendingAction = null
-        action?.let { (progress, block) -> runOnBox(progress, block) }
+        if (action != null) runOnBox(action.first, action.second) else startQueuedAction()
     }
 
     fun rejectCertificate() {
         failedAction = pendingAction
         pendingAction = null
+        // Without the box' certificate, nothing tapped meanwhile can reach it either.
+        queuedActions.clear()
         _state.update {
             it.copy(
                 certificatePrompt = null,
@@ -669,7 +673,26 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         whenIdle[key] = action
     }
 
+    /**
+     * Actions tapped while the box was busy (another action, or reading in the background) – they
+     * used to be dropped, so the tap seemed to do nothing. They run one after the other, each once
+     * (the same one tapped twice is queued once), before the requests of [whenIdle]; also after a
+     * failure, but only once its error has been read ([dismissError]) and not while the box' certificate
+     * is in question.
+     */
+    private val queuedActions = ArrayDeque<Pair<UiText, BoxAction>>()
+
+    /** The next of [queuedActions], if the box is free for it; true if one was started. */
+    private fun startQueuedAction(): Boolean {
+        val state = _state.value
+        if (state.busy || state.error != null || state.certificatePrompt != null) return false
+        val (progress, block) = queuedActions.removeFirstOrNull() ?: return false
+        runOnBox(progress, block)
+        return true
+    }
+
     private fun startQueuedRequests() {
+        if (startQueuedAction()) return
         while (whenIdle.isNotEmpty() && !_state.value.busy) {
             val key = whenIdle.keys.first()
             whenIdle.remove(key)?.invoke()
@@ -849,7 +872,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun runOnBox(progress: UiText, block: BoxAction) {
-        if (_state.value.busy) return
+        val waiting = _state.value
+        if (waiting.busy || waiting.certificatePrompt != null) {
+            if (queuedActions.none { it.first == progress }) queuedActions.addLast(progress to block)
+            return
+        }
         failedAction = null
         _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false, loginRejected = false) }
         viewModelScope.launch {
@@ -975,6 +1002,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             runCatching { FritzDialer(config).stopSecondFactor() }
         }
         _state.update { it.copy(secondFactor = null, busy = false, status = null) }
+        startQueuedAction()
     }
 
     // Runs last: all fields above are initialised by now (Kotlin initialises in source order).
