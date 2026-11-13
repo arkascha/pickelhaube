@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -106,35 +107,46 @@ fun NumberPickerScreen(
             )
         },
     ) { padding ->
-        Column(
+        // On a wide screen no wider than this, in the middle: a name and its time stay within one glance.
+        Box(
             Modifier
                 .padding(padding)
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            PrimaryTabRow(selectedTabIndex = shown.ordinal) {
-                PickerTabItem(shown, PickerTab.RECENT, R.string.picker_tab_recent, HistoryIcon, onTabChange)
-                PickerTabItem(shown, PickerTab.SPEED_DIALS, R.string.speed_dial, Icons.Default.Star, onTabChange)
-                PickerTabItem(shown, PickerTab.PHONEBOOKS, R.string.phone_books, ContactsIcon, onTabChange)
-                if (showInternal) {
-                    PickerTabItem(shown, PickerTab.INTERNAL, R.string.picker_tab_internal, Icons.Default.Home, onTabChange)
-                }
-            }
-            Box(
+            Column(
                 Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
+                    .widthIn(max = PICKER_MAX_WIDTH)
+                    .fillMaxSize()
             ) {
-                if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-            }
-            when (shown) {
-                PickerTab.RECENT -> recents()
-                PickerTab.SPEED_DIALS -> speedDials()
-                PickerTab.PHONEBOOKS -> phonebooks()
-                PickerTab.INTERNAL -> internal()
+                PrimaryTabRow(selectedTabIndex = shown.ordinal) {
+                    PickerTabItem(shown, PickerTab.RECENT, R.string.picker_tab_recent, HistoryIcon, onTabChange)
+                    PickerTabItem(shown, PickerTab.SPEED_DIALS, R.string.speed_dial, Icons.Default.Star, onTabChange)
+                    PickerTabItem(shown, PickerTab.PHONEBOOKS, R.string.phone_books, ContactsIcon, onTabChange)
+                    if (showInternal) {
+                        PickerTabItem(shown, PickerTab.INTERNAL, R.string.picker_tab_internal, Icons.Default.Home, onTabChange)
+                    }
+                }
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(4.dp)
+                ) {
+                    if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+                }
+                when (shown) {
+                    PickerTab.RECENT -> recents()
+                    PickerTab.SPEED_DIALS -> speedDials()
+                    PickerTab.PHONEBOOKS -> phonebooks()
+                    PickerTab.INTERNAL -> internal()
+                }
             }
         }
     }
 }
+
+/** The picker's tabs and lists are at most this wide – on a tablet across, too. */
+private val PICKER_MAX_WIDTH = 720.dp
 
 /**
  * One tab: icon and title. The title is never cut off: it wraps onto a second line and, if a word

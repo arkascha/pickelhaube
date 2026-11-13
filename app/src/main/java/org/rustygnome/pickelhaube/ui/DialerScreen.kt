@@ -12,6 +12,10 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -251,157 +255,243 @@ fun DialerScreen(
                 if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             }
 
-            Column(
-                modifier = Modifier
+            // Wide and low (a phone turned, a tablet across): the keypad beside the rest, which scrolls if it must.
+            // Otherwise one column – on a tablet held upright no wider than a phone's, the keys a little larger.
+            BoxWithConstraints(
+                Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp, vertical = 12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                contentAlignment = Alignment.TopCenter,
             ) {
-                // Display only: input comes from the dial pad. The field is disabled so it has no
-                // keyboard and no gesture handling of its own (its long-press text selection would
-                // otherwise swallow the long press on ⌫); the colours keep the normal look.
-                val onSurface = MaterialTheme.colorScheme.onSurface
-                val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
-                // When ⌫ was last tapped (or held), so a tap too many does not reach the paste button in its place.
-                var lastDeletion by remember { mutableLongStateOf(0L) }
-                // Grouped as numbers are written in the box' country, to be read at a glance.
-                val fieldContext = LocalContext.current
-                val codes = state.activeProfile?.dialingCodes
-                val grouping = remember(codes) { NumberGrouping(phoneNumberFormat(deviceCountryIso(fieldContext), codes)) }
-                OutlinedTextField(
-                    value = state.number,
-                    onValueChange = onNumberChange,
-                    enabled = false,
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    visualTransformation = grouping,
-                    // Never on two lines (long translation, large font): rather cut off with "…".
-                    // After a speed dial it says which one, and whose number it is.
-                    label = {
-                        Text(
-                            state.numberLabel?.asString() ?: state.matchedName ?: stringResource(R.string.dialer_number_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = onSurface,
-                        disabledBorderColor = MaterialTheme.colorScheme.outline,
-                        disabledLabelColor = onSurfaceVariant,
-                        disabledTrailingIconColor = onSurfaceVariant,
-                        disabledLeadingIconColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    leadingIcon = {
-                        IconButton(onClick = onOpenPicker) {
-                            // The box' missed calls not looked at yet, counted on the way to them.
-                            BadgedBox(
-                                badge = {
-                                    if (state.newMissedCalls > 0) Badge { Text(state.newMissedCalls.coerceAtMost(99).toString()) }
-                                },
-                            ) {
-                                Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
-                            }
-                        }
-                    },
-                    trailingIcon = {
-                        if (state.number.isNotEmpty()) {
-                            BackspaceButton(
-                                onBackspace = { lastDeletion = SystemClock.uptimeMillis(); onBackspace() },
-                                onClear = { lastDeletion = SystemClock.uptimeMillis(); onNumberChange("") },
+                val wide = maxWidth >= WIDE_MIN_WIDTH && maxWidth > maxHeight
+                val paneHeight = maxHeight
+                val low = paneHeight < LOW_MAX_HEIGHT
+                // Side by side: two panes of the same width, together in the middle.
+                val paneWidth = min((maxWidth - PANE_GAP) / 2, PANE_MAX_WIDTH)
+                val maxKey = if (LocalConfiguration.current.smallestScreenWidthDp >= 600) 96.dp else 80.dp
+
+                val numberField: @Composable () -> Unit = {
+                    // Display only: input comes from the dial pad. The field is disabled so it has no
+                    // keyboard and no gesture handling of its own (its long-press text selection would
+                    // otherwise swallow the long press on ⌫); the colours keep the normal look.
+                    val onSurface = MaterialTheme.colorScheme.onSurface
+                    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+                    // When ⌫ was last tapped (or held), so a tap too many does not reach the paste button in its place.
+                    var lastDeletion by remember { mutableLongStateOf(0L) }
+                    // Grouped as numbers are written in the box' country, to be read at a glance.
+                    val fieldContext = LocalContext.current
+                    val codes = state.activeProfile?.dialingCodes
+                    val grouping = remember(codes) { NumberGrouping(phoneNumberFormat(deviceCountryIso(fieldContext), codes)) }
+                    OutlinedTextField(
+                        value = state.number,
+                        onValueChange = onNumberChange,
+                        enabled = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        visualTransformation = grouping,
+                        // Never on two lines (long translation, large font): rather cut off with "…".
+                        // After a speed dial it says which one, and whose number it is.
+                        label = {
+                            Text(
+                                state.numberLabel?.asString() ?: state.matchedName ?: stringResource(R.string.dialer_number_label),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
-                        } else {
-                            // An empty field offers the clipboard instead: read only when tapped.
-                            val context = LocalContext.current
-                            IconButton(onClick = {
-                                // ⌫ tapped in a row, once too often: that tap is not meant for the clipboard,
-                                // which has taken its place just now.
-                                if (SystemClock.uptimeMillis() - lastDeletion < PASTE_AFTER_DELETION_MILLIS) return@IconButton
-                                val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
-                                onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
-                            }) {
-                                Icon(PasteIcon, contentDescription = stringResource(R.string.dialer_paste))
+                        },
+                        textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            disabledTextColor = onSurface,
+                            disabledBorderColor = MaterialTheme.colorScheme.outline,
+                            disabledLabelColor = onSurfaceVariant,
+                            disabledTrailingIconColor = onSurfaceVariant,
+                            disabledLeadingIconColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        leadingIcon = {
+                            IconButton(onClick = onOpenPicker) {
+                                // The box' missed calls not looked at yet, counted on the way to them.
+                                BadgedBox(
+                                    badge = {
+                                        if (state.newMissedCalls > 0) Badge { Text(state.newMissedCalls.coerceAtMost(99).toString()) }
+                                    },
+                                ) {
+                                    Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
+                                }
                             }
-                        }
-                    },
-                )
-
-                // Its room stays reserved, so the keypad does not jump while typing.
-                SuggestionRow(state.suggestions, onSuggestion)
-
-                // Takes all remaining height; keys shrink on small screens / in landscape.
-                val tones = rememberKeyTones(state.keyTonesEnabled)
-                DialPad(
-                    onDigit = { tones?.play(it); onDigit(it) },
-                    onLongDigit = { tones?.play(it); onLongDigit(it) },
-                    speedDials = state.usablePhoneSpeedDials,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                PhoneSelector(
-                    phones = state.phones,
-                    selected = state.selectedPhone,
-                    busy = state.busy,
-                    onSelect = onSelectPhone,
-                    onRefresh = onRefresh,
-                )
-
-                // Its room stays reserved while the feature is on, so the layout does not jump with each call.
-                // Numbers not registered are warned about even without it.
-                val linesDown = state.linesDown
-                if (state.callStatusEnabled || linesDown.isNotEmpty()) {
-                    Spacer(Modifier.height(8.dp))
-                    CallStatusLine(
-                        state.callProgress,
-                        FritzDialer.splitExtension(state.number),
-                        state.newMissedCalls,
-                        linesDown,
-                        allLinesDown = linesDown.size == state.lines.size,
-                        state.activeProfile?.name ?: stringResource(R.string.fritzbox),
-                        onShowMissedCalls,
-                        onCheckLines,
+                        },
+                        trailingIcon = {
+                            if (state.number.isNotEmpty()) {
+                                BackspaceButton(
+                                    onBackspace = { lastDeletion = SystemClock.uptimeMillis(); onBackspace() },
+                                    onClear = { lastDeletion = SystemClock.uptimeMillis(); onNumberChange("") },
+                                )
+                            } else {
+                                // An empty field offers the clipboard instead: read only when tapped.
+                                val context = LocalContext.current
+                                IconButton(onClick = {
+                                    // ⌫ tapped in a row, once too often: that tap is not meant for the clipboard,
+                                    // which has taken its place just now.
+                                    if (SystemClock.uptimeMillis() - lastDeletion < PASTE_AFTER_DELETION_MILLIS) return@IconButton
+                                    val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
+                                    onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
+                                }) {
+                                    Icon(PasteIcon, contentDescription = stringResource(R.string.dialer_paste))
+                                }
+                            }
+                        },
                     )
                 }
-
-                Spacer(Modifier.height(12.dp))
-
-                val redial = state.number.isEmpty() && state.redialNumber != null
-                Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-                    RoundActionButton(
-                        onClick = onDial,
-                        // A long press offers the call with the own number withheld.
-                        // and, with several internet numbers on the box, the call from one of them.
-                        // Not for an empty field, whose tap only brings the last number back.
-                        menu = if (redial) emptyList() else listOf(
-                            stringResource(R.string.dialer_dial) to onDial,
-                            stringResource(R.string.dialer_dial_hidden) to onDialHidden,
-                        ) + state.dialFromNumbers.map { own ->
-                            val label = if (own.name.isBlank()) own.number else "${own.name} (${own.number})"
-                            stringResource(R.string.dialer_dial_from, label) to { onDialFrom(own) }
-                        },
-                        // Only when there is something dialable (same check the dial action uses).
-                        // No box to dial through: entering a number still works, dialling does not.
-                        // Not for the number of the call under way: dialling it again would only ring the phone again.
-                        // An empty field: it brings back the number dialled last (dialled with the next tap).
-                        enabled = !state.busy && !state.noBoxReachable && (
-                            redial ||
-                                FritzDialer.sanitizeNumber(state.number).isNotEmpty() &&
-                                FritzDialer.splitExtension(state.number).number != state.callUnderway
-                            ),
-                        color = CallGreen,
-                    ) {
-                        Icon(
-                            Icons.Default.Call,
-                            contentDescription = stringResource(if (redial) R.string.dialer_redial else R.string.dialer_dial),
-                            modifier = Modifier.size(30.dp),
+                // Its room stays reserved, so the keypad does not jump while typing.
+                val suggestionRow: @Composable () -> Unit = {
+                    SuggestionRow(state.suggestions, onSuggestion)
+                }
+                val tones = rememberKeyTones(state.keyTonesEnabled)
+                val keypad: @Composable (Modifier) -> Unit = { modifier ->
+                    DialPad(
+                        onDigit = { tones?.play(it); onDigit(it) },
+                        onLongDigit = { tones?.play(it); onLongDigit(it) },
+                        speedDials = state.usablePhoneSpeedDials,
+                        maxKey = maxKey,
+                        modifier = modifier,
+                    )
+                }
+                val phoneSelector: @Composable () -> Unit = {
+                    PhoneSelector(
+                        phones = state.phones,
+                        selected = state.selectedPhone,
+                        busy = state.busy,
+                        onSelect = onSelectPhone,
+                        onRefresh = onRefresh,
+                    )
+                }
+                val statusLine: @Composable () -> Unit = {
+                    // Its room stays reserved while the feature is on, so the layout does not jump with each call.
+                    // Numbers not registered are warned about even without it.
+                    val linesDown = state.linesDown
+                    if (state.callStatusEnabled || linesDown.isNotEmpty()) {
+                        Spacer(Modifier.height(8.dp))
+                        CallStatusLine(
+                            state.callProgress,
+                            FritzDialer.splitExtension(state.number),
+                            state.newMissedCalls,
+                            linesDown,
+                            allLinesDown = linesDown.size == state.lines.size,
+                            state.activeProfile?.name ?: stringResource(R.string.fritzbox),
+                            onShowMissedCalls,
+                            onCheckLines,
                         )
                     }
-                    RoundActionButton(onClick = onHangup, enabled = state.dialActive && !state.busy, color = HangupRed) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.dialer_hang_up), modifier = Modifier.size(30.dp))
+                }
+                val actionButtons: @Composable () -> Unit = {
+                    val redial = state.number.isEmpty() && state.redialNumber != null
+                    // Side by side – or, beside the keys of a phone turned, one above the other.
+                    val stacked = wide && low
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(32.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        maxItemsInEachRow = if (stacked) 1 else 2,
+                    ) {
+                        RoundActionButton(
+                            onClick = onDial,
+                            // A long press offers the call with the own number withheld.
+                            // and, with several internet numbers on the box, the call from one of them.
+                            // Not for an empty field, whose tap only brings the last number back.
+                            menu = if (redial) emptyList() else listOf(
+                                stringResource(R.string.dialer_dial) to onDial,
+                                stringResource(R.string.dialer_dial_hidden) to onDialHidden,
+                            ) + state.dialFromNumbers.map { own ->
+                                val label = if (own.name.isBlank()) own.number else "${own.name} (${own.number})"
+                                stringResource(R.string.dialer_dial_from, label) to { onDialFrom(own) }
+                            },
+                            // Only when there is something dialable (same check the dial action uses).
+                            // No box to dial through: entering a number still works, dialling does not.
+                            // Not for the number of the call under way: dialling it again would only ring the phone again.
+                            // An empty field: it brings back the number dialled last (dialled with the next tap).
+                            enabled = !state.busy && !state.noBoxReachable && (
+                                redial ||
+                                    FritzDialer.sanitizeNumber(state.number).isNotEmpty() &&
+                                    FritzDialer.splitExtension(state.number).number != state.callUnderway
+                                ),
+                            color = CallGreen,
+                        ) {
+                            Icon(
+                                Icons.Default.Call,
+                                contentDescription = stringResource(if (redial) R.string.dialer_redial else R.string.dialer_dial),
+                                modifier = Modifier.size(30.dp),
+                            )
+                        }
+                        RoundActionButton(onClick = onHangup, enabled = state.dialActive && !state.busy, color = HangupRed) {
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.dialer_hang_up), modifier = Modifier.size(30.dp))
+                        }
+                    }
+                }
+
+                if (wide) {
+                    Row(
+                        Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.spacedBy(PANE_GAP, Alignment.CenterHorizontally),
+                    ) {
+                        Column(
+                            Modifier
+                                .width(paneWidth)
+                                .verticalScroll(rememberScrollState())
+                                .heightIn(min = paneHeight),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            numberField()
+                            suggestionRow()
+                            Spacer(Modifier.height(12.dp))
+                            phoneSelector()
+                            statusLine()
+                            if (!low) {
+                                Spacer(Modifier.height(12.dp))
+                                actionButtons()
+                            }
+                        }
+                        if (low) {
+                            // Too low for all of it in one pane (a phone turned): the call buttons beside the keys.
+                            Row(
+                                Modifier
+                                    .width(paneWidth)
+                                    .fillMaxHeight(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                keypad(
+                                    Modifier
+                                        .weight(1f)
+                                        .fillMaxHeight(),
+                                )
+                                Spacer(Modifier.width(16.dp))
+                                actionButtons()
+                            }
+                        } else {
+                            keypad(
+                                Modifier
+                                    .width(paneWidth)
+                                    .fillMaxHeight(),
+                            )
+                        }
+                    }
+                } else {
+                    Column(
+                        Modifier
+                            .widthIn(max = PANE_MAX_WIDTH)
+                            .fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        numberField()
+                        suggestionRow()
+                        // Takes all remaining height; keys shrink on small screens.
+                        keypad(
+                            Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        phoneSelector()
+                        statusLine()
+                        Spacer(Modifier.height(12.dp))
+                        actionButtons()
                     }
                 }
             }
@@ -692,6 +782,18 @@ private fun CallStatusText(text: String, hint: String?, progress: CallProgress?,
     )
 }
 
+/** From this width on, a screen wider than high shows the keypad beside the rest. */
+private val WIDE_MIN_WIDTH = 560.dp
+
+/** The dialer's column (or each of its two panes) is at most this wide – on a tablet, too. */
+private val PANE_MAX_WIDTH = 480.dp
+
+/** Between the two panes. */
+private val PANE_GAP = 32.dp
+
+/** Side by side and lower than this, the call buttons go beside the keys. */
+private val LOW_MAX_HEIGHT = 420.dp
+
 /** How long after the last ⌫ the paste button, in its place once the field is empty, ignores taps. */
 private const val PASTE_AFTER_DELETION_MILLIS = 1000L
 
@@ -842,13 +944,15 @@ private fun DialPad(
     onDigit: (Char) -> Unit,
     onLongDigit: (Char) -> Unit,
     speedDials: List<SpeedDial>,
+    /** The keys grow up to this size, no further. */
+    maxKey: Dp,
     modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
         val gap = 10.dp
         val byWidth = (maxWidth - gap * 2) / 3
         val byHeight = (maxHeight - gap * 3) / 4
-        val keySize: Dp = min(min(byWidth, byHeight), 80.dp).coerceAtLeast(36.dp)
+        val keySize: Dp = min(min(byWidth, byHeight), maxKey).coerceAtLeast(36.dp)
 
         Column(verticalArrangement = Arrangement.spacedBy(gap)) {
             KEYS.forEach { row ->

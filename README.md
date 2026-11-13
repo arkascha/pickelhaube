@@ -48,6 +48,15 @@ Without them, release builds are not signed; with only some of them, Gradle warn
 
 ## Using the app
 
+### Wide screens
+
+Turned sideways – a phone or a tablet, wider than 560 dp and wider than high – the dialer shows the
+keypad beside the rest: number field, suggestions, phone selector, call status and the call buttons
+on the left, the keys on the right, two panes of the same width (at most 480 dp each) in the middle.
+On a phone turned, lower than 420 dp, the call buttons stand beside the keys instead, one above the
+other. Upright, the dialer is one column, at most 480 dp wide; on a tablet (smallest width 600 dp and
+more) the keys grow to 96 dp instead of 80. The number picker is at most 720 dp wide, in the middle.
+
 ### Welcome tour
 
 On first start – while no FRITZ!Box is set up – a short tour leads to the first connection, with a
