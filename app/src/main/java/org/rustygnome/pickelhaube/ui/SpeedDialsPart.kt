@@ -15,6 +15,34 @@ internal class SpeedDialsPart(private val host: DialerHost) {
     private val state get() = host.state
     private val settings get() = host.settings
 
+    /** What puts back the removal offered for undoing ([UiState.undoOffer]); null: none. */
+    @Volatile
+    private var undoAction: (() -> Unit)? = null
+
+    @Volatile
+    private var undoSerial = 0L
+
+    /** Offers to undo a removal: [message] with "Undo", which runs [action]. Replaces an earlier offer. */
+    private fun offerUndo(message: UiText, action: () -> Unit) {
+        undoAction = action
+        val offer = UndoOffer(message, ++undoSerial)
+        state.update { it.copy(undoOffer = offer) }
+    }
+
+    /** "Undo" was tapped: the last removal is put back. */
+    fun undo() {
+        val action = undoAction ?: return
+        dropUndo()
+        action()
+    }
+
+    /** The offer [serial] went by without "Undo" (or the picker was left): it cannot be taken any more. */
+    fun dropUndo(serial: Long? = null) {
+        if (serial != null && serial != state.value.undoOffer?.serial) return
+        undoAction = null
+        state.update { it.copy(undoOffer = null) }
+    }
+
     /** Opens the phone books to choose the number for this phone's speed dial [slot]. */
     fun startAssigning(slot: String) =
         state.update { it.copy(assigningSpeedDial = SpeedDialAssignment.Phone(slot), pickerTab = PickerTab.PHONEBOOKS) }
@@ -32,9 +60,12 @@ internal class SpeedDialsPart(private val host: DialerHost) {
         state.update { it.copy(phoneSpeedDials = settings.phoneSpeedDials) }
     }
 
+    /** Removes this phone's speed dial [slot] – right away, with "Undo" to put it back. */
     fun removePhone(slot: String) {
+        val removed = settings.phoneSpeedDials.firstOrNull { it.slot == slot } ?: return
         settings.phoneSpeedDials = settings.phoneSpeedDials.filterNot { it.slot == slot }
         state.update { it.copy(phoneSpeedDials = settings.phoneSpeedDials) }
+        offerUndo(uiText(R.string.speed_dial_removed_phone, slot, removed.name)) { setPhone(removed.slot, removed.name, removed.number) }
     }
 
     /**
@@ -72,21 +103,50 @@ internal class SpeedDialsPart(private val host: DialerHost) {
         }
     }
 
-    /** Deletes [copy], an entry copying a contact of an online phone book, from the box; then reads the phone books anew. */
+    /**
+     * Deletes [copy], an entry copying a contact of an online phone book, from the box; then reads the
+     * phone books anew. "Undo" puts the entry back (see [restoreCopy]).
+     */
     fun deleteOnlineCopy(copy: OnlineCopy) = host.runOnBoxEntries(uiText(R.string.status_deleting_copy, copy.entry.name), retry = false) { dialer ->
         dialer.deletePhonebookEntry(copy.entry.bookId!!, copy.entry.uid!!)
         val books = dialer.loadPhonebooks()
         state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+        offerUndo(uiText(R.string.status_copy_deleted, copy.entry.name)) { restoreCopy(copy.entry) }
         uiText(R.string.status_copy_deleted, copy.entry.name)
     }
 
-    /** Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books anew. */
+    /**
+     * Puts [entry], deleted just before, back into its phone book on the box – a new entry with its
+     * name and numbers, speed dials included. The phone book is looked for by its name, as the box
+     * numbers its phone books by their place in its list; the box checks the name once more before
+     * the entry goes in.
+     */
+    private fun restoreCopy(entry: PhonebookContact) =
+        host.runOnBoxEntries(uiText(R.string.status_restoring_copy, entry.name), retry = true) { dialer ->
+            val book = state.value.phonebooks.filterNot { it.online }.firstOrNull { it.name == entry.book }
+                ?: return@runOnBoxEntries uiText(R.string.status_restore_book_gone, entry.name, entry.book)
+            dialer.addToPhonebook(book.id, book.name, PhonebookContact(entry.name, entry.numbers, ""))
+            val books = dialer.loadPhonebooks()
+            state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+            uiText(R.string.status_copy_restored, entry.name)
+        }
+
+    /**
+     * Takes the box' speed dial [slot] away from the numbers that have it; then reads the phone books
+     * anew. "Undo" gives it back to the number that had it.
+     */
     fun removeBox(slot: String) = host.runOnBoxEntries(uiText(R.string.status_removing_speed_dial, slot), retry = true) { dialer ->
-        state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }
+        val holders = state.value.phonebooks.filterNot { it.online }.flatMap { it.contacts }
             .filter { c -> c.bookId != null && c.uid != null && c.numbers.any { it.speedDial == slot } }
-            .forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
+        holders.forEach { dialer.setSpeedDial(it.bookId!!, it.uid!!, slot, null) }
         val books = dialer.loadPhonebooks()
         state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
+        holders.firstOrNull()?.let { holder ->
+            val number = holder.numbers.first { it.speedDial == slot }
+            offerUndo(uiText(R.string.status_speed_dial_removed, slot)) {
+                setBox(slot, holder.name, number.number, number.type, holder.bookId)
+            }
+        }
         uiText(R.string.status_speed_dial_removed, slot)
     }
 

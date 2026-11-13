@@ -484,7 +484,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** "Recent": just the missed calls, or all calls. */
     fun setRecentsMissedOnly(missedOnly: Boolean) = _state.update { it.copy(recentsMissedOnly = missedOnly) }
 
-    fun closePicker() = _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
+    fun closePicker() {
+        // What was removed there stays removed: "Undo" went with the picker.
+        speedDials.dropUndo()
+        _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
+    }
 
     fun selectPickerTab(tab: PickerTab) {
         _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }

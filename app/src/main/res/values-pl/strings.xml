@@ -321,9 +321,9 @@
     <string name="speed_dial_box_none">W książkach telefonicznych tego FRITZ!Box nie ustawiono szybkiego wybierania.</string>
     <string name="speed_dial_box_none_headline">Na FRITZ!Box nie ma jeszcze ulubionych.</string>
     <string name="speed_dial_free">Wolne</string>
-    <string name="speed_dial_change_or_remove">Zmień lub usuń</string>
+    <string name="speed_dial_replace_or_remove">Zastąp lub usuń</string>
     <string name="speed_dial_set_up">Ustaw</string>
-    <string name="speed_dial_change">Zmień</string>
+    <string name="speed_dial_replace">Zastąp</string>
     <string name="speed_dial_remove">Usuń</string>
     <string name="speed_dial_choose_number">Dotknij numeru dla szybkiego wybierania %1$s.</string>
     <string name="speed_dial_for">Szybkie wybieranie: %1$s</string>
@@ -333,9 +333,13 @@
     <string name="speed_dial_box_new_entry">Numeru nie ma jeszcze w żadnej książce telefonicznej FRITZ!Box. Nowy wpis w:</string>
     <string name="speed_dial_box_online">„%1$s” jest tylko w książce online „%2$s”, której FRITZ!Box nie może zmienić. Do szybkiego wybierania zostanie utworzony wpis we własnej książce telefonicznej FRITZ!Box.</string>
     <string name="copy_delete">Usuń kopię na FRITZ!Box</string>
-    <string name="copy_delete_text">„%1$s” jest w książce „%2$s” FRITZ!Box jako kopia kontaktu z książki online „%3$s” – np. dla szybkiego wybierania. Usunąć ten wpis? Kontakt pozostaje w książce online; szybkie wybieranie wpisu zostanie usunięte.</string>
     <string name="status_deleting_copy">Usuwanie kopii „%1$s” na FRITZ!Box…</string>
     <string name="status_copy_deleted">Usunięto kopię „%1$s” na FRITZ!Box.</string>
+    <string name="undo">Cofnij</string>
+    <string name="speed_dial_removed_phone">Szybkie wybieranie %1$s (%2$s) usunięte.</string>
+    <string name="status_restoring_copy">Przywracanie „%1$s” na FRITZ!Box…</string>
+    <string name="status_copy_restored">„%1$s” jest znów na FRITZ!Box.</string>
+    <string name="status_restore_book_gone">Nie można przywrócić „%1$s”: książki telefonicznej „%2$s” nie ma już na FRITZ!Box.</string>
     <string name="speed_dial_box_add">Nowe szybkie wybieranie FRITZ!Box</string>
     <string name="speed_dial_choose_number_box">Dotknij numeru dla szybkiego wybierania %1$s FRITZ!Box.</string>
     <string name="speed_dial_choose_number_box_new">Dotknij numeru dla nowego szybkiego wybierania FRITZ!Box.</string>

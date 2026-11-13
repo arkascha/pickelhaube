@@ -66,18 +66,6 @@ fun SpeedDialTab(
     onlineCopies: List<OnlineCopy>,
     onDeleteCopy: (OnlineCopy) -> Unit,
 ) {
-    // A copy of an online contact about to be deleted: asking first.
-    var deleteCopy by remember { mutableStateOf<OnlineCopy?>(null) }
-    deleteCopy?.let { copy ->
-        DeleteCopyDialog(
-            copy = copy,
-            onDelete = {
-                deleteCopy = null
-                onDeleteCopy(copy)
-            },
-            onDismiss = { deleteCopy = null },
-        )
-    }
     if (phoneSpeedDials == null && boxSpeedDials == null) {
         Message(stringResource(R.string.speed_dial_none_enabled), MascotPose.CLIPBOARD)
         return
@@ -120,7 +108,7 @@ fun SpeedDialTab(
                         onPick = onPick,
                         onChange = { onAssignBox(speedDial.slot) },
                         onRemove = { onRemoveBox(speedDial.slot) },
-                        onDeleteCopy = copy?.let { { deleteCopy = it } },
+                        onDeleteCopy = copy?.let { { onDeleteCopy(it) } },
                     )
                     HorizontalDivider()
                 }
@@ -162,7 +150,7 @@ private fun SlotLabel(slot: String) {
     )
 }
 
-/** One of the box' speed dials: tap to use; long press – while the box is there – to change or remove. */
+/** One of the box' speed dials: tap to use; long press – while the box is there – to replace or remove. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BoxSlotRow(
@@ -183,7 +171,7 @@ private fun BoxSlotRow(
             supportingContent = { Text(speedDial.number, maxLines = 1) },
             modifier = Modifier.combinedClickable(
                 onClick = { onPick(speedDial) },
-                onLongClickLabel = stringResource(R.string.speed_dial_change_or_remove).takeIf { editable },
+                onLongClickLabel = stringResource(R.string.speed_dial_replace_or_remove).takeIf { editable },
                 onLongClick = if (editable) {
                     {
                         haptics.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -196,7 +184,7 @@ private fun BoxSlotRow(
     }
 }
 
-/** Change or remove a speed dial – and for a box entry copying an online contact, delete that entry. */
+/** Replace or remove a speed dial – and for a box entry copying an online contact, delete that entry. */
 @Composable
 private fun SlotMenu(
     expanded: Boolean,
@@ -207,7 +195,7 @@ private fun SlotMenu(
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
         DropdownMenuItem(
-            text = { Text(stringResource(R.string.speed_dial_change)) },
+            text = { Text(stringResource(R.string.speed_dial_replace)) },
             onClick = { onDismiss(); onChange() },
         )
         DropdownMenuItem(
@@ -223,7 +211,7 @@ private fun SlotMenu(
     }
 }
 
-/** One of this phone's slots: tap to use (or, when free, to set up); long press to change or remove. */
+/** One of this phone's slots: tap to use (or, when free, to set up); long press to replace or remove. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PhoneSlotRow(
@@ -252,7 +240,7 @@ private fun PhoneSlotRow(
             modifier = if (speedDial != null) {
                 Modifier.combinedClickable(
                     onClick = { onPick(speedDial) },
-                    onLongClickLabel = stringResource(R.string.speed_dial_change_or_remove),
+                    onLongClickLabel = stringResource(R.string.speed_dial_replace_or_remove),
                     onLongClick = {
                         haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                         menu = true

@@ -62,7 +62,7 @@ class PhonebookChangedFlowTest : FlowTest() {
         deleteOnBox(GRANDMA)
 
         compose.onNode(slot("03", GRANDMA)).performTouchInput { longClick() }
-        compose.onNodeWithText(text(R.string.speed_dial_change)).performClick()
+        compose.onNodeWithText(text(R.string.speed_dial_replace)).performClick()
         notNowForContacts()
         awaitText(BEN_MOBILE)
         compose.onNodeWithText(BEN_MOBILE).performClick()

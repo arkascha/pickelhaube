@@ -53,11 +53,35 @@ class SpeedDialFlowTest : FlowTest() {
         longPressKey('1')
         awaitText(text(R.string.dialer_speed_dial_label, "1", ANNA))
 
-        // Removed with a long press on the slot.
+        // Removed with a long press on the slot, right away – and put back with "Undo".
         openPicker(R.string.speed_dial)
         compose.onNode(slot("1", ANNA)).performTouchInput { longClick() }
         compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
         awaitNode(slot("1", text(R.string.speed_dial_free)))
+        compose.onNodeWithText(text(R.string.undo)).performClick()
+        awaitNode(slot("1", ANNA))
+
+        // Removed again, and left so: it stays removed.
+        compose.onNode(slot("1", ANNA)).performTouchInput { longClick() }
+        compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
+        awaitNode(slot("1", text(R.string.speed_dial_free)))
+    }
+
+    /** The demo box' speed dial 01 (Anna) removed on the box – right away, without asking – and put back with "Undo". */
+    @Test
+    fun boxSpeedDialRemovedAndUndone() {
+        setUpDemoBox()
+        openPicker(R.string.speed_dial)
+        val list = compose.onNode(hasScrollToNodeAction())
+        list.performScrollToNode(slot("01", ANNA))
+        compose.onNode(slot("01", ANNA)).performTouchInput { longClick() }
+        compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
+        awaitText(text(R.string.status_speed_dial_removed, "01"))
+        awaitGone(slot("01", ANNA))
+
+        compose.onNodeWithText(text(R.string.undo)).performClick()
+        awaitBoxIdle()
+        list.performScrollToNode(slot("01", ANNA))
     }
 
     /**

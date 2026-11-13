@@ -38,6 +38,12 @@ sealed interface SpeedDialAssignment {
     data class Box(val slot: String?) : SpeedDialAssignment
 }
 
+/**
+ * Something just removed that can be put back: [message] says what, with "Undo" beside it. [serial]
+ * tells one offer from the next, also with the same message.
+ */
+data class UndoOffer(val message: UiText, val serial: Long)
+
 data class UiState(
     val number: String = "",
     /** Who the number is, when it came from a speed dial ("Speed dial 2: Office"); shown as the field's label. */
@@ -92,6 +98,8 @@ data class UiState(
     val newCallsSince: Long? = null,
     /** "Recent" shows only the numbers whose latest call was missed. */
     val recentsMissedOnly: Boolean = false,
+    /** A speed dial or a copy on the box just removed, to be put back with "Undo"; null: none. */
+    val undoOffer: UndoOffer? = null,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */
     val widgetSetup: WidgetSetup? = null,
     /** The number picker is open to add a number to [widgetSetup]. */

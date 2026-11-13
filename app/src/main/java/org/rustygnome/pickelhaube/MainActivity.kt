@@ -132,6 +132,9 @@ class MainActivity : ComponentActivity() {
                     }
                     NumberPickerScreen(
                         tab = state.pickerTab,
+                        undoOffer = state.undoOffer,
+                        onUndo = viewModel.speedDials::undo,
+                        onUndoGone = { viewModel.speedDials.dropUndo(it) },
                         onTabChange = viewModel::selectPickerTab,
                         busy = state.busy,
                         onReload = viewModel::reloadPicker,

@@ -316,9 +316,9 @@
     <string name="speed_dial_box_none">No speed dials are set up in the phone books of this FRITZ!Box.</string>
     <string name="speed_dial_box_none_headline">No favourites on the FRITZ!Box yet.</string>
     <string name="speed_dial_free">Not set</string>
-    <string name="speed_dial_change_or_remove">Change or remove</string>
+    <string name="speed_dial_replace_or_remove">Replace or remove</string>
     <string name="speed_dial_set_up">Set up</string>
-    <string name="speed_dial_change">Change</string>
+    <string name="speed_dial_replace">Replace</string>
     <string name="speed_dial_remove">Remove</string>
     <string name="speed_dial_choose_number">Tap the number for speed dial %1$s.</string>
     <string name="speed_dial_for">Speed dial for %1$s</string>
@@ -328,9 +328,13 @@
     <string name="speed_dial_box_new_entry">The number is in none of the FRITZ!Box’s phone books yet. New entry in:</string>
     <string name="speed_dial_box_online">“%1$s” is only in the online phone book “%2$s”, which the FRITZ!Box cannot change. For the speed dial, it gets an entry in one of the FRITZ!Box’s own phone books.</string>
     <string name="copy_delete">Delete copy on the FRITZ!Box</string>
-    <string name="copy_delete_text">“%1$s” is in the FRITZ!Box phone book “%2$s” as a copy of a contact from the online phone book “%3$s” – e.g. for a speed dial. Delete this entry? The contact stays in the online phone book; a speed dial of the entry goes with it.</string>
     <string name="status_deleting_copy">Deleting the copy of “%1$s” on the FRITZ!Box…</string>
     <string name="status_copy_deleted">Copy of “%1$s” on the FRITZ!Box deleted.</string>
+    <string name="undo">Undo</string>
+    <string name="speed_dial_removed_phone">Speed dial %1$s (%2$s) removed.</string>
+    <string name="status_restoring_copy">Putting “%1$s” back on the FRITZ!Box…</string>
+    <string name="status_copy_restored">“%1$s” is back on the FRITZ!Box.</string>
+    <string name="status_restore_book_gone">“%1$s” could not be put back: the phone book “%2$s” is no longer on the FRITZ!Box.</string>
     <string name="speed_dial_box_add">New FRITZ!Box speed dial</string>
     <string name="speed_dial_choose_number_box">Tap the number for FRITZ!Box speed dial %1$s.</string>
     <string name="speed_dial_choose_number_box_new">Tap the number for a new FRITZ!Box speed dial.</string>

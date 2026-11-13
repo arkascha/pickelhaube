@@ -152,18 +152,6 @@ fun PhonebookTab(
             onDismiss = { boxSpeedDialFor = null },
         )
     }
-    // A copy of an online contact about to be deleted: asking first.
-    var deleteCopy by remember { mutableStateOf<OnlineCopy?>(null) }
-    deleteCopy?.let { copy ->
-        DeleteCopyDialog(
-            copy = copy,
-            onDelete = {
-                deleteCopy = null
-                onDeleteCopy(copy)
-            },
-            onDismiss = { deleteCopy = null },
-        )
-    }
     // Contact of this phone being handed over to the box: choosing the phone book.
     var handOverFor by remember { mutableStateOf<PhonebookContact?>(null) }
     handOverFor?.takeIf { localBooks.isNotEmpty() }?.let { contact ->
@@ -310,7 +298,7 @@ fun PhonebookTab(
                                     } else null,
                                     if (fromPhone && localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
                                     if (!fromPhone) NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) } else null,
-                                    copy?.let { NumberAction(deleteCopyLabel) { deleteCopy = it } },
+                                    copy?.let { NumberAction(deleteCopyLabel) { onDeleteCopy(it) } },
                                 )
                             },
                         )

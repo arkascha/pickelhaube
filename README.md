@@ -358,7 +358,7 @@ Speed dials come from two sources that never collide, each of which can be switc
 - **This phone** – speed dials **1 to 9**, stored on the phone and valid with every FRITZ!Box (name
   and number are kept as a copy). Long-press the digit in the dialer to use one; digits with a speed
   dial have a small dot. Set them up in the picker's **Speed dial** tab (tap a free slot, then the
-  number in the phone books; long-press a set one to change or remove it), or long-press a number in
+  number in the phone books; long-press a set one to replace or remove it), or long-press a number in
   the **Phone books** tab and choose **Make speed dial**. Switch: **Settings › Speed dial › This phone's speed dials** (on by default).
 - **FRITZ!Box** – the two-digit speed dials (**00 to 99**) set up in the phone books of the box in use
   (the `quickdial` attribute of its phone book export), the same ones its phones dial with `**7`.
@@ -367,7 +367,7 @@ Speed dials come from two sources that never collide, each of which can be switc
   **Speed dials** (on by default, independent of **Phone books**). The box' phone books are read in
   the background after connecting, so these work right away.
   While the box is reachable they can be changed as well: **New FRITZ!Box speed dial** at the end of the
-  list (then tap the number in the phone books and choose a free slot), a long press on one to change or
+  list (then tap the number in the phone books and choose a free slot), a long press on one to replace or
   remove it, or **Make FRITZ!Box speed dial** in the menu of a long-pressed number (phone books, recent
   calls). The speed dial goes to the box' entry that has the number (TR-064 `GetPhonebookEntryUID`, the
   `quickdial` attribute set, `SetPhonebookEntryUID`, the rest of the entry unchanged); a number in none
@@ -379,6 +379,13 @@ Speed dials come from two sources that never collide, each of which can be switc
   in **Phone books**, TR-064 `DeletePhonebookEntryUID`). Pickelhaube does not remember which entries it
   made: an entry counts as a copy when one of the box' online phone books has a contact of the same name
   with all of its numbers. Other entries of the box cannot be deleted from the app.
+
+Removing a speed dial (either kind) or deleting such a copy happens right away, without a question
+before: a note at the bottom of the picker says what was removed, with **Undo** for a few seconds
+(`UndoOffer`, `SpeedDialsPart`). Undo sets the speed dial again – on the box for the number that had
+it – or puts the copy back as a new entry with its name, numbers and speed dials into its phone book,
+looked for by its name (the box' phone book ids are their places in its list). Leaving the picker ends
+the offer.
 
 After a speed dial the number field's label says which one it is and whose number. The **Speed
 dial** tab lists both kinds, so you can pick one without knowing its number.

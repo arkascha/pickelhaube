@@ -26,6 +26,12 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -58,12 +64,32 @@ fun NumberPickerScreen(
     internal: @Composable () -> Unit,
     /** The tab "Internal" is there: switched on for the box in use. */
     showInternal: Boolean,
+    /** Something just removed, offered to be put back; null: nothing. */
+    undoOffer: UndoOffer?,
+    onUndo: () -> Unit,
+    /** The offer (its serial) went by without "Undo". */
+    onUndoGone: (Long) -> Unit,
 ) {
+    // A removal says so at the bottom, with "Undo" – in place of asking beforehand.
+    val snackbars = remember { SnackbarHostState() }
+    val undoMessage = undoOffer?.message?.asString()
+    val undoLabel = stringResource(R.string.undo)
+    LaunchedEffect(undoOffer?.serial) {
+        val offer = undoOffer ?: return@LaunchedEffect
+        val result = snackbars.showSnackbar(
+            message = undoMessage.orEmpty(),
+            actionLabel = undoLabel,
+            withDismissAction = true,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) onUndo() else onUndoGone(offer.serial)
+    }
     val shown = if (tab == PickerTab.INTERNAL && !showInternal) PickerTab.RECENT else tab
     // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it
     // itself, so fields further down can be scrolled to (and are, when tapped).
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.union(WindowInsets.ime),
+        snackbarHost = { SnackbarHost(snackbars) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.picker_title)) },

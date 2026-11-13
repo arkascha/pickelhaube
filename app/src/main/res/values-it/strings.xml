@@ -317,9 +317,9 @@
     <string name="speed_dial_box_none">Nelle rubriche di questa FRITZ!Box non sono impostate selezioni rapide.</string>
     <string name="speed_dial_box_none_headline">Ancora nessun preferito sulla FRITZ!Box.</string>
     <string name="speed_dial_free">Libera</string>
-    <string name="speed_dial_change_or_remove">Modifica o rimuovi</string>
+    <string name="speed_dial_replace_or_remove">Sostituisci o rimuovi</string>
     <string name="speed_dial_set_up">Imposta</string>
-    <string name="speed_dial_change">Modifica</string>
+    <string name="speed_dial_replace">Sostituisci</string>
     <string name="speed_dial_remove">Rimuovi</string>
     <string name="speed_dial_choose_number">Tocca il numero per la selezione rapida %1$s.</string>
     <string name="speed_dial_for">Selezione rapida per %1$s</string>
@@ -329,9 +329,13 @@
     <string name="speed_dial_box_new_entry">Il numero non è ancora in nessuna rubrica della FRITZ!Box. Nuova voce in:</string>
     <string name="speed_dial_box_online">«%1$s» è solo nella rubrica online «%2$s», che la FRITZ!Box non può modificare. Per la selezione rapida viene creata una voce in una rubrica propria della FRITZ!Box.</string>
     <string name="copy_delete">Elimina copia sulla FRITZ!Box</string>
-    <string name="copy_delete_text">«%1$s» è nella rubrica «%2$s» della FRITZ!Box come copia di un contatto della rubrica online «%3$s», ad es. per una selezione rapida. Eliminare questa voce? Il contatto resta nella rubrica online; un’eventuale selezione rapida della voce viene rimossa.</string>
     <string name="status_deleting_copy">Eliminazione della copia di «%1$s» sulla FRITZ!Box…</string>
     <string name="status_copy_deleted">Copia di «%1$s» sulla FRITZ!Box eliminata.</string>
+    <string name="undo">Annulla</string>
+    <string name="speed_dial_removed_phone">Selezione rapida %1$s (%2$s) rimossa.</string>
+    <string name="status_restoring_copy">Ripristino di «%1$s» sulla FRITZ!Box…</string>
+    <string name="status_copy_restored">«%1$s» è di nuovo sulla FRITZ!Box.</string>
+    <string name="status_restore_book_gone">Impossibile ripristinare «%1$s»: la rubrica «%2$s» non è più sulla FRITZ!Box.</string>
     <string name="speed_dial_box_add">Nuova selezione rapida della FRITZ!Box</string>
     <string name="speed_dial_choose_number_box">Tocca il numero per la selezione rapida %1$s della FRITZ!Box.</string>
     <string name="speed_dial_choose_number_box_new">Tocca il numero per una nuova selezione rapida della FRITZ!Box.</string>
