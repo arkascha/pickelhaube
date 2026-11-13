@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -248,7 +249,7 @@ fun RecentsTab(
                 val days = remember(shown, now) { byDay(shown, ZoneId.systemDefault()) }
                 val today = remember(now) { Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate() }
                 Box(Modifier.fillMaxSize()) {
-                    LazyColumn(Modifier.fillMaxSize()) {
+                    LazyColumn(Modifier.fillMaxSize(), state = rememberLazyListState()) {
                         days.forEach { (day, dayCalls) ->
                             stickyHeader(key = day.toString()) { DayHeader(times.day(day, today)) }
                             items(dayCalls) { call ->

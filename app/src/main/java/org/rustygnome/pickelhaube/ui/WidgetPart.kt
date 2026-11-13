@@ -63,7 +63,11 @@ internal class WidgetPart(private val host: DialerHost) {
         val entry = WidgetLists.get(host.app, id).entries.getOrNull(index) ?: return
         if (host.settings.isConfigured()) host.showDialer()
         state.update {
-            it.copy(number = NumberText.clean(entry.number), numberLabel = entry.name.takeIf(String::isNotBlank)?.let(UiText::Raw))
+            it.copy(
+                number = NumberText.clean(entry.number),
+                numberLabel = entry.name.takeIf(String::isNotBlank)?.let(UiText::Raw),
+                backToPicker = false,
+            )
         }
     }
 }

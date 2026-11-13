@@ -12,6 +12,8 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -63,6 +65,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             PickelhaubeTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
+                // The picker's scroll positions and search, kept while it is away – for "back" from the dialer.
+                val pickerStates = rememberSaveableStateHolder()
                 if (state.showWelcome) {
                     val firstStart = state.profiles.isEmpty()
                     WelcomeScreen(
@@ -130,6 +134,10 @@ class MainActivity : ComponentActivity() {
                     BackHandler {
                         if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.closePicker()
                     }
+                    val session = state.pickerSession
+                    // Opened anew: what was kept of the last time is let go.
+                    LaunchedEffect(session) { if (session > 1) pickerStates.removeState("picker-${session - 1}") }
+                    pickerStates.SaveableStateProvider("picker-$session") {
                     NumberPickerScreen(
                         tab = state.pickerTab,
                         undoOffer = state.undoOffer,
@@ -224,6 +232,7 @@ class MainActivity : ComponentActivity() {
                         },
                         showInternal = state.activeProfile?.internalCallsEnabled == true,
                     )
+                    }
                 } else if (state.widgetSetup != null && state.profiles.isNotEmpty()) {
                     val setup = state.widgetSetup!!
                     // Done or not: back to where the widget was placed or tapped.
@@ -329,6 +338,8 @@ class MainActivity : ComponentActivity() {
                         onCancelImport = viewModel.transfer::cancelImport,
                     )
                 } else {
+                    // A number just picked: "back" leads to the picker again, as it was left.
+                    BackHandler(enabled = state.backToPicker) { viewModel.reopenPicker() }
                     DialerScreen(
                         state = state,
                         onNumberChange = viewModel::onNumberChange,
@@ -404,6 +415,12 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.onForeground()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Left, not just turned: "back" no longer leads to the picker left before.
+        if (!isChangingConfigurations) viewModel.onLeftApp()
     }
 
     override fun onNewIntent(intent: Intent) {

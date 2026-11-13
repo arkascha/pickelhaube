@@ -98,6 +98,13 @@ data class UiState(
     val newCallsSince: Long? = null,
     /** "Recent" shows only the numbers whose latest call was missed. */
     val recentsMissedOnly: Boolean = false,
+    /**
+     * The number in the dialer was just picked in the number picker: "back" leads there again, as it
+     * was left. Over once the number is changed, the dialer is reached another way, or the app is left.
+     */
+    val backToPicker: Boolean = false,
+    /** Counts the times the picker was opened anew; its tabs' scroll positions and search are kept per opening. */
+    val pickerSession: Int = 0,
     /** A speed dial or a copy on the box just removed, to be put back with "Undo"; null: none. */
     val undoOffer: UndoOffer? = null,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */

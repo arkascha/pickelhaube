@@ -143,21 +143,22 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     // --- number input ---------------------------------------------------------------
 
-    fun onNumberChange(value: String) = _state.update { it.copy(number = value, numberLabel = null) }
+    // A number changed by hand is no longer the one picked: "back" leaves the app again.
+    fun onNumberChange(value: String) = _state.update { it.copy(number = value, numberLabel = null, backToPicker = false) }
 
-    fun appendDigit(c: Char) = _state.update { it.copy(number = it.number + c, numberLabel = null) }
+    fun appendDigit(c: Char) = _state.update { it.copy(number = it.number + c, numberLabel = null, backToPicker = false) }
 
-    fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null) }
+    fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null, backToPicker = false) }
 
     /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
     fun pickInternalPhone(number: String, label: String) {
         if (_state.value.addingToWidget) return widget.add(label, number)
-        _state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false) }
+        _state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false, backToPicker = true) }
     }
 
     /** A suggestion was tapped: its number into the dialer, with whose it is as the field's label. */
     fun takeSuggestion(suggestion: Suggestion) = _state.update {
-        it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw))
+        it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw), backToPicker = false)
     }
 
     /** What the numbers to suggest are taken from; a change prepares them anew. The lists are compared as the same ones mostly. */
@@ -227,7 +228,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /** Called with the number from a tel: link (ACTION_DIAL / ACTION_VIEW). */
-    fun prefill(number: String) = _state.update { it.copy(number = NumberText.clean(number), numberLabel = null) }
+    fun prefill(number: String) = _state.update { it.copy(number = NumberText.clean(number), numberLabel = null, backToPicker = false) }
 
     /**
      * A text shared from another app ([fromClipboard]: pasted) – an email, a signature, a web page: its
@@ -280,6 +281,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             number = speedDial.number,
             numberLabel = uiText(R.string.dialer_speed_dial_label, speedDial.slot, speedDial.name),
             showPicker = false,
+            // Taken in the picker's speed dial tab: "back" leads there again; a long press in the dialer has none behind it.
+            backToPicker = it.showPicker,
         )
     }
 
@@ -467,6 +470,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 showPicker = true,
                 pickerTab = PickerTab.RECENT,
                 recentsMissedOnly = missedOnly,
+                // Opened anew: at the top of its lists, without the search of the last time.
+                pickerSession = it.pickerSession + 1,
+                backToPicker = false,
                 assigningSpeedDial = null,
                 addingToWidget = false,
                 newCallsSince = null,
@@ -480,6 +486,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
         if (_state.value.deviceContacts == null) loadDeviceContacts()
     }
+
+    /** "Back" in the dialer after a number was picked: the picker again, as it was left – nothing read anew. */
+    fun reopenPicker() = _state.update { it.copy(showPicker = true, backToPicker = false) }
+
+    /** The app was left (not just turned): coming back, "back" no longer leads to the picker left before. */
+    fun onLeftApp() = _state.update { it.copy(backToPicker = false) }
 
     /** "Recent": just the missed calls, or all calls. */
     fun setRecentsMissedOnly(missedOnly: Boolean) = _state.update { it.copy(recentsMissedOnly = missedOnly) }
@@ -646,7 +658,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** A number was tapped in the picker (recent calls or phone books): put it into the dialer and go back. */
     fun pickNumber(number: String) {
         if (_state.value.addingToWidget) return widget.add(nameFor(number).orEmpty(), number)
-        _state.update { it.copy(number = number, numberLabel = null, showPicker = false) }
+        _state.update { it.copy(number = number, numberLabel = null, showPicker = false, backToPicker = true) }
     }
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
