@@ -22,6 +22,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.rustygnome.pickelhaube.data.AppLanguage
+import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.ui.ConnectionSettingsScreen
@@ -130,6 +131,9 @@ class MainActivity : ComponentActivity() {
                         val countryIso = deviceCountryIso(context)
                         onlineCopies(boxBooks) { numberKey(it, countryIso, dialingCodes) }
                     }
+                    // A number's call button – not while picking one for a widget or a speed dial.
+                    val callFromPicker: ((String) -> Unit)? =
+                        if (state.addingToWidget || state.assigningSpeedDial != null) null else viewModel::callFromPicker
                     // While setting up a speed dial, "back" only cancels that.
                     BackHandler {
                         if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.closePicker()
@@ -168,6 +172,8 @@ class MainActivity : ComponentActivity() {
                                 callLogProblem = state.callLogProblem,
                                 busy = state.busy,
                                 onPick = viewModel::pickNumber,
+                                onCall = callFromPicker,
+                                callEnabled = !state.noBoxReachable,
                                 boxBooks = boxBooks,
                                 onHandOver = viewModel::handOverToBox,
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
@@ -189,6 +195,8 @@ class MainActivity : ComponentActivity() {
                                 loaded = state.phonebooksLoaded,
                                 busy = state.busy,
                                 onPick = viewModel::pickContactNumber,
+                                onCall = callFromPicker?.let { call -> { _: String, number: String -> call(number) } },
+                                callEnabled = !state.noBoxReachable,
                                 phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
                                 onSetSpeedDial = viewModel.speedDials::setPhone,
                                 assigningSpeedDial = state.assigningSpeedDial,
@@ -214,6 +222,8 @@ class MainActivity : ComponentActivity() {
                                 boxLoaded = state.phonebooksLoaded,
                                 busy = state.busy,
                                 onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.useSpeedDial(it) },
+                                onCall = callFromPicker?.let { { speedDial: SpeedDial -> viewModel.callSpeedDialFromPicker(speedDial) } },
+                                callEnabled = !state.noBoxReachable,
                                 onAssign = viewModel.speedDials::startAssigning,
                                 onRemove = viewModel.speedDials::removePhone,
                                 boxEditable = editableBoxSpeedDials != null,

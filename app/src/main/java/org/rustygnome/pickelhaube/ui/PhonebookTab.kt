@@ -92,6 +92,10 @@ fun PhonebookTab(
     busy: Boolean,
     /** A number was tapped: contact name and number. */
     onPick: (String, String) -> Unit,
+    /** Calls a number right away (name, number); null: no call buttons (picking for something else). */
+    onCall: ((String, String) -> Unit)?,
+    /** A box to call through is there: the call buttons work. */
+    callEnabled: Boolean,
     /** This phone's speed dials; null when switched off (then a long press does nothing). */
     phoneSpeedDials: List<SpeedDial>?,
     /** Long press on a number, slot chosen: make it this phone's speed dial (slot, name, number). */
@@ -280,6 +284,8 @@ fun PhonebookTab(
                         ContactRow(
                             contact,
                             showBook = phonebooks.size > 1,
+                            onCall = onCall?.let { call -> { n: PhonebookNumber -> call(contact.name, n.number) } },
+                            callEnabled = callEnabled,
                             onPick = { n ->
                                 val assignment = assigningSpeedDial
                                 if (assignment is SpeedDialAssignment.Box) {
@@ -461,6 +467,9 @@ private fun AssigningCard(assignment: SpeedDialAssignment, onCancel: () -> Unit)
 private fun ContactRow(
     contact: PhonebookContact,
     showBook: Boolean,
+    /** Calls the number right away; null: no call button, just the phone symbol. */
+    onCall: ((PhonebookNumber) -> Unit)?,
+    callEnabled: Boolean,
     onPick: (PhonebookNumber) -> Unit,
     /** What can be done with a number (none: no long press). */
     actions: (PhonebookNumber) -> List<NumberAction>,
@@ -503,14 +512,24 @@ private fun ContactRow(
                                 }
                             },
                         )
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        // With a call button, it brings its own room around the symbol.
+                        .padding(
+                            start = if (onCall != null) 4.dp else 16.dp,
+                            end = 16.dp,
+                            top = if (onCall != null) 0.dp else 8.dp,
+                            bottom = if (onCall != null) 0.dp else 8.dp,
+                        ),
                 ) {
-                    Icon(
-                        Icons.Default.Call,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(Modifier.width(12.dp))
+                    if (onCall != null) {
+                        CallButton(n.number, contact.name, enabled = callEnabled) { onCall(n) }
+                    } else {
+                        Icon(
+                            Icons.Default.Call,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(Modifier.width(12.dp))
+                    }
                     Text(n.number, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                     Text(
                         numberTypeLabel(n.type),

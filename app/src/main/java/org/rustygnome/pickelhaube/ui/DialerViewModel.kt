@@ -661,6 +661,26 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         _state.update { it.copy(number = number, numberLabel = null, showPicker = false, backToPicker = true) }
     }
 
+    /**
+     * The call button of a number in the picker: the number into the dialer – "back" there leads to
+     * the picker again – and dialled right away (once the box is free, should it be busy).
+     */
+    fun callFromPicker(number: String) {
+        pickNumber(number)
+        dialNow()
+    }
+
+    /** The call button of a speed dial in the picker: like [callFromPicker], the field saying which speed dial it is. */
+    fun callSpeedDialFromPicker(speedDial: SpeedDial) {
+        useSpeedDial(speedDial)
+        dialNow()
+    }
+
+    /** Dials the number in the field – once the box is free, should it be busy. */
+    private fun dialNow() {
+        if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
+    }
+
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
     fun pickContactNumber(name: String, number: String) {
         when (val assignment = _state.value.assigningSpeedDial) {

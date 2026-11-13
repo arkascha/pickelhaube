@@ -230,6 +230,9 @@ off the main thread, and a search still running when the next key comes is broke
 The address-book button at the left of the number field opens **Choose number** with two tabs,
 **Recent** and **Phone books**; tapping a number in either puts it into the dialer. The reload button
 at the top refreshes both.
+The green call button of each number (at its start in **Recent** and **Phone books**, at the end of a
+set speed dial in **Speed dial**) calls it right away instead: the dialer opens with the number and follows the call, as after the dialer's green button. It is
+greyed out while no box is reachable, and left out while a number is picked for a widget or a speed dial.
 **Back** in the dialer right after that leads to the picker again, as it was left – the same tab, scroll
 position, search and filter, nothing read anew – and from there back to the dialer. Once the number is
 changed by hand, or the dialer is reached another way (widget, shortcut, link, tile), or the app is left

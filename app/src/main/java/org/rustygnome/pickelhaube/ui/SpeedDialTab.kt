@@ -41,7 +41,7 @@ import org.rustygnome.pickelhaube.data.SpeedDials
  * dials 1–9 (valid with every box; free slots can be set up from the phone books, a long press on
  * a set one changes or removes it), and the two-digit ones set up in the phone books of the box in
  * use (while the box is there: a new one from the phone books, a long press on one changes or
- * removes it). Tapping one puts its number into the dialer.
+ * removes it). Tapping one puts its number into the dialer; its call button calls it right away.
  */
 @Composable
 fun SpeedDialTab(
@@ -55,6 +55,10 @@ fun SpeedDialTab(
     boxLoaded: Boolean,
     busy: Boolean,
     onPick: (SpeedDial) -> Unit,
+    /** Calls a speed dial right away; null: no call buttons (picking for a widget). */
+    onCall: ((SpeedDial) -> Unit)?,
+    /** A box to call through is there: the call buttons work. */
+    callEnabled: Boolean,
     /** Choose a number from the phone books for this phone's speed dial slot. */
     onAssign: (String) -> Unit,
     onRemove: (String) -> Unit,
@@ -84,6 +88,8 @@ fun SpeedDialTab(
                     slot = slot,
                     speedDial = phoneSpeedDials.firstOrNull { it.slot == slot },
                     onPick = onPick,
+                    onCall = onCall,
+                    callEnabled = callEnabled,
                     onAssign = { onAssign(slot) },
                     onRemove = { onRemove(slot) },
                 )
@@ -107,6 +113,8 @@ fun SpeedDialTab(
                         speedDial = speedDial,
                         editable = boxEditable,
                         onPick = onPick,
+                        onCall = onCall,
+                        callEnabled = callEnabled,
                         onChange = { onAssignBox(speedDial.slot) },
                         onRemove = { onRemoveBox(speedDial.slot) },
                         onDeleteCopy = copy?.let { { onDeleteCopy(it) } },
@@ -158,6 +166,8 @@ private fun BoxSlotRow(
     speedDial: SpeedDial,
     editable: Boolean,
     onPick: (SpeedDial) -> Unit,
+    onCall: ((SpeedDial) -> Unit)?,
+    callEnabled: Boolean,
     onChange: () -> Unit,
     onRemove: () -> Unit,
     /** Deletes the entry, a copy of an online contact; null when it is none. */
@@ -170,6 +180,10 @@ private fun BoxSlotRow(
             leadingContent = { SlotLabel(speedDial.slot) },
             headlineContent = { Text(speedDial.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
             supportingContent = { Text(speedDial.number, maxLines = 1) },
+            // At the right, where a free slot of this phone has its "+".
+            trailingContent = onCall?.let { call ->
+                { CallButton(speedDial.number, speedDial.name, enabled = callEnabled, modifier = AtRowEnd) { call(speedDial) } }
+            },
             modifier = Modifier.combinedClickable(
                 onClick = { onPick(speedDial) },
                 onLongClickLabel = stringResource(R.string.speed_dial_replace_or_remove).takeIf { editable },
@@ -219,6 +233,8 @@ private fun PhoneSlotRow(
     slot: String,
     speedDial: SpeedDial?,
     onPick: (SpeedDial) -> Unit,
+    onCall: ((SpeedDial) -> Unit)?,
+    callEnabled: Boolean,
     onAssign: () -> Unit,
     onRemove: () -> Unit,
 ) {
@@ -235,9 +251,11 @@ private fun PhoneSlotRow(
                 }
             },
             supportingContent = speedDial?.let { { Text(it.number, maxLines = 1) } },
-            trailingContent = if (speedDial == null) {
-                { Icon(Icons.Default.Add, contentDescription = null) }
-            } else null,
+            trailingContent = when {
+                speedDial == null -> { { Icon(Icons.Default.Add, contentDescription = null) } }
+                onCall != null -> { { CallButton(speedDial.number, speedDial.name, enabled = callEnabled, modifier = AtRowEnd) { onCall(speedDial) } } }
+                else -> null
+            },
             modifier = if (speedDial != null) {
                 Modifier.combinedClickable(
                     onClick = { onPick(speedDial) },

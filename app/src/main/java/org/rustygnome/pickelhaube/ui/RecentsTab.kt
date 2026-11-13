@@ -107,6 +107,10 @@ fun RecentsTab(
     callLogProblem: UiText?,
     busy: Boolean,
     onPick: (String) -> Unit,
+    /** Calls a number right away; null: no call buttons (picking for something else). */
+    onCall: ((String) -> Unit)?,
+    /** A box to call through is there: the call buttons work. */
+    callEnabled: Boolean,
     /** The phone books of the box in use, online ones included (empty = none, e.g. not reachable). */
     boxBooks: List<Phonebook>,
     /** Hands a number (with its name, if known) over to a phone book of the box. */
@@ -266,7 +270,7 @@ fun RecentsTab(
                                 )
                                 val isNew = newSince != null && call.source == RecentCall.Source.FRITZBOX &&
                                     call.direction == RecentCall.Direction.MISSED && call.time > newSince
-                                RecentRow(call, times.format(call.time, now), boxName, ownLabel(call), isNew, onPick, actions)
+                                RecentRow(call, times.format(call.time, now), boxName, ownLabel(call), isNew, onPick, onCall, callEnabled, actions)
                                 HorizontalDivider()
                             }
                         }
@@ -296,6 +300,9 @@ private fun RecentRow(
     /** A missed call of the box not looked at before: marked. */
     isNew: Boolean,
     onPick: (String) -> Unit,
+    /** Calls the number right away; null: no call button. */
+    onCall: ((String) -> Unit)?,
+    callEnabled: Boolean,
     /** What a long press offers to do with the number. */
     actions: List<NumberAction>,
 ) {
@@ -303,6 +310,9 @@ private fun RecentRow(
     var menu by remember { mutableStateOf(false) }
     Box {
         ListItem(
+            leadingContent = onCall?.let { dial ->
+                { CallButton(call.number, call.name, enabled = callEnabled) { dial(call.number) } }
+            },
             overlineContent = if (isNew) {
                 { Text(stringResource(R.string.recents_new_missed), color = MaterialTheme.colorScheme.error) }
             } else null,
