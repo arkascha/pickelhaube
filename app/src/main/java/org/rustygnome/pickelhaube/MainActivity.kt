@@ -238,6 +238,9 @@ class MainActivity : ComponentActivity() {
                                 phones = state.internalPhones,
                                 busy = state.busy,
                                 onPick = viewModel::pickInternalPhone,
+                                onCall = callFromPicker?.let { { number: String, name: String -> viewModel.callInternalFromPicker(number, name) } },
+                                callEnabled = !state.noBoxReachable,
+                                ringPhone = state.selectedPhone,
                             )
                         },
                         showInternal = state.activeProfile?.internalCallsEnabled == true,

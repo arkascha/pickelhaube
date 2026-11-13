@@ -16,17 +16,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.tr064.FritzDialer
 import org.rustygnome.pickelhaube.tr064.InternalPhone
 
 /**
  * The number picker's "Internal" tab: the box' phones with their internal numbers, for an internal
- * call. A tap puts the number into the dialer, with the phone's name as the field's label.
+ * call. A tap puts the number into the dialer, with the phone's name as the field's label; its call
+ * button calls it right away.
  */
 @Composable
 fun InternalPhonesTab(
     phones: List<InternalPhone>,
     busy: Boolean,
     onPick: (number: String, name: String) -> Unit,
+    /** Calls a phone right away (number, name); null: no call buttons (picking for a widget). */
+    onCall: ((number: String, name: String) -> Unit)?,
+    /** A box to call through is there: the call buttons work. */
+    callEnabled: Boolean,
+    /** The phone set under "Ring phone" (as the box names it): it cannot call itself, so its button is off. */
+    ringPhone: String?,
 ) {
     if (phones.isEmpty()) {
         if (busy) Message(stringResource(R.string.internal_loading), MascotPose.SEARCHING)
@@ -45,7 +53,16 @@ fun InternalPhonesTab(
                 },
             )
             ListItem(
-                leadingContent = { Icon(Icons.Default.Phone, contentDescription = null) },
+                // The phone under "Ring phone" rings first and then calls this one – not itself.
+                leadingContent = if (onCall != null) {
+                    {
+                        val itself = ringPhone != null && phone.name.isNotEmpty() &&
+                            FritzDialer.displayName(ringPhone).equals(phone.name, ignoreCase = true)
+                        CallButton(phone.number, name, enabled = callEnabled && !itself) { onCall(phone.number, name) }
+                    }
+                } else {
+                    { Icon(Icons.Default.Phone, contentDescription = null) }
+                },
                 headlineContent = { Text(name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 supportingContent = { Text("$kind · ${phone.number}", maxLines = 1) },
                 modifier = Modifier.clickable { onPick(phone.number, name) },

@@ -239,8 +239,8 @@ off the main thread, and a search still running when the next key comes is broke
 The address-book button at the left of the number field opens **Choose number** with the tabs
 **Recent**, **Speed dial** and **Phone books** (and **Internal**, see below); tapping a number in any
 of them puts it into the dialer. The reload button at the top refreshes them.
-The green call button of each number (at its start in **Recent** and **Phone books**, at the end of a
-set speed dial in **Speed dial**) calls it right away instead: the dialer opens with the number and follows the call, as after the dialer's green button. It is
+The green call button of each number (at its start in **Recent**, **Phone books** and **Internal**, at the
+end of a set speed dial in **Speed dial**) calls it right away instead: the dialer opens with the number and follows the call, as after the dialer's green button. It is
 greyed out while no box is reachable, and left out while a number is picked for a widget or a speed dial.
 **Back** in the dialer right after that leads to the picker again, as it was left – the same tab, scroll
 position, search and filter, nothing read anew – and from there back to the dialer. Once the number is
@@ -349,7 +349,7 @@ not tell (user rights, older FRITZ!OS) is left out.
   id *n* is taken to be `**61(n-1)`, `**610` to `**615`, as the box numbers them – *not yet verified
   on a real box*.
 - A phone cannot call itself: dialling the internal number of the phone under **Ring phone** says so
-  instead of placing the call. With a group under **Ring phone** (e.g. all DECT handsets), the phone
+  instead of placing the call, and that phone's call button in **Internal** is greyed out. With a group under **Ring phone** (e.g. all DECT handsets), the phone
   being called rings for the dial help as well – choose a single phone there.
 - Internal calls are not followed on the live call status, as it is not known yet whether
   the box' call monitor reports them; the dialer shows *pick up* as without it.

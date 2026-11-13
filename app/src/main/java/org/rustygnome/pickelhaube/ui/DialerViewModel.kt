@@ -676,6 +676,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         dialNow()
     }
 
+    /** The call button of one of the box' phones in the picker: like [callFromPicker], the field saying which phone. */
+    fun callInternalFromPicker(number: String, name: String) {
+        pickInternalPhone(number, name)
+        dialNow()
+    }
+
     /** Dials the number in the field – once the box is free, should it be busy. */
     private fun dialNow() {
         if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
