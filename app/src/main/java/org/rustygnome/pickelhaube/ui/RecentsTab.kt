@@ -40,6 +40,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -253,7 +255,17 @@ fun RecentsTab(
                 val days = remember(shown, now) { byDay(shown, ZoneId.systemDefault()) }
                 val today = remember(now) { Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate() }
                 Box(Modifier.fillMaxSize()) {
-                    LazyColumn(Modifier.fillMaxSize(), state = rememberLazyListState()) {
+                    val listState = rememberLazyListState()
+                    // The filter switched: the list from its top. (The days' headers have keys, so the list
+                    // would otherwise keep the day shown before at the top – and the calls above it out of sight.)
+                    var listedMissedOnly by rememberSaveable { mutableStateOf(missedOnly) }
+                    LaunchedEffect(missedOnly) {
+                        if (missedOnly != listedMissedOnly) {
+                            listedMissedOnly = missedOnly
+                            listState.scrollToItem(0)
+                        }
+                    }
+                    LazyColumn(Modifier.fillMaxSize(), state = listState) {
                         days.forEach { (day, dayCalls) ->
                             stickyHeader(key = day.toString()) { DayHeader(times.day(day, today)) }
                             items(dayCalls) { call ->

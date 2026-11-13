@@ -563,4 +563,12 @@
         <item>Tastentöne wie bei der Wähltastatur eines Telefons – einschalten unter Einstellungen › Wähltastatur.</item>
         <item>Auf der FRITZ!Box selbst geänderte Telefonbücher stören Kurzwahlen und die Übergabe von Kontakten nicht mehr.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Die letzten Anrufe stehen nach Tagen, und der Filter oben rechts zeigt nur die verpassten – ein Tipp auf die Zeile über verpasste Anrufe in der Wählansicht öffnet sie.</item>
+        <item>Jede Nummer in den Listen hat einen grünen Anrufknopf: Er ruft sofort an. Zurück führt wieder zur Liste.</item>
+        <item>Die Nummer erscheint in Gruppen und mit dem Namen, zu dem sie gehört. Ist das Feld leer, holt der grüne Knopf die zuletzt gewählte Nummer zurück.</item>
+        <item>Kurzwahl versehentlich entfernt? Rückgängig holt sie zurück.</item>
+        <item>Quer gehalten oder auf dem Tablet stehen die Tasten neben dem Rest.</item>
+        <item>Behoben: Schnelle Tipps, die auf einer Taste ein wenig rutschten, gingen verloren.</item>
+    </string-array>
 </resources>

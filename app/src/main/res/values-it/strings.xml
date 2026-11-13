@@ -573,4 +573,12 @@
         <item>Toni dei tasti come sul tastierino di un telefono – attivali in Impostazioni › Tastierino.</item>
         <item>Le rubriche cambiate sulla FRITZ!Box stessa non intralciano più le selezioni rapide né il trasferimento dei contatti.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Le chiamate recenti sono raggruppate per giorno, e il filtro in alto a destra mostra solo quelle perse – un tocco sulla riga delle chiamate perse nel tastierino le apre.</item>
+        <item>Ogni numero nelle liste ha un pulsante verde di chiamata: chiama subito. Indietro riporta alla lista.</item>
+        <item>Il numero appare a gruppi e con il nome di chi lo possiede. Con il campo vuoto, il pulsante verde riprende l’ultimo numero chiamato.</item>
+        <item>Selezione rapida rimossa per errore? Annulla la rimette.</item>
+        <item>In orizzontale o su un tablet, il tastierino sta accanto al resto.</item>
+        <item>Corretto: i tocchi rapidi che scivolavano un po’ su un tasto andavano persi.</item>
+    </string-array>
 </resources>

@@ -583,4 +583,12 @@
         <item>Dźwięki klawiszy jak na klawiaturze telefonu – włącz je w Ustawienia › Klawiatura.</item>
         <item>Książki telefoniczne zmienione na samym FRITZ!Box nie przeszkadzają już szybkiemu wybieraniu ani przekazywaniu kontaktów.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Ostatnie połączenia są pogrupowane według dni, a filtr w prawym górnym rogu pokazuje tylko nieodebrane – dotknięcie wiersza o nieodebranych połączeniach w wybieraniu je otwiera.</item>
+        <item>Każdy numer na listach ma zielony przycisk połączenia: dzwoni od razu. Wstecz wraca do listy.</item>
+        <item>Numer jest pokazywany w grupach i z nazwą osoby, do której należy. Przy pustym polu zielony przycisk przywraca ostatnio wybrany numer.</item>
+        <item>Usunięto szybkie wybieranie przez pomyłkę? Cofnij je przywraca.</item>
+        <item>Po obróceniu lub na tablecie klawiatura stoi obok reszty.</item>
+        <item>Naprawiono: szybkie dotknięcia, które lekko przesuwały się po klawiszu, ginęły.</item>
+    </string-array>
 </resources>

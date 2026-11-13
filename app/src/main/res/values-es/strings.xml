@@ -573,4 +573,12 @@
         <item>Tonos del teclado como en un teléfono – actívalos en Ajustes › Teclado.</item>
         <item>Las agendas cambiadas en la propia FRITZ!Box ya no estorban a las marcaciones rápidas ni al traspaso de contactos.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Las llamadas recientes se agrupan por día, y el filtro de arriba a la derecha muestra solo las perdidas; un toque en la línea de llamadas perdidas del marcador las abre.</item>
+        <item>Cada número de las listas tiene un botón verde de llamada: llama al instante. Atrás vuelve a la lista.</item>
+        <item>El número se muestra por grupos y con el nombre de quien es. Con el campo vacío, el botón verde recupera el último número marcado.</item>
+        <item>¿Quitaste una marcación rápida por error? Deshacer la recupera.</item>
+        <item>En horizontal o en una tableta, el teclado queda al lado del resto.</item>
+        <item>Corregido: se perdían los toques rápidos que se deslizaban un poco sobre una tecla.</item>
+    </string-array>
 </resources>

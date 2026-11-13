@@ -1,11 +1,12 @@
-Pickelhaube ist eine Wählhilfe für deine FRITZ!Box. Such die Nummer bequem auf dem Smartphone aus – aus den letzten Anrufen, deinen Telefonbüchern oder per Kurzwahl – und dein Festnetztelefon ruft an: Die FRITZ!Box lässt zuerst das gewählte Telefon klingeln, zum Beispiel ein DECT-Mobilteil, und sobald du abnimmst, wählt sie die Nummer. Genau wie die Wählhilfe in der Benutzeroberfläche der FRITZ!Box, nur viel schneller.
+Pickelhaube ist eine Wählhilfe für deine FRITZ!Box. Such die Nummer bequem auf dem Smartphone aus – aus den letzten Anrufen, deinen Telefonbüchern oder per Kurzwahl – und dein Festnetztelefon ruft an: Die FRITZ!Box lässt zuerst das gewählte Telefon klingeln, zum Beispiel ein DECT-Mobilteil, und sobald du abnimmst, wählt sie die Nummer. Wie die Wählhilfe der FRITZ!Box-Oberfläche, nur schneller.
 
 NUMMER AUSWÄHLEN
-• Letzte Anrufe der FRITZ!Box – gewählt, angenommen und verpasst, von all ihren Telefonen
+• Letzte Anrufe der FRITZ!Box – gewählt, angenommen und verpasst, nach Tagen, die verpassten auf einen Tipp
 • Die Telefonbücher der FRITZ!Box, mit Suche, A–Z-Leiste und Filter nach Telefonbuch
 • Auf Wunsch die Kontakte deines Smartphones gleich daneben
+• Ein Anrufknopf an jeder Nummer
 • Kurzwahlen 1–9 auf dem Smartphone, gültig mit jeder Box, dazu die Kurzwahlen 00–99 der FRITZ!Box
-• Vorschläge beim Tippen: passende Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Buchstaben der Tasten
+• Vorschläge beim Tippen: passende Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Buchstaben der Tasten – samt Name zur fertigen Nummer
 • Tastentöne auf Wunsch
 • Einen Text an Pickelhaube teilen oder einfügen – die Telefonnummer darin wird herausgesucht
 • Neue verpasste Anrufe der FRITZ!Box werden gezählt und markiert
@@ -28,9 +29,10 @@ RUFUMLEITUNG
 
 SCHNELLER ZUGRIFF
 • Kacheln in den Schnelleinstellungen: Wählhilfe öffnen, Wahlwiederholung, Rufumleitung schalten
-• Langes Drücken auf das App-Symbol: Wahlwiederholung, Rufumleitung, Nummer auswählen, FRITZ!Box suchen
+• Langer Druck aufs App-Symbol: Wahlwiederholung, Rufumleitung, Nummer auswählen, FRITZ!Box suchen
 • Widgets für den Startbildschirm, jedes mit eigener Nummernliste
 • Nach unten ziehen liest alles neu von der FRITZ!Box
+• Quer oder auf dem Tablet: Tasten neben dem Rest
 
 MEHRERE FRITZ!BOXEN
 • Zuhause, Büro, Ferienwohnung: richte beliebig viele Boxen ein
@@ -41,7 +43,7 @@ SICHER UND PRIVAT
 • Spricht nur mit deiner FRITZ!Box, über ihre offizielle TR-064-Schnittstelle – keine Cloud, kein Konto, keine Werbung, kein Tracking
 • HTTPS mit festgelegtem Zertifikat auf Wunsch, und Bestätigung von Aktionen an der FRITZ!Box (Zwei-Faktor)
 • Passwörter werden verschlüsselt im Android Keystore gespeichert
-• Zugriff auf deine Kontakte ist freiwillig, wird erst beim Einschalten erfragt, und sie verlassen das Telefon nie
+• Zugriff auf deine Kontakte nur auf Wunsch – sie verlassen das Telefon nie
 • Alle Einstellungen exportieren und importieren, Passwörter auf Wunsch mit einer Passphrase verschlüsselt
 
 SPRACHEN
@@ -51,7 +53,7 @@ DAS BRAUCHST DU
 • Eine FRITZ!Box mit angeschlossenem Telefon
 • In der FRITZ!Box eingeschaltet: „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und „Wählhilfe verwenden“ (Telefonie › Anrufe › Wählhilfe)
 • Einen FRITZ!Box-Benutzer mit der Berechtigung für Telefonie
-• Für den Gesprächsstatus: den Anrufmonitor der Box, einmal eingeschaltet durch Wählen von #96*5* an einem angeschlossenen Telefon
+• Für den Gesprächsstatus: den Anrufmonitor, einmal eingeschaltet mit #96*5* an einem angeschlossenen Telefon
 • Den Rest zeigt dir beim ersten Start die Willkommens-Tour, Schritt für Schritt – und eine Demo-Box lässt dich die App ohne FRITZ!Box ausprobieren
 
-Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH; sie werden hier nur genannt, um zu sagen, mit welchen Routern die App funktioniert.
+Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH; sie nennen hier nur, mit welchen Routern die App funktioniert.

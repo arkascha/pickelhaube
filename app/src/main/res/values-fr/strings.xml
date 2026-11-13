@@ -573,4 +573,12 @@
         <item>Des tonalités de clavier comme sur un téléphone – à activer dans Réglages › Clavier.</item>
         <item>Les répertoires modifiés sur la FRITZ!Box elle-même ne gênent plus les numéros abrégés ni la transmission de contacts.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Les appels récents sont regroupés par jour, et le filtre en haut à droite n’affiche que les appels manqués – toucher la ligne des appels manqués dans le clavier les ouvre.</item>
+        <item>Chaque numéro des listes a un bouton d’appel vert : il appelle tout de suite. Retour ramène à la liste.</item>
+        <item>Le numéro s’affiche par groupes, avec le nom de son titulaire. Champ vide, le bouton vert reprend le dernier numéro composé.</item>
+        <item>Un numéro abrégé supprimé par erreur ? Annuler le remet.</item>
+        <item>À l’horizontale ou sur une tablette, le clavier se place à côté du reste.</item>
+        <item>Corrigé : les touches rapides qui glissaient un peu sur une touche se perdaient.</item>
+    </string-array>
 </resources>

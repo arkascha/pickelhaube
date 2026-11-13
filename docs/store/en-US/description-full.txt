@@ -1,11 +1,12 @@
 Pickelhaube is a dialer for your FRITZ!Box. Pick the number comfortably on your smartphone – from your recent calls, your phone books or a speed dial – and your landline phone makes the call: the FRITZ!Box first rings the phone you chose, for example a DECT handset, and as soon as you pick it up, it dials the number. It works just like the dial help in the FRITZ!Box web interface, only much quicker.
 
 CHOOSE A NUMBER
-• Recent calls of the FRITZ!Box – dialled, received and missed, from all of its phones
+• Recent calls of the FRITZ!Box – dialled, received and missed, from all of its phones, by day, the missed ones at a tap
 • The phone books of the FRITZ!Box, with search, an A–Z bar and a filter by phone book
 • Optionally your smartphone's own contacts next to them
-• Speed dials 1–9 on your smartphone, valid with every box, plus the FRITZ!Box speed dials 00–99, also set up in the app
-• Suggestions while typing: matching numbers and names from your phone books and recent calls, also by the letters on the keys
+• A call button on every number – or tap it into the dialer
+• Speed dials 1–9 on your smartphone, valid with every box, plus the FRITZ!Box speed dials 00–99, also set up in the app – with Undo
+• Suggestions while typing: matching numbers and names from your phone books and recent calls, also by the letters on the keys – and the name of a number typed in full
 • Optional key tones
 • Share a text to Pickelhaube or paste it – the phone number in it is picked out and cleaned for dialling
 • New missed calls of the FRITZ!Box are counted and marked
@@ -31,6 +32,7 @@ QUICK ACCESS
 • Long press on the app icon: redial, call forwarding, choose a number, look for the FRITZ!Box
 • Home screen widget with your own list of numbers – as many widgets as you like
 • Pull down to read everything from the FRITZ!Box again
+• Turned sideways or on a tablet: the keypad beside the rest
 
 SEVERAL FRITZ!BOXES
 • Home, office, holiday flat: set up as many boxes as you like

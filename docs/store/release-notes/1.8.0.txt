@@ -1,0 +1,18 @@
+<en-US>
+• Recent calls by day, and a filter for the missed ones
+• A call button on every number in the lists
+• The number in groups, with whose it is; with the field empty, the green button brings back the last number
+• Removed a speed dial by mistake? Undo
+• Turned sideways or on a tablet: the keypad beside the rest
+• Back from the dialer leads to the list you picked from
+• Fixed: quick taps that slid a little on a key got lost
+</en-US>
+<de-DE>
+• Letzte Anrufe nach Tagen, und ein Filter für die verpassten
+• Ein Anrufknopf an jeder Nummer in den Listen
+• Die Nummer in Gruppen, mit dem Namen dazu; bei leerem Feld holt der grüne Knopf die letzte Nummer zurück
+• Kurzwahl versehentlich entfernt? Rückgängig
+• Quer gehalten oder auf dem Tablet: die Tasten neben dem Rest
+• Zurück aus der Wählansicht führt zur Liste, aus der du gewählt hast
+• Behoben: Schnelle Tipps, die auf einer Taste etwas rutschten, gingen verloren
+</de-DE>

@@ -567,4 +567,12 @@
         <item>Key tones like on a phone’s keypad – switch them on in Settings › Keypad.</item>
         <item>Phone books changed on the FRITZ!Box itself no longer get in the way of speed dials or handing over contacts.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Recent calls are grouped by day, and the filter at the top right shows just the missed ones – a tap on the dialer’s line about missed calls opens them.</item>
+        <item>Every number in the lists has a green call button: it calls right away. Back leads to the list again.</item>
+        <item>The number is shown in groups and with the name of whoever it belongs to. With the field empty, the green button brings back the number dialled last.</item>
+        <item>Removed a speed dial by mistake? Undo puts it back.</item>
+        <item>Turned sideways or on a tablet, the keypad stands beside the rest.</item>
+        <item>Fixed: quick taps that slid a little on a key got lost.</item>
+    </string-array>
 </resources>

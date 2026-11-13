@@ -563,4 +563,12 @@
         <item>Toetstonen zoals bij het kiesscherm van een telefoon – zet ze aan via Instellingen › Kiesscherm.</item>
         <item>Telefoonboeken die op de FRITZ!Box zelf zijn gewijzigd, zitten snelkeuzes en het overdragen van contacten niet meer in de weg.</item>
     </string-array>
+    <string-array name="whats_new_12">
+        <item>Recente oproepen staan per dag, en het filter rechtsboven toont alleen de gemiste – een tik op de regel over gemiste oproepen in het kiesscherm opent ze.</item>
+        <item>Elk nummer in de lijsten heeft een groene belknop: die belt meteen. Terug brengt je weer naar de lijst.</item>
+        <item>Het nummer verschijnt in groepen en met de naam van wie het is. Bij een leeg veld haalt de groene knop het laatst gekozen nummer terug.</item>
+        <item>Per ongeluk een snelkiesnummer verwijderd? Ongedaan maken zet het terug.</item>
+        <item>Gekanteld of op een tablet staat het toetsenblok naast de rest.</item>
+        <item>Opgelost: snelle tikken die een beetje over een toets gleden, gingen verloren.</item>
+    </string-array>
 </resources>
