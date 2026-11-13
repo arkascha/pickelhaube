@@ -234,11 +234,11 @@ Typing never waits for them: the phone books and calls are made ready to be sear
 whenever they change (`SuggestionIndex` in `ui/Suggestions.kt`), a key press then only compares strings,
 off the main thread, and a search still running when the next key comes is broken off.
 
-### Choosing a number: recent calls and phone books
+### Choosing a number: recent calls, speed dials and phone books
 
-The address-book button at the left of the number field opens **Choose number** with two tabs,
-**Recent** and **Phone books**; tapping a number in either puts it into the dialer. The reload button
-at the top refreshes both.
+The address-book button at the left of the number field opens **Choose number** with the tabs
+**Recent**, **Speed dial** and **Phone books** (and **Internal**, see below); tapping a number in any
+of them puts it into the dialer. The reload button at the top refreshes them.
 The green call button of each number (at its start in **Recent** and **Phone books**, at the end of a
 set speed dial in **Speed dial**) calls it right away instead: the dialer opens with the number and follows the call, as after the dialer's green button. It is
 greyed out while no box is reachable, and left out while a number is picked for a widget or a speed dial.
@@ -631,6 +631,11 @@ report.
 | `tr064/LineStatus.kt` | The box' own numbers, their codes for a single call, and whether its internet numbers are registered with their provider (`X_VoIP` `X_AVM-DE_GetNumbers`, `X_AVM-DE_GetVoIPStatus`) |
 | `tr064/CallMonitor.kt` | The box' call monitor (TCP port 1012): connection and line parsing |
 | `ui/CallProgress.kt` | How the call placed last is going, and how the monitor's report of it is recognised |
+| `ui/Suggestions.kt` | The suggestions while typing: `SuggestionIndex` makes the phone books and calls ready to be searched, once per change, and finds the name of a number typed in full |
+| `ui/NumberGrouping.kt` | The number field's display grouped as numbers are written (Android's formatting, by the box' country) – only separators put in |
+| `ui/PullToRefresh.kt` | Pulling the dialer down to read the box anew, started only past 32 dp so a key tapped with a slide stays a tap |
+| `ui/CallButton.kt` | The green call button of a number in the picker |
+| `ui/RecentsTab.kt` | "Recent": calls by day, the filter for the missed ones |
 | `shortcut/LauncherShortcuts.kt` | The entries of the app icon's long-press menu |
 | `shortcut/ShortcutActivities.kt` | Invisible activities behind the "Call forwarding" and FRITZ!Box entries |
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
@@ -649,7 +654,7 @@ report.
 | `ui/theme/TextRoles.kt` | How hints (grey italic) and findings about a box (accent colour) look, on every page |
 | `res/values*/strings.xml` | All UI texts: English (`values/`) and the translations (`values-de/`, …) |
 
-Unit tests (`./gradlew test`) cover digest computation, envelope building, number sanitising, withholding the own number, picking numbers out of text, the new missed calls,
+Unit tests (`./gradlew test`) cover digest computation, the suggestions while typing (also broken off when no longer wanted) and the name of a number typed in full, the number field's grouping, the calls by day, envelope building, number sanitising, withholding the own number, picking numbers out of text, the new missed calls,
 the call list's date format, the device details, the user list (and the users made by the box), the user's permissions, the comparison of numbers, merging of the recent numbers, certificate pinning, the settings file, the widget's lists, which box answers at a connection's host, the call monitor's lines, the box' VoIP numbers and their state, recognising the dialled number in them, following a call on the call monitor, how a saved connection merges what the box told, which box counts as the one of the network, editing a widget's list, an import without Android's permissions and the demo box.
 
 Instrumented tests (`app/src/androidTest`) run flows in the real app on an emulator, with the demo box –
@@ -661,7 +666,11 @@ passwords, the box deleted and the file imported again (the system file picker a
 this phone's speed dials (set from the phone books, used with a long press on the keypad – also after a
 new start –, removed, switched off in the settings) and the box' ones (used, a new one set up in its
 phone books), the call forwardings switched on and off and the one for the tile chosen, and a widget's
-numbers added, moved, removed and saved, and the keypad's tones switched on. Each test starts like a fresh install (Android Test Orchestrator with
+numbers added, moved, removed and saved, the keypad's tones switched on, fast typing with real touches
+(also taps that slide a little on a key), the number field (name, grouping, the last number, no paste
+after a ⌫ too many), the box' speed dial removed and put back with Undo, "Recent" with just the missed
+calls, "back" from a picked number to the picker as it was left, and the call buttons in the phone
+books and the speed dials. Each test starts like a fresh install (Android Test Orchestrator with
 `clearPackageData`), and animations are off for them. Run them with `scripts/instrumented-tests.sh`,
 on one emulator: a connected test run installs the app, clears its data and uninstalls it at the end –
 on a phone in use, that would remove Pickelhaube with its boxes and passwords, so the script refuses
