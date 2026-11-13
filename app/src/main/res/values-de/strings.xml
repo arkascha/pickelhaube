@@ -86,6 +86,8 @@
     <string name="recents_load_failed">Die Anrufliste konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_empty">Noch keine Anrufe.</string>
     <string name="recents_empty_headline">Alles ruhig in der Leitung.</string>
+    <string name="recents_filter_missed">Verpasste Anrufe</string>
+    <string name="recents_no_missed">Keine verpassten Anrufe.</string>
     <string name="recents_none_enabled">Keine Anrufliste eingeschaltet. Du kannst sie in den Einstellungen einschalten.</string>
     <string name="recents_box_load_failed">Die Anrufliste der FRITZ!Box konnte nicht geladen werden. Zum Wiederholen auf Neu laden tippen.</string>
     <string name="recents_recorded_by_box">Aufgezeichnet von %1$s</string>

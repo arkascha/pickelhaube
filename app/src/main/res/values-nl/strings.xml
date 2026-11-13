@@ -86,6 +86,8 @@
     <string name="recents_load_failed">De gesprekkenlijst kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_empty">Nog geen recente gesprekken.</string>
     <string name="recents_empty_headline">Alles stil op de lijn.</string>
+    <string name="recents_filter_missed">Gemiste oproepen</string>
+    <string name="recents_no_missed">Geen gemiste oproepen.</string>
     <string name="recents_none_enabled">Er is geen gesprekkenlijst ingeschakeld. Je kunt deze in de instellingen inschakelen.</string>
     <string name="recents_box_load_failed">De gesprekkenlijst van de FRITZ!Box kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_recorded_by_box">Vastgelegd door %1$s</string>

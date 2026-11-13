@@ -86,6 +86,8 @@
     <string name="recents_load_failed">Nie udało się wczytać listy połączeń. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_empty">Brak ostatnich połączeń.</string>
     <string name="recents_empty_headline">Na linii cisza i spokój.</string>
+    <string name="recents_filter_missed">Nieodebrane połączenia</string>
+    <string name="recents_no_missed">Brak nieodebranych połączeń.</string>
     <string name="recents_none_enabled">Żadna lista połączeń nie jest włączona. Możesz ją włączyć w ustawieniach.</string>
     <string name="recents_box_load_failed">Nie udało się wczytać listy połączeń FRITZ!Box. Dotknij Wczytaj ponownie, aby spróbować jeszcze raz.</string>
     <string name="recents_recorded_by_box">Zarejestrowane przez %1$s</string>

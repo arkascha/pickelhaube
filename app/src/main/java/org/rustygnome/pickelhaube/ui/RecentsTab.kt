@@ -6,6 +6,17 @@ import android.icu.util.ULocale
 import android.text.format.DateFormat
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -68,12 +79,16 @@ import java.util.Locale
  * press opens a menu to take it over into this phone's contacts, hand it over to the box, or make
  * it a speed dial of this phone or of the box.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RecentsTab(
     boxCalls: List<RecentCall>,
     boxCallsLoaded: Boolean,
     /** The box' missed calls after this time (ms) are marked as new; null: none. */
     newSince: Long?,
+    /** Only the numbers whose latest call was missed are shown. */
+    missedOnly: Boolean,
+    onMissedOnlyChange: (Boolean) -> Unit,
     /** Name of the FritzBox in use (as in the settings), shown as the source of its calls. */
     boxName: String?,
     /** Country and area code of the box in use, for recognising a number written differently. */
@@ -181,12 +196,39 @@ fun RecentsTab(
             )
         }
 
+        // All calls, or just the missed ones: at the right, above the arrows that say how each call went –
+        // on the line of the day's header at the top.
+        val filter = @Composable { modifier: Modifier ->
+            Box(modifier.height(DAY_HEADER_HEIGHT).padding(end = MISSED_FILTER_END), contentAlignment = Alignment.Center) {
+                FilledIconToggleButton(
+                    checked = missedOnly,
+                    onCheckedChange = onMissedOnlyChange,
+                    colors = IconButtonDefaults.filledIconToggleButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        checkedContainerColor = MaterialTheme.colorScheme.primary,
+                        checkedContentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                ) {
+                    MissedFilterIcon(missedOnly, contentDescription = stringResource(R.string.recents_filter_missed))
+                }
+            }
+        }
+        val shown = remember(calls, missedOnly) {
+            if (missedOnly) calls.filter { it.direction == RecentCall.Direction.MISSED } else calls
+        }
+
         when {
             !boxCallsEnabled && !callLogEnabled -> Message(stringResource(R.string.recents_none_enabled), MascotPose.CLIPBOARD)
             calls.isEmpty() && busy -> Message(stringResource(R.string.recents_loading), MascotPose.SEARCHING)
             calls.isEmpty() && boxCallsEnabled && !boxCallsLoaded ->
                 Message(stringResource(R.string.recents_load_failed), MascotPose.PUZZLED)
             calls.isEmpty() -> Message(stringResource(R.string.recents_empty), MascotPose.LISTENING, stringResource(R.string.recents_empty_headline))
+            shown.isEmpty() -> {
+                // Still there, to show all calls again.
+                filter(Modifier.align(Alignment.End))
+                Message(stringResource(R.string.recents_no_missed), MascotPose.LISTENING, stringResource(R.string.recents_empty_headline))
+            }
             else -> {
                 // Only the phone's calls are shown: say so, rather than silently leave the box' out.
                 if (boxCallsEnabled && !boxCallsLoaded && !busy) {
@@ -203,24 +245,33 @@ fun RecentsTab(
                 val toPhone = stringResource(R.string.contact_to_phone)
                 val makeSpeedDial = stringResource(R.string.speed_dial_make)
                 val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
-                LazyColumn(Modifier.fillMaxSize()) {
-                    items(calls) { call ->
-                        val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
-                        val actions = listOfNotNull(
-                            NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
-                            if (localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
-                            phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact } },
-                            if (boxSpeedDials != null && localBooks.isNotEmpty()) {
-                                NumberAction(makeBoxSpeedDial) {
-                                    boxSpeedDialFor = BoxSpeedDialRequest(contact.name, call.number, "other", null)
-                                }
-                            } else null,
-                        )
-                        val isNew = newSince != null && call.source == RecentCall.Source.FRITZBOX &&
-                            call.direction == RecentCall.Direction.MISSED && call.time > newSince
-                        RecentRow(call, times.format(call.time, now), boxName, ownLabel(call), isNew, onPick, actions)
-                        HorizontalDivider()
+                val days = remember(shown, now) { byDay(shown, ZoneId.systemDefault()) }
+                val today = remember(now) { Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate() }
+                Box(Modifier.fillMaxSize()) {
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        days.forEach { (day, dayCalls) ->
+                            stickyHeader(key = day.toString()) { DayHeader(times.day(day, today)) }
+                            items(dayCalls) { call ->
+                                val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
+                                val actions = listOfNotNull(
+                                    NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
+                                    if (localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
+                                    phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact } },
+                                    if (boxSpeedDials != null && localBooks.isNotEmpty()) {
+                                        NumberAction(makeBoxSpeedDial) {
+                                            boxSpeedDialFor = BoxSpeedDialRequest(contact.name, call.number, "other", null)
+                                        }
+                                    } else null,
+                                )
+                                val isNew = newSince != null && call.source == RecentCall.Source.FRITZBOX &&
+                                    call.direction == RecentCall.Direction.MISSED && call.time > newSince
+                                RecentRow(call, times.format(call.time, now), boxName, ownLabel(call), isNew, onPick, actions)
+                                HorizontalDivider()
+                            }
+                        }
                     }
+                    // Over the list, on the line of the header that stays at the top.
+                    filter(Modifier.align(Alignment.TopEnd))
                 }
             }
         }
@@ -328,6 +379,42 @@ private fun RecentRow(
     }
 }
 
+/**
+ * The [calls] (newest first) by the calendar day they were on, in [zone]: the days newest first, each
+ * with its calls in the order given.
+ */
+internal fun byDay(calls: List<RecentCall>, zone: ZoneId): List<Pair<LocalDate, List<RecentCall>>> {
+    val days = LinkedHashMap<LocalDate, MutableList<RecentCall>>()
+    calls.forEach { call -> days.getOrPut(Instant.ofEpochMilli(call.time).atZone(zone).toLocalDate()) { mutableListOf() } += call }
+    return days.entries.sortedByDescending { it.key }.map { it.key to it.value }
+}
+
+/** "Today", "Yesterday", "Monday", … above the calls of a day; it stays at the top while they scroll by. */
+@Composable
+private fun DayHeader(text: String) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(DAY_HEADER_HEIGHT)
+            .background(MaterialTheme.colorScheme.surface)
+            // At its right, the filter for the missed calls lies over it.
+            .padding(start = 16.dp, end = 16.dp + 48.dp),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.semantics { heading() },
+        )
+    }
+}
+
+/** A day's header: as high as the filter button lying over it at the right needs. */
+private val DAY_HEADER_HEIGHT = 48.dp
+
 /** Arrow for how the call went: dialled (up), received (down, green), missed (red). */
 @Composable
 private fun DirectionIcon(direction: RecentCall.Direction) {
@@ -341,6 +428,32 @@ private fun DirectionIcon(direction: RecentCall.Direction) {
 
 /** Both icons share one size, so they sit exactly above each other at the right edge. */
 private val ICON_SIZE = 18.dp
+
+/**
+ * The filter button's distance from the right edge: its middle above the middle of the rows' icons
+ * (16 dp from the edge, as a list item's content is) – the button is 40 dp wide.
+ */
+private val MISSED_FILTER_END = 16.dp + ICON_SIZE / 2 - 20.dp
+
+/**
+ * A funnel with the missed-call arrow at its bottom right – red, like the arrow of a missed call in
+ * the list, while the filter is off; in the button's colour while it is on (red on its fill would be hard to see).
+ */
+@Composable
+private fun MissedFilterIcon(on: Boolean, contentDescription: String) {
+    Box(Modifier.size(24.dp).semantics { this.contentDescription = contentDescription }) {
+        Icon(FunnelIcon, contentDescription = null, modifier = Modifier.size(20.dp).offset(x = (-2).dp, y = (-2).dp))
+        Icon(
+            CallMissedIcon,
+            contentDescription = null,
+            tint = if (on) LocalContentColor.current else MaterialTheme.colorScheme.error,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(15.dp)
+                .offset(x = 2.dp, y = 2.dp),
+        )
+    }
+}
 
 /** Shown when "this phone's calls" is switched on but reading the call log failed. */
 @Composable
@@ -365,27 +478,46 @@ private fun CallLogProblemCard(
 }
 
 /**
- * "now", "14 min. ago", "3 hr. ago", "yesterday", "3 days ago", then the date – in the app's language.
- * (DateUtils' relative times always use the system language, even when the app has its own.)
+ * A call's time: "now", "14 min. ago", "3 hr. ago" today, the time of day ("14:32") on an earlier day,
+ * which its [day] header names – "Today", "Yesterday", the weekday within a week, then the date. In
+ * the app's language (DateUtils' relative times always use the system language, even when the app
+ * has its own) and the phone's 12/24-hour setting ([hours24]).
  */
-private class RelativeTimes(private val locale: Locale) {
+private class RelativeTimes(private val locale: Locale, hours24: Boolean) {
     private val formatter = RelativeDateTimeFormatter.getInstance(
         ULocale.forLocale(locale), null, RelativeDateTimeFormatter.Style.SHORT,
         DisplayContext.CAPITALIZATION_FOR_STANDALONE,
     )
-    private val date = SimpleDateFormat(DateFormat.getBestDateTimePattern(locale, "dMMMyy"), locale)
+    private val days = RelativeDateTimeFormatter.getInstance(
+        ULocale.forLocale(locale), null, RelativeDateTimeFormatter.Style.LONG,
+        DisplayContext.CAPITALIZATION_FOR_STANDALONE,
+    )
+    private val clock = SimpleDateFormat(DateFormat.getBestDateTimePattern(locale, if (hours24) "Hm" else "hm"), locale)
+    private val weekday = DateTimeFormatter.ofPattern("cccc", locale)
+    private val thisYear = DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM"), locale)
+    private val otherYear = DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMMMyyyy"), locale)
 
     fun format(time: Long, now: Long): String {
         val minutes = (now - time) / 60_000
-        val days = daysBetween(time, now)
         return when {
+            daysBetween(time, now) != 0 -> clock.format(Date(time))
             minutes < 1 -> formatter.format(RelativeDateTimeFormatter.Direction.PLAIN, RelativeDateTimeFormatter.AbsoluteUnit.NOW)
             minutes < 60 -> formatter.format(minutes.toDouble(), RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.MINUTES)
-            days == 0 -> formatter.format((minutes / 60).toDouble(), RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.HOURS)
-            days == 1 -> formatter.format(RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.AbsoluteUnit.DAY)
-            days < 7 -> formatter.format(days.toDouble(), RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.DAYS)
-            else -> date.format(Date(time))
+            else -> formatter.format((minutes / 60).toDouble(), RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.HOURS)
         }
+    }
+
+    /** The header of the calls on [day], seen on [today]. */
+    fun day(day: LocalDate, today: LocalDate): String {
+        val ago = ChronoUnit.DAYS.between(day, today)
+        val text = when {
+            ago == 0L -> days.format(RelativeDateTimeFormatter.Direction.THIS, RelativeDateTimeFormatter.AbsoluteUnit.DAY)
+            ago == 1L -> days.format(RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.AbsoluteUnit.DAY)
+            ago in 2..6 -> day.format(weekday)
+            day.year == today.year -> day.format(thisYear)
+            else -> day.format(otherYear)
+        }
+        return text.replaceFirstChar { it.titlecase(locale) }
     }
 
     /** Calendar days from [time] to [now] (0 = same day), in the phone's time zone. */
@@ -400,5 +532,6 @@ private class RelativeTimes(private val locale: Locale) {
 @Composable
 private fun rememberRelativeTimes(): RelativeTimes {
     val locale = LocalConfiguration.current.locales[0]
-    return remember(locale) { RelativeTimes(locale) }
+    val hours24 = DateFormat.is24HourFormat(LocalContext.current)
+    return remember(locale, hours24) { RelativeTimes(locale, hours24) }
 }

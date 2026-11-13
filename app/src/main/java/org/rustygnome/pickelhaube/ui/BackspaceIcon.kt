@@ -112,6 +112,23 @@ internal val CallMissedIcon: ImageVector by lazy {
     ).build()
 }
 
+/** Material "filter_alt" glyph (a funnel, Apache 2.0): the filter for just the missed calls in "Recent". */
+internal val FunnelIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "FilterAlt",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).addPath(
+        pathData = addPathNodes(
+            "M4.25,5.61C6.27,8.2 10,13 10,13v6c0,0.55 0.45,1 1,1h2c0.55,0 1,-0.45 1,-1v-6c0,0 3.72,-4.8 5.74,-7.39" +
+                "C20.25,4.95 19.78,4 18.95,4H5.04C4.21,4 3.74,4.95 4.25,5.61z"
+        ),
+        fill = SolidColor(Color.Black),
+    ).build()
+}
+
 /** Material "router" glyph (Apache 2.0): calls from the FritzBox' call list. */
 internal val RouterIcon: ImageVector by lazy {
     ImageVector.Builder(

@@ -133,6 +133,8 @@ fun DialerScreen(
     onRefresh: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPicker: () -> Unit,
+    /** The line about new missed calls was tapped: "Recent" with just the missed calls. */
+    onShowMissedCalls: () -> Unit,
     /** The clipboard's text, for the phone number in it. */
     onPaste: (String) -> Unit,
     onChooseNumber: (String) -> Unit,
@@ -360,7 +362,7 @@ fun DialerScreen(
                         linesDown,
                         allLinesDown = linesDown.size == state.lines.size,
                         state.activeProfile?.name ?: stringResource(R.string.fritzbox),
-                        onOpenPicker,
+                        onShowMissedCalls,
                         onCheckLines,
                     )
                 }

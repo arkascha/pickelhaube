@@ -86,6 +86,8 @@
     <string name="recents_load_failed">Impossibile caricare l’elenco chiamate. Tocca Ricarica per riprovare.</string>
     <string name="recents_empty">Ancora nessuna chiamata recente.</string>
     <string name="recents_empty_headline">Tutto tranquillo sulla linea.</string>
+    <string name="recents_filter_missed">Chiamate perse</string>
+    <string name="recents_no_missed">Nessuna chiamata persa.</string>
     <string name="recents_none_enabled">Nessun elenco chiamate attivato. Puoi attivarlo nelle impostazioni.</string>
     <string name="recents_box_load_failed">Impossibile caricare l’elenco chiamate della FRITZ!Box. Tocca Ricarica per riprovare.</string>
     <string name="recents_recorded_by_box">Registrata da %1$s</string>

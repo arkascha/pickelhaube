@@ -460,11 +460,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      * Opens the number picker. The recent calls are read anew each time (they change with every
      * call); the phone books only the first time.
      */
-    fun openPicker() {
+    /** Opens the number picker on "Recent" – [missedOnly]: with just the missed calls (from the dialer's line about them). */
+    fun openPicker(missedOnly: Boolean = false) {
         _state.update {
             it.copy(
                 showPicker = true,
                 pickerTab = PickerTab.RECENT,
+                recentsMissedOnly = missedOnly,
                 assigningSpeedDial = null,
                 addingToWidget = false,
                 newCallsSince = null,
@@ -478,6 +480,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         if (!_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
         if (_state.value.deviceContacts == null) loadDeviceContacts()
     }
+
+    /** "Recent": just the missed calls, or all calls. */
+    fun setRecentsMissedOnly(missedOnly: Boolean) = _state.update { it.copy(recentsMissedOnly = missedOnly) }
 
     fun closePicker() = _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
 

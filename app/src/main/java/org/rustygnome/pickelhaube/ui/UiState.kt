@@ -90,6 +90,8 @@ data class UiState(
     val ownNumbers: List<OwnNumber> = emptyList(),
     /** While the picker is open: its box calls after this time (ms) are marked as new; null: none. */
     val newCallsSince: Long? = null,
+    /** "Recent" shows only the numbers whose latest call was missed. */
+    val recentsMissedOnly: Boolean = false,
     /** The setup of a dial widget is open: which widget, and its list as being edited. */
     val widgetSetup: WidgetSetup? = null,
     /** The number picker is open to add a number to [widgetSetup]. */

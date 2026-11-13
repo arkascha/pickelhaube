@@ -278,8 +278,15 @@ Each is a one-off copy of a single contact, not a synchronisation.
 The **Recent** tab lists the numbers recently dialled, received or missed, newest first, each number
 once at its latest call: name and number, the time, then an arrow for how the call went (dialled,
 received, missed) and an icon for where it was recorded. Rejected calls and calls with a
-withheld number are left out. The list is read anew every time the picker is opened (or with the
-reload button), from two sources:
+withheld number are left out. The calls stand under the day they were on – *Today*, *Yesterday*, the
+weekday within a week, then the date –, a header that stays at the top while its calls scroll by; a
+call of today says how long ago it was (*12 min. ago*), one of an earlier day its time (*14:32*). The
+filter at the top right of the list, on the line of the day's header there and above the arrows of the
+calls (a funnel with the missed-call arrow,
+*Missed calls* for screen readers; filled while on) shows just the numbers whose latest call was missed (a call back
+settles one, as for the count of new missed calls below); the dialer's line about new missed calls
+opens **Recent** with it switched on, the address-book button always with all calls. The list is read
+anew every time the picker is opened (or with the reload button), from two sources:
 
 - **FRITZ!Box** (router icon with the box' name from the settings) – the dialled, received and missed calls in the box' call list (TR-064 `X_AVM-DE_OnTel` `GetCallList`),
   i.e. Pickelhaube's dial-help calls as well as the calls of the phones themselves. The FRITZ!Box user

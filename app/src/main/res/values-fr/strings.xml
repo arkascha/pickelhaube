@@ -86,6 +86,8 @@
     <string name="recents_load_failed">Impossible de charger la liste d’appels. Touchez Recharger pour réessayer.</string>
     <string name="recents_empty">Aucun appel récent pour l’instant.</string>
     <string name="recents_empty_headline">Calme plat sur la ligne.</string>
+    <string name="recents_filter_missed">Appels manqués</string>
+    <string name="recents_no_missed">Aucun appel manqué.</string>
     <string name="recents_none_enabled">Aucune liste d’appels n’est activée. Vous pouvez l’activer dans les paramètres.</string>
     <string name="recents_box_load_failed">Impossible de charger la liste d’appels de la FRITZ!Box. Touchez Recharger pour réessayer.</string>
     <string name="recents_recorded_by_box">Enregistré par %1$s</string>

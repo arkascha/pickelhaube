@@ -89,6 +89,8 @@
     <string name="recents_load_failed">The call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_empty">No recent calls yet.</string>
     <string name="recents_empty_headline">All quiet on the line.</string>
+    <string name="recents_filter_missed">Missed calls</string>
+    <string name="recents_no_missed">No missed calls.</string>
     <string name="recents_none_enabled">No call list is switched on. You can switch one on in the settings.</string>
     <string name="recents_box_load_failed">The FRITZ!Box call list could not be loaded. Tap reload to try again.</string>
     <string name="recents_recorded_by_box">Recorded by %1$s</string>
