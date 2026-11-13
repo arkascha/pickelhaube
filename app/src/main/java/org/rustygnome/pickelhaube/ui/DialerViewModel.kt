@@ -41,6 +41,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -67,6 +70,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             phoneSpeedDials = settings.phoneSpeedDials,
             callStatusEnabled = settings.callStatusEnabled,
             keyTonesEnabled = settings.keyTonesEnabled,
+            redialNumber = settings.lastDialledNumber,
         )
     )
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -156,10 +160,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw))
     }
 
-    /** What the suggestions are made of; a change makes them anew. The lists are compared as the same ones mostly. */
-    private data class SuggestionInput(
-        val number: String,
-        val labelled: Boolean,
+    /** What the numbers to suggest are taken from; a change prepares them anew. The lists are compared as the same ones mostly. */
+    private data class SuggestionSources(
         val phonebooks: List<Phonebook>,
         val deviceContacts: Phonebook?,
         val internalPhones: List<InternalPhone>,
@@ -169,16 +171,17 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     /**
-     * Keeps [DialerState.suggestions] up to date with the number typed and the phone books and calls
-     * loaded – off the main thread, the latest typing only. A number already named in the field
-     * (taken from a suggestion, the picker, a speed dial) is not offered to itself once more.
+     * Keeps [UiState.suggestions] and [UiState.matchedName] up to date with the number typed – never on
+     * the main thread, and never holding up typing: the phone books and calls are made ready to be
+     * searched ([SuggestionIndex]) only when they change, a key press then only searches them, and a
+     * search still running when the next key is pressed is broken off. A number taken from a suggestion,
+     * the picker or a speed dial is not offered to itself once more; one typed in full is.
      */
     private fun watchSuggestions() = viewModelScope.launch {
-        _state
+        val countryIso = deviceCountryIso(getApplication())
+        val index = _state
             .map { s ->
-                SuggestionInput(
-                    number = s.number,
-                    labelled = s.numberLabel != null,
+                SuggestionSources(
                     phonebooks = if (s.activeProfile?.phonebooksEnabled != false) s.phonebooks else emptyList(),
                     deviceContacts = s.deviceContacts,
                     internalPhones = s.internalPhones,
@@ -188,18 +191,38 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 )
             }
             .distinctUntilChanged()
-            .collectLatest { input ->
-                val key = numberKeys()
-                val found = withContext(Dispatchers.Default) {
-                    val typed = key(FritzDialer.sanitizeNumber(input.number))
+            // Each one made ready to the end and used – one cut short by the next change (as they come in
+            // one after the other after connecting) would leave none at all for a while; changes meanwhile
+            // are taken together into the next one.
+            .conflate()
+            .map { sources ->
+                withContext(Dispatchers.Default) {
+                    // Android's number formatting reads its tables on first use: here, not on the main thread
+                    // when the number field is first shown grouped (see NumberGrouping).
+                    phoneNumberFormat(countryIso, sources.codes)("0301234567")
+                    val key = { n: String -> numberKey(n, countryIso, sources.codes) }
                     // The box' phones, by their names, too ("Kitchen"); "all phones" has none to type.
-                    val internal = input.internalPhones.filter { it.name.isNotEmpty() }
+                    val internal = sources.internalPhones.filter { it.name.isNotEmpty() }
                         .map { PhonebookContact(it.name, listOf(PhonebookNumber(it.number, "intern")), "") }
-                    val contacts = (input.phonebooks + listOfNotNull(input.deviceContacts)).flatMap { it.contacts } + internal
-                    suggestions(input.number, contacts, input.boxCalls + input.phoneCalls.orEmpty(), key, input.codes)
-                        .filterNot { input.labelled && key(it.number) == typed }
+                    val contacts = (sources.phonebooks + listOfNotNull(sources.deviceContacts)).flatMap { it.contacts } + internal
+                    SuggestionIndex(contacts, sources.boxCalls + sources.phoneCalls.orEmpty(), key, sources.codes) to key
                 }
-                _state.update { it.copy(suggestions = found) }
+            }
+        val typing = _state.map { it.number to (it.numberLabel != null) }.distinctUntilChanged()
+        combine(typing, index) { typed, prepared -> typed to prepared }
+            .collectLatest { (typed, prepared) ->
+                val (number, labelled) = typed
+                val (searchable, key) = prepared
+                val (found, matched) = withContext(Dispatchers.Default) {
+                    // A number typed in full that is somebody's: their name as the field's label.
+                    val matched = if (labelled) null else searchable.nameOf(number)
+                    val wanted = key(FritzDialer.sanitizeNumber(number))
+                    searchable.suggest(number) { ensureActive() }
+                        // Not the number taken from a suggestion, the picker or a speed dial once more. One typed
+                        // in full keeps its suggestion: it was there a key before, and should not vanish now.
+                        .filterNot { labelled && key(it.number) == wanted } to matched
+                }
+                _state.update { it.copy(suggestions = found, matchedName = matched) }
             }
     }
 
@@ -755,6 +778,14 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun dial(withhold: Boolean = false, from: OwnNumber? = null) {
         if (_state.value.noBoxReachable) return
+        // Nothing entered: the number dialled last into the field, as on a phone – dialled with the next tap.
+        if (_state.value.number.isEmpty()) {
+            val last = _state.value.redialNumber
+            if (last != null) {
+                _state.update { it.copy(number = last, numberLabel = settings.lastDialledName?.let(UiText::Raw)) }
+                return
+            }
+        }
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
             ?.let(::useSpeedDial)
@@ -813,6 +844,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             // Redial brings the later digits back as well.
             settings.lastDialledNumber = split.written
             settings.lastDialledName = name
+            _state.update { it.copy(redialNumber = split.written) }
             RedialTileService.refresh(getApplication())
             LauncherShortcuts.updateRedial(getApplication(), split.written, name)
             phone?.let { uiText(R.string.status_pick_up, FritzDialer.displayName(it), number) }
@@ -823,13 +855,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** Whose [number] is, as far as the phone books and recent calls loaded so far tell. */
     private fun nameFor(number: String): String? {
         val key = numberKeys()
-        val wanted = key(number)
         val state = _state.value
         val books = state.phonebooks + listOfNotNull(state.deviceContacts)
-        return books.asSequence().flatMap { it.contacts }
-            .firstOrNull { c -> c.numbers.any { key(it.number) == wanted } }?.name?.takeIf { it.isNotBlank() }
-            ?: (state.boxCalls + state.phoneCalls.orEmpty())
-                .firstOrNull { !it.name.isNullOrBlank() && key(it.number) == wanted }?.name
+        return nameOf(key(number), books.flatMap { it.contacts }, state.boxCalls + state.phoneCalls.orEmpty(), key)
     }
 
     // --- launcher shortcuts -----------------------------------------------------------

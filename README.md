@@ -74,7 +74,8 @@ its spike while the app talks to the box (the progress bar below still says so t
 animations off), and spins once on a long press on the title. **Pulling the dialer down** reads
 everything it shows from the box anew – which box is reachable, its phones, missed calls, whether its
 numbers are registered, call forwardings and phone books –; the helmet tips its spike forward as far as
-it is pulled, and rocks while the box answers. A tap on a key stays a tap; for accessibility services the
+it is pulled, and rocks while the box answers. A tap on a key stays a tap – also one that slides a little,
+as a thumb does in a hurry: the pull starts only once the finger has moved 32 dp down (`ui/PullToRefresh.kt`); for accessibility services the
 same is offered as an action of the dialer. A long press on the version line in the
 settings makes it pop up and spin as well (and copies the version, as before).
 
@@ -112,6 +113,14 @@ on the device and not exported.
    set to silent or vibrate. A key gives way a little under the finger and springs back, with a tiny tap
    of vibration – as far as the system's touch feedback is on, and without the movement when the system's
    animations are switched off.
+   The number is shown grouped as numbers are written in the box' country (`030 1234567`,
+   `0171 2345678` – Android's formatting, `PhoneNumberUtils`, by the box' country code, else the phone's
+   country); only separators are put in, the number dialled is exactly the one entered, and service codes,
+   internal numbers and numbers with separators of their own are shown as they are (`ui/NumberGrouping.kt`).
+   A number that is somebody's – in the phone books, among the box' phones or the recent calls – has
+   their name as the field's label, however it was entered, typed in full included.
+   With the field empty, the green button brings back the number dialled last, with its name; the next
+   tap dials it.
    The red button cancels a dial-help call that is still being set up. While a call is under way, the green
    button is off for its number – dialling it again would only ring the phone again; another number can be dialled.
    A **long press on the green button** offers *Hide my number*: your own number is withheld
@@ -212,6 +221,9 @@ keys typed, from the start of a word (`2766` finds *Arno*, `26626` *Anna M…*, 
 letter), then numbers containing it elsewhere. Numbers called recently come first. A tap takes the
 best one into the field, with its name above; **3 more ▾** opens all of them (up to eight). For this, the
 box' phone books are read when the app comes up, as long as they are switched on for the box.
+Typing never waits for them: the phone books and calls are made ready to be searched in the background
+whenever they change (`SuggestionIndex` in `ui/Suggestions.kt`), a key press then only compares strings,
+off the main thread, and a search still running when the next key comes is broken off.
 
 ### Choosing a number: recent calls and phone books
 

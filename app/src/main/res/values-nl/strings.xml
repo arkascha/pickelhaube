@@ -42,6 +42,7 @@
     <string name="dialer_number_label">Telefoonnummer</string>
     <string name="dialer_choose_number">Kiezen uit recente gesprekken of telefoonboeken</string>
     <string name="dialer_dial">Bellen</string>
+    <string name="dialer_redial">Laatst gekozen nummer</string>
     <string name="dialer_hang_up">Ophangen</string>
     <string name="dialer_delete_digit">Laatste cijfer wissen</string>
     <string name="dialer_clear_number">Nummer wissen</string>

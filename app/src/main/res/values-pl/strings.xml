@@ -42,6 +42,7 @@
     <string name="dialer_number_label">Numer telefonu</string>
     <string name="dialer_choose_number">Wybierz z ostatnich połączeń lub książek telefonicznych</string>
     <string name="dialer_dial">Zadzwoń</string>
+    <string name="dialer_redial">Ostatnio wybrany numer</string>
     <string name="dialer_hang_up">Rozłącz</string>
     <string name="dialer_delete_digit">Usuń ostatnią cyfrę</string>
     <string name="dialer_clear_number">Wyczyść numer</string>

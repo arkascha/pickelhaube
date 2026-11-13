@@ -42,6 +42,13 @@ data class UiState(
     val number: String = "",
     /** Who the number is, when it came from a speed dial ("Speed dial 2: Office"); shown as the field's label. */
     val numberLabel: UiText? = null,
+    /**
+     * Whose the number typed is, as the phone books, the box' phones and the recent calls tell –
+     * shown as the field's label while [numberLabel] says nothing; null: nobody's known.
+     */
+    val matchedName: String? = null,
+    /** The number dialled last, which the green button puts into an empty field; null before the first call. */
+    val redialNumber: String? = null,
     val phones: List<String> = emptyList(),
     /** The box' phones with their internal numbers, read with [phones] (empty: none known). */
     val internalPhones: List<InternalPhone> = emptyList(),

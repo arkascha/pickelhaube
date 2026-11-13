@@ -94,6 +94,14 @@ fun nameRecents(calls: List<RecentCall>, contacts: List<PhonebookContact>, key: 
 }
 
 /**
+ * Whose number [wanted] (a comparison key, see [numberKey]) is: the first of the [contacts] with it,
+ * else the newest of the [calls] with a name for it; null if none says.
+ */
+fun nameOf(wanted: String, contacts: List<PhonebookContact>, calls: List<RecentCall>, key: (String) -> String): String? =
+    contacts.firstOrNull { c -> c.name.isNotBlank() && c.numbers.any { key(it.number) == wanted } }?.name
+        ?: calls.sortedByDescending { it.time }.firstOrNull { !it.name.isNullOrBlank() && key(it.number) == wanted }?.name
+
+/**
  * Whether [number] matches the digits searched for in [query]: as typed ("123" in "030 123456"), or
  * written differently ("030 12" finds "+49 30 123456") – compared via [key].
  */

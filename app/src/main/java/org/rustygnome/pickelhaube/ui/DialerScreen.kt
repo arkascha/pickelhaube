@@ -260,17 +260,24 @@ fun DialerScreen(
                 // otherwise swallow the long press on ⌫); the colours keep the normal look.
                 val onSurface = MaterialTheme.colorScheme.onSurface
                 val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+                // When ⌫ was last tapped (or held), so a tap too many does not reach the paste button in its place.
+                var lastDeletion by remember { mutableLongStateOf(0L) }
+                // Grouped as numbers are written in the box' country, to be read at a glance.
+                val fieldContext = LocalContext.current
+                val codes = state.activeProfile?.dialingCodes
+                val grouping = remember(codes) { NumberGrouping(phoneNumberFormat(deviceCountryIso(fieldContext), codes)) }
                 OutlinedTextField(
                     value = state.number,
                     onValueChange = onNumberChange,
                     enabled = false,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    visualTransformation = grouping,
                     // Never on two lines (long translation, large font): rather cut off with "…".
                     // After a speed dial it says which one, and whose number it is.
                     label = {
                         Text(
-                            state.numberLabel?.asString() ?: stringResource(R.string.dialer_number_label),
+                            state.numberLabel?.asString() ?: state.matchedName ?: stringResource(R.string.dialer_number_label),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -298,13 +305,16 @@ fun DialerScreen(
                     trailingIcon = {
                         if (state.number.isNotEmpty()) {
                             BackspaceButton(
-                                onBackspace = onBackspace,
-                                onClear = { onNumberChange("") },
+                                onBackspace = { lastDeletion = SystemClock.uptimeMillis(); onBackspace() },
+                                onClear = { lastDeletion = SystemClock.uptimeMillis(); onNumberChange("") },
                             )
                         } else {
                             // An empty field offers the clipboard instead: read only when tapped.
                             val context = LocalContext.current
                             IconButton(onClick = {
+                                // ⌫ tapped in a row, once too often: that tap is not meant for the clipboard,
+                                // which has taken its place just now.
+                                if (SystemClock.uptimeMillis() - lastDeletion < PASTE_AFTER_DELETION_MILLIS) return@IconButton
                                 val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
                                 onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
                             }) {
@@ -357,12 +367,14 @@ fun DialerScreen(
 
                 Spacer(Modifier.height(12.dp))
 
+                val redial = state.number.isEmpty() && state.redialNumber != null
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
                     RoundActionButton(
                         onClick = onDial,
                         // A long press offers the call with the own number withheld.
                         // and, with several internet numbers on the box, the call from one of them.
-                        menu = listOf(
+                        // Not for an empty field, whose tap only brings the last number back.
+                        menu = if (redial) emptyList() else listOf(
                             stringResource(R.string.dialer_dial) to onDial,
                             stringResource(R.string.dialer_dial_hidden) to onDialHidden,
                         ) + state.dialFromNumbers.map { own ->
@@ -372,12 +384,19 @@ fun DialerScreen(
                         // Only when there is something dialable (same check the dial action uses).
                         // No box to dial through: entering a number still works, dialling does not.
                         // Not for the number of the call under way: dialling it again would only ring the phone again.
-                        enabled = !state.busy && !state.noBoxReachable &&
-                            FritzDialer.sanitizeNumber(state.number).isNotEmpty() &&
-                            FritzDialer.splitExtension(state.number).number != state.callUnderway,
+                        // An empty field: it brings back the number dialled last (dialled with the next tap).
+                        enabled = !state.busy && !state.noBoxReachable && (
+                            redial ||
+                                FritzDialer.sanitizeNumber(state.number).isNotEmpty() &&
+                                FritzDialer.splitExtension(state.number).number != state.callUnderway
+                            ),
                         color = CallGreen,
                     ) {
-                        Icon(Icons.Default.Call, contentDescription = stringResource(R.string.dialer_dial), modifier = Modifier.size(30.dp))
+                        Icon(
+                            Icons.Default.Call,
+                            contentDescription = stringResource(if (redial) R.string.dialer_redial else R.string.dialer_dial),
+                            modifier = Modifier.size(30.dp),
+                        )
                     }
                     RoundActionButton(onClick = onHangup, enabled = state.dialActive && !state.busy, color = HangupRed) {
                         Icon(Icons.Default.Close, contentDescription = stringResource(R.string.dialer_hang_up), modifier = Modifier.size(30.dp))
@@ -670,6 +689,9 @@ private fun CallStatusText(text: String, hint: String?, progress: CallProgress?,
         modifier = modifier,
     )
 }
+
+/** How long after the last ⌫ the paste button, in its place once the field is empty, ignores taps. */
+private const val PASTE_AFTER_DELETION_MILLIS = 1000L
 
 /** ⌫ button: tap deletes the last digit, long press clears the whole number. */
 @OptIn(ExperimentalFoundationApi::class)

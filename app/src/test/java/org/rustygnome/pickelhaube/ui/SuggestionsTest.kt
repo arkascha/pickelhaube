@@ -83,4 +83,29 @@ class SuggestionsTest {
         assertTrue(nameMatches("Muster, Anna", "2662"))
         assertFalse(nameMatches("Muster, Anna", "8783"))
     }
+
+    @Test
+    fun `says whose a number typed in full is, however it is written`() {
+        val calls = listOf(RecentCall("0171 555666", "Caller", 1L, FRITZBOX))
+        val index = SuggestionIndex(listOf(anna, bernd, joerg), calls, key, berlin)
+        assertEquals("Anna Muster", index.nameOf("0301234567"))
+        assertEquals("Anna Muster", index.nameOf("1234567"))
+        assertEquals("Bernd Krause", index.nameOf("01712345678"))
+        // Digits typed once connected do not count.
+        assertEquals("Joerg", SuggestionIndex(listOf(contact("Joerg", "0221 998877")), emptyList(), key, berlin).nameOf("0221998877,42"))
+        assertEquals("Caller", index.nameOf("0171555666"))
+        assertEquals(null, index.nameOf("030123456"))
+        assertEquals(null, index.nameOf(""))
+    }
+
+    @Test
+    fun `a search no longer wanted is broken off`() {
+        val many = List(5000) { contact("Person $it", "030 1$it") }
+        val index = SuggestionIndex(many, emptyList(), key, berlin)
+        var checks = 0
+        val stop = RuntimeException("next key")
+        val thrown = runCatching { index.suggest("0301") { if (++checks == 2) throw stop } }.exceptionOrNull()
+        assertEquals(stop, thrown)
+        assertEquals(2, checks)
+    }
 }

@@ -42,6 +42,7 @@
     <string name="dialer_number_label">Rufnummer</string>
     <string name="dialer_choose_number">Aus letzten Anrufen oder Telefonbüchern wählen</string>
     <string name="dialer_dial">Wählen</string>
+    <string name="dialer_redial">Zuletzt gewählte Nummer</string>
     <string name="dialer_hang_up">Auflegen</string>
     <string name="dialer_delete_digit">Letzte Ziffer löschen</string>
     <string name="dialer_clear_number">Nummer löschen</string>

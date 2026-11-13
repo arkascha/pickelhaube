@@ -42,6 +42,7 @@
     <string name="dialer_number_label">Número a marcar</string>
     <string name="dialer_choose_number">Elegir de las llamadas recientes o de las agendas</string>
     <string name="dialer_dial">Llamar</string>
+    <string name="dialer_redial">Último número marcado</string>
     <string name="dialer_hang_up">Colgar</string>
     <string name="dialer_delete_digit">Borrar el último dígito</string>
     <string name="dialer_clear_number">Borrar el número</string>

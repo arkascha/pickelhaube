@@ -45,6 +45,7 @@
     <string name="dialer_number_label">Number to dial</string>
     <string name="dialer_choose_number">Choose from recent calls or phone books</string>
     <string name="dialer_dial">Dial</string>
+    <string name="dialer_redial">Last number dialled</string>
     <string name="dialer_hang_up">Hang up</string>
     <string name="dialer_delete_digit">Delete last digit</string>
     <string name="dialer_clear_number">Clear number</string>
