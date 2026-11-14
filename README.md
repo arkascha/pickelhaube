@@ -133,6 +133,11 @@ on the device and not exported.
    their name as the field's label, however it was entered, typed in full included.
    With the field empty, the green button brings back the number dialled last, with its name; the next
    tap dials it.
+   A tap in the number field sets the cursor there – to fix a typo in the middle: ⌫ deletes the digit
+   before the cursor, a key puts its digit at the cursor, and the digits after it stay. No keyboard comes
+   up (the field's requests for one are held back, `InterceptPlatformTextInput`); a hardware keyboard or
+   *Paste* in the field's menu work as well, keeping only what can be dialled. Taken from a list, a link
+   or a shared text, a number has the cursor at its end again.
    The red button cancels a dial-help call that is still being set up. While a call is under way, the green
    button is off for its number – dialling it again would only ring the phone again; another number can be dialled.
    A **long press on the green button** offers *Hide my number*: your own number is withheld

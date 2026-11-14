@@ -91,6 +91,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.awaitCancellation
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -127,6 +131,8 @@ import kotlinx.coroutines.delay
 fun DialerScreen(
     state: UiState,
     onNumberChange: (String) -> Unit,
+    /** The number field itself: the cursor set or a selection made (start, end), or its text changed. */
+    onFieldChange: (String, Int, Int) -> Unit,
     onDigit: (Char) -> Unit,
     /** Long press on a digit: speed dial, else like a tap ("0": "+"). */
     onLongDigit: (Char) -> Unit,
@@ -271,9 +277,8 @@ fun DialerScreen(
                 val maxKey = if (LocalConfiguration.current.smallestScreenWidthDp >= 600) 96.dp else 80.dp
 
                 val numberField: @Composable () -> Unit = {
-                    // Display only: input comes from the dial pad. The field is disabled so it has no
-                    // keyboard and no gesture handling of its own (its long-press text selection would
-                    // otherwise swallow the long press on ⌫); the colours keep the normal look.
+                    // Input comes from the dial pad, at the cursor: a tap in the field sets it (to fix a typo
+                    // in the middle), but no keyboard comes up – the field's requests for one are held back.
                     val onSurface = MaterialTheme.colorScheme.onSurface
                     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
                     // When ⌫ was last tapped (or held), so a tap too many does not reach the paste button in its place.
@@ -282,63 +287,66 @@ fun DialerScreen(
                     val fieldContext = LocalContext.current
                     val codes = state.activeProfile?.dialingCodes
                     val grouping = remember(codes) { NumberGrouping(phoneNumberFormat(deviceCountryIso(fieldContext), codes)) }
-                    OutlinedTextField(
-                        value = state.number,
-                        onValueChange = onNumberChange,
-                        enabled = false,
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        visualTransformation = grouping,
-                        // Never on two lines (long translation, large font): rather cut off with "…".
-                        // After a speed dial it says which one, and whose number it is.
-                        label = {
-                            Text(
-                                state.numberLabel?.asString() ?: state.matchedName ?: stringResource(R.string.dialer_number_label),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        },
-                        textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            disabledTextColor = onSurface,
-                            disabledBorderColor = MaterialTheme.colorScheme.outline,
-                            disabledLabelColor = onSurfaceVariant,
-                            disabledTrailingIconColor = onSurfaceVariant,
-                            disabledLeadingIconColor = MaterialTheme.colorScheme.primary,
-                        ),
-                        leadingIcon = {
-                            IconButton(onClick = onOpenPicker) {
-                                // The box' missed calls not looked at yet, counted on the way to them.
-                                BadgedBox(
-                                    badge = {
-                                        if (state.newMissedCalls > 0) Badge { Text(state.newMissedCalls.coerceAtMost(99).toString()) }
-                                    },
-                                ) {
-                                    Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
-                                }
-                            }
-                        },
-                        trailingIcon = {
-                            if (state.number.isNotEmpty()) {
-                                BackspaceButton(
-                                    onBackspace = { lastDeletion = SystemClock.uptimeMillis(); onBackspace() },
-                                    onClear = { lastDeletion = SystemClock.uptimeMillis(); onNumberChange("") },
+                    val cursor = state.cursor
+                    InterceptPlatformTextInput(interceptor = { _, _ -> awaitCancellation() }) {
+                        OutlinedTextField(
+                            value = TextFieldValue(state.number, TextRange(cursor.first, cursor.last)),
+                            onValueChange = { onFieldChange(it.text, it.selection.min, it.selection.max) },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            visualTransformation = grouping,
+                            // Never on two lines (long translation, large font): rather cut off with "…".
+                            // After a speed dial it says which one, and whose number it is.
+                            label = {
+                                Text(
+                                    state.numberLabel?.asString() ?: state.matchedName ?: stringResource(R.string.dialer_number_label),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
-                            } else {
-                                // An empty field offers the clipboard instead: read only when tapped.
-                                val context = LocalContext.current
-                                IconButton(onClick = {
-                                    // ⌫ tapped in a row, once too often: that tap is not meant for the clipboard,
-                                    // which has taken its place just now.
-                                    if (SystemClock.uptimeMillis() - lastDeletion < PASTE_AFTER_DELETION_MILLIS) return@IconButton
-                                    val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
-                                    onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
-                                }) {
-                                    Icon(PasteIcon, contentDescription = stringResource(R.string.dialer_paste))
+                            },
+                            textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                unfocusedTextColor = onSurface,
+                                unfocusedLabelColor = onSurfaceVariant,
+                                unfocusedTrailingIconColor = onSurfaceVariant,
+                                focusedTrailingIconColor = onSurfaceVariant,
+                                unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+                                focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+                            ),
+                            leadingIcon = {
+                                IconButton(onClick = onOpenPicker) {
+                                    // The box' missed calls not looked at yet, counted on the way to them.
+                                    BadgedBox(
+                                        badge = {
+                                            if (state.newMissedCalls > 0) Badge { Text(state.newMissedCalls.coerceAtMost(99).toString()) }
+                                        },
+                                    ) {
+                                        Icon(ContactsIcon, contentDescription = stringResource(R.string.dialer_choose_number))
+                                    }
                                 }
-                            }
-                        },
-                    )
+                            },
+                            trailingIcon = {
+                                if (state.number.isNotEmpty()) {
+                                    BackspaceButton(
+                                        onBackspace = { lastDeletion = SystemClock.uptimeMillis(); onBackspace() },
+                                        onClear = { lastDeletion = SystemClock.uptimeMillis(); onNumberChange("") },
+                                    )
+                                } else {
+                                    // An empty field offers the clipboard instead: read only when tapped.
+                                    val context = LocalContext.current
+                                    IconButton(onClick = {
+                                        // ⌫ tapped in a row, once too often: that tap is not meant for the clipboard,
+                                        // which has taken its place just now.
+                                        if (SystemClock.uptimeMillis() - lastDeletion < PASTE_AFTER_DELETION_MILLIS) return@IconButton
+                                        val clip = context.getSystemService(ClipboardManager::class.java)?.primaryClip
+                                        onPaste(clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty())
+                                    }) {
+                                        Icon(PasteIcon, contentDescription = stringResource(R.string.dialer_paste))
+                                    }
+                                }
+                            },
+                        )
+                    }
                 }
                 // Its room stays reserved, so the keypad does not jump while typing.
                 val suggestionRow: @Composable () -> Unit = {

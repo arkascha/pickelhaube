@@ -367,6 +367,7 @@ class MainActivity : ComponentActivity() {
                         DialerScreen(
                             state = state,
                             onNumberChange = viewModel::onNumberChange,
+                            onFieldChange = viewModel::editField,
                             onDigit = viewModel::appendDigit,
                             onLongDigit = viewModel::longPressDigit,
                             onBackspace = viewModel::backspace,

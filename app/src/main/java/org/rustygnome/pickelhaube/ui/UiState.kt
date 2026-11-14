@@ -44,8 +44,16 @@ sealed interface SpeedDialAssignment {
  */
 data class UndoOffer(val message: UiText, val serial: Long)
 
+/**
+ * Where the cursor (or the selection, [start] to [end]) stands in the number field – for the [number]
+ * it was set in; once the number is another one (taken from a list, a link, …), the cursor is at its end.
+ */
+data class FieldCursor(val number: String, val start: Int, val end: Int = start)
+
 data class UiState(
     val number: String = "",
+    /** The cursor set in the number field (by a tap); null or set in another number: at the end. */
+    val fieldCursor: FieldCursor? = null,
     /** Who the number is, when it came from a speed dial ("Speed dial 2: Office"); shown as the field's label. */
     val numberLabel: UiText? = null,
     /**
@@ -298,3 +306,11 @@ class SecondFactorNotConfirmedException : IOException("The action was not confir
 
 /** Answers to the "include this phone's contacts?" question. */
 enum class DeviceContactsAnswer { ALLOWED, NOT_NOW, NEVER }
+
+/** The cursor in the number field: from..to in [UiState.number] – both at its end unless set in it (see [FieldCursor]). */
+val UiState.cursor: IntRange
+    get() {
+        val c = fieldCursor?.takeIf { it.number == number } ?: return number.length..number.length
+        val start = c.start.coerceIn(0, number.length)
+        return start..c.end.coerceIn(start, number.length)
+    }

@@ -47,6 +47,9 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/** Besides digits, what the number field takes from a hardware keyboard or a paste: + * # and the pauses. */
+private const val DIALLABLE = "+*#,;pPwWxX"
+
 /** How long to wait for the user to confirm on the box before giving up. */
 private const val SECOND_FACTOR_TIMEOUT_MILLIS = 120_000L
 
@@ -146,9 +149,35 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     // A number changed by hand is no longer the one picked: "back" leaves the app again.
     fun onNumberChange(value: String) = _state.update { it.copy(number = value, numberLabel = null, backToPicker = false) }
 
-    fun appendDigit(c: Char) = _state.update { it.copy(number = it.number + c, numberLabel = null, backToPicker = false) }
+    /** A key of the keypad: its character at the cursor (in place of what is selected), the cursor after it. */
+    fun appendDigit(c: Char) = _state.update {
+        val (number, cursor) = typed(it.number, it.cursor, c)
+        it.copy(number = number, fieldCursor = FieldCursor(number, cursor), numberLabel = null, backToPicker = false)
+    }
 
-    fun backspace() = _state.update { it.copy(number = it.number.dropLast(1), numberLabel = null, backToPicker = false) }
+    /** ⌫: the character before the cursor (or what is selected) deleted; at the start of the field, nothing. */
+    fun backspace() = _state.update {
+        val (number, cursor) = deletedBefore(it.number, it.cursor) ?: return@update it
+        it.copy(number = number, fieldCursor = FieldCursor(number, cursor), numberLabel = null, backToPicker = false)
+    }
+
+    /**
+     * The number field itself: the cursor set (a tap between two digits) or a selection made – or, from a
+     * hardware keyboard or "Paste" in its menu, the text changed: only what can be dialled is kept.
+     */
+    fun editField(text: String, start: Int, end: Int) {
+        val state = _state.value
+        if (text == state.number) {
+            _state.update { it.copy(fieldCursor = FieldCursor(it.number, start, end)) }
+            return
+        }
+        val kept = text.filter { it.isDigit() || it in DIALLABLE }
+        // Where the cursor was, counted in what is kept.
+        val at = text.take(end.coerceIn(0, text.length)).count { it.isDigit() || it in DIALLABLE }
+        _state.update {
+            it.copy(number = kept, fieldCursor = FieldCursor(kept, at), numberLabel = null, backToPicker = false)
+        }
+    }
 
     /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
     fun pickInternalPhone(number: String, label: String) {

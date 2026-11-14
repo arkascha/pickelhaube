@@ -2,7 +2,11 @@ package org.rustygnome.pickelhaube
 
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performTextInputSelection
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performTouchInput
@@ -53,6 +57,19 @@ class NumberFieldFlowTest : FlowTest() {
         compose.waitForIdle()
         compose.onNode(hasText(text(R.string.error_no_number_found_title))).assertDoesNotExist()
         compose.onNode(labelled(text(R.string.dialer_paste))).assertExists()
+    }
+
+    /** A typo in the middle fixed where it is: the cursor set after it, ⌫, the right digit – the digits after it stay. */
+    @Test
+    fun typoFixedAtTheCursor() {
+        setUpDemoBox()
+        "0301294567".forEach { compose.onNode(key(it)).performClick() }
+        val field = compose.onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText) and hasText(shown("0301294567")))
+        // After the 9 (the 6th digit) – as a tap there would put it.
+        field.performTextInputSelection(TextRange(6))
+        compose.onNode(labelled(text(R.string.dialer_backspace_description))).performClick()
+        compose.onNode(key('3')).performClick()
+        awaitNode(hasText(shown("0301234567")))
     }
 
     private companion object {
