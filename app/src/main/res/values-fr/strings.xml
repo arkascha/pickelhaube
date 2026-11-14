@@ -487,6 +487,7 @@
     <string name="call_type_now">Tapez maintenant %1$s sur le téléphone – raccrochez-y aussi</string>
     <string name="call_ended">Appel terminé · %1$s</string>
     <string name="call_not_answered">Pas de réponse, ou occupé</string>
+    <string name="call_try_again">Réessayer</string>
     <string name="call_not_picked_up">Le téléphone n’a pas été décroché</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->

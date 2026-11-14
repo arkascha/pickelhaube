@@ -487,6 +487,7 @@
     <string name="call_type_now">Marca ahora %1$s en el teléfono – cuelga también allí</string>
     <string name="call_ended">Llamada terminada · %1$s</string>
     <string name="call_not_answered">Sin respuesta, o comunicando</string>
+    <string name="call_try_again">Reintentar</string>
     <string name="call_not_picked_up">No se contestó el teléfono</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->

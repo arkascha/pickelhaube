@@ -482,6 +482,7 @@
     <string name="call_type_now">Now type %1$s on the phone – hang up there too</string>
     <string name="call_ended">Call ended · %1$s</string>
     <string name="call_not_answered">Not answered, or busy</string>
+    <string name="call_try_again">Try again</string>
     <string name="call_not_picked_up">The phone was not picked up</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->

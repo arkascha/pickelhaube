@@ -487,6 +487,7 @@
     <string name="call_type_now">Digita ora %1$s sul telefono – riaggancia anche lì</string>
     <string name="call_ended">Chiamata terminata · %1$s</string>
     <string name="call_not_answered">Nessuna risposta, o occupato</string>
+    <string name="call_try_again">Riprova</string>
     <string name="call_not_picked_up">Nessuna risposta al telefono</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->

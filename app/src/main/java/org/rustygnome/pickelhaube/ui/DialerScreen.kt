@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -390,6 +391,12 @@ fun DialerScreen(
                             onCheckLines,
                             state.quietError,
                             onRetry,
+                            // Only for the number of the call that failed, still in the field.
+                            onDial.takeIf {
+                                val dialled = state.redialNumber?.let { FritzDialer.splitExtension(it).number }
+                                dialled != null && FritzDialer.splitExtension(state.number).number == dialled &&
+                                    !state.busy && !state.noBoxReachable
+                            },
                         )
                     }
                 }
@@ -674,6 +681,8 @@ private fun CallStatusLine(
     /** Shown first while there is no call to follow: a failure likely to pass, a tap tries again. */
     quietError: BoxError?,
     onRetry: () -> Unit,
+    /** Calls the number again after it was busy or not answered; null: not offered (the number was changed since). */
+    onTryAgain: (() -> Unit)?,
 ) {
     // Numbers grouped as they are written, as in the number field.
     val show = LocalNumberDisplay.current
@@ -785,6 +794,15 @@ private fun CallStatusLine(
             Spacer(Modifier.width(12.dp))
         }
         CallStatusText(text, hint, progress, extension, Modifier.weight(1f))
+        // Busy, or nobody answered (or the own phone was not picked up): calling again is the next step.
+        if (onTryAgain != null && (progress == CallProgress.NotAnswered || progress == CallProgress.NotPickedUp)) {
+            Spacer(Modifier.width(8.dp))
+            FilledTonalButton(onClick = onTryAgain) {
+                Icon(Icons.Default.Call, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(stringResource(R.string.call_try_again))
+            }
+        }
     }
 }
 

@@ -176,7 +176,8 @@ an OkHttp interceptor in `Tr064Client`, plus its device description and call mon
 two phone books with speed dials, a call list and call forwardings. A call through it rings nowhere:
 after a few seconds it counts as picked up, then connected, ends after a short talk and appears in
 its call list. Changes (speed dials, entries, call forwardings) last until the app is closed. Its
-numbers are from the ranges the Bundesnetzagentur keeps free for films.
+numbers are from the ranges the Bundesnetzagentur keeps free for films. The garage's line
+(`08999998202`) is always busy: its calls end without being answered, to show *Try again*.
 
 Like any box reached only at its configured host, it is used when the current network has none of
 the configured boxes.
@@ -446,7 +447,8 @@ timer, and finally *call ended* with its duration, *not answered, or busy*, or �
 up within 45 seconds – *the phone was not picked up*. The red button stays usable exactly as long as
 the call is still being set up: the box' hang-up (`X_AVM-DE_DialHangup`) only cancels the dial help and
 does not end a connected call – tested on a 7530 AX –, so while connected the dialer says to hang up on
-the device itself (handset, headset or speakerphone). The end stays shown for 20 seconds.
+the device itself (handset, headset or speakerphone). The end stays shown for 20 seconds; after *not answered, or busy* or *the phone was not picked up* it offers
+**Try again** beside it, which calls the number once more – as long as it is still the one in the field.
 Beside it, the mascot acts the call out: while the box rings your phone, rings spread from it and it
 shakes like a bell; while the other side is called, it listens with a hand behind its ear, its spike
 rocking; connected, it nods; at the end it bows and waves; not answered, it tilts its head. It stays

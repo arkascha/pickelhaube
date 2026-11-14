@@ -60,6 +60,9 @@ object DemoBox {
     private const val ANSWER_MILLIS = 3_000L
     private const val TALK_MILLIS = 8_000L
 
+    /** Garage Krüger's number: always busy, for a call that is not answered (and "Try again"). */
+    internal const val BUSY_NUMBER = "08999998202"
+
     /** The device description every box serves at `/tr64desc.xml` (see [BoxDiscovery]). */
     fun description(): String = """<?xml version="1.0"?>
         <root xmlns="urn:dslforum-org:device-1-0">
@@ -442,6 +445,12 @@ object DemoBox {
             delay(RING_MILLIS)
             monitor.emit(CallEvent.Call(connection, extension = "11", caller = from, called = number, line = line))
             delay(ANSWER_MILLIS)
+            // The garage's line is always busy: the call ends without being connected.
+            if (number == BUSY_NUMBER) {
+                synchronized(DemoBox) { calls += Call(3, number, nameFor(number), System.currentTimeMillis(), 0, own = from) }
+                monitor.emit(CallEvent.Disconnect(connection, 0))
+                return@launch
+            }
             monitor.emit(CallEvent.Connect(connection, extension = "11", number = number))
             delay(TALK_MILLIS)
             val seconds = (TALK_MILLIS / 1000).toInt()

@@ -497,6 +497,7 @@
     <string name="call_type_now">Wybierz teraz %1$s na telefonie – tam też się rozłącz</string>
     <string name="call_ended">Połączenie zakończone · %1$s</string>
     <string name="call_not_answered">Nie odebrano lub zajęte</string>
+    <string name="call_try_again">Ponów</string>
     <string name="call_not_picked_up">Telefon nie został odebrany</string>
 
     <!-- launcher shortcuts (long press on the app icon) -->
