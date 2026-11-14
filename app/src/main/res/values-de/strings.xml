@@ -583,4 +583,12 @@
         <item>Quer gehalten oder auf dem Tablet stehen die Tasten neben dem Rest.</item>
         <item>Behoben: Schnelle Tipps, die auf einer Taste ein wenig rutschten, gingen verloren.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>Ein Tippfehler mitten in der Nummer? Tipp direkt dahinter: ⌫ löscht ihn, die nächste Taste setzt die richtige Ziffer an seine Stelle.</item>
+        <item>Besetzt, oder niemand nimmt ab? „Nochmal“ neben dem Status ruft erneut an.</item>
+        <item>Nummern erscheinen jetzt überall in Gruppen – in den Listen, den Vorschlägen und im Gesprächsstatus.</item>
+        <item>„Nummer kopieren“ im Menü einer lange gedrückten Nummer oder Kurzwahl.</item>
+        <item>Antwortet die Box kurz nicht, erscheint ein knapper Hinweis mit „erneut versuchen“ statt einer Meldung, die im Weg ist.</item>
+        <item>Bei den Kurzwahlen sind die freien Plätze dieses Telefons in einer Zeile zusammengefasst.</item>
+    </string-array>
 </resources>

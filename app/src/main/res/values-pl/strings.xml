@@ -605,4 +605,12 @@
         <item>Po obróceniu lub na tablecie klawiatura stoi obok reszty.</item>
         <item>Naprawiono: szybkie dotknięcia, które lekko przesuwały się po klawiszu, ginęły.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>Literówka w środku numeru? Dotknij tuż za nią: ⌫ ją usuwa, a następny klawisz wstawia właściwą cyfrę.</item>
+        <item>Zajęte albo nikt nie odbiera? „Ponów” obok stanu dzwoni jeszcze raz.</item>
+        <item>Numery są teraz wszędzie pokazywane w grupach – na listach, w podpowiedziach i w stanie połączenia.</item>
+        <item>„Kopiuj numer” w menu długo przytrzymanego numeru lub szybkiego wybierania.</item>
+        <item>Gdy box przez chwilę nie odpowiada, pojawia się krótka uwaga z „spróbuj ponownie” zamiast przeszkadzającego komunikatu.</item>
+        <item>W szybkim wybieraniu wolne miejsca tego telefonu są zebrane w jednym wierszu.</item>
+    </string-array>
 </resources>

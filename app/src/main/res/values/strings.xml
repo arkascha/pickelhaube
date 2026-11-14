@@ -587,4 +587,12 @@
         <item>Turned sideways or on a tablet, the keypad stands beside the rest.</item>
         <item>Fixed: quick taps that slid a little on a key got lost.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>A typo in the middle of a number? Tap right after it: ⌫ deletes it, the next key puts the right digit there.</item>
+        <item>Busy, or nobody answered? “Try again” beside the status calls once more.</item>
+        <item>Numbers are grouped everywhere now – in the lists, the suggestions and the call status.</item>
+        <item>“Copy number” in the menu of a long-pressed number or speed dial.</item>
+        <item>When the box does not answer for a moment, a short note with “try again” appears instead of a message in the way.</item>
+        <item>In the speed dials, this phone’s free slots are folded into one row.</item>
+    </string-array>
 </resources>

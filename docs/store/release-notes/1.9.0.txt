@@ -1,0 +1,16 @@
+<en-US>
+• Fix a typo in the middle of a number: tap right after it, ⌫ and the keys work there
+• Busy or not answered? “Try again” calls once more
+• Numbers grouped everywhere: lists, suggestions, call status
+• “Copy number” in the long-press menu
+• The box not answering for a moment: a short note with “try again”, no message in the way
+• Speed dials: the free slots folded into one row
+</en-US>
+<de-DE>
+• Tippfehler mitten in der Nummer: direkt dahinter tippen, ⌫ und die Tasten wirken dort
+• Besetzt oder nicht angenommen? „Nochmal“ ruft erneut an
+• Nummern überall in Gruppen: Listen, Vorschläge, Gesprächsstatus
+• „Nummer kopieren“ im Menü bei langem Drücken
+• Antwortet die Box kurz nicht: ein knapper Hinweis mit „erneut versuchen“ statt einer Meldung im Weg
+• Kurzwahlen: freie Plätze in einer Zeile
+</de-DE>

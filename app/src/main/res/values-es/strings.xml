@@ -593,4 +593,12 @@
         <item>En horizontal o en una tableta, el teclado queda al lado del resto.</item>
         <item>Corregido: se perdían los toques rápidos que se deslizaban un poco sobre una tecla.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>¿Un error en medio de un número? Toca justo detrás: ⌫ lo borra y la siguiente tecla pone ahí la cifra correcta.</item>
+        <item>¿Ocupado o nadie contesta? «Reintentar» junto al estado vuelve a llamar.</item>
+        <item>Los números se muestran por grupos en todas partes: en las listas, las sugerencias y el estado de la llamada.</item>
+        <item>«Copiar número» en el menú de un número o una marcación rápida mantenidos pulsados.</item>
+        <item>Si la box no responde un momento, aparece una nota breve con «reintentar» en lugar de un mensaje que estorba.</item>
+        <item>En las marcaciones rápidas, las posiciones libres de este teléfono se agrupan en una sola fila.</item>
+    </string-array>
 </resources>

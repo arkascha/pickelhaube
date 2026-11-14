@@ -1,4 +1,4 @@
-Pickelhaube is a dialer for your FRITZ!Box. Pick the number comfortably on your smartphone – from your recent calls, your phone books or a speed dial – and your landline phone makes the call: the FRITZ!Box first rings the phone you chose, for example a DECT handset, and as soon as you pick it up, it dials the number. It works just like the dial help in the FRITZ!Box web interface, only much quicker.
+Pickelhaube is a dialer for your FRITZ!Box. Pick the number comfortably on your smartphone – from your recent calls, your phone books or a speed dial – and your landline phone makes the call: the FRITZ!Box first rings the phone you chose, for example a DECT handset, and as soon as you pick it up, it dials the number. Like the dial help of the FRITZ!Box web interface, only quicker.
 
 CHOOSE A NUMBER
 • Recent calls of the FRITZ!Box – dialled, received and missed, from all of its phones, by day, the missed ones at a tap
@@ -13,15 +13,17 @@ CHOOSE A NUMBER
 • Choose which phone rings: a single phone or all of them
 
 DIALLING
+• Fix a typo where it is: tap in the number, and the keys and ⌫ work at the cursor
 • Hide your number for a single call
 • Several own numbers: choose the one a call goes out from
-• Extensions, conference PINs and phone menus: the number is dialled, and the app tells you what to type once connected
+• Extensions, PINs and phone menus: the app tells you what to type once connected
 • Internal calls between the phones of your FRITZ!Box – the kitchen from the study, for free
-• A warning when an internet number of the FRITZ!Box is not registered with its provider
+• A warning when an internet number of the box is not registered
 
 ON THE CALL
 • Live call status: pick up, calling, connected with a running timer, call ended – based on the call monitor of the FRITZ!Box
 • Cancel a call that is still being set up
+• Busy or not answered? Try again with one tap
 
 CALL FORWARDING
 • Switch the call forwardings set up on your FRITZ!Box on and off
@@ -56,4 +58,4 @@ WHAT YOU NEED
 • For the live call status: the call monitor of the box, switched on once by dialling #96*5* on a connected phone
 • The rest is shown by the welcome tour on first start, step by step – and a demo box lets you try the app without a FRITZ!Box
 
-Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH; they are used here only to say which routers the app works with.
+Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM). FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH; they only name the routers the app works with.

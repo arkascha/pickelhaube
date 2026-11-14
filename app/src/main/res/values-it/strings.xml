@@ -593,4 +593,12 @@
         <item>In orizzontale o su un tablet, il tastierino sta accanto al resto.</item>
         <item>Corretto: i tocchi rapidi che scivolavano un po’ su un tasto andavano persi.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>Un errore a metà del numero? Tocca subito dopo: ⌫ lo cancella, il tasto successivo mette lì la cifra giusta.</item>
+        <item>Occupato, o nessuno risponde? «Riprova» accanto allo stato richiama.</item>
+        <item>I numeri sono ora raggruppati ovunque – nelle liste, nei suggerimenti e nello stato della chiamata.</item>
+        <item>«Copia numero» nel menu di un numero o di una selezione rapida tenuti premuti.</item>
+        <item>Se la box non risponde per un momento, compare una breve nota con «riprova» invece di un messaggio d’intralcio.</item>
+        <item>Nelle selezioni rapide, le posizioni libere di questo telefono sono raccolte in una riga.</item>
+    </string-array>
 </resources>

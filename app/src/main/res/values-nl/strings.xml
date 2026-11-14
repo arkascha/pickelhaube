@@ -583,4 +583,12 @@
         <item>Gekanteld of op een tablet staat het toetsenblok naast de rest.</item>
         <item>Opgelost: snelle tikken die een beetje over een toets gleden, gingen verloren.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>Een tikfout midden in een nummer? Tik er direct achter: ⌫ wist hem, de volgende toets zet het juiste cijfer op zijn plek.</item>
+        <item>In gesprek, of neemt niemand op? „Opnieuw” naast de status belt nog eens.</item>
+        <item>Nummers staan nu overal in groepen – in de lijsten, de suggesties en de gespreksstatus.</item>
+        <item>„Nummer kopiëren” in het menu van een lang ingedrukt nummer of snelkiesnummer.</item>
+        <item>Antwoordt de box even niet, dan verschijnt een korte melding met „opnieuw proberen” in plaats van een bericht dat in de weg zit.</item>
+        <item>Bij de snelkiesnummers zijn de vrije plekken van deze telefoon samengevoegd tot één regel.</item>
+    </string-array>
 </resources>

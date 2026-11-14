@@ -593,4 +593,12 @@
         <item>À l’horizontale ou sur une tablette, le clavier se place à côté du reste.</item>
         <item>Corrigé : les touches rapides qui glissaient un peu sur une touche se perdaient.</item>
     </string-array>
+    <string-array name="whats_new_13">
+        <item>Une faute au milieu d’un numéro ? Touchez juste après : ⌫ l’efface, la touche suivante met le bon chiffre à sa place.</item>
+        <item>Occupé, ou personne ne répond ? « Réessayer » à côté de l’état rappelle.</item>
+        <item>Les numéros s’affichent par groupes partout – dans les listes, les suggestions et l’état de l’appel.</item>
+        <item>« Copier le numéro » dans le menu d’un numéro ou d’un numéro abrégé maintenu appuyé.</item>
+        <item>Quand la box ne répond pas un instant, une courte note avec « réessayer » remplace le message qui gênait.</item>
+        <item>Dans les numéros abrégés, les emplacements libres de ce téléphone sont regroupés sur une ligne.</item>
+    </string-array>
 </resources>
