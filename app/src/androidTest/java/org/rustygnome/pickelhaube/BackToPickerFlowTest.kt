@@ -25,8 +25,8 @@ class BackToPickerFlowTest : FlowTest() {
         openPicker(R.string.phone_books)
         notNowForContacts()
         compose.onNode(hasSetTextAction()).performTextInput(SEARCH)
-        awaitText(NUMBER)
-        compose.onNodeWithText(NUMBER).performClick()
+        awaitText(shown(NUMBER))
+        compose.onNodeWithText(shown(NUMBER)).performClick()
         // The dialer, with the number – grouped, and named above it (so not "Number to dial").
         awaitText(GROUPED)
 
@@ -34,7 +34,7 @@ class BackToPickerFlowTest : FlowTest() {
         back()
         awaitText(R.string.picker_title)
         compose.onNode(hasSetTextAction() and hasText(SEARCH)).assertExists()
-        compose.onNodeWithText(NUMBER).assertExists()
+        compose.onNodeWithText(shown(NUMBER)).assertExists()
 
         // Back from there: the dialer, with the number picked.
         back()
@@ -45,8 +45,8 @@ class BackToPickerFlowTest : FlowTest() {
         // Opened anew: without the search of the last time.
         compose.onNode(hasSetTextAction() and hasText(SEARCH)).assertDoesNotExist()
         compose.onNode(hasSetTextAction()).performTextInput(SEARCH)
-        awaitText(NUMBER)
-        compose.onNodeWithText(NUMBER).performClick()
+        awaitText(shown(NUMBER))
+        compose.onNodeWithText(shown(NUMBER)).performClick()
         // The dialer, with the number – grouped, and named above it (so not "Number to dial").
         awaitText(GROUPED)
         compose.onNode(key('1')).performClick()

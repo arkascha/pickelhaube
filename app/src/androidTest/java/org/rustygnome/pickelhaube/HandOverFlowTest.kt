@@ -39,7 +39,7 @@ class HandOverFlowTest : FlowTest() {
             DemoBox.latencyMillis = SLOW_MILLIS
             compose.onNode(labelled(text(R.string.picker_reload))).performClick()
         }
-        compose.onAllNodes(hasText(UNKNOWN))[0].performTouchInput { longClick() }
+        compose.onAllNodes(hasText(shown(UNKNOWN)))[0].performTouchInput { longClick() }
         compose.onNodeWithText(text(R.string.contact_to_box)).performClick()
         compose.onNode(hasText(book) and hasAnyAncestor(isDialog())).performClick()
         if (whileBusy) compose.onNode(hasProgressBarRangeInfo(ProgressBarRangeInfo.Indeterminate)).assertExists()
@@ -52,7 +52,7 @@ class HandOverFlowTest : FlowTest() {
     fun handedOverFromTheRecentCalls() {
         setUpDemoBox()
         openPicker(R.string.picker_tab_recent)
-        awaitText(UNKNOWN)
+        awaitText(shown(UNKNOWN))
         handOver(SERVICES)
         assertEquals(listOf(SERVICES), booksWith(UNKNOWN))
     }
@@ -66,7 +66,7 @@ class HandOverFlowTest : FlowTest() {
     fun intoTheRightPhoneBookAfterOneWasAddedOnTheBox() {
         setUpDemoBox()
         openPicker(R.string.picker_tab_recent)
-        awaitText(UNKNOWN)
+        awaitText(shown(UNKNOWN))
         val before = FritzDialer(demo).loadPhonebooks()
         Tr064Client(demo).call(FritzPhonebooks.SERVICE_TYPE, FritzPhonebooks.CONTROL_URL, "AddPhonebook",
             mapOf("NewPhonebookName" to "Doctors", "NewPhonebookExtraID" to ""))
@@ -82,7 +82,7 @@ class HandOverFlowTest : FlowTest() {
     fun handedOverWhileTheBoxIsBusy() {
         setUpDemoBox()
         openPicker(R.string.picker_tab_recent)
-        awaitText(UNKNOWN)
+        awaitText(shown(UNKNOWN))
         try {
             handOver(SERVICES, whileBusy = true)
         } finally {

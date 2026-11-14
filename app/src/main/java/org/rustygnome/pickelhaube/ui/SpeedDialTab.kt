@@ -215,7 +215,7 @@ private fun BoxSlotRow(
         ListItem(
             leadingContent = { SlotLabel(speedDial.slot) },
             headlineContent = { Text(speedDial.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-            supportingContent = { Text(speedDial.number, maxLines = 1) },
+            supportingContent = { Text(LocalNumberDisplay.current(speedDial.number), maxLines = 1) },
             // At the right, where a free slot of this phone has its "+".
             trailingContent = onCall?.let { call ->
                 { CallButton(speedDial.number, speedDial.name, enabled = callEnabled, modifier = AtRowEnd) { call(speedDial) } }
@@ -286,7 +286,7 @@ private fun PhoneSlotRow(
                     Text(stringResource(R.string.speed_dial_free), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
-            supportingContent = speedDial?.let { { Text(it.number, maxLines = 1) } },
+            supportingContent = speedDial?.let { { Text(LocalNumberDisplay.current(it.number), maxLines = 1) } },
             trailingContent = when {
                 speedDial == null -> { { Icon(Icons.Default.Add, contentDescription = null) } }
                 onCall != null -> { { CallButton(speedDial.number, speedDial.name, enabled = callEnabled, modifier = AtRowEnd) { onCall(speedDial) } } }

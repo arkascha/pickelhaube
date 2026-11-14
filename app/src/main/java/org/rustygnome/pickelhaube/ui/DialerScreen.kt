@@ -608,7 +608,7 @@ private fun SuggestionRow(suggestions: List<Suggestion>, onSuggestion: (Suggesti
                                     Column {
                                         suggestion.name?.let { Text(it, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                                         Text(
-                                            suggestion.number,
+                                            LocalNumberDisplay.current(suggestion.number),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
@@ -633,7 +633,7 @@ private fun SuggestionText(suggestion: Suggestion, modifier: Modifier) {
             Spacer(Modifier.width(10.dp))
         }
         Text(
-            suggestion.number,
+            LocalNumberDisplay.current(suggestion.number),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = if (suggestion.name != null) MaterialTheme.typography.bodyMedium else LocalTextStyle.current,
@@ -660,6 +660,8 @@ private fun CallStatusLine(
     onShowMissed: () -> Unit,
     onCheckLines: () -> Unit,
 ) {
+    // Numbers grouped as they are written, as in the number field.
+    val show = LocalNumberDisplay.current
     if (progress == null && linesDown.isNotEmpty()) {
         Text(
             when {
@@ -681,7 +683,7 @@ private fun CallStatusLine(
     val entry = entered.shownExtension
     if (progress == null && entry != null && entered.number.isNotEmpty()) {
         Text(
-            stringResource(R.string.dialer_extension_hint, entered.number, entry),
+            stringResource(R.string.dialer_extension_hint, show(entered.number), entry),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -712,15 +714,15 @@ private fun CallStatusLine(
             progress.monitorOff -> stringResource(R.string.call_monitor_off_hint)
             // Nothing tells when the call is connected: what to type then is said right away.
             progress.extension != null && progress.phone != null -> stringResource(
-                R.string.status_pick_up_extension, FritzDialer.displayName(progress.phone), progress.number, progress.extension,
+                R.string.status_pick_up_extension, FritzDialer.displayName(progress.phone), show(progress.number), progress.extension,
             )
-            progress.extension != null -> stringResource(R.string.status_pick_up_any_extension, progress.number, progress.extension)
+            progress.extension != null -> stringResource(R.string.status_pick_up_any_extension, show(progress.number), progress.extension)
             progress.phone != null ->
-                stringResource(R.string.status_pick_up, FritzDialer.displayName(progress.phone), progress.number)
-            else -> stringResource(R.string.status_pick_up_any, progress.number)
+                stringResource(R.string.status_pick_up, FritzDialer.displayName(progress.phone), show(progress.number))
+            else -> stringResource(R.string.status_pick_up_any, show(progress.number))
         }
-        is CallProgress.Dialling -> progress.from?.let { stringResource(R.string.call_dialling_from, progress.number, it) }
-            ?: stringResource(R.string.call_dialling, progress.number)
+        is CallProgress.Dialling -> progress.from?.let { stringResource(R.string.call_dialling_from, show(progress.number), show(it)) }
+            ?: stringResource(R.string.call_dialling, show(progress.number))
         is CallProgress.Connected -> {
             // Counts up while connected.
             var now by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
@@ -730,7 +732,7 @@ private fun CallStatusLine(
                     delay(1_000 - (now - progress.since) % 1_000)
                 }
             }
-            stringResource(R.string.call_connected, progress.number, formatDuration(((now - progress.since) / 1_000).toInt()))
+            stringResource(R.string.call_connected, show(progress.number), formatDuration(((now - progress.since) / 1_000).toInt()))
         }
         is CallProgress.Ended -> stringResource(R.string.call_ended, formatDuration(progress.seconds))
         CallProgress.NotAnswered -> stringResource(R.string.call_not_answered)

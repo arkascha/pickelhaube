@@ -126,6 +126,9 @@ on the device and not exported.
    `0171 2345678` – Android's formatting, `PhoneNumberUtils`, by the box' country code, else the phone's
    country); only separators are put in, the number dialled is exactly the one entered, and service codes,
    internal numbers and numbers with separators of their own are shown as they are (`ui/NumberGrouping.kt`).
+   Numbers are shown that way everywhere – in **Recent**, the phone books, the speed dials, the suggestions,
+   the call status and the widget's setup (`NumberDisplay`, provided to all screens as `LocalNumberDisplay`,
+   with what it formatted kept for lists scrolling by); searching and dialling use the numbers as stored.
    A number that is somebody's – in the phone books, among the box' phones or the recent calls – has
    their name as the field's label, however it was entered, typed in full included.
    With the field empty, the green button brings back the number dialled last, with its name; the next

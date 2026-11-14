@@ -1,6 +1,7 @@
 package org.rustygnome.pickelhaube.ui
 
 import android.telephony.PhoneNumberUtils
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -71,3 +72,24 @@ internal fun phoneNumberFormat(countryIso: String, codes: DialingCodes?): (Strin
     val international = codes?.let { internationalForm(head, it) }?.takeIf { it.startsWith('+') }
     runCatching { PhoneNumberUtils.formatNumber(head, international, countryIso.ifEmpty { "ZZ" }) }.getOrNull()
 }
+
+/**
+ * Shows numbers grouped as numbers are written (see [groupedNumber]) – in the lists, the suggestions
+ * and the call status, as in the number field. Anything that is no plain number (a name, a service
+ * code, a number written with separators of its own) is shown as it is. What it made is kept, so a
+ * list scrolling by does not format the same numbers again and again.
+ */
+internal class NumberDisplay(private val format: (String) -> String?) {
+    private val made = object : LinkedHashMap<String, String>(64, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?) = size > CACHE_SIZE
+    }
+
+    fun show(text: String): String = synchronized(made) { made.getOrPut(text) { groupedNumber(text, format) } }
+
+    private companion object {
+        const val CACHE_SIZE = 1000
+    }
+}
+
+/** How a number is shown on screen ([NumberDisplay.show]); as it is outside the app's screens (previews, tests). */
+internal val LocalNumberDisplay = staticCompositionLocalOf<(String) -> String> { { it } }

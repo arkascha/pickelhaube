@@ -94,9 +94,9 @@ fun WidgetSetupScreen(
             LazyColumn(Modifier.weight(1f, fill = false)) {
                 itemsIndexed(list.entries) { i, entry ->
                     ListItem(
-                        headlineContent = { Text(entry.name.ifBlank { entry.number }) },
+                        headlineContent = { Text(entry.name.ifBlank { LocalNumberDisplay.current(entry.number) }) },
                         supportingContent = if (entry.name.isNotBlank()) {
-                            { Text(entry.number) }
+                            { Text(LocalNumberDisplay.current(entry.number)) }
                         } else null,
                         trailingContent = {
                             Row(verticalAlignment = Alignment.CenterVertically) {

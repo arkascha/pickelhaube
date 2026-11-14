@@ -41,15 +41,15 @@ class SpeedDialFlowTest : FlowTest() {
         // The phone books, saying which slot the tapped number becomes.
         notNowForContacts()
         awaitText(text(R.string.speed_dial_choose_number, "1"))
-        awaitText(ANNA_HOME)
-        compose.onNodeWithText(ANNA_HOME).performClick()
+        awaitText(shown(ANNA_HOME))
+        compose.onNodeWithText(shown(ANNA_HOME)).performClick()
         awaitNode(slot("1", ANNA))
         back()
 
         // A long press on "1" in the dialer: Anna's number, the field saying whose it is.
         awaitText(R.string.dialer_number_label)
         longPressKey('1')
-        awaitText(ANNA_HOME)
+        awaitText(shown(ANNA_HOME))
         awaitText(text(R.string.dialer_speed_dial_label, "1", ANNA))
 
         // Stored on the phone: still there after a new start.
@@ -107,7 +107,7 @@ class SpeedDialFlowTest : FlowTest() {
 
         compose.onNode(key('0')).performClick()
         longPressKey('1')
-        awaitText(ANNA_MOBILE)
+        awaitText(shown(ANNA_MOBILE))
         awaitText(text(R.string.dialer_speed_dial_label, "01", ANNA))
 
         // A new one: Ben's number from the phone books, then its slot.
@@ -116,8 +116,8 @@ class SpeedDialFlowTest : FlowTest() {
         compose.onNodeWithText(text(R.string.speed_dial_box_add)).performClick()
         notNowForContacts()
         awaitText(R.string.speed_dial_choose_number_box_new)
-        awaitText(BEN_MOBILE)
-        compose.onNodeWithText(BEN_MOBILE).performClick()
+        awaitText(shown(BEN_MOBILE))
+        compose.onNodeWithText(shown(BEN_MOBILE)).performClick()
         awaitText(text(R.string.speed_dial_box_for, BEN))
         compose.onNode(hasText(NEW_SLOT) and hasAnyAncestor(isDialog())).performClick()
 
@@ -126,7 +126,7 @@ class SpeedDialFlowTest : FlowTest() {
         compose.onNode(slot(NEW_SLOT, BEN)).performClick()
         // In the dialer, the field labelled with whose number it is.
         awaitText(text(R.string.dialer_speed_dial_label, NEW_SLOT, BEN))
-        awaitText(BEN_MOBILE)
+        awaitText(shown(BEN_MOBILE))
     }
 
     /** This phone's speed dials switched off in the settings: gone from the speed dial tab, also after a new start. */

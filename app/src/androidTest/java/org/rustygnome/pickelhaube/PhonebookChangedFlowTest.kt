@@ -64,8 +64,8 @@ class PhonebookChangedFlowTest : FlowTest() {
         compose.onNode(slot("03", GRANDMA)).performTouchInput { longClick() }
         compose.onNodeWithText(text(R.string.speed_dial_replace)).performClick()
         notNowForContacts()
-        awaitText(BEN_MOBILE)
-        compose.onNodeWithText(BEN_MOBILE).performClick()
+        awaitText(shown(BEN_MOBILE))
+        compose.onNodeWithText(shown(BEN_MOBILE)).performClick()
         // Back on the speed dial tab, read anew: Ben has 03, without an error.
         compose.waitUntil(TIMEOUT_MILLIS) {
             runCatching { compose.onNode(hasScrollToNodeAction()).performScrollToNode(slot("03", BEN)) }.isSuccess

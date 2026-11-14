@@ -25,8 +25,8 @@ class WidgetListFlowTest : FlowTest() {
         pickerTab(R.string.phone_books)
         notNowForContacts()
         // Once the box' phone books are read.
-        awaitText(number)
-        compose.onNodeWithText(number).performClick()
+        awaitText(shown(number))
+        compose.onNodeWithText(shown(number)).performClick()
         awaitText(R.string.widget_setup_add)
     }
 
@@ -61,7 +61,7 @@ class WidgetListFlowTest : FlowTest() {
         // Its setup opened again, from the widget: as saved.
         restart(setup)
         awaitText(BEN)
-        awaitText(BEN_MOBILE)
+        awaitText(shown(BEN_MOBILE))
         compose.onNodeWithText(TITLE).assertExists()
         compose.onNodeWithText(ANNA).assertDoesNotExist()
         scenario?.onActivity { it.onBackPressedDispatcher.onBackPressed() }

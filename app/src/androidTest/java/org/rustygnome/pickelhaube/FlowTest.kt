@@ -17,6 +17,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import org.rustygnome.pickelhaube.tr064.DialingCodes
+import org.rustygnome.pickelhaube.ui.deviceCountryIso
+import org.rustygnome.pickelhaube.ui.groupedNumber
+import org.rustygnome.pickelhaube.ui.phoneNumberFormat
 import org.junit.After
 import org.junit.Rule
 
@@ -68,6 +72,13 @@ abstract class FlowTest {
         scenario?.close()
         launch(intent)
     }
+
+    /**
+     * [number] as the app shows it, grouped as numbers are written – by the demo box' country and area
+     * code (49, 30), as in the lists, the suggestions, the call status and the number field.
+     */
+    protected fun shown(number: String): String =
+        groupedNumber(number, phoneNumberFormat(deviceCountryIso(context), DialingCodes(countryCode = "49", areaCode = "30")))
 
     /** A key of the dialer's keypad (the number field above it may hold the same digits). */
     protected fun key(digit: Char): SemanticsMatcher =

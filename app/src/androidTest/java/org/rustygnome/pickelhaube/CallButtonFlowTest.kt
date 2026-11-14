@@ -23,7 +23,7 @@ class CallButtonFlowTest : FlowTest() {
         compose.onNode(labelled(text(R.string.picker_call, NAME))).performClick()
 
         // The dialer, following the call – no green button pressed.
-        awaitText(text(R.string.call_connected, NUMBER, "").trimEnd(), CALL_TIMEOUT_MILLIS)
+        awaitText(text(R.string.call_connected, shown(NUMBER), "").trimEnd(), CALL_TIMEOUT_MILLIS)
 
         // Back: the phone books again, still searched for Felix.
         scenario?.onActivity { it.onBackPressedDispatcher.onBackPressed() }
@@ -41,7 +41,7 @@ class CallButtonFlowTest : FlowTest() {
         compose.onNode(hasContentDescription(text(R.string.picker_call, ANNA))).performClick()
 
         awaitText(text(R.string.dialer_speed_dial_label, "01", ANNA))
-        awaitText(text(R.string.call_connected, ANNA_MOBILE, "").trimEnd(), CALL_TIMEOUT_MILLIS)
+        awaitText(text(R.string.call_connected, shown(ANNA_MOBILE), "").trimEnd(), CALL_TIMEOUT_MILLIS)
     }
 
     private companion object {

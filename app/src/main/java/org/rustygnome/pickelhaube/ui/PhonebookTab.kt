@@ -494,6 +494,7 @@ private fun ContactRow(
                 )
             }
         }
+        val show = LocalNumberDisplay.current
         contact.numbers.forEach { n ->
             val numberActions = actions(n)
             var menu by remember { mutableStateOf(false) }
@@ -530,7 +531,7 @@ private fun ContactRow(
                         )
                         Spacer(Modifier.width(12.dp))
                     }
-                    Text(n.number, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    Text(show(n.number), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                     Text(
                         numberTypeLabel(n.type),
                         style = MaterialTheme.typography.labelMedium,

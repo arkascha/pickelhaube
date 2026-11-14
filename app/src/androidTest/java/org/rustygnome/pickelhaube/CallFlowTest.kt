@@ -22,7 +22,7 @@ class CallFlowTest : FlowTest() {
         compose.onNode(labelled(text(R.string.dialer_dial))).performClick()
 
         // "Connected with <number> · 0:01", then "Call ended · 0:08" – the demo call takes a few seconds.
-        awaitText(text(R.string.call_connected, NUMBER, "").trimEnd())
+        awaitText(text(R.string.call_connected, shown(NUMBER), "").trimEnd())
         // The green button is off for the number of the call under way: it would only ring the phone again.
         compose.onNode(labelled(text(R.string.dialer_dial))).assertIsNotEnabled()
         awaitText(text(R.string.call_ended, "").trimEnd(), CALL_TIMEOUT_MILLIS)

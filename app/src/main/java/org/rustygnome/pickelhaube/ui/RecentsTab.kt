@@ -319,6 +319,8 @@ private fun RecentRow(
     actions: List<NumberAction>,
 ) {
     val haptics = LocalHapticFeedback.current
+    // Numbers grouped as they are written (names and the like as they are).
+    val show = LocalNumberDisplay.current
     var menu by remember { mutableStateOf(false) }
     Box {
         ListItem(
@@ -330,20 +332,20 @@ private fun RecentRow(
             } else null,
             headlineContent = {
                 Text(
-                    call.name ?: call.number,
+                    call.name ?: show(call.number),
                     fontWeight = if (isNew) FontWeight.Bold else null,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             },
             supportingContent = run {
-                val via = own?.let {
+                val via = own?.let(show)?.let {
                     stringResource(
                         if (call.direction == RecentCall.Direction.OUTGOING) R.string.recents_from_own else R.string.recents_to_own,
                         it,
                     )
                 }
-                val text = listOfNotNull(call.number.takeIf { call.name != null }, via).joinToString(" · ")
+                val text = listOfNotNull(show(call.number).takeIf { call.name != null }, via).joinToString(" · ")
                 if (text.isEmpty()) null else {
                     { Text(text, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                 }
