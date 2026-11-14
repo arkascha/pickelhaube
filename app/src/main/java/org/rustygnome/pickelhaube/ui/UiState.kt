@@ -2,6 +2,7 @@ package org.rustygnome.pickelhaube.ui
 
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.HostCheck
+import org.rustygnome.pickelhaube.data.NetworkKind
 import org.rustygnome.pickelhaube.data.SettingsFileInfo
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
@@ -158,6 +159,8 @@ data class UiState(
     val boxesSeen: Set<String>? = null,
     /** Note about the current network, e.g. an unknown FritzBox was found there. */
     val networkNotice: UiText? = null,
+    /** The kind of network the last detection ran in: says why no box answered, and what may help. */
+    val networkKind: NetworkKind? = null,
     val showSettings: Boolean = false,
     /** The connection sub-page of the settings is open. */
     val showConnectionSettings: Boolean = false,

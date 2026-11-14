@@ -55,6 +55,11 @@ object DemoBox {
     @Volatile
     internal var latencyMillis = LATENCY_MILLIS
 
+    /** Whether it answers when the network is searched for boxes; tests switch it off, as if away from home. */
+    @VisibleForTesting
+    @Volatile
+    internal var answering = true
+
     /** The steps of a call: the phone rings until picked up, the other side answers, they talk. */
     private const val RING_MILLIS = 3_000L
     private const val ANSWER_MILLIS = 3_000L

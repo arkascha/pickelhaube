@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FilledTonalButton
@@ -71,6 +72,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -202,15 +204,39 @@ fun DialerScreen(
                         // The box in use as the title, centred beside the helmet – or, in its place, a note
                         // about the network (smaller, in up to two lines, as it is longer).
                         val notice = state.networkNotice?.asString()
-                            ?: if (state.noBoxReachable) stringResource(R.string.notice_no_known_box) else null
+                            ?: if (state.noBoxReachable) noBoxNotice(state.networkKind) else null
                         if (notice != null) {
-                            Text(
-                                notice,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.error,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                            )
+                            // While no box is reachable, a tap says why and what helps (Wi-Fi at home, a VPN).
+                            var explain by rememberSaveable { mutableStateOf(false) }
+                            if (explain && state.noBoxReachable) {
+                                NotAtHomeDialog(state.networkKind, onSearchAgain = onPullRefresh, onDismiss = { explain = false })
+                            }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = if (state.noBoxReachable) {
+                                    Modifier.clickable(onClickLabel = stringResource(R.string.not_at_home_what_now)) { explain = true }
+                                } else {
+                                    Modifier
+                                },
+                            ) {
+                                Text(
+                                    notice,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.error,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f, fill = false),
+                                )
+                                if (state.noBoxReachable) {
+                                    Spacer(Modifier.width(6.dp))
+                                    Icon(
+                                        Icons.Outlined.Info,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                }
+                            }
                         } else {
                             Text(box ?: stringResource(R.string.app_name), maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }

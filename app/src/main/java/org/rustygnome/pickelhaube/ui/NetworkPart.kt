@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.BoxRecognition
+import org.rustygnome.pickelhaube.data.NetworkKind
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
 
@@ -50,6 +51,7 @@ internal class NetworkPart(private val host: DialerHost) {
         val profiles = settings.profiles()
         if (profiles.isEmpty()) return Detection(null, false)
         val recognition = BoxRecognition.recognise(host.app, profiles)
+        val kind = NetworkKind.current(host.app)
         val found = recognition.found
         val gateway = recognition.gateway
         val match = recognition.match
@@ -61,6 +63,7 @@ internal class NetworkPart(private val host: DialerHost) {
                 activeBoxSeen = profiles.firstOrNull { p -> p.id == settings.activeProfileId }?.let(::seenInNetwork),
                 // By device id only: a connection without one is not known to be the box at its host.
                 boxesSeen = seenByDeviceId(profiles, found),
+                networkKind = kind,
                 // A request that failed in the previous network says nothing about this one.
                 activeBoxWorking = null,
                 networkNotice = unknown?.let { box ->

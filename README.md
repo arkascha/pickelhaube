@@ -203,6 +203,16 @@ use (they all look alike), and the dialer says that none of your boxes is reacha
 its own and disables the dial button (a number can still be entered); the picker then shows only the
 phone's own contacts and calls, while its reload button still tries the box.
 
+That note in the dialer's title names the kind of network the phone is in (`data/NetworkKind.kt`, from
+the default network's transports – a VPN counts before the network beneath it): *No network*, *On mobile
+data*, *None of your FRITZ!Boxes in this network* (a Wi-Fi or cable) or *VPN on – but no FRITZ!Box reachable*.
+With an ⓘ beside it, a tap opens **Not at home?** (`ui/NotAtHomeDialog.kt`): the box is reached only from its
+home network – its Wi-Fi, or a VPN into it –, what that means for this kind of network (through a VPN: that it
+leads home, and that the connection's address is reachable through it, such as 192.168.178.1), a button
+to Android's **VPN settings** (without any network: the internet settings) and **Search again**, which
+looks for the boxes as pulling the dialer down does. A VPN switched on is a network change, so the boxes
+are looked for again by themselves anyway.
+
 The connection page also shows the box' **device details** (folded, a tap opens them) – model,
 FRITZ!OS version and serial number
 (TR-064 `DeviceInfo` `GetInfo`) – right under its address, to tell boxes apart (hidden while another
