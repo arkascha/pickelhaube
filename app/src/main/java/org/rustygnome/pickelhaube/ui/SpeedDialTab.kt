@@ -29,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -231,7 +232,7 @@ private fun BoxSlotRow(
                 } else null,
             ),
         )
-        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onChange, onRemove = onRemove, onDeleteCopy = onDeleteCopy)
+        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onChange, onRemove = onRemove, onDeleteCopy = onDeleteCopy, number = speedDial.number)
     }
 }
 
@@ -243,8 +244,15 @@ private fun SlotMenu(
     onChange: () -> Unit,
     onRemove: () -> Unit,
     onDeleteCopy: (() -> Unit)? = null,
+    /** The speed dial's number, offered to be copied. */
+    number: String,
 ) {
+    val context = LocalContext.current
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.number_copy)) },
+            onClick = { onDismiss(); copyNumber(context, number) },
+        )
         DropdownMenuItem(
             text = { Text(stringResource(R.string.speed_dial_replace)) },
             onClick = { onDismiss(); onChange() },
@@ -308,6 +316,8 @@ private fun PhoneSlotRow(
                 )
             },
         )
-        SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onAssign, onRemove = onRemove)
+        if (speedDial != null) {
+            SlotMenu(expanded = menu, onDismiss = { menu = false }, onChange = onAssign, onRemove = onRemove, number = speedDial.number)
+        }
     }
 }

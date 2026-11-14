@@ -367,6 +367,9 @@
     <string name="status_handed_over">„%1$s” jest teraz w książce telefonicznej „%2$s”.</string>
     <string name="no_contacts_app">Na tym telefonie nie ma aplikacji kontaktów.</string>
     <string name="number_actions">Więcej działań</string>
+    <string name="number_copy">Kopiuj numer</string>
+    <string name="number_copied">Numer skopiowany</string>
+    <string name="number_copy_label">Numer telefonu</string>
     <string name="dialer_speed_dial_label">Szybkie wybieranie %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Szybkie wybieranie tego telefonu</string>
     <string name="settings_phone_speed_dials_hint">Szybkie wybieranie 1–9, wybierane z książek telefonicznych i zapisane na tym telefonie, dlatego działa z każdym FRITZ!Box. Aby go użyć, przytrzymaj cyfrę na klawiaturze.</string>

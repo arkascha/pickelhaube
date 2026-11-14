@@ -281,6 +281,8 @@ question. The permission itself can be revoked in the Android app settings.
 
 A long press on a number – in **Phone books** or in **Recent** – opens a menu:
 
+- **Copy number**: the number, as stored, to the clipboard – to paste it into a message or an email
+  (also in the menu of a speed dial). From Android 13 on the system confirms it, before a short note does.
 - **Add to this phone's contacts** (for the box' contacts and recent calls): the phone's contacts app
   opens with a new contact filled in – name and numbers with their kind (home, mobile, work, fax,
   other) – to be saved there, in the account chosen there. Pickelhaube needs no permission for this.

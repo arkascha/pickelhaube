@@ -360,6 +360,9 @@
     <string name="status_handed_over">“%1$s” is now in the phone book “%2$s”.</string>
     <string name="no_contacts_app">No contacts app found on this phone.</string>
     <string name="number_actions">More actions</string>
+    <string name="number_copy">Copy number</string>
+    <string name="number_copied">Number copied</string>
+    <string name="number_copy_label">Phone number</string>
     <string name="dialer_speed_dial_label">Speed dial %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">This phone’s speed dials</string>
     <string name="settings_phone_speed_dials_hint">Speed dials 1 to 9, chosen from the phone books and stored on this phone, so they work with every FRITZ!Box. To use one, long-press its digit in the dialer.</string>

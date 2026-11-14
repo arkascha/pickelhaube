@@ -250,6 +250,7 @@ fun RecentsTab(
                 val times = rememberRelativeTimes()
                 val toBox = stringResource(R.string.contact_to_box)
                 val toPhone = stringResource(R.string.contact_to_phone)
+                val copy = stringResource(R.string.number_copy)
                 val makeSpeedDial = stringResource(R.string.speed_dial_make)
                 val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                 val days = remember(shown, now) { byDay(shown, ZoneId.systemDefault()) }
@@ -271,6 +272,7 @@ fun RecentsTab(
                             items(dayCalls) { call ->
                                 val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
                                 val actions = listOfNotNull(
+                                    NumberAction(copy) { copyNumber(context, call.number) },
                                     NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
                                     if (localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
                                     phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact } },

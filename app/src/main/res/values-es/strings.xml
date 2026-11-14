@@ -361,6 +361,9 @@
     <string name="status_handed_over">«%1$s» ya está en la agenda «%2$s».</string>
     <string name="no_contacts_app">No hay ninguna app de contactos en este teléfono.</string>
     <string name="number_actions">Más acciones</string>
+    <string name="number_copy">Copiar número</string>
+    <string name="number_copied">Número copiado</string>
+    <string name="number_copy_label">Número de teléfono</string>
     <string name="dialer_speed_dial_label">Marcación rápida %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Marcaciones rápidas de este teléfono</string>
     <string name="settings_phone_speed_dials_hint">Marcaciones rápidas 1 a 9, elegidas de las agendas y guardadas en este teléfono, por lo que funcionan con cualquier FRITZ!Box. Para usar una, mantén pulsada su cifra en el teclado.</string>

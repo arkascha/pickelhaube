@@ -357,6 +357,9 @@
     <string name="status_handed_over">‘%1$s’ staat nu in telefoonboek ‘%2$s’.</string>
     <string name="no_contacts_app">Geen contacten-app op deze telefoon gevonden.</string>
     <string name="number_actions">Meer acties</string>
+    <string name="number_copy">Nummer kopiëren</string>
+    <string name="number_copied">Nummer gekopieerd</string>
+    <string name="number_copy_label">Telefoonnummer</string>
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Snelkeuzes van deze telefoon</string>
     <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>

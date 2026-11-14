@@ -357,6 +357,9 @@
     <string name="status_handed_over">„%1$s“ steht jetzt im Telefonbuch „%2$s“.</string>
     <string name="no_contacts_app">Auf diesem Telefon ist keine Kontakte-App vorhanden.</string>
     <string name="number_actions">Weitere Aktionen</string>
+    <string name="number_copy">Nummer kopieren</string>
+    <string name="number_copied">Nummer kopiert</string>
+    <string name="number_copy_label">Telefonnummer</string>
     <string name="dialer_speed_dial_label">Kurzwahl %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Kurzwahlen dieses Telefons</string>
     <string name="settings_phone_speed_dials_hint">Die Kurzwahlen 1 bis 9 werden aus den Telefonbüchern gewählt und auf diesem Telefon gespeichert, sie gelten also mit jeder FRITZ!Box. Zum Verwenden im Wählfeld die Ziffer lange drücken.</string>

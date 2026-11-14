@@ -279,6 +279,7 @@ fun PhonebookTab(
                         val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                         val toBox = stringResource(R.string.contact_to_box)
                         val toPhone = stringResource(R.string.contact_to_phone)
+                        val copyLabel = stringResource(R.string.number_copy)
                         val deleteCopyLabel = stringResource(R.string.copy_delete)
                         val copy = onlineCopies.firstOrNull { it.entry.bookId == contact.bookId && it.entry.uid == contact.uid }
                         ContactRow(
@@ -296,6 +297,7 @@ fun PhonebookTab(
                             },
                             actions = { number ->
                                 listOfNotNull(
+                                    NumberAction(copyLabel) { copyNumber(context, number.number) },
                                     phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact.name to number.number } },
                                     if (boxSpeedDials != null && localBooks.isNotEmpty()) {
                                         NumberAction(makeBoxSpeedDial) {

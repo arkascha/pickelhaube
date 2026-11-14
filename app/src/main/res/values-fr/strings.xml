@@ -361,6 +361,9 @@
     <string name="status_handed_over">« %1$s » figure maintenant dans le répertoire « %2$s ».</string>
     <string name="no_contacts_app">Aucune application de contacts sur ce téléphone.</string>
     <string name="number_actions">Plus d’actions</string>
+    <string name="number_copy">Copier le numéro</string>
+    <string name="number_copied">Numéro copié</string>
+    <string name="number_copy_label">Numéro de téléphone</string>
     <string name="dialer_speed_dial_label">Numéro abrégé %1$s : %2$s</string>
     <string name="settings_phone_speed_dials">Numéros abrégés de ce téléphone</string>
     <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>

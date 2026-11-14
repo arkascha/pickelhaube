@@ -29,6 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.rustygnome.pickelhaube.R
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.os.Build
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.Phonebook
@@ -50,6 +53,18 @@ fun NumberActionsMenu(expanded: Boolean, actions: List<NumberAction>, onDismiss:
                 },
             )
         }
+    }
+}
+
+/**
+ * Copies [number] (as it is stored, ready to be dialled or pasted) to the clipboard. From Android 13 on
+ * the system confirms it itself; before, a short note does.
+ */
+fun copyNumber(context: Context, number: String) {
+    val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return
+    clipboard.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.number_copy_label), number))
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        Toast.makeText(context, R.string.number_copied, Toast.LENGTH_SHORT).show()
     }
 }
 
