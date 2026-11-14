@@ -245,6 +245,8 @@
     <string name="error_router_title">Error del router</string>
     <string name="error_router_code_title">Error del router %1$s</string>
     <string name="error_router_busy_title">Router ocupado</string>
+    <string name="dialer_quiet_error">%1$s – toca para reintentar</string>
+    <string name="quiet_error_retry">Reintentar</string>
     <string name="error_router_busy">El router rechaza las solicitudes temporalmente: tras inicios de sesión fallidos bloquea más intentos durante un tiempo. Espera un minuto y vuelve a intentarlo.</string>
     <string name="error_unexpected_title">Respuesta inesperada</string>
     <string name="error_unexpected">El router en %1$s respondió con HTTP %2$d. ¿Es realmente el puerto TR-064?</string>

@@ -133,6 +133,8 @@ fun DialerScreen(
     onNumberChange: (String) -> Unit,
     /** The number field itself: the cursor set or a selection made (start, end), or its text changed. */
     onFieldChange: (String, Int, Int) -> Unit,
+    /** The quiet note about a failure likely to pass ([UiState.quietError]) was tapped: try again. */
+    onRetry: () -> Unit,
     onDigit: (Char) -> Unit,
     /** Long press on a digit: speed dial, else like a tap ("0": "+"). */
     onLongDigit: (Char) -> Unit,
@@ -375,7 +377,7 @@ fun DialerScreen(
                     // Its room stays reserved while the feature is on, so the layout does not jump with each call.
                     // Numbers not registered are warned about even without it.
                     val linesDown = state.linesDown
-                    if (state.callStatusEnabled || linesDown.isNotEmpty()) {
+                    if (state.callStatusEnabled || linesDown.isNotEmpty() || state.quietError != null) {
                         Spacer(Modifier.height(8.dp))
                         CallStatusLine(
                             state.callProgress,
@@ -386,6 +388,8 @@ fun DialerScreen(
                             state.activeProfile?.name ?: stringResource(R.string.fritzbox),
                             onShowMissedCalls,
                             onCheckLines,
+                            state.quietError,
+                            onRetry,
                         )
                     }
                 }
@@ -667,9 +671,27 @@ private fun CallStatusLine(
     boxName: String,
     onShowMissed: () -> Unit,
     onCheckLines: () -> Unit,
+    /** Shown first while there is no call to follow: a failure likely to pass, a tap tries again. */
+    quietError: BoxError?,
+    onRetry: () -> Unit,
 ) {
     // Numbers grouped as they are written, as in the number field.
     val show = LocalNumberDisplay.current
+    if (progress == null && quietError != null) {
+        Text(
+            stringResource(R.string.dialer_quiet_error, quietError.title.asString()),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+            minLines = 2,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Button, onClickLabel = stringResource(R.string.quiet_error_retry), onClick = onRetry),
+        )
+        return
+    }
     if (progress == null && linesDown.isNotEmpty()) {
         Text(
             when {

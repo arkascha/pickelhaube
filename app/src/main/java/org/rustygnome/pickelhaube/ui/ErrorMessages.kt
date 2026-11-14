@@ -24,6 +24,11 @@ data class BoxError(
     val settingsRelated: Boolean,
     /** The request to the box that failed, and its answer – shown on request; null when not known. */
     val technical: TechnicalDetails? = null,
+    /**
+     * Likely to pass by itself – the box not answering, not found, busy (right after a network change,
+     * say): in the dialer and the picker only a quiet note with "try again", not a dialog in the way.
+     */
+    val passing: Boolean = false,
 )
 
 /** The failed request to the box ([call]) and what came back ([answer]), for the error's technical details. */
@@ -124,6 +129,7 @@ private fun describeCause(e: Throwable, config: FritzConfig, rights: UserRights?
             uiText(R.string.error_router_busy_title),
             uiText(R.string.error_router_busy),
             settingsRelated = false,
+            passing = true,
         ) else BoxError(
             uiText(R.string.error_unexpected_title),
             uiText(R.string.error_unexpected, target, e.code),
@@ -133,16 +139,19 @@ private fun describeCause(e: Throwable, config: FritzConfig, rights: UserRights?
             uiText(R.string.error_not_found_title),
             uiText(R.string.error_not_found, config.host),
             settingsRelated = true,
+            passing = true,
         )
         is ConnectException, is NoRouteToHostException -> BoxError(
             uiText(R.string.error_cannot_connect_title),
             uiText(R.string.error_cannot_connect, target, FritzConfig.HTTP_PORT, FritzConfig.HTTPS_PORT),
             settingsRelated = true,
+            passing = true,
         )
         is SocketTimeoutException -> BoxError(
             uiText(R.string.error_no_answer_title),
             uiText(R.string.error_no_answer, target),
             settingsRelated = true,
+            passing = true,
         )
         is SSLException -> BoxError(
             uiText(R.string.error_ssl_title),

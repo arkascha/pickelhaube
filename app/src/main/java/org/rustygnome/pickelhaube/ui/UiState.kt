@@ -73,6 +73,11 @@ data class UiState(
     val error: BoxError? = null,
     /** The failed action can be retried as-is. */
     val canRetry: Boolean = false,
+    /**
+     * A failure likely to pass by itself (see [BoxError.passing]), shown quietly – a note in the dialer,
+     * a bar in the picker, with "try again" – instead of [error]'s dialog.
+     */
+    val quietError: BoxError? = null,
     val busy: Boolean = false,
     /**
      * A dial-help call was started and may still be ringing / being set up, so it can be

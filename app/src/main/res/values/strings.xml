@@ -248,6 +248,8 @@
     <string name="error_router_title">Router error</string>
     <string name="error_router_code_title">Router error %1$s</string>
     <string name="error_router_busy_title">Router busy</string>
+    <string name="dialer_quiet_error">%1$s – tap to try again</string>
+    <string name="quiet_error_retry">Try again</string>
     <string name="error_router_busy">The router temporarily refuses requests – after failed logins it blocks further attempts for a while. Wait a minute and try again.</string>
     <string name="error_unexpected_title">Unexpected answer</string>
     <string name="error_unexpected">The router at %1$s answered with HTTP %2$d. Is this really the TR-064 port?</string>

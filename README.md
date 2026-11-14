@@ -156,7 +156,11 @@ entered host leads to another box, the page says so and does not offer that box'
 Otherwise the settings stay open and an error dialog explains the problem (wrong user name or password,
 missing telephony permission, router not found or not reachable, wrong port / HTTPS setting, router
 temporarily blocking logins). Errors during normal use appear in the same dialog on top of the dialer,
-with **Retry** and, when the cause is likely in the settings, **Open settings**. When a request to
+with **Retry** and, when the cause is likely in the settings, **Open settings** – except those likely to
+pass by themselves (the box not answering, not found, busy – right after a network change, say): in the
+dialer and the number picker these are only a quiet note, a red line above the call buttons or a bar at
+the bottom of the picker, with *try again*; should trying again fail the same way, the full dialog
+follows, with what to check (`BoxError.passing`, `UiState.quietError`). When a request to
 the box failed, **Technical details** unfolds which one it was – TR-064 service and action, its
 arguments (long ones shortened), the HTTP status and the box' error code, and the box' address –
 selectable and with **Copy**, for a message to whoever looks into it. Credentials are no arguments,

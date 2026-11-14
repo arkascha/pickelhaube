@@ -70,6 +70,10 @@ fun NumberPickerScreen(
     onUndo: () -> Unit,
     /** The offer (its serial) went by without "Undo". */
     onUndoGone: (Long) -> Unit,
+    /** A failure likely to pass ([UiState.quietError]): a bar with "Try again" rather than a dialog. */
+    quietError: BoxError?,
+    onRetry: () -> Unit,
+    onQuietErrorGone: () -> Unit,
 ) {
     // A removal says so at the bottom, with "Undo" – in place of asking beforehand.
     val snackbars = remember { SnackbarHostState() }
@@ -84,6 +88,18 @@ fun NumberPickerScreen(
             duration = SnackbarDuration.Long,
         )
         if (result == SnackbarResult.ActionPerformed) onUndo() else onUndoGone(offer.serial)
+    }
+    val quietMessage = quietError?.title?.asString()
+    val retryLabel = stringResource(R.string.quiet_error_retry)
+    LaunchedEffect(quietError) {
+        if (quietError == null) return@LaunchedEffect
+        val result = snackbars.showSnackbar(
+            message = quietMessage.orEmpty(),
+            actionLabel = retryLabel,
+            withDismissAction = true,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) onRetry() else onQuietErrorGone()
     }
     val shown = if (tab == PickerTab.INTERNAL && !showInternal) PickerTab.RECENT else tab
     // Edge to edge, the window no longer shrinks for the keyboard: the content makes room for it

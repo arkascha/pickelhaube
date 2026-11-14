@@ -245,6 +245,8 @@
     <string name="error_router_title">Routerfout</string>
     <string name="error_router_code_title">Routerfout %1$s</string>
     <string name="error_router_busy_title">Router bezet</string>
+    <string name="dialer_quiet_error">%1$s – tik om opnieuw te proberen</string>
+    <string name="quiet_error_retry">Opnieuw proberen</string>
     <string name="error_router_busy">De router weigert tijdelijk verzoeken – na mislukte inlogpogingen blokkeert hij verdere pogingen een tijdje. Wacht een minuut en probeer het opnieuw.</string>
     <string name="error_unexpected_title">Onverwacht antwoord</string>
     <string name="error_unexpected">De router op %1$s antwoordde met HTTP %2$d. Is dit echt de TR-064-poort?</string>

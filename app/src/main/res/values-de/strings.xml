@@ -245,6 +245,8 @@
     <string name="error_router_title">Router-Fehler</string>
     <string name="error_router_code_title">Router-Fehler %1$s</string>
     <string name="error_router_busy_title">Router beschäftigt</string>
+    <string name="dialer_quiet_error">%1$s – tippen, um es erneut zu versuchen</string>
+    <string name="quiet_error_retry">Erneut versuchen</string>
     <string name="error_router_busy">Der Router lehnt Anfragen vorübergehend ab – nach fehlgeschlagenen Anmeldungen sperrt er weitere Versuche eine Weile. Warte eine Minute und versuche es erneut.</string>
     <string name="error_unexpected_title">Unerwartete Antwort</string>
     <string name="error_unexpected">Der Router unter %1$s hat mit HTTP %2$d geantwortet. Ist das wirklich der TR-064-Port?</string>

@@ -245,6 +245,8 @@
     <string name="error_router_title">Błąd routera</string>
     <string name="error_router_code_title">Błąd routera %1$s</string>
     <string name="error_router_busy_title">Router zajęty</string>
+    <string name="dialer_quiet_error">%1$s – dotknij, aby spróbować ponownie</string>
+    <string name="quiet_error_retry">Spróbuj ponownie</string>
     <string name="error_router_busy">Router tymczasowo odrzuca żądania – po nieudanych logowaniach przez pewien czas blokuje kolejne próby. Odczekaj minutę i spróbuj ponownie.</string>
     <string name="error_unexpected_title">Nieoczekiwana odpowiedź</string>
     <string name="error_unexpected">Router pod adresem %1$s odpowiedział kodem HTTP %2$d. Czy to na pewno port TR-064?</string>

@@ -138,6 +138,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** The last action that failed, for "Retry". */
     private var failedAction: Pair<UiText, BoxAction>? = null
 
+    /** The action running is "try again" after a quiet note: should it fail as well, then in full. */
+    private var retryingQuietly = false
+
     /**
      * True while settings entered on the settings screen are being verified. The edited
      * config is only persisted once the router accepted it.
@@ -317,13 +320,15 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun dismissError() {
         failedAction = null
-        _state.update { it.copy(error = null, canRetry = false) }
+        _state.update { it.copy(error = null, canRetry = false, quietError = null) }
         // Tapped while the failed one was running: its turn now that the error has been read.
         startQueuedAction()
     }
 
     fun retry() {
         val action = failedAction ?: return
+        // Tried again after a quiet note: failing once more, it is shown in full.
+        retryingQuietly = _state.value.quietError != null
         dismissError()
         runOnBox(action.first, action.second)
     }
@@ -1006,7 +1011,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
         failedAction = null
-        _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false, loginRejected = false) }
+        _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false, quietError = null, loginRejected = false) }
         viewModelScope.launch {
             val config = _state.value.config
             val result = runCatching {
@@ -1047,11 +1052,18 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                                 _state.update { it.copy(profiles = settings.profiles()) }
                             }
                     }
+                    val described = describeError(error, config, rights)
+                    // Likely to pass: quietly, in the dialer or the picker – unless "try again" after it failed the
+                    // same way, then in full, with what to check. Elsewhere (settings, the tour, …) always in full.
+                    val shown = _state.value
+                    val dialerOrPicker = !shown.showSettings && !shown.showWelcome && !shown.showDeflections && shown.widgetSetup == null
+                    val quiet = described.passing && !retryingQuietly && !verifyingSettings && dialerOrPicker
                     _state.update {
                         it.copy(
                             busy = false,
                             status = null,
-                            error = describeError(error, config, rights),
+                            error = described.takeUnless { quiet },
+                            quietError = described.takeIf { quiet },
                             canRetry = true,
                             loginRejected = error is AuthenticationException,
                             // A failed check of edited settings says nothing about the box in use.
@@ -1060,6 +1072,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                     }
                 }
             }
+            retryingQuietly = false
             if (error == null) startQueuedRequests()
         }
     }
