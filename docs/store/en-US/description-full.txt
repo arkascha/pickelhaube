@@ -21,7 +21,7 @@ DIALLING
 • A warning when an internet number of the box is not registered
 
 ON THE CALL
-• Live call status: pick up, calling, connected with a running timer, call ended – based on the call monitor of the FRITZ!Box
+• Live call status: pick up, calling, connected with a running timer, call ended
 • Cancel a call that is still being set up
 • Busy or not answered? Try again with one tap
 
@@ -39,7 +39,7 @@ QUICK ACCESS
 SEVERAL FRITZ!BOXES
 • Home, office, holiday flat: set up as many boxes as you like
 • Pickelhaube finds out which box is in the network you are in and uses it automatically
-• Works through a VPN as well
+• Away from home? The app says what helps: Wi-Fi at home or a VPN
 
 SECURE AND PRIVATE
 • Talks to your FRITZ!Box only, using its official TR-064 interface – no cloud, no account, no advertising, no tracking

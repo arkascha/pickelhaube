@@ -21,7 +21,7 @@ WÄHLEN
 • Warnung, wenn eine Internetrufnummer der FRITZ!Box nicht registriert ist
 
 WÄHREND DES ANRUFS
-• Gesprächsstatus live: abnehmen, wählt, verbunden mit laufender Zeit, beendet – über den Anrufmonitor der FRITZ!Box
+• Gesprächsstatus live: abnehmen, wählt, verbunden mit laufender Zeit, beendet
 • Einen Anruf abbrechen, solange er aufgebaut wird
 • Besetzt? Mit einem Tipp nochmal
 
@@ -39,7 +39,7 @@ SCHNELLER ZUGRIFF
 MEHRERE FRITZ!BOXEN
 • Zuhause, Büro, Ferienwohnung: richte beliebig viele Boxen ein
 • Pickelhaube nimmt automatisch die Box des aktuellen Netzes
-• Funktioniert auch über VPN
+• Nicht zu Hause? Die App sagt, was hilft: WLAN zu Hause oder VPN
 
 SICHER UND PRIVAT
 • Spricht nur mit deiner FRITZ!Box, über ihre offizielle TR-064-Schnittstelle – keine Cloud, kein Konto, keine Werbung, kein Tracking
