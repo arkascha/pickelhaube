@@ -322,6 +322,14 @@
     <string name="speed_dial_box_none">W książkach telefonicznych tego FRITZ!Box nie ustawiono szybkiego wybierania.</string>
     <string name="speed_dial_box_none_headline">Na FRITZ!Box nie ma jeszcze ulubionych.</string>
     <string name="speed_dial_free">Wolne</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d wolne miejsce – do ustawienia</item>
+        <item quantity="few">%d wolne miejsca – do ustawienia</item>
+        <item quantity="many">%d wolnych miejsc – do ustawienia</item>
+        <item quantity="other">%d wolnego miejsca – do ustawienia</item>
+    </plurals>
+    <string name="speed_dial_show_free">Pokaż wolne miejsca</string>
+    <string name="speed_dial_hide_free">Ukryj wolne miejsca</string>
     <string name="speed_dial_replace_or_remove">Zastąp lub usuń</string>
     <string name="speed_dial_set_up">Ustaw</string>
     <string name="speed_dial_replace">Zastąp</string>

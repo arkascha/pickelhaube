@@ -26,11 +26,16 @@ class SpeedDialFlowTest : FlowTest() {
 
     private fun back() = compose.onNode(labelled(text(R.string.back))).performClick()
 
+    /** The row that folds this phone's [count] free slots. */
+    private fun freeSlots(count: Int) = context.resources.getQuantityString(R.plurals.speed_dial_free_slots, count, count)
+
     /** Slot 1 of this phone set to Anna from the phone books, used with a long press on "1" – also after a new start – and removed. */
     @Test
     fun phoneSpeedDialSetUsedAndRemoved() {
         setUpDemoBox()
         openPicker(R.string.speed_dial)
+        // All nine free: folded into one row, shown with a tap.
+        compose.onNodeWithText(freeSlots(9)).performClick()
         compose.onNode(slot("1", text(R.string.speed_dial_free))).performClick()
 
         // The phone books, saying which slot the tapped number becomes.
@@ -57,14 +62,18 @@ class SpeedDialFlowTest : FlowTest() {
         openPicker(R.string.speed_dial)
         compose.onNode(slot("1", ANNA)).performTouchInput { longClick() }
         compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
-        awaitNode(slot("1", text(R.string.speed_dial_free)))
+        // Free again: folded with the others.
+        awaitText(freeSlots(9))
         compose.onNodeWithText(text(R.string.undo)).performClick()
         awaitNode(slot("1", ANNA))
+
+        // With one set, eight are folded.
+        awaitText(freeSlots(8))
 
         // Removed again, and left so: it stays removed.
         compose.onNode(slot("1", ANNA)).performTouchInput { longClick() }
         compose.onNodeWithText(text(R.string.speed_dial_remove)).performClick()
-        awaitNode(slot("1", text(R.string.speed_dial_free)))
+        awaitText(freeSlots(9))
     }
 
     /** The demo box' speed dial 01 (Anna) removed on the box – right away, without asking – and put back with "Undo". */
@@ -136,7 +145,7 @@ class SpeedDialFlowTest : FlowTest() {
         // The box' speed dials only.
         awaitNode(slot("01", ANNA))
         compose.onNodeWithText(text(R.string.this_phone)).assertDoesNotExist()
-        compose.onAllNodesWithText(text(R.string.speed_dial_free)).fetchSemanticsNodes().let {
+        compose.onAllNodesWithText(freeSlots(9)).fetchSemanticsNodes().let {
             check(it.isEmpty()) { "no free slots of this phone are shown" }
         }
     }

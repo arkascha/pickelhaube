@@ -318,6 +318,12 @@
     <string name="speed_dial_box_none">Nelle rubriche di questa FRITZ!Box non sono impostate selezioni rapide.</string>
     <string name="speed_dial_box_none_headline">Ancora nessun preferito sulla FRITZ!Box.</string>
     <string name="speed_dial_free">Libera</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d posizione libera – da impostare</item>
+        <item quantity="other">%d posizioni libere – da impostare</item>
+    </plurals>
+    <string name="speed_dial_show_free">Mostra posizioni libere</string>
+    <string name="speed_dial_hide_free">Nascondi posizioni libere</string>
     <string name="speed_dial_replace_or_remove">Sostituisci o rimuovi</string>
     <string name="speed_dial_set_up">Imposta</string>
     <string name="speed_dial_replace">Sostituisci</string>

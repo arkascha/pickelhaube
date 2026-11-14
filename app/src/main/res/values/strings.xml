@@ -317,6 +317,12 @@
     <string name="speed_dial_box_none">No speed dials are set up in the phone books of this FRITZ!Box.</string>
     <string name="speed_dial_box_none_headline">No favourites on the FRITZ!Box yet.</string>
     <string name="speed_dial_free">Not set</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d free slot – set one up</item>
+        <item quantity="other">%d free slots – set one up</item>
+    </plurals>
+    <string name="speed_dial_show_free">Show free slots</string>
+    <string name="speed_dial_hide_free">Hide free slots</string>
     <string name="speed_dial_replace_or_remove">Replace or remove</string>
     <string name="speed_dial_set_up">Set up</string>
     <string name="speed_dial_replace">Replace</string>

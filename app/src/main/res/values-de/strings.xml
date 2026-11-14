@@ -314,6 +314,12 @@
     <string name="speed_dial_box_none">In den Telefonbüchern dieser FRITZ!Box sind keine Kurzwahlen eingerichtet.</string>
     <string name="speed_dial_box_none_headline">Noch keine Lieblinge auf der FRITZ!Box.</string>
     <string name="speed_dial_free">Nicht belegt</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d freier Platz – zum Einrichten</item>
+        <item quantity="other">%d freie Plätze – zum Einrichten</item>
+    </plurals>
+    <string name="speed_dial_show_free">Freie Plätze zeigen</string>
+    <string name="speed_dial_hide_free">Freie Plätze ausblenden</string>
     <string name="speed_dial_replace_or_remove">Ersetzen oder entfernen</string>
     <string name="speed_dial_set_up">Einrichten</string>
     <string name="speed_dial_replace">Ersetzen</string>

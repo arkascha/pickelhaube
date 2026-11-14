@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -23,10 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -75,6 +79,8 @@ fun SpeedDialTab(
         Message(stringResource(R.string.speed_dial_none_enabled), MascotPose.CLIPBOARD)
         return
     }
+    // This phone's free slots shown one by one (to set one up), or folded into one row.
+    var showFree by rememberSaveable { mutableStateOf(false) }
     LazyColumn(Modifier.fillMaxSize(), state = rememberLazyListState()) {
         if (phoneSpeedDials != null) {
             item {
@@ -83,7 +89,10 @@ fun SpeedDialTab(
                     listOf(stringResource(R.string.speed_dial_phone_help)),
                 )
             }
-            items(SpeedDials.PHONE_SLOTS) { slot ->
+            // The free slots folded into one row, so the speed dials in use – the box' ones too – come first.
+            val free = SpeedDials.PHONE_SLOTS.filter { slot -> phoneSpeedDials.none { it.slot == slot } }
+            val shown = if (showFree) SpeedDials.PHONE_SLOTS else SpeedDials.PHONE_SLOTS - free.toSet()
+            items(shown, key = { "phone-$it" }) { slot ->
                 PhoneSlotRow(
                     slot = slot,
                     speedDial = phoneSpeedDials.firstOrNull { it.slot == slot },
@@ -94,6 +103,12 @@ fun SpeedDialTab(
                     onRemove = { onRemove(slot) },
                 )
                 HorizontalDivider()
+            }
+            if (free.isNotEmpty()) {
+                item(key = "phone-free") {
+                    FreeSlotsRow(count = free.size, expanded = showFree, onToggle = { showFree = !showFree })
+                    HorizontalDivider()
+                }
             }
         }
         if (boxSpeedDials != null) {
@@ -156,6 +171,27 @@ private fun SlotLabel(slot: String) {
         color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier.width(32.dp),
+    )
+}
+
+/**
+ * This phone's free slots, folded: how many there are – a tap shows them, one by one, to set one up;
+ * shown, the same row folds them again.
+ */
+@Composable
+private fun FreeSlotsRow(count: Int, expanded: Boolean, onToggle: () -> Unit) {
+    val text = if (expanded) stringResource(R.string.speed_dial_hide_free)
+    else pluralStringResource(R.plurals.speed_dial_free_slots, count, count)
+    ListItem(
+        leadingContent = { Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.width(32.dp)) },
+        headlineContent = { Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+        trailingContent = {
+            Icon(if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, contentDescription = null)
+        },
+        modifier = Modifier.clickable(
+            onClickLabel = stringResource(if (expanded) R.string.speed_dial_hide_free else R.string.speed_dial_show_free),
+            onClick = onToggle,
+        ),
     )
 }
 

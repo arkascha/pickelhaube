@@ -404,7 +404,9 @@ looked for by its name (the box' phone book ids are their places in its list). L
 the offer.
 
 After a speed dial the number field's label says which one it is and whose number. The **Speed
-dial** tab lists both kinds, so you can pick one without knowing its number.
+dial** tab lists both kinds, so you can pick one without knowing its number. This phone's free slots
+are folded into one row (*3 free slots – set one up*), so the speed dials in use – the box' ones as
+well – come first; a tap shows the free slots one by one, and the same row folds them again.
 
 ### Call forwarding
 

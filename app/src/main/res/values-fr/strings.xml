@@ -318,6 +318,12 @@
     <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FRITZ!Box.</string>
     <string name="speed_dial_box_none_headline">Pas encore de favoris sur la FRITZ!Box.</string>
     <string name="speed_dial_free">Libre</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d emplacement libre – à configurer</item>
+        <item quantity="other">%d emplacements libres – à configurer</item>
+    </plurals>
+    <string name="speed_dial_show_free">Afficher les emplacements libres</string>
+    <string name="speed_dial_hide_free">Masquer les emplacements libres</string>
     <string name="speed_dial_replace_or_remove">Remplacer ou supprimer</string>
     <string name="speed_dial_set_up">Configurer</string>
     <string name="speed_dial_replace">Remplacer</string>

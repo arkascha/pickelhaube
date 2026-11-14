@@ -314,6 +314,12 @@
     <string name="speed_dial_box_none">In de telefoonboeken van deze FRITZ!Box zijn geen snelkeuzes ingesteld.</string>
     <string name="speed_dial_box_none_headline">Nog geen favorieten op de FRITZ!Box.</string>
     <string name="speed_dial_free">Niet ingesteld</string>
+    <plurals name="speed_dial_free_slots">
+        <item quantity="one">%d vrije plek – om in te stellen</item>
+        <item quantity="other">%d vrije plekken – om in te stellen</item>
+    </plurals>
+    <string name="speed_dial_show_free">Vrije plekken tonen</string>
+    <string name="speed_dial_hide_free">Vrije plekken verbergen</string>
     <string name="speed_dial_replace_or_remove">Vervangen of verwijderen</string>
     <string name="speed_dial_set_up">Instellen</string>
     <string name="speed_dial_replace">Vervangen</string>
