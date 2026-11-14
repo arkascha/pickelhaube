@@ -4,10 +4,10 @@ CHOOSE A NUMBER
 • Recent calls of the FRITZ!Box – dialled, received and missed, from all of its phones, by day, the missed ones at a tap
 • The phone books of the FRITZ!Box, with search, an A–Z bar and a filter by phone book
 • Optionally your smartphone's own contacts next to them
+• Optionally "Call via FRITZ!Box" in your contacts app, beside each number
 • A call button on every number – or tap it into the dialer
 • Speed dials 1–9 on your smartphone, valid with every box, plus the FRITZ!Box speed dials 00–99, also set up in the app – with Undo
 • Suggestions while typing: matching numbers and names from your phone books and recent calls, also by the letters on the keys – and the name of a number typed in full
-• Optional key tones
 • Share a text to Pickelhaube or paste it – the phone number in it is picked out and cleaned for dialling
 • New missed calls of the FRITZ!Box are counted and marked
 • Choose which phone rings: a single phone or all of them
@@ -45,7 +45,7 @@ SECURE AND PRIVATE
 • Talks to your FRITZ!Box only, using its official TR-064 interface – no cloud, no account, no advertising, no tracking
 • Optional HTTPS with a pinned certificate, and support for confirming actions on the FRITZ!Box (two-factor)
 • Passwords are stored encrypted in the Android Keystore
-• Access to your contacts is optional, asked for only when you switch it on, and they never leave the phone
+• Access to your contacts is optional, and they never leave the phone
 • Export and import all settings, passwords encrypted with a passphrase if you include them
 
 LANGUAGES

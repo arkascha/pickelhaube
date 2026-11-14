@@ -4,10 +4,10 @@ NUMMER AUSWÄHLEN
 • Letzte Anrufe der FRITZ!Box – gewählt, angenommen und verpasst, nach Tagen, die verpassten auf einen Tipp
 • Die Telefonbücher der FRITZ!Box, mit Suche, A–Z-Leiste und Filter nach Telefonbuch
 • Auf Wunsch die Kontakte deines Smartphones gleich daneben
+• Auf Wunsch „Über FRITZ!Box anrufen“ in deiner Kontakte-App
 • Ein Anrufknopf an jeder Nummer
 • Kurzwahlen 1–9 auf dem Smartphone, gültig mit jeder Box, dazu die Kurzwahlen 00–99 der FRITZ!Box
 • Vorschläge beim Tippen: passende Nummern und Namen aus Telefonbüchern und letzten Anrufen, auch über die Buchstaben der Tasten – samt Name zur fertigen Nummer
-• Tastentöne auf Wunsch
 • Einen Text an Pickelhaube teilen oder einfügen – die Telefonnummer darin wird herausgesucht
 • Neue verpasste Anrufe der FRITZ!Box werden gezählt und markiert
 • Wähle, welches Telefon klingelt: ein einzelnes Telefon oder alle
@@ -22,7 +22,7 @@ WÄHLEN
 
 WÄHREND DES ANRUFS
 • Gesprächsstatus live: abnehmen, wählt, verbunden mit laufender Zeit, beendet – über den Anrufmonitor der FRITZ!Box
-• Einen Anruf abbrechen, solange er noch aufgebaut wird
+• Einen Anruf abbrechen, solange er aufgebaut wird
 • Besetzt? Mit einem Tipp nochmal
 
 RUFUMLEITUNG
@@ -56,6 +56,6 @@ DAS BRAUCHST DU
 • In der FRITZ!Box eingeschaltet: „Zugriff für Anwendungen zulassen“ (Heimnetz › Netzwerk › Netzwerkeinstellungen) und „Wählhilfe verwenden“ (Telefonie › Anrufe › Wählhilfe)
 • Einen FRITZ!Box-Benutzer mit der Berechtigung für Telefonie
 • Für den Gesprächsstatus: den Anrufmonitor, einmal eingeschaltet mit #96*5* an einem angeschlossenen Telefon
-• Den Rest zeigt dir beim ersten Start die Willkommens-Tour, Schritt für Schritt – und eine Demo-Box lässt dich die App ohne FRITZ!Box ausprobieren
+• Den Rest zeigt dir beim ersten Start die Willkommens-Tour – und eine Demo-Box lässt dich die App ohne FRITZ!Box ausprobieren
 
 Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM). FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH; sie nennen hier nur, mit welchen Routern die App funktioniert.

@@ -120,6 +120,12 @@
     You can also <strong>share a text</strong> to Pickelhaube – an email signature, a message – or paste one with the paste
     button of the empty number field: the phone number in it is picked out and cleaned for dialling
     (<code>+49 (0)30 / 123 45-6</code> becomes <code>+4930123456</code>); with several, the app asks which one.</p>
+  <p>Optionally, the phone's own contacts app offers Pickelhaube right beside each number: switch on
+    <em>Settings › Phone books › “Call via FRITZ!Box” in Contacts</em> (off by default; the app asks to read and change
+    the contacts). Each contact then shows a row <strong>Call … via FRITZ!Box</strong> next to its numbers; a tap opens
+    Pickelhaube with the number in the dialer. The rows live in an account of the app's own (<em>Pickelhaube</em> under
+    Android's accounts) – your contacts themselves are not changed, and nothing is synced anywhere. They follow your
+    contacts by themselves; switching the option off removes them again.</p>
   <h3>Notes on the dialer</h3>
   <p>Above the buttons, the dialer points out what needs a look: an internet number of the box that is not registered
     with its provider (calls over it fail – a tap checks again), and <strong>new missed calls</strong> on the box since you
@@ -246,6 +252,7 @@
       <tbody>
         <tr><td>Network access</td><td>To talk to your FRITZ!Box</td><td>Yes</td></tr>
         <tr><td>Contacts (<code>READ_CONTACTS</code>)</td><td>Show the phone's own contacts as an extra phone book</td><td>No – only if you switch it on</td></tr>
+        <tr><td>Changing contacts (<code>WRITE_CONTACTS</code>)</td><td>Add the rows “Call … via FRITZ!Box” in the phone's contacts app</td><td>No – only if you switch it on</td></tr>
         <tr><td>Call log (<code>READ_CALL_LOG</code>)</td><td>Show the phone's own calls under <em>Recent</em></td><td>No – and not available in the Google Play version (see below)</td></tr>
       </tbody>
     </table>
