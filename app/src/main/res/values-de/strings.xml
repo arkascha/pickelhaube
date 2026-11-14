@@ -116,6 +116,11 @@
     <string name="settings_device_contacts">Kontakte dieses Telefons einbeziehen</string>
     <string name="settings_device_contacts_hint">Zeigt die auf diesem Telefon gespeicherten Kontakte zusätzlich zu den Telefonbüchern der FRITZ!Box. Benötigt Zugriff auf deine Kontakte; sie verlassen das Telefon nie.</string>
     <string name="settings_device_contacts_denied">Android erlaubt Pickelhaube nicht, deine Kontakte zu lesen. Du kannst es in den App-Einstellungen erlauben.</string>
+    <string name="settings_contact_actions">„Über FRITZ!Box anrufen“ in Kontakte</string>
+    <string name="settings_contact_actions_hint">Fügt in der Kontakte-App des Telefons neben jeder Nummer eine Zeile „… über FRITZ!Box anrufen“ hinzu; ein Tipp darauf öffnet Pickelhaube mit der Nummer. Dafür schreibt Pickelhaube diese Zeilen in deine Kontakte, in ein eigenes Konto („Pickelhaube“ unter den Konten von Android) – nichts verlässt das Telefon. Ausschalten entfernt sie wieder.</string>
+    <string name="settings_contact_actions_denied">Android erlaubt Pickelhaube nicht, deine Kontakte zu ändern. Du kannst es in den App-Einstellungen erlauben.</string>
+    <!-- The row beside a number in the phone's contacts app; %1$s the number. -->
+    <string name="contact_action_detail">%1$s über FRITZ!Box anrufen</string>
     <string name="settings_recents">Letzte Nummern</string>
     <string name="settings_call_log">Anrufe dieses Telefons einbeziehen</string>
     <string name="settings_call_log_hint">Bietet auch die Nummern an, die mit der Telefon-App dieses Telefons gewählt, angenommen oder verpasst wurden. Benötigt Zugriff auf deine Anrufliste; sie verlässt das Telefon nie.</string>

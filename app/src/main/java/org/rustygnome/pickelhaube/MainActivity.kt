@@ -8,6 +8,11 @@ import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.rustygnome.pickelhaube.contacts.ContactActions
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -66,6 +71,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         if (savedInstanceState == null) handleIntent(intent)
+        // "Call via FRITZ!Box" in the contacts: keep its rows following the contacts.
+        lifecycleScope.launch(Dispatchers.IO) { ContactActions.ensureScheduled(applicationContext) }
 
         setContent {
             PickelhaubeTheme {
@@ -500,6 +507,12 @@ class MainActivity : ComponentActivity() {
         val data: Uri = intent.data ?: return
         if (data.scheme == "tel") {
             data.schemeSpecificPart?.let(viewModel::prefill)
+        }
+        // A "Call via FRITZ!Box" row tapped in the contacts app: its number, read from the row (if it is one).
+        if (data.scheme == "content") {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { ContactActions.numberOf(applicationContext, data) }?.let(viewModel::prefill)
+            }
         }
     }
 }

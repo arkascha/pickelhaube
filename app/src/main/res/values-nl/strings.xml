@@ -116,6 +116,11 @@
     <string name="settings_device_contacts">Contacten van deze telefoon opnemen</string>
     <string name="settings_device_contacts_hint">Toont de op deze telefoon opgeslagen contacten naast de telefoonboeken van de FRITZ!Box. Vereist toegang tot je contacten; ze verlaten de telefoon nooit.</string>
     <string name="settings_device_contacts_denied">Android staat Pickelhaube niet toe je contacten te lezen. Je kunt het toestaan in de app-instellingen.</string>
+    <string name="settings_contact_actions">‘Bellen via FRITZ!Box’ in Contacten</string>
+    <string name="settings_contact_actions_hint">Voegt in de contacten-app van de telefoon naast elk nummer een regel ‘… bellen via FRITZ!Box’ toe; erop tikken opent Pickelhaube met het nummer. Daarvoor schrijft Pickelhaube deze regels in je contacten, in een eigen account (‘Pickelhaube’ bij de accounts van Android) – niets verlaat de telefoon. Uitzetten verwijdert ze weer.</string>
+    <string name="settings_contact_actions_denied">Android staat Pickelhaube niet toe je contacten te wijzigen. Je kunt het toestaan in de app-instellingen.</string>
+    <!-- The row beside a number in the phone's contacts app; %1$s the number. -->
+    <string name="contact_action_detail">%1$s bellen via FRITZ!Box</string>
     <string name="settings_recents">Recente nummers</string>
     <string name="settings_call_log">Gesprekken van deze telefoon opnemen</string>
     <string name="settings_call_log_hint">Biedt ook de nummers aan die met de telefoon-app van deze telefoon zijn gebeld, aangenomen of gemist. Vereist toegang tot je gesprekkenlijst; die verlaat de telefoon nooit.</string>

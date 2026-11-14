@@ -26,6 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import androidx.compose.runtime.rememberCoroutineScope
+import org.rustygnome.pickelhaube.contacts.ContactActions
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -207,6 +211,69 @@ internal fun DeviceContactsSetting(enabled: Boolean, onChange: (Boolean) -> Unit
     if (denied || (enabled && !allowed)) {
         Text(
             stringResource(R.string.settings_device_contacts_denied),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error,
+        )
+        OutlinedButton(onClick = { context.startActivity(DeviceContacts.appSettingsIntent(context)) }) {
+            Text(stringResource(R.string.app_settings))
+        }
+    }
+}
+
+/**
+ * Switch for "Call via FRITZ!Box" rows in the phone's contacts app ([ContactActions]). Turning it on
+ * asks Android for reading and changing the contacts; it is on while Pickelhaube's account exists.
+ */
+@Composable
+internal fun ContactActionsSetting() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var enabled by remember { mutableStateOf(ContactActions.isEnabled(context)) }
+    var allowed by remember { mutableStateOf(ContactActions.hasPermission(context)) }
+    var denied by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
+
+    fun switch(on: Boolean) {
+        busy = true
+        scope.launch {
+            withContext(Dispatchers.IO) { if (on) ContactActions.enable(context) else ContactActions.disable(context) }
+            enabled = ContactActions.isEnabled(context)
+            busy = false
+        }
+    }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        allowed = ContactActions.hasPermission(context)
+        denied = !allowed
+        if (allowed) switch(true)
+    }
+    // Re-check when coming back from Android's settings (the account may have been removed there).
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        allowed = ContactActions.hasPermission(context)
+        enabled = ContactActions.isEnabled(context)
+        if (allowed) denied = false
+    }
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OptionTitle(
+            stringResource(R.string.settings_contact_actions),
+            listOf(stringResource(R.string.settings_contact_actions_hint)),
+            Modifier.weight(1f),
+        )
+        Switch(
+            checked = enabled && allowed,
+            enabled = !busy,
+            onCheckedChange = { on ->
+                when {
+                    !on -> switch(false)
+                    allowed -> switch(true)
+                    else -> launcher.launch(arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS))
+                }
+            },
+        )
+    }
+    if (denied || (enabled && !allowed)) {
+        Text(
+            stringResource(R.string.settings_contact_actions_denied),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.error,
         )

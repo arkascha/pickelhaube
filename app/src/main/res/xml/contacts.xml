@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    How the contacts app shows the rows of Pickelhaube's account: "Pickelhaube" (data2) with
+    "Call … via FRITZ!Box" (data3); a tap opens the row's data URI with this MIME type – MainActivity.
+    No EditSchema: the account is read-only, so it is not offered for saving new contacts.
+-->
+<ContactsAccountType xmlns:android="http://schemas.android.com/apk/res/android">
+    <ContactsDataKind
+        android:detailColumn="data3"
+        android:icon="@mipmap/ic_launcher"
+        android:mimeType="vnd.android.cursor.item/vnd.org.rustygnome.pickelhaube.call"
+        android:summaryColumn="data2" />
+</ContactsAccountType>

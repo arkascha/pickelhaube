@@ -196,6 +196,7 @@ fun SettingsScreen(
             ) {
                 Text(stringResource(R.string.phone_books), style = MaterialTheme.typography.titleSmall)
                 DeviceContactsSetting(enabled = deviceContactsEnabled, onChange = onDeviceContactsChange)
+                ContactActionsSetting()
             }
 
             // The section holds only the phone's calls, which the Google Play build leaves out.

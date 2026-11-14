@@ -287,6 +287,33 @@ the phone books are opened) or **Don't ask again**. It can always be switched in
 **Settings › Phone books › Include this phone's contacts**; switching it off there also stops the
 question. The permission itself can be revoked in the Android app settings.
 
+### Call via FRITZ!Box in the phone's contacts app
+
+**Settings › Phone books › “Call via FRITZ!Box” in Contacts** (off by default) adds a row
+*Call … via FRITZ!Box* beside each callable number in the phone's own contacts app – as messengers add
+theirs; fax, pager and telex numbers get none, a number stored twice one. A tap on it opens Pickelhaube
+with the number in the dialer, as a `tel:` link does. Turning it on asks for the contacts permissions
+(`READ_CONTACTS` and `WRITE_CONTACTS`, one question).
+
+Android shows such rows only for an account, so Pickelhaube adds one, *Pickelhaube* in Android's
+accounts, with no login and nothing synced anywhere (`contacts/AccountServices.kt`: an authenticator
+with nothing to authenticate and a sync adapter whose description, `xml/contacts.xml`, tells the
+contacts app how to show the rows – `data2` "Pickelhaube", `data3` the text – and that the account
+is read-only, so it is not offered for new contacts). Each contact gets a raw contact in it, held together
+with the contact's own (`AggregationExceptions.TYPE_KEEP_TOGETHER`; `SYNC1` keeps the id of that raw
+contact, the "anchor"), with one data row per number of the MIME type
+`vnd.android.cursor.item/vnd.org.rustygnome.pickelhaube.call`. A tapped row reaches `MainActivity`
+as `VIEW` of the row's data URI; the number is read from it there (and only from a row of that type).
+The switch shows whether the account exists. Switching it off deletes the rows and then the account.
+
+The rows follow the contacts by a job (`contacts/ContactActionsJob.kt`) that runs a few seconds after
+the contacts change (a content trigger, set up again after each run) and once a day (kept over restarts,
+hence `RECEIVE_BOOT_COMPLETED`; it sets up the content trigger again, which a restart forgets); Android's
+own sync of the account does the same. Each run compares what is there with what should be
+(`ContactActionsPlan`) and writes only the difference – including the text, so a change of the language
+is followed. In "View linked contacts" the account's part of a contact shows as *(No name)*,
+*Pickelhaube • View-only*.
+
 ### Taking over and handing over contacts
 
 A long press on a number – in **Phone books** or in **Recent** – opens a menu:
@@ -659,6 +686,10 @@ report.
 | `tile/Tiles.kt` | Quick settings tiles "Pickelhaube", "Redial" and "Call forwarding" |
 | `widget/` | Home screen widget "Numbers to dial": the widget, its rows, its lists and the activity the launcher starts to set it up |
 | `data/DeviceContacts.kt` | The phone's own contacts as an extra phone book (`READ_CONTACTS`) |
+| `contacts/ContactActions.kt` | "Call via FRITZ!Box" rows in the phone's contacts app: account, writing the rows, a tapped row's number |
+| `contacts/ContactActionsPlan.kt` | Which rows each contact should have, and what to change to get there |
+| `contacts/ContactActionsJob.kt` | Keeps the rows in step with the contacts: on a change, and daily |
+| `contacts/AccountServices.kt` | The account's stand-in authenticator and sync adapter |
 | `tr064/CallList.kt` | Dialled, received and missed calls from the box' call list (`X_AVM-DE_OnTel` `GetCallList`, XML export) |
 | `data/DeviceCallLog.kt` | The phone's own dialled, received and missed calls from the Android call log (`READ_CALL_LOG`) |
 | `data/MissedCalls.kt` | Which of the box' missed calls are new: after the last look at "Recent", and not settled by a later call |

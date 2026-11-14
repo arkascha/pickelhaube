@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nothing is synced anywhere; the adapter only lets the contacts app find xml/contacts.xml. -->
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="org.rustygnome.pickelhaube.contacts"
+    android:contentAuthority="com.android.contacts"
+    android:supportsUploading="false"
+    android:userVisible="false" />

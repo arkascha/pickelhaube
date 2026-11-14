@@ -82,9 +82,10 @@
   <p>The app can read data on your Android device only with permissions you grant, and only if you switch the corresponding option on:</p>
   <ul>
     <li><strong>Contacts</strong> (<code>READ_CONTACTS</code>): to show the contacts stored on your phone as an additional phone book.</li>
+    <li><strong>Changing contacts</strong> (<code>WRITE_CONTACTS</code>, only if you switch on “Call via FRITZ!Box” in Contacts): to add a row “Call … via FRITZ!Box” beside the numbers of your contacts, kept in an account of the app’s own (“Pickelhaube” under Android’s accounts) that holds nothing else and is not synced anywhere. Your contacts themselves are not changed. Switching the option off removes the rows and the account; uninstalling the app does as well.</li>
     <li><strong>Call log</strong> (<code>READ_CALL_LOG</code>): to show the calls of your phone’s own telephony app under “Recent”. This option exists only in versions installed outside Google Play.</li>
   </ul>
-  <p>Both are used for nothing else and can be revoked at any time in Android’s app settings. The app does not read your location, device identifiers, or other personal information unrelated to these functions.</p>
+  <p>They are used for nothing else and can be revoked at any time in Android’s app settings. The app does not read your location, device identifiers, or other personal information unrelated to these functions.</p>
   <p>The app can also be chosen to open <code>tel:</code> links from other apps; the number is then filled into the dialer. In the same way, you can share a text to the app, or paste one with the paste button of the empty number field: the app looks for a phone number in it and fills that into the dialer. The clipboard is read only when you tap that button; the text is not kept.</p>
 
   <h2>6. Use of data</h2>

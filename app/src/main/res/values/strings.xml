@@ -119,6 +119,11 @@
     <string name="settings_device_contacts">Include this phone’s contacts</string>
     <string name="settings_device_contacts_hint">Shows the contacts stored on this phone next to the FRITZ!Box phone books. Needs access to your contacts; they never leave the phone.</string>
     <string name="settings_device_contacts_denied">Android does not allow Pickelhaube to read your contacts. You can allow it in the app settings.</string>
+    <string name="settings_contact_actions">“Call via FRITZ!Box” in Contacts</string>
+    <string name="settings_contact_actions_hint">Adds a row “Call … via FRITZ!Box” beside each number in the phone’s contacts app; tapping it opens Pickelhaube with the number. For this, Pickelhaube writes these rows into your contacts, in an account of its own (“Pickelhaube” under Android’s accounts) – nothing leaves the phone. Switching it off removes them again.</string>
+    <string name="settings_contact_actions_denied">Android does not allow Pickelhaube to change your contacts. You can allow it in the app settings.</string>
+    <!-- The row beside a number in the phone's contacts app; %1$s the number. -->
+    <string name="contact_action_detail">Call %1$s via FRITZ!Box</string>
     <string name="settings_recents">Recent numbers</string>
     <string name="settings_call_log">Include this phone’s calls</string>
     <string name="settings_call_log_hint">Also offers the numbers dialled, received and missed with the phone’s own telephony app. Needs access to your call log; it never leaves the phone.</string>

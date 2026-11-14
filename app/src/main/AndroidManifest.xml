@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Optional: show the phone's own contacts in the phone book view (asked at runtime). -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Optional: "Call via FRITZ!Box" rows in the phone's contacts (ContactActions; asked at runtime). -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <!-- Only for the daily job that keeps those rows in step to survive a restart. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- READ_CALL_LOG only in the "full" flavour, see src/full/AndroidManifest.xml. -->
 
     <!-- tools:ignore UnusedAttribute: localeConfig (the in-app language list in Android's settings)
@@ -50,6 +54,13 @@
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- A "Call via FRITZ!Box" row tapped in the contacts app (ContactActions): its number into the dialer. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.rustygnome.pickelhaube.call" />
             </intent-filter>
         </activity>
 
@@ -136,5 +147,37 @@
                 android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                 android:value="true" />
         </service>
+
+        <!-- "Call via FRITZ!Box" in the phone's contacts: the account for the rows, its stand-in sync
+             adapter (which tells the contacts app how to show them), and the job keeping them in step. -->
+        <service
+            android:name=".contacts.AuthenticatorService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".contacts.ContactsSyncService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_contacts" />
+            <meta-data
+                android:name="android.provider.CONTACTS_STRUCTURE"
+                android:resource="@xml/contacts" />
+        </service>
+        <service
+            android:name=".contacts.ContactActionsJob"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 </manifest>
