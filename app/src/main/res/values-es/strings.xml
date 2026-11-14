@@ -621,4 +621,8 @@
         <item>Si la box no responde un momento, aparece una nota breve con «reintentar» en lugar de un mensaje que estorba.</item>
         <item>En las marcaciones rápidas, las posiciones libres de este teléfono se agrupan en una sola fila.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>«Llamar con la FRITZ!Box» directamente en la app de contactos del teléfono: actívalo en los ajustes y cada número de un contacto tendrá una fila que lo abre aquí.</item>
+        <item>¿Fuera de casa? Si ninguna FRITZ!Box responde, el título del marcador dice por qué; tócalo para ver qué ayuda: el wifi de casa o una VPN hacia tu red doméstica.</item>
+    </string-array>
 </resources>

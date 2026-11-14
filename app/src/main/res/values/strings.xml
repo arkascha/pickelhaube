@@ -615,4 +615,8 @@
         <item>When the box does not answer for a moment, a short note with “try again” appears instead of a message in the way.</item>
         <item>In the speed dials, this phone’s free slots are folded into one row.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>“Call via FRITZ!Box” right in your phone’s contacts app: switch it on in the settings, and each number of a contact gets a row that opens it here.</item>
+        <item>Away from home? When no FRITZ!Box answers, the dialer’s title says why – tap it to see what helps: the Wi-Fi at home, or a VPN into your home network.</item>
+    </string-array>
 </resources>

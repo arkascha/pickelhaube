@@ -1,0 +1,8 @@
+<en-US>
+• "Call via FRITZ!Box" in your phone's contacts app: switch it on in the settings, and a row beside each number opens it in Pickelhaube
+• Away from home? When no FRITZ!Box answers, the dialer says why – a tap shows what helps: Wi-Fi at home, or a VPN into your home network
+</en-US>
+<de-DE>
+• „Über FRITZ!Box anrufen“ in der Kontakte-App: in den Einstellungen einschalten, eine Zeile an jeder Nummer öffnet sie in Pickelhaube
+• Nicht zu Hause? Antwortet keine FRITZ!Box, sagt die Wählhilfe, warum – ein Tipp zeigt, was hilft: WLAN zu Hause oder ein VPN ins Heimnetz
+</de-DE>

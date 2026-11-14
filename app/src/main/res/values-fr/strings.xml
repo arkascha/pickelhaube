@@ -621,4 +621,8 @@
         <item>Quand la box ne répond pas un instant, une courte note avec « réessayer » remplace le message qui gênait.</item>
         <item>Dans les numéros abrégés, les emplacements libres de ce téléphone sont regroupés sur une ligne.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>« Appeler via la FRITZ!Box » directement dans l’app Contacts du téléphone : activez-le dans les paramètres, et chaque numéro d’un contact reçoit une ligne qui l’ouvre ici.</item>
+        <item>Pas à la maison ? Quand aucune FRITZ!Box ne répond, le titre du clavier dit pourquoi – touchez-le pour voir ce qui aide : le Wi-Fi de la maison, ou un VPN vers votre réseau domestique.</item>
+    </string-array>
 </resources>

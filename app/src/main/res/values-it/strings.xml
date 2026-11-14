@@ -621,4 +621,8 @@
         <item>Se la box non risponde per un momento, compare una breve nota con «riprova» invece di un messaggio d’intralcio.</item>
         <item>Nelle selezioni rapide, le posizioni libere di questo telefono sono raccolte in una riga.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>«Chiama tramite FRITZ!Box» direttamente nell’app Contatti del telefono: attivalo nelle impostazioni e ogni numero di un contatto avrà una riga che lo apre qui.</item>
+        <item>Non sei a casa? Se nessuna FRITZ!Box risponde, il titolo del tastierino dice perché – toccalo per vedere cosa aiuta: il Wi-Fi di casa o una VPN verso la tua rete domestica.</item>
+    </string-array>
 </resources>

@@ -611,4 +611,8 @@
         <item>Antwoordt de box even niet, dan verschijnt een korte melding met „opnieuw proberen” in plaats van een bericht dat in de weg zit.</item>
         <item>Bij de snelkiesnummers zijn de vrije plekken van deze telefoon samengevoegd tot één regel.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>‘Bellen via FRITZ!Box’ direct in de contacten-app van je telefoon: zet het aan in de instellingen, en elk nummer van een contact krijgt een regel die het hier opent.</item>
+        <item>Niet thuis? Als geen FRITZ!Box antwoordt, zegt de titel van de kiezer waarom – tik erop om te zien wat helpt: de wifi thuis, of een VPN naar je thuisnetwerk.</item>
+    </string-array>
 </resources>

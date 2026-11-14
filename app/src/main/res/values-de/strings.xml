@@ -611,4 +611,8 @@
         <item>Antwortet die Box kurz nicht, erscheint ein knapper Hinweis mit „erneut versuchen“ statt einer Meldung, die im Weg ist.</item>
         <item>Bei den Kurzwahlen sind die freien Plätze dieses Telefons in einer Zeile zusammengefasst.</item>
     </string-array>
+    <string-array name="whats_new_14">
+        <item>„Über FRITZ!Box anrufen“ direkt in der Kontakte-App des Telefons: in den Einstellungen einschalten, und jede Nummer eines Kontakts bekommt eine Zeile, die sie hier öffnet.</item>
+        <item>Nicht zu Hause? Antwortet keine FRITZ!Box, sagt der Titel der Wählhilfe, warum – ein Tipp zeigt, was hilft: das WLAN zu Hause oder ein VPN in dein Heimnetz.</item>
+    </string-array>
 </resources>
