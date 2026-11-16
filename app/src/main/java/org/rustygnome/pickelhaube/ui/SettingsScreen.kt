@@ -435,6 +435,8 @@ private fun VersionInfo(onShowWhatsNew: () -> Unit) {
                     .padding(vertical = 6.dp),
             )
         }
+        // The feedback form on the web page – a line of its own, as three links don't fit in one row.
+        WebLink(stringResource(R.string.web_feedback), WebPages.FEEDBACK)
         // The web page: help beyond the app's own explanations, and the privacy policy.
         Row(verticalAlignment = Alignment.CenterVertically) {
             WebLink(stringResource(R.string.web_guide), WebPages.GUIDE)

@@ -602,6 +602,7 @@
     <string name="settings_welcome_tour_hint">Krok po kroku przez konfigurację – dodaje kolejny FRITZ!Box</string>
     <string name="web_guide">Przewodnik w sieci (po angielsku)</string>
     <string name="web_privacy_policy">Polityka prywatności (po angielsku)</string>
+    <string name="web_feedback">Prześlij opinię (po angielsku)</string>
     <string name="welcome_ready_more">Wszystko inne – w przewodniku w sieci (po angielsku) ›</string>
     <string name="whats_new_title">Nowości w %1$s</string>
     <string name="whats_new_ok">Rozumiem</string>

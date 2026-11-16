@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback – Pickelhaube</title>
+  <meta name="description" content="Tell me what you think of Pickelhaube: a problem, an idea, a question or praise.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="feedback.html" aria-current="page">Feedback</a>
+      <a href="privacy-policy.html">Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Feedback</h1>
+  <p class="lead">Something doesn't work, an idea, a question, or just a word of praise – I read every message.</p>
+
+  <div class="note warn">
+    Please don't enter passwords, or names and numbers from your phone books.
+    What happens with what you send is described in the <a href="privacy-policy.html#feedback">privacy policy</a>.
+  </div>
+
+  <iframe class="form" id="feedback-form" title="Feedback form"
+    src="/apps/forms/embed/PsmF8BEN7bbjoyPNw4CSxmi7"></iframe>
+  <p>Bug reports are also welcome as <a href="https://github.com/arkascha/pickelhaube/issues">issues on GitHub</a>.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Footer">
+      <a href="./">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="testing.html">Help testing</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="https://github.com/arkascha/pickelhaube">Source code</a>
+    </nav>
+    <p>Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
+      FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
+  </div>
+</footer>
+<script>
+  // The form comes from this web site's own host, so the page can measure it: the frame gets the height
+  // of the form's content, so neither the frame nor the form inside has a scroll bar of its own. The form
+  // reports when its size changes; it scrolls in an element of its own, which the frame has to make room for.
+  (function () {
+    var frame = document.getElementById('feedback-form');
+    function fit() {
+      var doc;
+      try { doc = frame.contentDocument; } catch (e) { return; }
+      var main = doc && doc.getElementById('app-content-vue');
+      if (!main) return;
+      tidy(doc);
+      var top = main.getBoundingClientRect().top, bottom = 0;
+      for (var i = 0; i < main.children.length; i++) {
+        var child = main.children[i];
+        var end = child.getBoundingClientRect().bottom - top + main.scrollTop + parseFloat(getComputedStyle(child).marginBottom || 0);
+        if (end > bottom) bottom = end;
+      }
+      var height = Math.ceil(top + bottom + parseFloat(getComputedStyle(main).paddingBottom || 0));
+      // The frame's own border comes on top.
+      if (height > 0 && Math.abs(height - frame.clientHeight) > 1) frame.style.height = (height + frame.offsetHeight - frame.clientHeight) + 'px';
+    }
+    // The form's title block is as wide as the form plus a margin – a few pixels too wide in a frame, which
+    // would bring a horizontal scroll bar. Narrowed by that margin, it fits.
+    function tidy(doc) {
+      if (doc.getElementById('fit-in-frame')) return;
+      var style = doc.createElement('style');
+      style.id = 'fit-in-frame';
+      style.textContent = '#app-content-vue > header { max-width: min(750px, calc(100% - var(--default-clickable-area))); }';
+      doc.head.appendChild(style);
+    }
+    frame.addEventListener('load', fit);
+    fit(); // in case the frame was quicker than this script
+    window.addEventListener('resize', fit);
+    window.addEventListener('message', function (event) {
+      if (event.origin === window.location.origin && event.data && event.data.type === 'resize-iframe') fit();
+    });
+  })();
+</script>
+</body>
+</html>

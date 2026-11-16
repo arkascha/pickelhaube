@@ -584,6 +584,7 @@
     <string name="settings_welcome_tour_hint">Step by step through the setup – adds another FRITZ!Box</string>
     <string name="web_guide">Guide on the web</string>
     <string name="web_privacy_policy">Privacy policy</string>
+    <string name="web_feedback">Send feedback</string>
     <string name="welcome_ready_more">Everything else – in the guide on the web ›</string>
     <string name="whats_new_title">What’s new in %1$s</string>
     <string name="whats_new_ok">Got it</string>

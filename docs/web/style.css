@@ -152,3 +152,5 @@ footer.site a { color: var(--muted); }
   h1 { font-size: 1.6rem; }
   .hero img { width: 72px; height: 72px; }
 }
+
+iframe.form { display: block; width: 100%; height: 75rem; border: 1px solid var(--border); border-radius: var(--radius); margin: 1rem 0; background: var(--surface); }
