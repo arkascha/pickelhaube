@@ -1,0 +1,6 @@
+<en-US>
+• Feedback welcome: Settings has a link to the feedback form on the web page – for a problem, an idea or a word of praise
+</en-US>
+<de-DE>
+• Feedback willkommen: In den Einstellungen führt ein Link zum Feedback-Formular auf der Webseite – für ein Problem, eine Idee oder ein Lob
+</de-DE>

@@ -626,4 +626,7 @@
         <item>« Appeler via la FRITZ!Box » directement dans l’app Contacts du téléphone : activez-le dans les paramètres, et chaque numéro d’un contact reçoit une ligne qui l’ouvre ici.</item>
         <item>Pas à la maison ? Quand aucune FRITZ!Box ne répond, le titre du clavier dit pourquoi – touchez-le pour voir ce qui aide : le Wi-Fi de la maison, ou un VPN vers votre réseau domestique.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Quelque chose à dire ? Les paramètres ont maintenant un lien vers le formulaire d’avis du site web – pour un problème, une idée ou un compliment.</item>
+    </string-array>
 </resources>

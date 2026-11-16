@@ -638,4 +638,7 @@
         <item>„Zadzwoń przez FRITZ!Box” prosto w aplikacji Kontakty telefonu: włącz to w ustawieniach, a każdy numer kontaktu dostanie wiersz, który otwiera go tutaj.</item>
         <item>Poza domem? Gdy żaden FRITZ!Box nie odpowiada, tytuł wybierania mówi dlaczego – dotknij go, by zobaczyć, co pomoże: Wi-Fi w domu albo VPN do sieci domowej.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Masz coś do powiedzenia? W ustawieniach jest teraz link do formularza opinii na stronie internetowej – na problem, pomysł albo pochwałę.</item>
+    </string-array>
 </resources>

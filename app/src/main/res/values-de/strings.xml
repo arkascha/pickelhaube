@@ -616,4 +616,7 @@
         <item>„Über FRITZ!Box anrufen“ direkt in der Kontakte-App des Telefons: in den Einstellungen einschalten, und jede Nummer eines Kontakts bekommt eine Zeile, die sie hier öffnet.</item>
         <item>Nicht zu Hause? Antwortet keine FRITZ!Box, sagt der Titel der Wählhilfe, warum – ein Tipp zeigt, was hilft: das WLAN zu Hause oder ein VPN in dein Heimnetz.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Etwas zu sagen? In den Einstellungen führt jetzt ein Link zum Feedback-Formular auf der Webseite – für ein Problem, eine Idee oder ein Lob.</item>
+    </string-array>
 </resources>

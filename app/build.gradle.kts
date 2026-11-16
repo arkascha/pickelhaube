@@ -23,8 +23,8 @@ android {
         applicationId = "org.rustygnome.pickelhaube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 14
-        versionName = "1.10.0"
+        versionCode = 15
+        versionName = "1.10.1"
 
         // Instrumented tests (src/androidTest): each test starts like a fresh install – the orchestrator
         // clears the app's data before it. Run them on an emulator only, see scripts/instrumented-tests.sh.

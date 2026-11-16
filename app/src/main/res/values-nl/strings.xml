@@ -616,4 +616,7 @@
         <item>‘Bellen via FRITZ!Box’ direct in de contacten-app van je telefoon: zet het aan in de instellingen, en elk nummer van een contact krijgt een regel die het hier opent.</item>
         <item>Niet thuis? Als geen FRITZ!Box antwoordt, zegt de titel van de kiezer waarom – tik erop om te zien wat helpt: de wifi thuis, of een VPN naar je thuisnetwerk.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Iets te zeggen? In de instellingen staat nu een link naar het feedbackformulier op de website – voor een probleem, een idee of een compliment.</item>
+    </string-array>
 </resources>

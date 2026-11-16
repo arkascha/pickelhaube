@@ -620,4 +620,7 @@
         <item>“Call via FRITZ!Box” right in your phone’s contacts app: switch it on in the settings, and each number of a contact gets a row that opens it here.</item>
         <item>Away from home? When no FRITZ!Box answers, the dialer’s title says why – tap it to see what helps: the Wi-Fi at home, or a VPN into your home network.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Something to say? The settings now have a link to the feedback form on the web page – for a problem, an idea or a word of praise.</item>
+    </string-array>
 </resources>

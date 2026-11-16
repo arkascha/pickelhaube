@@ -626,4 +626,7 @@
         <item>«Chiama tramite FRITZ!Box» direttamente nell’app Contatti del telefono: attivalo nelle impostazioni e ogni numero di un contatto avrà una riga che lo apre qui.</item>
         <item>Non sei a casa? Se nessuna FRITZ!Box risponde, il titolo del tastierino dice perché – toccalo per vedere cosa aiuta: il Wi-Fi di casa o una VPN verso la tua rete domestica.</item>
     </string-array>
+    <string-array name="whats_new_15">
+        <item>Qualcosa da dire? Nelle impostazioni ora c’è un link al modulo di feedback sul sito web – per un problema, un’idea o un complimento.</item>
+    </string-array>
 </resources>
