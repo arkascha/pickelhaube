@@ -154,6 +154,11 @@ details p { margin: .5rem 0 .25rem; }
 .imprint { display: inline-block; max-width: 100%; background: #fff; padding: .75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
 .imprint img { display: block; max-width: 100%; height: auto; }
 
+/* Version history */
+.release h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .75rem; }
+.release h2 .date { font-size: .9rem; font-weight: 400; color: var(--muted); }
+.release .release-link { font-size: .9rem; margin-top: -.25rem; }
+
 /* Footer */
 footer.site { border-top: 1px solid var(--border); color: var(--muted); font-size: .85rem; }
 footer.site .wrap { padding-top: 1.25rem; padding-bottom: 2rem; }
