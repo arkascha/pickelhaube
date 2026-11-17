@@ -20,6 +20,11 @@ data class RecentCall(
     val direction: Direction = Direction.OUTGOING,
     /** The own number the call went out from or came in on, as the box' call list says (null: not known). */
     val ownNumber: String? = null,
+    /**
+     * How many calls of the same kind in a row this one stands for: in the merged list (mergeRecents),
+     * the latest call of a number and the calls of the same direction right before it.
+     */
+    val count: Int = 1,
 ) {
     enum class Source { FRITZBOX, PHONE }
     enum class Direction { OUTGOING, INCOMING, MISSED }

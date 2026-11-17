@@ -53,6 +53,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
@@ -352,12 +353,27 @@ private fun RecentRow(
                 else -> null
             },
             headlineContent = {
-                Text(
-                    call.name ?: show(call.number),
-                    fontWeight = if (isNew) FontWeight.Bold else null,
-                    maxLines = lines,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                // Several calls of one kind in a row: their number after the name, "Mum (3)" – kept
+                // visible when a long name is cut off, and said in words by screen readers.
+                val title = call.name ?: show(call.number)
+                val count = pluralStringResource(R.plurals.recents_call_count, call.count, call.count)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        title,
+                        fontWeight = if (isNew) FontWeight.Bold else null,
+                        maxLines = lines,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    if (call.count > 1) {
+                        Text(
+                            " (${call.count})",
+                            fontWeight = if (isNew) FontWeight.Bold else null,
+                            maxLines = 1,
+                            modifier = Modifier.semantics { contentDescription = count },
+                        )
+                    }
+                }
             },
             supportingContent = run {
                 val via = own?.let(show)?.let {

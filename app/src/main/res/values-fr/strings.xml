@@ -99,6 +99,11 @@
     <string name="recents_received">Reçu</string>
     <string name="recents_new_missed">Nouvel appel manqué</string>
     <string name="recents_missed">Manqué</string>
+    <!-- Spoken after a name in Recent that stands for several calls in a row ("Mum (3)"). -->
+    <plurals name="recents_call_count">
+        <item quantity="one">%d appel</item>
+        <item quantity="other">%d appels</item>
+    </plurals>
 
     <!-- settings overview -->
     <string name="settings_connections">Connexions FRITZ!Box</string>

@@ -102,6 +102,11 @@
     <string name="recents_received">Received</string>
     <string name="recents_new_missed">New missed call</string>
     <string name="recents_missed">Missed</string>
+    <!-- Spoken after a name in Recent that stands for several calls in a row ("Mum (3)"). -->
+    <plurals name="recents_call_count">
+        <item quantity="one">%d call</item>
+        <item quantity="other">%d calls</item>
+    </plurals>
 
     <!-- settings overview -->
     <string name="settings_connections">FRITZ!Box connections</string>

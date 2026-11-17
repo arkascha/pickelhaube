@@ -28,15 +28,27 @@ fun dedupeNumbers(contacts: List<PhonebookContact>, key: (String) -> String): Li
 /**
  * Combines the recent calls of several sources into one list, newest first, with each number
  * (compared via [key]) only once – at its latest call. A name missing there is taken from an
- * older call of the same number.
+ * older call of the same number. Its [RecentCall.count] says how many calls of the same direction
+ * came in a row up to it – three missed calls without one in between: 3 –, so it shows how often
+ * someone tried since the last time you spoke.
  */
 fun mergeRecents(calls: List<RecentCall>, key: (String) -> String): List<RecentCall> {
     val byKey = LinkedHashMap<String, RecentCall>()
+    // Numbers whose run of calls of one direction is still being counted.
+    val counting = HashSet<String>()
     calls.sortedByDescending { it.time }.forEach { call ->
         val k = key(call.number)
-        val newest = byKey[k]
-        if (newest == null) byKey[k] = call
-        else if (newest.name == null && call.name != null) byKey[k] = newest.copy(name = call.name)
+        var newest = byKey[k]
+        if (newest == null) {
+            byKey[k] = call
+            counting += k
+            return@forEach
+        }
+        if (k in counting) {
+            if (call.direction == newest.direction) newest = newest.copy(count = newest.count + 1) else counting -= k
+        }
+        if (newest.name == null && call.name != null) newest = newest.copy(name = call.name)
+        byKey[k] = newest
     }
     return byKey.values.toList()
 }

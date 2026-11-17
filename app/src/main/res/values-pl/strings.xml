@@ -99,6 +99,13 @@
     <string name="recents_received">Odebrane</string>
     <string name="recents_new_missed">Nowe nieodebrane połączenie</string>
     <string name="recents_missed">Nieodebrane</string>
+    <!-- Spoken after a name in Recent that stands for several calls in a row ("Mum (3)"). -->
+    <plurals name="recents_call_count">
+        <item quantity="one">%d połączenie</item>
+        <item quantity="few">%d połączenia</item>
+        <item quantity="many">%d połączeń</item>
+        <item quantity="other">%d połączenia</item>
+    </plurals>
 
     <!-- settings overview -->
     <string name="settings_connections">Połączenia z FRITZ!Box</string>

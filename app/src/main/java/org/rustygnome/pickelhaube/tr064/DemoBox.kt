@@ -159,6 +159,8 @@ object DemoBox {
             Call(3, "03023125203", "Pizzeria Da Marco", now - 2 * hour, 75),
             Call(1, "017604069002", "Ben Hoffmann", now - 5 * hour, 610),
             Call(2, "08999998107", "Grandma", now - day - 3 * hour, 0),
+            // Tried twice: shown once in Recent, as "Grandma (2)".
+            Call(2, "08999998107", "Grandma", now - day - 4 * hour, 0),
             Call(3, "03023125201", "Dr. Weber, dentist", now - day - 6 * hour, 120, own = OFFICE_NUMBER),
             Call(1, "08999998350", null, now - 3 * day, 45, own = OFFICE_NUMBER),
             Call(1, "03023125104", "Dad", now - 4 * day, 1260),
