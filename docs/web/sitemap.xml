@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The pages of the Pickelhaube web site for search engines. The legal notice is left out: it is marked noindex. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.rustygnome.org/pickelhaube/</loc></url>
+  <url><loc>https://www.rustygnome.org/pickelhaube/guide.html</loc></url>
+  <url><loc>https://www.rustygnome.org/pickelhaube/changes.html</loc></url>
+  <url><loc>https://www.rustygnome.org/pickelhaube/feedback.html</loc></url>
+  <url><loc>https://www.rustygnome.org/pickelhaube/privacy-policy.html</loc></url>
+</urlset>
