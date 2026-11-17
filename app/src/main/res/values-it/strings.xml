@@ -638,4 +638,9 @@
     <string-array name="whats_new_15">
         <item>Qualcosa da dire? Nelle impostazioni ora c’è un link al modulo di feedback sul sito web – per un problema, un’idea o un complimento.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>Chiamato più volte di seguito? Recenti mostra quante volte dopo il nome – “Mamma (3)”: tre chiamate perse dall’ultima volta che vi siete sentiti.</item>
+        <item>Le risposte dove nascono le domande: un punto interrogativo accanto a “Riaggancia sull’apparecchio stesso” e un link negli errori di connessione portano al sito web.</item>
+        <item>Meglio con lettore di schermo e testo grande: gli interruttori dicono cosa attivano, lo stato della chiamata viene letto a ogni cambiamento e Recenti non taglia più nomi e numeri.</item>
+    </string-array>
 </resources>

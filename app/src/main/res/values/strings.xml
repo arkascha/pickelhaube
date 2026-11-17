@@ -632,4 +632,9 @@
     <string-array name="whats_new_15">
         <item>Something to say? The settings now have a link to the feedback form on the web page – for a problem, an idea or a word of praise.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>Called more than once in a row? Recent shows how often after the name – “Mum (3)”: three missed calls since you last spoke.</item>
+        <item>Answers where the questions come up: a question mark beside “Hang up on the device itself”, and a link in connection errors, lead to them on the web page.</item>
+        <item>Better with screen readers and large text: switches say what they switch, the call status is read out as it changes, and Recent no longer cuts off names and numbers.</item>
+    </string-array>
 </resources>

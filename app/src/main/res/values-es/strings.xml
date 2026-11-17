@@ -638,4 +638,9 @@
     <string-array name="whats_new_15">
         <item>¿Algo que decir? En los ajustes hay ahora un enlace al formulario de comentarios de la página web: para un problema, una idea o un elogio.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>¿Llamadas varias veces seguidas? Recientes muestra cuántas tras el nombre – «Mamá (3)»: tres llamadas perdidas desde la última vez que hablasteis.</item>
+        <item>Respuestas donde surgen las preguntas: un signo de interrogación junto a «Cuelga en el propio aparato» y un enlace en los errores de conexión llevan a ellas en la página web.</item>
+        <item>Mejor con lector de pantalla y texto grande: los interruptores dicen qué activan, el estado de la llamada se lee en voz alta cuando cambia, y Recientes ya no corta nombres ni números.</item>
+    </string-array>
 </resources>

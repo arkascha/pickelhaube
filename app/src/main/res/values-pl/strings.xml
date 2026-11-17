@@ -652,4 +652,9 @@
     <string-array name="whats_new_15">
         <item>Masz coś do powiedzenia? W ustawieniach jest teraz link do formularza opinii na stronie internetowej – na problem, pomysł albo pochwałę.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>Kilka połączeń z rzędu? Ostatnie pokazują ich liczbę po nazwie – „Mama (3)”: trzy nieodebrane od waszej ostatniej rozmowy.</item>
+        <item>Odpowiedzi tam, gdzie pojawiają się pytania: znak zapytania obok „Rozłącz się na samym urządzeniu” i link przy błędach połączenia prowadzą do nich na stronie internetowej.</item>
+        <item>Lepiej z czytnikiem ekranu i dużym tekstem: przełączniki mówią, co przełączają, stan połączenia jest odczytywany przy każdej zmianie, a Ostatnie nie obcinają już nazw i numerów.</item>
+    </string-array>
 </resources>

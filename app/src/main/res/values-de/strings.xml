@@ -628,4 +628,9 @@
     <string-array name="whats_new_15">
         <item>Etwas zu sagen? In den Einstellungen führt jetzt ein Link zum Feedback-Formular auf der Webseite – für ein Problem, eine Idee oder ein Lob.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>Mehrmals hintereinander angerufen? „Letzte“ zeigt die Anzahl hinter dem Namen – „Mama (3)“: drei verpasste Anrufe seit eurem letzten Gespräch.</item>
+        <item>Antworten dort, wo die Fragen aufkommen: Ein Fragezeichen neben „Auflegen am Gerät selbst“ und ein Link bei Verbindungsfehlern führen zu ihnen auf der Webseite.</item>
+        <item>Besser mit Screenreader und großer Schrift: Schalter sagen, was sie schalten, der Gesprächsstatus wird bei jeder Änderung vorgelesen, und „Letzte“ schneidet Namen und Nummern nicht mehr ab.</item>
+    </string-array>
 </resources>

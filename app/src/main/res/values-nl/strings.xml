@@ -628,4 +628,9 @@
     <string-array name="whats_new_15">
         <item>Iets te zeggen? In de instellingen staat nu een link naar het feedbackformulier op de website – voor een probleem, een idee of een compliment.</item>
     </string-array>
+    <string-array name="whats_new_16">
+        <item>Meerdere keren achter elkaar gebeld? Recent toont het aantal achter de naam – „Mama (3)”: drie gemiste oproepen sinds jullie laatste gesprek.</item>
+        <item>Antwoorden waar de vragen opkomen: een vraagteken naast „Ophangen op het toestel zelf” en een link bij verbindingsfouten leiden ernaartoe op de website.</item>
+        <item>Beter met schermlezer en grote tekst: schakelaars zeggen wat ze schakelen, de gespreksstatus wordt bij elke wijziging voorgelezen, en Recent kapt namen en nummers niet meer af.</item>
+    </string-array>
 </resources>
