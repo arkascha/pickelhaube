@@ -487,6 +487,8 @@
     <string name="call_dialling_from">Wähle %1$s von %2$s…</string>
     <string name="call_connected">Verbunden mit %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Auflegen am Gerät selbst</string>
+    <!-- The question mark beside it, opening the guide's answer. -->
+    <string name="call_hang_up_why">Warum kann die App das Gespräch nicht beenden?</string>
     <string name="dialer_insert_pause">Pause einfügen</string>
     <plurals name="dialer_more_suggestions_short">
         <item quantity="one">%d weitere</item>
@@ -586,6 +588,8 @@
     <string name="web_guide">Anleitung im Web (Englisch)</string>
     <string name="web_privacy_policy">Datenschutzerklärung (Englisch)</string>
     <string name="web_feedback">Feedback geben (Englisch)</string>
+    <!-- A link in error dialogs to the guide's answer on connection problems. -->
+    <string name="web_help_connection">Weitere Ursachen und was hilft (Englisch)</string>
     <string name="welcome_ready_more">Alles Weitere – in der Anleitung im Web (Englisch) ›</string>
     <string name="whats_new_title">Neu in %1$s</string>
     <string name="whats_new_ok">Alles klar</string>

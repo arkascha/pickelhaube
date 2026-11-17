@@ -493,6 +493,8 @@
     <string name="call_dialling_from">Llamando a %1$s desde %2$s…</string>
     <string name="call_connected">Conectado con %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Cuelga en el propio aparato</string>
+    <!-- The question mark beside it, opening the guide's answer. -->
+    <string name="call_hang_up_why">¿Por qué la app no puede terminar la llamada?</string>
     <string name="dialer_insert_pause">Insertar pausa</string>
     <plurals name="dialer_more_suggestions_short">
         <item quantity="one">%d más</item>
@@ -596,6 +598,8 @@
     <string name="web_guide">Guía en la web (en inglés)</string>
     <string name="web_privacy_policy">Política de privacidad (en inglés)</string>
     <string name="web_feedback">Enviar comentarios (en inglés)</string>
+    <!-- A link in error dialogs to the guide's answer on connection problems. -->
+    <string name="web_help_connection">Más causas y soluciones (en inglés)</string>
     <string name="welcome_ready_more">Todo lo demás – en la guía en la web (en inglés) ›</string>
     <string name="whats_new_title">Novedades en %1$s</string>
     <string name="whats_new_ok">Entendido</string>

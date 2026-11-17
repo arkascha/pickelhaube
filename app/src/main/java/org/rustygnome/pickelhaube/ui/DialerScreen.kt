@@ -68,6 +68,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.runtime.Composable
@@ -829,6 +830,18 @@ private fun CallStatusLine(
             else -> text
         } + (hint?.let { "\n$it" } ?: "")
         CallStatusText(text, hint, progress, extension, spoken, Modifier.weight(1f))
+        // "Hang up on the device itself": why, in the guide's answer.
+        if (progress is CallProgress.Connected && extension == null) {
+            val uriHandler = LocalUriHandler.current
+            IconButton(onClick = { uriHandler.openUri(WebPages.FAQ_END_CALL) }) {
+                Icon(
+                    HelpOutlineIcon,
+                    contentDescription = stringResource(R.string.call_hang_up_why),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
         // Busy, or nobody answered (or the own phone was not picked up): calling again is the next step.
         if (onTryAgain != null && (progress == CallProgress.NotAnswered || progress == CallProgress.NotPickedUp)) {
             Spacer(Modifier.width(8.dp))

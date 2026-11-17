@@ -490,6 +490,8 @@
     <string name="call_dialling_from">Calling %1$s from %2$s…</string>
     <string name="call_connected">Connected with %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Hang up on the device itself</string>
+    <!-- The question mark beside it, opening the guide's answer. -->
+    <string name="call_hang_up_why">Why can’t the app end the call?</string>
     <string name="dialer_insert_pause">Insert pause</string>
     <plurals name="dialer_more_suggestions_short">
         <item quantity="one">%d more</item>
@@ -590,6 +592,8 @@
     <string name="web_guide">Guide on the web</string>
     <string name="web_privacy_policy">Privacy policy</string>
     <string name="web_feedback">Send feedback</string>
+    <!-- A link in error dialogs to the guide's answer on connection problems. -->
+    <string name="web_help_connection">More causes and what helps</string>
     <string name="welcome_ready_more">Everything else – in the guide on the web ›</string>
     <string name="whats_new_title">What’s new in %1$s</string>
     <string name="whats_new_ok">Got it</string>

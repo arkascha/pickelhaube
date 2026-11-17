@@ -84,6 +84,8 @@ fun ErrorDialog(
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text(error.detail.asString())
+                // A connection that fails: the guide's answer lists the other causes and what helps.
+                if (error.settingsRelated) WebHelpLink(stringResource(R.string.web_help_connection), WebPages.FAQ_NO_CONNECTION)
                 error.technical?.let { TechnicalDetailsSection(it) }
             }
         },

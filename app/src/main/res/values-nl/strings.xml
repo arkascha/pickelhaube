@@ -487,6 +487,8 @@
     <string name="call_dialling_from">%1$s wordt gebeld vanaf %2$s…</string>
     <string name="call_connected">Verbonden met %1$s · %2$s</string>
     <string name="call_hang_up_on_device">Ophangen op het toestel zelf</string>
+    <!-- The question mark beside it, opening the guide's answer. -->
+    <string name="call_hang_up_why">Waarom kan de app het gesprek niet beëindigen?</string>
     <string name="dialer_insert_pause">Pauze invoegen</string>
     <plurals name="dialer_more_suggestions_short">
         <item quantity="one">nog %d</item>
@@ -586,6 +588,8 @@
     <string name="web_guide">Handleiding op het web (Engels)</string>
     <string name="web_privacy_policy">Privacybeleid (Engels)</string>
     <string name="web_feedback">Feedback geven (Engels)</string>
+    <!-- A link in error dialogs to the guide's answer on connection problems. -->
+    <string name="web_help_connection">Meer oorzaken en wat helpt (Engels)</string>
     <string name="welcome_ready_more">Al het andere – in de handleiding op het web (Engels) ›</string>
     <string name="whats_new_title">Nieuw in %1$s</string>
     <string name="whats_new_ok">Begrepen</string>

@@ -1,8 +1,10 @@
 package org.rustygnome.pickelhaube.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -21,7 +23,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -69,6 +73,20 @@ internal fun HelpButton(title: String, help: List<String>) {
             confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(R.string.close)) } },
         )
     }
+}
+
+/** A link to a page of the web site, [url], in a dialog's text: further help than fits there. */
+@Composable
+internal fun WebHelpLink(text: String, url: String) {
+    val uriHandler = LocalUriHandler.current
+    Text(
+        text,
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier
+            .clickable(role = Role.Button) { uriHandler.openUri(url) }
+            .padding(vertical = 12.dp),
+    )
 }
 
 /** Material "help_outline" glyph (question mark in a circle, Apache 2.0). */

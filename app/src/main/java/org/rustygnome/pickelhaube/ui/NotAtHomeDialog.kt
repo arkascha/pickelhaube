@@ -53,6 +53,10 @@ internal fun NotAtHomeDialog(kind: NetworkKind?, onSearchAgain: () -> Unit, onDi
                         },
                     ),
                 )
+                // In a network where none of the boxes answers – maybe at home, with another cause.
+                if (kind == NetworkKind.LOCAL || kind == NetworkKind.VPN || kind == null) {
+                    WebHelpLink(stringResource(R.string.web_help_connection), WebPages.FAQ_NO_CONNECTION)
+                }
                 OutlinedButton(onClick = {
                     val intent = when {
                         !noNetwork -> Intent(Settings.ACTION_VPN_SETTINGS)
