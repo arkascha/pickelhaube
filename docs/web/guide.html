@@ -292,16 +292,21 @@
     <p>Hang up on the phone you are talking on – the headset, speakerphone or handset that rang – the same way as after
       any other call on it. Once you picked it up, the call no longer runs through your smartphone at all: it is a call of
       that phone on the FRITZ!Box.</p>
-    <p>The FRITZ!Box’s dial help, which Pickelhaube uses, can only cancel a call while it is being set up; it offers
-      no way to end a connected call. That’s why the red button works only until the call is connected and is greyed out
-      after that – the dialer then shows “Hang up on the device itself”. As always, the call also ends when the other
-      side hangs up.</p>
+    <p>Pickelhaube dials for a phone attached to your FRITZ!Box: it sets up the call from there. Once the call is
+      connected, that job is done, and the call is no longer in Pickelhaube’s hands. That’s why the red button can cancel
+      a call only while it is being set up, and is greyed out once it is connected – the dialer then shows “Hang up on
+      the device itself”. As always, the call also ends when the other side hangs up.</p>
   </details>
   <details id="faq-no-connection">
     <summary>The app doesn’t connect to my FRITZ!Box. What can I do?</summary>
     <p>When connecting fails, a dialog says why – that is the best place to start. These are the usual causes,
       the most frequent first:</p>
     <ul>
+      <li><strong>The router is not a FRITZ!Box.</strong> Many homes have a router of another make, often one supplied
+        by the internet provider. Pickelhaube needs the interface for apps that only a FRITZ!Box offers (TR-064), so it
+        cannot work with other routers. Check the name on the device, or open <code>http://fritz.box</code> in the
+        phone’s browser: if no FRITZ!Box login page appears, the router is most likely not one. If you have a FRITZ!Box
+        behind another router, see the point on the address below.</li>
       <li><strong>The phone is not in the box’s home network.</strong> It has to be in the Wi-Fi of that box – not on
         mobile data, and not in its guest Wi-Fi, which keeps devices away from the box itself. Away from home, a VPN
         into the home network helps (see <a href="#boxes">Several FRITZ!Boxes</a>).</li>
@@ -318,8 +323,7 @@
       <li><strong>HTTPS.</strong> If <em>Use HTTPS</em> is on, try once without it; the password is still not sent in
         clear text. If that works, see <a href="#https">HTTPS</a> for the port and the certificate.</li>
     </ul>
-    <p>The app works only with FRITZ!Box routers; other routers don’t offer the interface it needs. Still no luck?
-      The dialog’s <em>Technical details</em> can be copied – send them through the <a href="feedback.html">feedback form</a>.
+    <p>Still no luck? The dialog’s <em>Technical details</em> can be copied – send them through the <a href="feedback.html">feedback form</a>.
       They never contain your password; phone numbers in them you can replace with <code>x</code>.</p>
   </details>
 
