@@ -57,6 +57,7 @@
     <li><a href="#language">Language</a></li>
     <li><a href="#permissions">Permissions</a></li>
     <li><a href="#limits">Limitations</a></li>
+    <li><a href="#faq">Questions and answers</a></li>
   </ol>
 
   <h2 id="prepare">1. Prepare your FRITZ!Box</h2>
@@ -285,6 +286,20 @@
       no way to let another phone ring for a single call.</li>
   </ul>
 
+  <h2 id="faq">17. Questions and answers</h2>
+  <details id="faq-end-call">
+    <summary>The red “cancel” button doesn’t end my call – during the call it is even greyed out. How do I end the call?</summary>
+    <p>Hang up on the phone you are talking on – the headset, speakerphone or handset that rang – the same way as after
+      any other call on it. Once you picked it up, the call no longer runs through your smartphone at all: it is a call of
+      that phone on the FRITZ!Box.</p>
+    <p>The FRITZ!Box’s dial help, which Pickelhaube uses, can only cancel a call while it is being set up; it offers
+      no way to end a connected call. That’s why the red button works only until the call is connected and is greyed out
+      after that – the dialer then shows “Hang up on the device itself”. As always, the call also ends when the other
+      side hangs up.</p>
+  </details>
+
+  <p>Something not answered here? Ask through the <a href="feedback.html">feedback form</a>.</p>
+
   <p>Technical details and the source code: <a href="https://github.com/arkascha/pickelhaube">github.com/arkascha/pickelhaube</a>.</p>
 </main>
 
@@ -303,5 +318,14 @@
       FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
   </div>
 </footer>
+<script>
+  // A link to one answer (guide.html#faq-…) opens it.
+  function openAnswer() {
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.tagName === 'DETAILS') target.open = true;
+  }
+  openAnswer();
+  window.addEventListener('hashchange', openAnswer);
+</script>
 </body>
 </html>
