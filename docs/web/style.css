@@ -64,7 +64,7 @@ nav.main a:hover { color: var(--text); }
 nav.main a[aria-current="page"] { color: var(--text); font-weight: 600; border-bottom: 2px solid var(--accent); }
 
 /* Content */
-main { padding: 2rem 0 3rem; }
+main.wrap { padding-top: 2rem; padding-bottom: 3rem; }  /* .wrap alone would take the vertical padding away */
 h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .5rem; }
 h2 { font-size: 1.35rem; margin: 2.25rem 0 .5rem; }
 h3 { font-size: 1.08rem; margin: 1.5rem 0 .25rem; }
@@ -79,8 +79,15 @@ code, kbd {
 
 /* Hero on the landing page */
 .hero { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
-.hero img { width: 96px; height: 96px; flex: none; }
+.hero img.shot { width: 11rem; height: auto; flex: none; }
 .hero div { flex: 1 1 18rem; }
+
+/* Screenshots of the app */
+img.shot { display: block; max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 14px; }
+.gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; margin: 1rem 0 1.5rem; }
+.gallery figure { margin: 0; }
+.gallery figcaption { text-align: center; font-size: .9rem; color: var(--muted); margin-top: .35rem; }
+@media (max-width: 560px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
 
 /* Call to action */
 .cta {
@@ -154,7 +161,7 @@ footer.site a { color: var(--muted); }
 @media (max-width: 480px) {
   body { font-size: 16px; }
   h1 { font-size: 1.6rem; }
-  .hero img { width: 72px; height: 72px; }
+  .hero img.shot { width: 10rem; margin: 0 auto; }
 }
 
 iframe.form { display: block; width: 100%; height: 75rem; border: 1px solid var(--border); border-radius: var(--radius); margin: 1rem 0; background: var(--surface); }

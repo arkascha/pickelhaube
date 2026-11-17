@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pickelhaube – dial through your FRITZ!Box</title>
   <meta name="description" content="Pickelhaube is an Android dialer that places calls through your FRITZ!Box using its dial help (click-to-dial).">
+  <!-- Link previews (Open Graph): what a forum, messenger or social network shows for a link to this page. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pickelhaube">
+  <meta property="og:title" content="Pickelhaube – dial through your FRITZ!Box">
+  <meta property="og:description" content="Pickelhaube is an Android dialer that places calls through your FRITZ!Box using its dial help (click-to-dial).">
+  <meta property="og:url" content="https://www.rustygnome.org/pickelhaube/">
+  <meta property="og:image" content="https://www.rustygnome.org/pickelhaube/preview.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="500">
+  <meta property="og:image:alt" content="Pickelhaube: pick the number on your smartphone – your FRITZ!Box phone makes the call.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,12 +34,13 @@
 
 <main class="wrap">
   <section class="hero">
-    <img src="logo.svg" alt="Pickelhaube logo">
     <div>
       <h1>Dial from your smartphone, talk on your FRITZ!Box headset</h1>
       <p class="lead">Pickelhaube is a small Android app that places calls through your FRITZ!Box router –
         exactly like the router's own <em>dial help</em> (click-to-dial).</p>
     </div>
+    <img class="shot" src="screenshot-dialer.webp" width="540" height="960"
+      alt="The app's dialer: a number with its name, the keypad, the phone that should ring, and the green call button">
   </section>
 
   <p>Pick a number on your Android phone, tap the green button – the device you chose on the FRITZ!Box
@@ -51,6 +63,16 @@
   </div>
 
   <h2>What it does</h2>
+  <div class="gallery">
+    <figure><img class="shot" src="screenshot-recents.webp" width="540" height="960" loading="lazy"
+      alt="Recent calls, grouped by day, each with a call button"><figcaption>Recent calls</figcaption></figure>
+    <figure><img class="shot" src="screenshot-phonebooks.webp" width="540" height="960" loading="lazy"
+      alt="The FRITZ!Box phone books with a search field and an index by letter"><figcaption>Phone books</figcaption></figure>
+    <figure><img class="shot" src="screenshot-call.webp" width="540" height="960" loading="lazy"
+      alt="The dialer during a call: connected, with the time running"><figcaption>Live call status</figcaption></figure>
+    <figure><img class="shot" src="screenshot-forwarding.webp" width="540" height="960" loading="lazy"
+      alt="The box's call forwardings with switches to turn them on and off"><figcaption>Call forwarding</figcaption></figure>
+  </div>
   <div class="grid">
     <div class="card"><h3>Dial help</h3><p>Uses the FRITZ!Box's TR-064 interface: the box rings your handset first, then dials the target number. A typo? Tap right after it in the number and fix it there.</p></div>
     <div class="card"><h3>Phone books &amp; recent calls</h3><p>Pick numbers from the box's phone books and call list – and optionally from your phone's own contacts. Recent calls by day, the missed ones at a tap, and a call button on every number. Optionally, “Call via FRITZ!Box” right in your phone's contacts app.</p></div>
