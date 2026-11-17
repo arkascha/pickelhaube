@@ -524,7 +524,13 @@ private fun ContactRow(
                         ),
                 ) {
                     if (onCall != null) {
-                        CallButton(n.number, contact.name, enabled = callEnabled) { onCall(n) }
+                        // Several numbers: each button says which one ("Call Anna (Mobile)").
+                        val whose = when {
+                            contact.numbers.size == 1 -> contact.name
+                            contact.numbers.count { it.type == n.type } == 1 -> "${contact.name} (${numberTypeLabel(n.type)})"
+                            else -> "${contact.name} (${show(n.number)})"
+                        }
+                        CallButton(n.number, whose, enabled = callEnabled) { onCall(n) }
                     } else {
                         Icon(
                             Icons.Default.Call,

@@ -86,7 +86,11 @@ fun WidgetSetupScreen(
                     listOf(stringResource(R.string.widget_setup_transparent_help)),
                     Modifier.weight(1f),
                 )
-                Switch(checked = list.transparent, onCheckedChange = onTransparentChange)
+                Switch(
+                    checked = list.transparent,
+                    onCheckedChange = onTransparentChange,
+                    modifier = Modifier.labelled(stringResource(R.string.widget_setup_transparent)),
+                )
             }
             if (list.entries.isEmpty()) {
                 Text(stringResource(R.string.widget_setup_hint), style = TextRoles.hint)

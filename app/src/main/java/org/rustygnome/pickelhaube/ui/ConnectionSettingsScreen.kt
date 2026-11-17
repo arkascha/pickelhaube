@@ -303,6 +303,7 @@ fun ConnectionSettingsScreen(
                     Modifier.weight(1f),
                 )
                 Switch(
+                    modifier = Modifier.labelled(stringResource(R.string.connection_https)),
                     checked = useHttps,
                     onCheckedChange = { checked ->
                         useHttps = checked

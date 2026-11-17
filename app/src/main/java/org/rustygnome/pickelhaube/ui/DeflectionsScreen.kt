@@ -117,16 +117,18 @@ private fun DeflectionRow(
     onChooseTile: (CallDeflection) -> Unit,
     onToggle: (CallDeflection, Boolean) -> Unit,
 ) {
+    val calls = deflectionCalls(deflection)
     ListItem(
         leadingContent = forTile?.let {
             {
                 RadioButton(
                     selected = deflection.id == it.id,
                     onClick = { onChooseTile(deflection) },
+                    modifier = Modifier.labelled(calls),
                 )
             }
         },
-        headlineContent = { Text(deflectionCalls(deflection)) },
+        headlineContent = { Text(calls) },
         supportingContent = {
             Text("→ ${deflection.toNumber.ifBlank { "–" }} · ${deflectionMode(deflection.mode)}")
         },
@@ -135,6 +137,7 @@ private fun DeflectionRow(
                 checked = deflection.enabled,
                 onCheckedChange = { onToggle(deflection, it) },
                 enabled = !busy,
+                modifier = Modifier.labelled(calls),
             )
         },
     )

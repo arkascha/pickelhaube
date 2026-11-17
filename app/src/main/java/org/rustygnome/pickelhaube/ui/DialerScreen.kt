@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.liveRegion
 import android.os.SystemClock
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -819,7 +822,13 @@ private fun CallStatusLine(
             CallMascot(progress, Modifier.size(40.dp))
             Spacer(Modifier.width(12.dp))
         }
-        CallStatusText(text, hint, progress, extension, Modifier.weight(1f))
+        // What screen readers announce on each change: the status without the running time, which would
+        // otherwise be announced every second.
+        val spoken = when (progress) {
+            is CallProgress.Connected -> stringResource(R.string.call_connected, show(progress.number), "").trimEnd(' ', '·')
+            else -> text
+        } + (hint?.let { "\n$it" } ?: "")
+        CallStatusText(text, hint, progress, extension, spoken, Modifier.weight(1f))
         // Busy, or nobody answered (or the own phone was not picked up): calling again is the next step.
         if (onTryAgain != null && (progress == CallProgress.NotAnswered || progress == CallProgress.NotPickedUp)) {
             Spacer(Modifier.width(8.dp))
@@ -834,7 +843,7 @@ private fun CallStatusLine(
 
 /** The call's status in up to two lines: what happens, and what to do. */
 @Composable
-private fun CallStatusText(text: String, hint: String?, progress: CallProgress?, extension: String?, modifier: Modifier) {
+private fun CallStatusText(text: String, hint: String?, progress: CallProgress?, extension: String?, spoken: String, modifier: Modifier) {
     Text(
         buildAnnotatedString {
             append(text)
@@ -854,7 +863,14 @@ private fun CallStatusText(text: String, hint: String?, progress: CallProgress?,
         minLines = 2,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier,
+        // Announced as it changes, so the call can be followed without looking; with no call, nothing to read.
+        modifier = modifier.then(
+            if (spoken.isBlank()) Modifier.clearAndSetSemantics {}
+            else Modifier.semantics {
+                contentDescription = spoken
+                liveRegion = LiveRegionMode.Polite
+            },
+        ),
     )
 }
 

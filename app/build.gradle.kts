@@ -132,6 +132,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.intents)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    // Accessibility checks (Accessibility Test Framework) on the screens in AccessibilityTest.
+    androidTestImplementation(libs.androidx.ui.test.junit4.accessibility)
     debugImplementation(libs.androidx.ui.test.manifest)
     androidTestUtil(libs.androidx.test.orchestrator)
     androidTestUtil(libs.androidx.test.services)

@@ -68,7 +68,7 @@ internal fun CallStatusSetting(
             listOf(stringResource(R.string.settings_call_status_hint), stringResource(R.string.settings_call_status_privacy)),
             Modifier.weight(1f),
         )
-        Switch(checked = enabled, onCheckedChange = onChange)
+        Switch(checked = enabled, onCheckedChange = onChange, modifier = Modifier.labelled(stringResource(R.string.settings_call_status_switch)))
     }
     if (!enabled) return
     profiles.forEach { profile ->
@@ -167,7 +167,7 @@ internal fun TilesSetting() {
 internal fun BoxFeatureSetting(title: String, hint: String, enabled: Boolean, onChange: (Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         OptionTitle(title, listOf(hint), Modifier.weight(1f))
-        Switch(checked = enabled, onCheckedChange = onChange)
+        Switch(checked = enabled, onCheckedChange = onChange, modifier = Modifier.labelled(title))
     }
 }
 
@@ -198,6 +198,7 @@ internal fun DeviceContactsSetting(enabled: Boolean, onChange: (Boolean) -> Unit
             Modifier.weight(1f),
         )
         Switch(
+            modifier = Modifier.labelled(stringResource(R.string.settings_device_contacts)),
             checked = enabled && allowed,
             onCheckedChange = { on ->
                 when {
@@ -260,6 +261,7 @@ internal fun ContactActionsSetting() {
             Modifier.weight(1f),
         )
         Switch(
+            modifier = Modifier.labelled(stringResource(R.string.settings_contact_actions)),
             checked = enabled && allowed,
             enabled = !busy,
             onCheckedChange = { on ->
@@ -305,6 +307,7 @@ internal fun CallLogSetting(
             Modifier.weight(1f),
         )
         Switch(
+            modifier = Modifier.labelled(stringResource(R.string.settings_call_log)),
             checked = enabled,
             onCheckedChange = { on ->
                 when {

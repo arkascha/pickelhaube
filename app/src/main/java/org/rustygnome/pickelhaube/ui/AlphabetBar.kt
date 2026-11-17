@@ -21,7 +21,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import kotlin.math.min
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +54,8 @@ fun AlphabetBar(
     val haptics = LocalHapticFeedback.current
     var height by remember { mutableIntStateOf(1) }
     var lastIndex by remember { mutableIntStateOf(-1) }
+    // The letters grow with the font size only as far as the bar's height leaves room for all of them.
+    val letterSize = with(LocalDensity.current) { min(LETTER_SIZE.toPx(), height / INDEX_LETTERS.size * 0.85f).toSp() }
 
     fun select(y: Float) {
         val index = (y / height * INDEX_LETTERS.size).toInt().coerceIn(0, INDEX_LETTERS.lastIndex)
@@ -67,6 +72,8 @@ fun AlphabetBar(
             .fillMaxHeight()
             .padding(vertical = 4.dp)
             .onSizeChanged { height = it.height.coerceAtLeast(1) }
+            // Only a finger can slide along it; screen readers reach the entries by the list and its search.
+            .clearAndSetSemantics {}
             .pointerInput(Unit) {
                 awaitEachGesture {
                     val down = awaitFirstDown()
@@ -92,8 +99,8 @@ fun AlphabetBar(
             ) {
                 Text(
                     letter.toString(),
-                    fontSize = 11.sp,
-                    lineHeight = 11.sp,
+                    fontSize = letterSize,
+                    lineHeight = letterSize,
                     fontWeight = FontWeight.SemiBold,
                     color = if (letter in available) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f),
@@ -102,3 +109,6 @@ fun AlphabetBar(
         }
     }
 }
+
+/** The letters' size at the normal font size. */
+private val LETTER_SIZE = 11.sp

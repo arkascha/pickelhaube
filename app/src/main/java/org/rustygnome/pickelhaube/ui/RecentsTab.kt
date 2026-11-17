@@ -49,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -301,7 +302,8 @@ fun RecentsTab(
  * Name (or number) and number on the left. On the right, top line: when the call was and how it
  * went (dialled / received / missed); bottom line: where it was recorded (the FritzBox' name and a
  * router icon, or a phone icon). The icons have a fixed size and sit at the right edge, so the times
- * of all rows end at the same position – a right-aligned column.
+ * of all rows end at the same position – a right-aligned column. With large text, when and where take
+ * a line above the name instead, so name and number keep the row's width.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -324,19 +326,36 @@ private fun RecentRow(
     // Numbers grouped as they are written (names and the like as they are).
     val show = LocalNumberDisplay.current
     var menu by remember { mutableStateOf(false) }
+    // With large text, name and number may take a second line rather than being cut off.
+    val large = LocalDensity.current.fontScale > LARGE_FONT_SCALE
+    val lines = if (large) 2 else 1
     Box {
         ListItem(
             leadingContent = onCall?.let { dial ->
                 { CallButton(call.number, call.name, enabled = callEnabled) { dial(call.number) } }
             },
-            overlineContent = if (isNew) {
-                { Text(stringResource(R.string.recents_new_missed), color = MaterialTheme.colorScheme.error) }
-            } else null,
+            overlineContent = when {
+                large -> {
+                    {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (isNew) {
+                                Text(stringResource(R.string.recents_new_missed), color = MaterialTheme.colorScheme.error)
+                                Spacer(Modifier.width(8.dp))
+                            }
+                            RecentMeta(call, time, boxName, inline = true)
+                        }
+                    }
+                }
+                isNew -> {
+                    { Text(stringResource(R.string.recents_new_missed), color = MaterialTheme.colorScheme.error) }
+                }
+                else -> null
+            },
             headlineContent = {
                 Text(
                     call.name ?: show(call.number),
                     fontWeight = if (isNew) FontWeight.Bold else null,
-                    maxLines = 1,
+                    maxLines = lines,
                     overflow = TextOverflow.Ellipsis,
                 )
             },
@@ -349,49 +368,13 @@ private fun RecentRow(
                 }
                 val text = listOfNotNull(show(call.number).takeIf { call.name != null }, via).joinToString(" · ")
                 if (text.isEmpty()) null else {
-                    { Text(text, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                    { Text(text, maxLines = lines, overflow = TextOverflow.Ellipsis) }
                 }
             },
-            trailingContent = {
-                Column(horizontalAlignment = Alignment.End) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            time,
-                            // Tabular figures: digits of equal width, so the times line up neatly.
-                            style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.End,
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        DirectionIcon(call.direction)
-                    }
-                    Spacer(Modifier.height(2.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (call.source == RecentCall.Source.FRITZBOX) {
-                            Text(
-                                boxName ?: stringResource(R.string.fritzbox),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.widthIn(max = 96.dp),
-                            )
-                            Spacer(Modifier.width(8.dp))
-                        }
-                        Icon(
-                            when (call.source) {
-                                RecentCall.Source.FRITZBOX -> RouterIcon
-                                RecentCall.Source.PHONE -> SmartphoneIcon
-                            },
-                            contentDescription = when (call.source) {
-                                RecentCall.Source.FRITZBOX -> stringResource(R.string.recents_recorded_by_box, boxName ?: stringResource(R.string.fritzbox))
-                                RecentCall.Source.PHONE -> stringResource(R.string.recents_recorded_by_phone)
-                            },
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(ICON_SIZE),
-                        )
-                    }
-                }
+            // Normally when and where the call was stand at the right; with large text they take a line above
+            // instead, leaving the row's width to the name and number.
+            trailingContent = if (large) null else {
+                { RecentMeta(call, time, boxName, inline = false) }
             },
             modifier = Modifier.combinedClickable(
                 onClick = { onPick(call.number) },
@@ -403,6 +386,73 @@ private fun RecentRow(
             ),
         )
         NumberActionsMenu(expanded = menu, actions = actions, onDismiss = { menu = false })
+    }
+}
+
+/**
+ * When the call was and how it went, and where it was recorded: in two lines at the row's end, or
+ * [inline] in one line above the name.
+ */
+@Composable
+private fun RecentMeta(call: RecentCall, time: String, boxName: String?, inline: Boolean) {
+    if (inline) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CallTime(call, time)
+            Spacer(Modifier.width(12.dp))
+            CallSource(call, boxName)
+        }
+    } else {
+        Column(horizontalAlignment = Alignment.End) {
+            CallTime(call, time)
+            Spacer(Modifier.height(2.dp))
+            CallSource(call, boxName)
+        }
+    }
+}
+
+/** When the call was, and how it went (dialled / received / missed). */
+@Composable
+private fun CallTime(call: RecentCall, time: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            time,
+            // Tabular figures: digits of equal width, so the times line up neatly.
+            style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.End,
+        )
+        Spacer(Modifier.width(8.dp))
+        DirectionIcon(call.direction)
+    }
+}
+
+/** Where the call was recorded: the FRITZ!Box' name and a router icon, or a phone icon. */
+@Composable
+private fun CallSource(call: RecentCall, boxName: String?) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (call.source == RecentCall.Source.FRITZBOX) {
+            Text(
+                boxName ?: stringResource(R.string.fritzbox),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.widthIn(max = 96.dp),
+            )
+            Spacer(Modifier.width(8.dp))
+        }
+        Icon(
+            when (call.source) {
+                RecentCall.Source.FRITZBOX -> RouterIcon
+                RecentCall.Source.PHONE -> SmartphoneIcon
+            },
+            contentDescription = when (call.source) {
+                RecentCall.Source.FRITZBOX -> stringResource(R.string.recents_recorded_by_box, boxName ?: stringResource(R.string.fritzbox))
+                RecentCall.Source.PHONE -> stringResource(R.string.recents_recorded_by_phone)
+            },
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(ICON_SIZE),
+        )
     }
 }
 
