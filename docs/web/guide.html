@@ -297,6 +297,31 @@
       after that – the dialer then shows “Hang up on the device itself”. As always, the call also ends when the other
       side hangs up.</p>
   </details>
+  <details id="faq-no-connection">
+    <summary>The app doesn’t connect to my FRITZ!Box. What can I do?</summary>
+    <p>When connecting fails, a dialog says why – that is the best place to start. These are the usual causes,
+      the most frequent first:</p>
+    <ul>
+      <li><strong>The phone is not in the box’s home network.</strong> It has to be in the Wi-Fi of that box – not on
+        mobile data, and not in its guest Wi-Fi, which keeps devices away from the box itself. Away from home, a VPN
+        into the home network helps (see <a href="#boxes">Several FRITZ!Boxes</a>).</li>
+      <li><strong>“Allow access for applications” is off.</strong> Without it, the box doesn’t answer apps at all:
+        <em>Home Network › Network › Network Settings</em> (see <a href="#prepare">Prepare your FRITZ!Box</a>).</li>
+      <li><strong>The user name is wrong or missing.</strong> If you log in to the box with a password only, it still
+        has a user name made by the box, like <code>fritz1234</code>. It is shown under <em>System › FRITZ!Box Users</em>,
+        and the app offers it in the user name field (<kbd>▾</kbd>).</li>
+      <li><strong>Too many wrong passwords.</strong> After failed logins the box refuses further attempts for a while.
+        Wait a few minutes before trying again.</li>
+      <li><strong>The address doesn’t lead to the box.</strong> <code>fritz.box</code> works only where the FRITZ!Box
+        answers for it. If another router, a mesh system or your own DNS server stands in between, enter the box’s IP
+        address instead – <code>192.168.178.1</code>, unless it was changed on the box.</li>
+      <li><strong>HTTPS.</strong> If <em>Use HTTPS</em> is on, try once without it; the password is still not sent in
+        clear text. If that works, see <a href="#https">HTTPS</a> for the port and the certificate.</li>
+    </ul>
+    <p>The app works only with FRITZ!Box routers; other routers don’t offer the interface it needs. Still no luck?
+      The dialog’s <em>Technical details</em> can be copied – send them through the <a href="feedback.html">feedback form</a>.
+      They never contain your password; phone numbers in them you can replace with <code>x</code>.</p>
+  </details>
 
   <p>Something not answered here? Ask through the <a href="feedback.html">feedback form</a>.</p>
 
