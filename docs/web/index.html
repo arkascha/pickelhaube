@@ -60,6 +60,14 @@
       and the app is in Google's review for publication. Until then, it is available from GitHub, as the
       full version, which can also show the calls of your phone's own telephony app.</p>
     <a class="button" href="https://github.com/arkascha/pickelhaube/releases/latest">Download from GitHub</a>
+    <details class="verify">
+      <summary>Check that the download is genuine</summary>
+      <p>Every release of Pickelhaube on GitHub is signed with the same certificate. Its SHA-256 fingerprint:</p>
+      <p><code class="fingerprint">7D:<wbr>2C:<wbr>1F:<wbr>F9:<wbr>06:<wbr>28:<wbr>64:<wbr>87:<wbr>D2:<wbr>95:<wbr>51:<wbr>D2:<wbr>7D:<wbr>21:<wbr>EA:<wbr>A9:<wbr>D9:<wbr>51:<wbr>73:<wbr>A5:<wbr>0C:<wbr>7F:<wbr>B2:<wbr>0D:<wbr>72:<wbr>49:<wbr>CC:<wbr>8A:<wbr>91:<wbr>DC:<wbr>8B:<wbr>4E</code></p>
+      <p>To compare it: on a computer with <code>apksigner verify --print-certs</code> from the Android SDK,
+        or on the phone with an app such as AppVerifier. Android checks it as well: an update installs over
+        the version you have only if it is signed with the same certificate.</p>
+    </details>
   </div>
 
   <h2>What it does</h2>

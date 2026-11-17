@@ -102,6 +102,8 @@ img.shot { display: block; max-width: 100%; height: auto; border: 1px solid var(
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .button { color: #2a0d0b; }
 }
+.cta details.verify { border-bottom: 0; padding-bottom: 0; font-size: .95rem; }
+.cta details.verify summary { font-weight: 500; color: var(--muted); }
 .button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 
 /* Cards / grids */
