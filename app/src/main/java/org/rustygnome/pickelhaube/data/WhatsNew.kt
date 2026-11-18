@@ -23,6 +23,7 @@ object WhatsNew {
         14 to Note("1.10.0", R.array.whats_new_14),
         15 to Note("1.10.1", R.array.whats_new_15),
         16 to Note("1.11.0", R.array.whats_new_16),
+        17 to Note("1.12.0", R.array.whats_new_17),
     )
 
     /** At most this many points at once, when several versions were skipped. */

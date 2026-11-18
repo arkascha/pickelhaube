@@ -642,4 +642,9 @@
         <item>Answers where the questions come up: a question mark beside “Hang up on the device itself”, and a link in connection errors, lead to them on the web page.</item>
         <item>Better with screen readers and large text: switches say what they switch, the call status is read out as it changes, and Recent no longer cuts off names and numbers.</item>
     </string-array>
+    <string-array name="whats_new_17">
+        <item>The helmet joins in: in messages and questions it looks puzzled, searches or checks its list, it hops along as you dial, and cheers when the other side answers.</item>
+        <item>On Android 12 and newer the helmet wobbles as the app starts; on older Android the app now wears its own colours – the blue and brass of the helmet.</item>
+        <item>Names like FRITZ!\u2060Box are no longer split at the end of a line, and the titles of dialogs are centred.</item>
+    </string-array>
 </resources>

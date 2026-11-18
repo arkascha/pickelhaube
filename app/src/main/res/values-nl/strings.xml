@@ -633,4 +633,9 @@
         <item>Antwoorden waar de vragen opkomen: een vraagteken naast „Ophangen op het toestel zelf” en een link bij verbindingsfouten leiden ernaartoe op de website.</item>
         <item>Beter met schermlezer en grote tekst: schakelaars zeggen wat ze schakelen, de gespreksstatus wordt bij elke wijziging voorgelezen, en Recent kapt namen en nummers niet meer af.</item>
     </string-array>
+    <string-array name="whats_new_17">
+        <item>De helm doet mee: in meldingen en vragen kijkt hij verbaasd, zoekt hij of controleert hij zijn lijst, hij huppelt mee terwijl je kiest en juicht als de ander opneemt.</item>
+        <item>Vanaf Android 12 wiebelt de helm bij het starten van de app; op oudere Android-versies draagt de app nu zijn eigen kleuren – het blauw en messing van de helm.</item>
+        <item>Namen als FRITZ!\u2060Box worden aan het eind van een regel niet meer afgebroken, en de titels van dialogen staan gecentreerd.</item>
+    </string-array>
 </resources>

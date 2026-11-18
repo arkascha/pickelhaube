@@ -643,4 +643,9 @@
         <item>Le risposte dove nascono le domande: un punto interrogativo accanto a “Riaggancia sull’apparecchio stesso” e un link negli errori di connessione portano al sito web.</item>
         <item>Meglio con lettore di schermo e testo grande: gli interruttori dicono cosa attivano, lo stato della chiamata viene letto a ogni cambiamento e Recenti non taglia più nomi e numeri.</item>
     </string-array>
+    <string-array name="whats_new_17">
+        <item>Il casco partecipa: nei messaggi e nelle domande appare perplesso, cerca o controlla la sua lista, saltella mentre componi ed esulta quando l’altra parte risponde.</item>
+        <item>Da Android 12 il casco ondeggia all’avvio dell’app; sugli Android più vecchi l’app ha ora i suoi colori: il blu e l’ottone del casco.</item>
+        <item>Nomi come FRITZ!\u2060Box non vengono più spezzati a fine riga, e i titoli delle finestre di dialogo sono centrati.</item>
+    </string-array>
 </resources>

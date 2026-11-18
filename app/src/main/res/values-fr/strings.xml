@@ -643,4 +643,9 @@
         <item>Les réponses là où les questions se posent : un point d’interrogation à côté de « Raccrochez sur l’appareil lui-même » et un lien dans les erreurs de connexion y mènent, sur le site web.</item>
         <item>Mieux avec un lecteur d’écran et un grand texte : les interrupteurs disent ce qu’ils activent, l’état de l’appel est lu à chaque changement, et Récents ne coupe plus les noms et les numéros.</item>
     </string-array>
+    <string-array name="whats_new_17">
+        <item>Le casque participe : dans les messages et les questions, il a l’air perplexe, cherche ou vérifie sa liste, il sautille pendant que vous composez et se réjouit quand l’autre décroche.</item>
+        <item>À partir d’Android 12, le casque vacille au démarrage de l’appli ; sur les Android plus anciens, l’appli porte désormais ses propres couleurs : le bleu et le laiton du casque.</item>
+        <item>Les noms comme FRITZ!\u2060Box ne sont plus coupés en fin de ligne, et les titres des dialogues sont centrés.</item>
+    </string-array>
 </resources>

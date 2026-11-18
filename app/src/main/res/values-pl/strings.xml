@@ -657,4 +657,9 @@
         <item>Odpowiedzi tam, gdzie pojawiają się pytania: znak zapytania obok „Rozłącz się na samym urządzeniu” i link przy błędach połączenia prowadzą do nich na stronie internetowej.</item>
         <item>Lepiej z czytnikiem ekranu i dużym tekstem: przełączniki mówią, co przełączają, stan połączenia jest odczytywany przy każdej zmianie, a Ostatnie nie obcinają już nazw i numerów.</item>
     </string-array>
+    <string-array name="whats_new_17">
+        <item>Hełm też się włącza: w komunikatach i pytaniach robi zdziwioną minę, szuka albo sprawdza swoją listę, podskakuje, gdy wybierasz numer, i cieszy się, gdy druga strona odbierze.</item>
+        <item>Od Androida 12 hełm chwieje się przy uruchamianiu aplikacji; na starszym Androidzie aplikacja ma teraz własne kolory – niebieski i mosiądz hełmu.</item>
+        <item>Nazwy takie jak FRITZ!\u2060Box nie są już dzielone na końcu wiersza, a tytuły okien dialogowych są wyśrodkowane.</item>
+    </string-array>
 </resources>
