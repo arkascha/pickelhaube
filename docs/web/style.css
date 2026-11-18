@@ -64,13 +64,12 @@ nav.main a:hover { color: var(--text); }
 nav.main a[aria-current="page"] { color: var(--text); font-weight: 600; border-bottom: 2px solid var(--accent); }
 
 /* Language menu: the flag of the page's language, opening the languages with their flags (as in the app). */
-details.lang { position: relative; }
+details.lang { position: relative; border: 0; padding: 0; margin: 0; }  /* not the look of the folding answers (details below) */
 details.lang summary {
-  list-style: none; cursor: pointer; display: flex; align-items: center; gap: .3rem;
-  padding: .3rem .45rem; border: 1px solid var(--border); border-radius: 6px;
+  list-style: none; cursor: pointer; display: flex; align-items: center; font-weight: 400;
+  padding: .35rem; border: 1px solid var(--border); border-radius: 6px;
 }
 details.lang summary::-webkit-details-marker { display: none; }
-details.lang summary::after { content: "▾"; font-size: .75rem; color: var(--muted); }
 details.lang summary:hover, details.lang[open] summary { border-color: var(--muted); }
 details.lang img { display: block; width: 24px; height: 16px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
 details.lang ul {
@@ -78,7 +77,8 @@ details.lang ul {
   list-style: none; min-width: 9.5rem; background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); box-shadow: 0 6px 18px rgba(0,0,0,.15);
 }
-details.lang li a { display: flex; align-items: center; gap: .6rem; padding: .45rem .9rem; color: var(--text); text-decoration: none; }
+details.lang li a { display: flex; align-items: center; padding: .45rem .9rem; line-height: 1.2; color: var(--text); text-decoration: none; white-space: nowrap; }
+details.lang li img { margin-right: .65rem; flex: none; }
 details.lang li a:hover { background: var(--bg); }
 details.lang li a[aria-current] { font-weight: 600; }
 /* Narrow screens: the flag stays beside the name at the top, the menu goes onto a line of its own below. */
