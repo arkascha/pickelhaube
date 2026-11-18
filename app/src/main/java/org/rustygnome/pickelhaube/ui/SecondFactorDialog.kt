@@ -33,7 +33,7 @@ fun SecondFactorDialog(challenge: SecondFactorChallenge, onCancel: () -> Unit) {
         onDismissRequest = {},
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
         icon = { DialogMascot(MascotPose.LISTENING) },
-        title = { Text(stringResource(R.string.second_factor_title)) },
+        title = { DialogTitle(stringResource(R.string.second_factor_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(R.string.second_factor_intro))

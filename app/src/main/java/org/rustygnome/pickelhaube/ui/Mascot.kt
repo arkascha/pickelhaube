@@ -3,7 +3,9 @@ package org.rustygnome.pickelhaube.ui
 import android.provider.Settings
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 import kotlinx.coroutines.delay
@@ -112,4 +115,14 @@ internal fun DialogMascot(pose: MascotPose) {
         contentDescription = null,
         modifier = Modifier.size(DIALOG_MASCOT_SIZE),
     )
+}
+
+/**
+ * A dialog's title under the [DialogMascot]: centred like the mascot above it – also when it wraps
+ * onto a second line, which Material's dialog would leave aligned to the start.
+ */
+@Composable
+internal fun DialogTitle(text: String) {
+    // Not "FRITZ!" and "Box" on two lines: a line may break after a "!", so a word joiner holds them together.
+    Text(text.replace("FRITZ!Box", "FRITZ!\u2060Box"), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }

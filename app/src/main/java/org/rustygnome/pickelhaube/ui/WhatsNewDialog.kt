@@ -37,7 +37,7 @@ fun WhatsNewDialog(versions: List<Int>, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { DialogMascot(MascotPose.CHEERING) },
-        title = { Text(stringResource(R.string.whats_new_title, WhatsNew.titleVersion(versions) ?: BuildConfig.VERSION_NAME)) },
+        title = { DialogTitle(stringResource(R.string.whats_new_title, WhatsNew.titleVersion(versions) ?: BuildConfig.VERSION_NAME)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 points.forEach { point ->

@@ -40,7 +40,7 @@ internal fun NotAtHomeDialog(kind: NetworkKind?, onSearchAgain: () -> Unit, onDi
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { DialogMascot(MascotPose.SEARCHING) },
-        title = { Text(stringResource(if (noNetwork) R.string.not_at_home_title_offline else R.string.not_at_home_title)) },
+        title = { DialogTitle(stringResource(if (noNetwork) R.string.not_at_home_title_offline else R.string.not_at_home_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(R.string.not_at_home_how))

@@ -64,7 +64,7 @@ internal fun HelpButton(title: String, help: List<String>) {
         AlertDialog(
             onDismissRequest = { open = false },
             icon = { DialogMascot(MascotPose.CLIPBOARD) },
-            title = { Text(title) },
+            title = { DialogTitle(title) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     help.forEach { Text(it, fontStyle = FontStyle.Italic) }

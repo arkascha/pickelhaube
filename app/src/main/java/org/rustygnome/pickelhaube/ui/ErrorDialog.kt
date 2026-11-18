@@ -78,7 +78,7 @@ fun ErrorDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { DialogMascot(MascotPose.PUZZLED) },
-        title = { Text(error.title.asString()) },
+        title = { DialogTitle(error.title.asString()) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text(error.detail.asString())

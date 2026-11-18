@@ -648,7 +648,7 @@ private fun DemoBoxDialog(onFill: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { DialogMascot(MascotPose.WAVING) },
-        title = { Text(stringResource(R.string.connection_demo_title)) },
+        title = { DialogTitle(stringResource(R.string.connection_demo_title)) },
         text = { Text(stringResource(R.string.connection_demo_hint), fontStyle = FontStyle.Italic) },
         confirmButton = { TextButton(onClick = onFill) { Text(stringResource(R.string.connection_demo_fill)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
@@ -676,7 +676,7 @@ internal fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSa
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { DialogMascot(pose) },
-        title = { Text(stringResource(title)) },
+        title = { DialogTitle(stringResource(title)) },
         text = { Text(text) },
         confirmButton = {
             TextButton(onClick = if (alreadySetUp) onSaveAnyway else onSaveUnchecked) {
