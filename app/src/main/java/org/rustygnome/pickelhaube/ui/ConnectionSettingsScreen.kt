@@ -647,6 +647,7 @@ private fun UserRightsSection(username: String, rights: UserRights) {
 private fun DemoBoxDialog(onFill: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        icon = { DialogMascot(MascotPose.WAVING) },
         title = { Text(stringResource(R.string.connection_demo_title)) },
         text = { Text(stringResource(R.string.connection_demo_hint), fontStyle = FontStyle.Italic) },
         confirmButton = { TextButton(onClick = onFill) { Text(stringResource(R.string.connection_demo_fill)) } },
@@ -666,8 +667,15 @@ internal fun SaveCheckDialog(check: SaveCheck, onSaveUnchecked: () -> Unit, onSa
         else -> R.string.save_check_none_title to stringResource(R.string.save_check_none_text, check.host, check.name)
     }
     val alreadySetUp = check.check is HostCheck.AlreadySetUp
+    // Nobody answering: still looking; another box: puzzled; set up already: it is on its list.
+    val pose = when (check.check) {
+        is HostCheck.OtherBox -> MascotPose.PUZZLED
+        is HostCheck.AlreadySetUp -> MascotPose.CLIPBOARD
+        else -> MascotPose.SEARCHING
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
+        icon = { DialogMascot(pose) },
         title = { Text(stringResource(title)) },
         text = { Text(text) },
         confirmButton = {

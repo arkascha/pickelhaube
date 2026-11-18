@@ -1,13 +1,11 @@
 package org.rustygnome.pickelhaube.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -39,7 +36,7 @@ fun WhatsNewDialog(versions: List<Int>, onDismiss: () -> Unit) {
     val uriHandler = LocalUriHandler.current
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Image(painterResource(R.drawable.mascot_cheering), contentDescription = null, modifier = Modifier.size(96.dp)) },
+        icon = { DialogMascot(MascotPose.CHEERING) },
         title = { Text(stringResource(R.string.whats_new_title, WhatsNew.titleVersion(versions) ?: BuildConfig.VERSION_NAME)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {

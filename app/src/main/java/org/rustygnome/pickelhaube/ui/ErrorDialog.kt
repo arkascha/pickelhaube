@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -78,8 +77,7 @@ fun ErrorDialog(
     val settingsButton = offerSettings && error.settingsRelated
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Default.Warning, contentDescription = null) },
-        iconContentColor = MaterialTheme.colorScheme.error,
+        icon = { DialogMascot(MascotPose.PUZZLED) },
         title = { Text(error.title.asString()) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {

@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,7 +32,7 @@ fun SecondFactorDialog(challenge: SecondFactorChallenge, onCancel: () -> Unit) {
     AlertDialog(
         onDismissRequest = {},
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
-        icon = { Icon(Icons.Default.Lock, contentDescription = null) },
+        icon = { DialogMascot(MascotPose.LISTENING) },
         title = { Text(stringResource(R.string.second_factor_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

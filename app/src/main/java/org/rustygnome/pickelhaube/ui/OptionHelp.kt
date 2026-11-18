@@ -63,7 +63,7 @@ internal fun HelpButton(title: String, help: List<String>) {
     if (open) {
         AlertDialog(
             onDismissRequest = { open = false },
-            icon = { Icon(HelpOutlineIcon, contentDescription = null) },
+            icon = { DialogMascot(MascotPose.CLIPBOARD) },
             title = { Text(title) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

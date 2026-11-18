@@ -46,6 +46,8 @@ fun TrustCertificateDialog(
 ) {
     AlertDialog(
         onDismissRequest = onReject,
+        // A certificate to check; one that changed since it was trusted puzzles it.
+        icon = { DialogMascot(if (prompt.changed) MascotPose.PUZZLED else MascotPose.CLIPBOARD) },
         title = {
             Text(stringResource(if (prompt.changed) R.string.cert_changed_title else R.string.cert_trust_title))
         },
@@ -75,6 +77,7 @@ fun ViewCertificateDialog(
 ) {
     AlertDialog(
         onDismissRequest = onClose,
+        icon = { DialogMascot(MascotPose.CLIPBOARD) },
         title = { Text(stringResource(R.string.connection_trusted_cert)) },
         text = { CertificateDetails(info = info, intro = null, warning = false, initiallyExpanded = true) },
         confirmButton = { TextButton(onClick = onClose) { Text(stringResource(R.string.close)) } },

@@ -2,13 +2,18 @@ package org.rustygnome.pickelhaube.ui
 
 import android.provider.Settings
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 import kotlinx.coroutines.delay
 import org.rustygnome.pickelhaube.R
@@ -90,4 +95,21 @@ fun rememberBlinking(pose: MascotPose, animate: Boolean): Boolean {
         }
     }
     return blinking
+}
+
+/** How big the mascot is above a dialog's title. */
+internal val DIALOG_MASCOT_SIZE = 80.dp
+
+/**
+ * The mascot in [pose] as a dialog's icon, above its title – in place of a plain Material symbol,
+ * blinking like everywhere else. Decorative: the title says what it is about.
+ */
+@Composable
+internal fun DialogMascot(pose: MascotPose) {
+    val blinking = rememberBlinking(pose, rememberAnimationsOn())
+    Image(
+        painterResource(if (blinking) pose.blinkDrawable ?: pose.drawable else pose.drawable),
+        contentDescription = null,
+        modifier = Modifier.size(DIALOG_MASCOT_SIZE),
+    )
 }
