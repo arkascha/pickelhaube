@@ -203,6 +203,8 @@ fun DialerScreen(
                             pull = pull.value,
                             // The app's name, no longer written beside it: for accessibility services.
                             description = stringResource(R.string.app_name),
+                            number = state.number,
+                            connectedSince = (state.callProgress as? CallProgress.Connected)?.since,
                         )
                         Spacer(Modifier.width(12.dp))
                         // The box in use as the title, centred beside the helmet – or, in its place, a note

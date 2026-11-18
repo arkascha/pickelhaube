@@ -1,5 +1,6 @@
 package org.rustygnome.pickelhaube.ui
 
+import android.os.SystemClock
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
@@ -11,12 +12,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 
 /**
  * The helmet in the dialer's title, in place of the app's name (beside the box in use): at rest it
@@ -24,6 +29,10 @@ import androidx.compose.ui.unit.dp
  * from side to side; when [spin] is started (a long press on the title), it turns once around; and
  * pulled down for a refresh, it nods forward as far as pulled. Still while Android's animations are
  * switched off – the progress bar below the title says that the app is busy all the same.
+ *
+ * It takes part in dialling, too: each change of the [number] (a key pressed) makes it hop, and it
+ * looks down at the keypad for a moment; when the other side answers ([connectedSince]), it cheers
+ * with a double hop. Without animations it only changes its look.
  */
 @Composable
 fun TitleHelmet(
@@ -34,9 +43,49 @@ fun TitleHelmet(
     pull: Float = 0f,
     /** What accessibility services say for it; null: nothing (decoration). */
     description: String? = null,
+    /** The number in the dialer: as it changes, it hops and looks at the keypad. */
+    number: String = "",
+    /** When the call in progress was answered ([android.os.SystemClock.elapsedRealtime]); null: none is. */
+    connectedSince: Long? = null,
 ) {
     val animate = rememberAnimationsOn()
     val blinking = rememberBlinking(MascotPose.IDLE, animate)
+    // Upwards in dp, for the hops.
+    val hop = remember { Animatable(0f) }
+    var lookingDown by remember { mutableStateOf(false) }
+    // The number it saw last: a hop for a change only, not for the number already there when shown.
+    val seen = remember { arrayOf(number) }
+    LaunchedEffect(number) {
+        if (number == seen[0]) return@LaunchedEffect
+        seen[0] = number
+        // A key pressed again restarts this: it keeps looking down while the keys are pressed.
+        lookingDown = true
+        if (animate) {
+            hop.animateTo(HOP_DP, tween(HOP_UP_MILLIS, easing = FastOutSlowInEasing))
+            hop.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+        }
+        delay(LOOK_DOWN_MILLIS)
+        lookingDown = false
+    }
+    // Its own, so a cheer and a key pressed do not cut each other's hops short.
+    val cheerHop = remember { Animatable(0f) }
+    var cheering by remember { mutableStateOf(false) }
+    LaunchedEffect(connectedSince) {
+        // Only just answered – not again when the screen is built anew during the call (turned, say).
+        if (connectedSince == null || SystemClock.elapsedRealtime() - connectedSince > CHEER_MILLIS) {
+            cheering = false
+            return@LaunchedEffect
+        }
+        cheering = true
+        if (animate) {
+            repeat(2) {
+                cheerHop.animateTo(CHEER_HOP_DP, tween(HOP_UP_MILLIS + 40, easing = FastOutSlowInEasing))
+                cheerHop.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+            }
+        }
+        delay(CHEER_MILLIS)
+        cheering = false
+    }
     // Degrees of the rocking (around the chin) and of the spin (around the middle).
     val rock = remember { Animatable(0f) }
     val turn = remember { Animatable(0f) }
@@ -63,6 +112,9 @@ fun TitleHelmet(
                 when {
                     // Pulled down a little already: it looks down, nodding along.
                     pull > NOD_LOOK_DOWN -> MascotPose.NODDING.drawable
+                    cheering -> MascotPose.CHEERING.drawable
+                    // At the keypad below, as a key was pressed.
+                    lookingDown -> MascotPose.NODDING.drawable
                     blinking -> MascotPose.IDLE.blinkDrawable!!
                     else -> MascotPose.IDLE.drawable
                 },
@@ -81,7 +133,7 @@ fun TitleHelmet(
                     // the refresh point, and never beyond: pulled further, it only creeps closer to flat.
                     rotationX = -nodDegrees(pull)
                     cameraDistance = 12 * density
-                    translationY = (pull.coerceAtMost(1f) * PULL_DROP).dp.toPx()
+                    translationY = (pull.coerceAtMost(1f) * PULL_DROP - hop.value - cheerHop.value).dp.toPx()
                 },
         )
     }
@@ -109,3 +161,12 @@ private const val NOD_LOOK_DOWN = 0.15f
 private const val ROCK_DEGREES = 12f
 private const val ROCK_MILLIS = 420
 private const val SPIN_MILLIS = 900
+
+/** How high it hops for a key pressed, and for joy when a call is answered (dp), and how quickly up. */
+private const val HOP_DP = 4f
+private const val CHEER_HOP_DP = 7f
+private const val HOP_UP_MILLIS = 70
+
+/** How long it looks at the keypad after a key, and cheers after a call was answered. */
+private const val LOOK_DOWN_MILLIS = 1200L
+private const val CHEER_MILLIS = 2000L
