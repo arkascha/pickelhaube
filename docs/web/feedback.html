@@ -37,8 +37,15 @@
       <a href="guide.html">Guide</a>
       <a href="feedback.html" aria-current="page">Feedback</a>
       <a href="privacy-policy.html">Privacy</a>
-      <a class="lang" href="feedback.de.html" hreflang="de" lang="de">Deutsch</a>
     </nav>
+    <!-- The page in the other language: a flag menu, as in the app's settings (menu.js closes it on a click elsewhere). -->
+    <details class="lang">
+      <summary aria-label="Language: English" title="Language"><img src="flag-gb.svg" alt="" width="24" height="16"></summary>
+      <ul>
+          <li><a href="feedback.html" lang="en" aria-current="true"><img src="flag-gb.svg" alt="" width="24" height="16">English</a></li>
+          <li><a href="feedback.de.html" lang="de" hreflang="de"><img src="flag-de.svg" alt="" width="24" height="16">Deutsch</a></li>
+      </ul>
+    </details>
   </div>
 </header>
 
@@ -115,5 +122,6 @@
     });
   })();
 </script>
+<script src="menu.js" defer></script>
 </body>
 </html>

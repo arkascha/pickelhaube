@@ -25,8 +25,15 @@
       <a href="/pickelhaube/guide.html">Guide</a>
       <a href="/pickelhaube/feedback.html">Feedback</a>
       <a href="/pickelhaube/privacy-policy.html">Privacy</a>
-      <a class="lang" href="/pickelhaube/index.de.html" hreflang="de" lang="de">Deutsch</a>
     </nav>
+    <!-- The page in the other language: a flag menu, as in the app's settings (menu.js closes it on a click elsewhere). -->
+    <details class="lang">
+      <summary aria-label="Language: English" title="Language"><img src="/pickelhaube/flag-gb.svg" alt="" width="24" height="16"></summary>
+      <ul>
+          <li><a href="/pickelhaube/" lang="en" aria-current="true"><img src="/pickelhaube/flag-gb.svg" alt="" width="24" height="16">English</a></li>
+          <li><a href="/pickelhaube/index.de.html" lang="de" hreflang="de"><img src="/pickelhaube/flag-de.svg" alt="" width="24" height="16">Deutsch</a></li>
+      </ul>
+    </details>
   </div>
 </header>
 
@@ -64,5 +71,6 @@
       FRITZ! and FRITZ!Box are trademarks of FRITZ! GmbH, used here only to say which routers the app works with.</p>
   </div>
 </footer>
+<script src="/pickelhaube/menu.js" defer></script>
 </body>
 </html>

@@ -37,8 +37,15 @@
       <a href="guide.de.html">Anleitung</a>
       <a href="feedback.de.html">Feedback</a>
       <a href="privacy-policy.de.html">Datenschutz</a>
-      <a class="lang" href="./" hreflang="en" lang="en">English</a>
     </nav>
+    <!-- The page in the other language: a flag menu, as in the app's settings (menu.js closes it on a click elsewhere). -->
+    <details class="lang">
+      <summary aria-label="Sprache: Deutsch" title="Sprache"><img src="flag-de.svg" alt="" width="24" height="16"></summary>
+      <ul>
+          <li><a href="./" lang="en" hreflang="en"><img src="flag-gb.svg" alt="" width="24" height="16">English</a></li>
+          <li><a href="index.de.html" lang="de" aria-current="true"><img src="flag-de.svg" alt="" width="24" height="16">Deutsch</a></li>
+      </ul>
+    </details>
   </div>
 </header>
 
@@ -145,5 +152,6 @@
       FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH und werden hier nur genannt, um zu sagen, mit welchen Routern die App funktioniert.</p>
   </div>
 </footer>
+<script src="menu.js" defer></script>
 </body>
 </html>
