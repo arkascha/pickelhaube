@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback – Pickelhaube</title>
+  <meta name="description" content="Probleme, Ideen, Fragen oder Lob zu Pickelhaube, der Android-App, die über deine FRITZ!Box wählt.">
+  <!-- The same page in English; search engines show the one in the reader's language. -->
+  <link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/feedback.html">
+  <link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/feedback.de.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.rustygnome.org/pickelhaube/feedback.html">
+  <!-- Link previews (Open Graph): what a forum, messenger or social network shows for a link to this page. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pickelhaube">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="Feedback – Pickelhaube">
+  <meta property="og:description" content="Probleme, Ideen, Fragen oder Lob zu Pickelhaube, der Android-App, die über deine FRITZ!Box wählt.">
+  <meta property="og:url" content="https://www.rustygnome.org/pickelhaube/feedback.de.html">
+  <meta property="og:image" content="https://www.rustygnome.org/pickelhaube/preview.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="500">
+  <meta property="og:image:alt" content="Pickelhaube: Nummer auf dem Smartphone auswählen – dein FRITZ!Box-Telefon ruft an.">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Icons: PNG for browsers without SVG icons and for home screens (iOS takes the square apple-touch-icon and rounds it itself); the SVG comes last, so browsers that can use it prefer it. -->
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.de.html"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Hauptmenü">
+      <a href="index.de.html">Start</a>
+      <a href="guide.de.html">Anleitung</a>
+      <a href="feedback.de.html" aria-current="page">Feedback</a>
+      <a href="privacy-policy.de.html">Datenschutz</a>
+      <a class="lang" href="feedback.html" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Feedback</h1>
+  <p class="lead">Etwas funktioniert nicht, eine Idee, eine Frage oder einfach ein Lob – ich lese jede Nachricht.</p>
+
+  <div class="note warn">
+    Bitte gib keine Kennwörter ein und keine Namen und Nummern aus deinen Telefonbüchern.
+    Was mit dem Gesendeten geschieht, steht in der <a href="privacy-policy.de.html#feedback">Datenschutzerklärung</a>.
+  </div>
+
+  <p>Das Formular selbst ist auf Englisch – schreib gern auf Deutsch.</p>
+  <iframe class="form" id="feedback-form" title="Feedback-Formular"
+    src="/apps/forms/embed/PsmF8BEN7bbjoyPNw4CSxmi7"></iframe>
+  <p>Fehlerberichte sind auch als <a href="https://github.com/arkascha/pickelhaube/issues">Issues auf GitHub</a> willkommen.</p>
+</main>
+
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Fußzeile">
+      <a href="index.de.html">Start</a>
+      <a href="guide.de.html">Anleitung</a>
+      <a href="changes.de.html">Versionsgeschichte</a>
+      <a href="feedback.de.html" aria-current="page">Feedback</a>
+      <a href="privacy-policy.de.html">Datenschutzerklärung</a>
+      <a href="legal-notice.de.html">Impressum</a>
+      <a href="https://github.com/arkascha/pickelhaube">Quellcode</a>
+    </nav>
+    <p>Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM).
+      FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH und werden hier nur genannt, um zu sagen, mit welchen Routern die App funktioniert.</p>
+  </div>
+</footer>
+<script>
+  // The form comes from this web site's own host, so the page can measure it: the frame gets the height
+  // of the form's content, so neither the frame nor the form inside has a scroll bar of its own. The form
+  // reports when its size changes; it scrolls in an element of its own, which the frame has to make room for.
+  (function () {
+    var frame = document.getElementById('feedback-form');
+    function fit() {
+      var doc;
+      try { doc = frame.contentDocument; } catch (e) { return; }
+      var main = doc && doc.getElementById('app-content-vue');
+      if (!main) return;
+      tidy(doc);
+      var top = main.getBoundingClientRect().top, bottom = 0;
+      for (var i = 0; i < main.children.length; i++) {
+        var child = main.children[i];
+        var end = child.getBoundingClientRect().bottom - top + main.scrollTop + parseFloat(getComputedStyle(child).marginBottom || 0);
+        if (end > bottom) bottom = end;
+      }
+      var height = Math.ceil(top + bottom + parseFloat(getComputedStyle(main).paddingBottom || 0));
+      // The frame's own border comes on top.
+      if (height > 0 && Math.abs(height - frame.clientHeight) > 1) frame.style.height = (height + frame.offsetHeight - frame.clientHeight) + 'px';
+    }
+    // Fitting the form into the frame: its title block is as wide as the form plus a margin – a few pixels
+    // too wide, which would bring a horizontal scroll bar –, so it is narrowed by that margin. The buttons
+    // keep a large space below them, meant for the server's own page, and sit at the very right edge; they
+    // get the same right margin as the answer fields, and little space below.
+    function tidy(doc) {
+      if (doc.getElementById('fit-in-frame')) return;
+      var style = doc.createElement('style');
+      style.id = 'fit-in-frame';
+      style.textContent =
+        '#app-content-vue > header { max-width: min(750px, calc(100% - var(--default-clickable-area))); }' +
+        '#app-content-vue .form-buttons { padding-inline-end: calc(var(--default-clickable-area) - 5px); }' +
+        '#app-content-vue .form-buttons > button { margin-bottom: 5px; }';
+      doc.head.appendChild(style);
+    }
+    frame.addEventListener('load', fit);
+    fit(); // in case the frame was quicker than this script
+    window.addEventListener('resize', fit);
+    window.addEventListener('message', function (event) {
+      if (event.origin === window.location.origin && event.data && event.data.type === 'resize-iframe') fit();
+    });
+  })();
+</script>
+</body>
+</html>

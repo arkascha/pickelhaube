@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anleitung – Pickelhaube</title>
+  <meta name="description" content="So richtest du deine FRITZ!Box ein und nutzt Pickelhaube: Wählhilfe, Telefonbücher, letzte Anrufe, Kurzwahl, Rufumleitung, mehrere Boxen, HTTPS.">
+  <!-- The same page in English; search engines show the one in the reader's language. -->
+  <link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/guide.html">
+  <link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/guide.de.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.rustygnome.org/pickelhaube/guide.html">
+  <!-- Link previews (Open Graph): what a forum, messenger or social network shows for a link to this page. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pickelhaube">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="Anleitung – Pickelhaube">
+  <meta property="og:description" content="So richtest du deine FRITZ!Box ein und nutzt Pickelhaube: Wählhilfe, Telefonbücher, letzte Anrufe, Kurzwahl, Rufumleitung, mehrere Boxen, HTTPS.">
+  <meta property="og:url" content="https://www.rustygnome.org/pickelhaube/guide.de.html">
+  <meta property="og:image" content="https://www.rustygnome.org/pickelhaube/preview.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="500">
+  <meta property="og:image:alt" content="Pickelhaube: Nummer auf dem Smartphone auswählen – dein FRITZ!Box-Telefon ruft an.">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Icons: PNG for browsers without SVG icons and for home screens (iOS takes the square apple-touch-icon and rounds it itself); the SVG comes last, so browsers that can use it prefer it. -->
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.de.html"><img src="logo.svg" alt="">Pickelhaube</a>
+    <nav class="main" aria-label="Hauptmenü">
+      <a href="index.de.html">Start</a>
+      <a href="guide.de.html" aria-current="page">Anleitung</a>
+      <a href="feedback.de.html">Feedback</a>
+      <a href="privacy-policy.de.html">Datenschutz</a>
+      <a class="lang" href="guide.html" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Anleitung</h1>
+  <p class="lead">Alles, was du brauchst, um Pickelhaube einzurichten und dich darin zurechtzufinden.</p>
+
+  <ol class="toc">
+    <li><a href="#prepare">FRITZ!Box vorbereiten</a></li>
+    <li><a href="#first-start">Erster Start</a></li>
+    <li><a href="#dialling">Wählen</a></li>
+    <li><a href="#numbers">Eine Nummer aussuchen</a></li>
+    <li><a href="#speed-dial">Kurzwahl</a></li>
+    <li><a href="#internal">Interne Gespräche</a></li>
+    <li><a href="#boxes">Mehrere FRITZ!Boxen</a></li>
+    <li><a href="#status">Gesprächsstatus live</a></li>
+    <li><a href="#forwarding">Rufumleitung</a></li>
+    <li><a href="#shortcuts">Kacheln, Verknüpfungen und Widget</a></li>
+    <li><a href="#https">HTTPS und das Zertifikat des Routers</a></li>
+    <li><a href="#confirm">Bestätigung an der Box</a></li>
+    <li><a href="#backup">Sichern und übertragen</a></li>
+    <li><a href="#language">Sprache</a></li>
+    <li><a href="#permissions">Berechtigungen</a></li>
+    <li><a href="#limits">Grenzen</a></li>
+    <li><a href="#faq">Fragen und Antworten</a></li>
+  </ol>
+
+  <h2 id="prepare">1. FRITZ!Box vorbereiten</h2>
+  <p>Drei Einstellungen in der Oberfläche der FRITZ!Box (<code>http://fritz.box</code>):</p>
+  <ol class="steps">
+    <li><strong>Zugriff für Anwendungen zulassen</strong>
+      <em>Heimnetz › Netzwerk › Netzwerkeinstellungen</em> – das schaltet TR-064 ein, die Schnittstelle, die die App nutzt.</li>
+    <li><strong>Wählhilfe verwenden</strong>
+      <em>Telefonie › Anrufe › Wählhilfe</em>.</li>
+    <li><strong>Ein Benutzer mit der Berechtigung für Telefonie</strong>
+      <em>System › FRITZ!Box-Benutzer</em> – nimm einen vorhandenen oder leg einen an. Wenn du dich an der Box nur mit
+      Kennwort anmeldest, hat sie trotzdem einen automatisch erzeugten Benutzernamen (etwa <code>fritz1234</code>), der
+      auf dieser Seite steht; die App braucht ihn. Für die Anrufliste braucht der Benutzer außerdem die Berechtigung
+      <em>Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste</em>.</li>
+  </ol>
+  <p class="note">Die Menünamen sind die des deutschen FRITZ!OS; je nach Version kann deine Box sie etwas anders nennen.</p>
+
+  <h2 id="first-start">2. Erster Start</h2>
+  <p>Beim ersten Start führt dich eine kurze <strong>Willkommens-Tour</strong> Schritt für Schritt dorthin, begleitet vom
+    Helm aus dem App-Symbol, der Augen hat: Sie erklärt, was die Box braucht (mit einem Link zu <a href="#prepare">Abschnitt 1</a>),
+    sucht die Box unter <code>fritz.box</code>, fragt nach einem Anzeigenamen – bleibt er leer, wird der Name der Box
+    genommen – sowie nach Benutzername und Kennwort, verbindet sich und sagt dir, welches Telefon die Box beim Wählen
+    klingeln lässt. Das ist die Einstellung der Box für die Wählhilfe: Die Tour liest sie nur und ändert nichts, denn
+    eine Änderung kann eine Bestätigung an der Box erfordern.</p>
+  <p>Lehnt die Box Benutzername oder Kennwort ab, führt die Tour direkt zurück zum Kennwort. <em>Alle Einstellungen</em>
+    öffnet die vollständige Verbindungsseite, die unten beschrieben ist, mit deinen Eingaben; <em>Überspringen</em> führt
+    ebenfalls dorthin. <em>Einstellungen › Willkommens-Tour</em> startet die Tour erneut, etwa um eine weitere Box hinzuzufügen.</p>
+  <p>Du ziehst von einem anderen Telefon um? Die erste Seite der Tour bietet <strong>Sicherung laden…</strong> an (siehe
+    <a href="#backup">Sichern</a>). Keine FRITZ!Box zur Hand? <strong>Teste die Demo-Box ›</strong> verbindet dort mit einer in die
+    App eingebauten Box – mit Telefonen, Telefonbüchern, einer Anrufliste und einem simulierten Gespräch – zum Umschauen.</p>
+  <p>Auf der Verbindungsseite gibst du die Adresse der Box ein (<code>fritz.box</code> oder <code>192.168.178.1</code>), den
+    Benutzernamen und das Kennwort. Sobald die Adresse eingetragen ist, bietet das Feld für den Benutzernamen die
+    Benutzer an, die die Box kennt (Auswahl mit <kbd>▾</kbd>) – praktisch für den automatisch erzeugten.</p>
+  <p>Auf Wunsch schaltest du <strong>HTTPS verwenden</strong> ein; die App nutzt dann den HTTPS-Port der Box
+    (siehe <a href="#https">HTTPS</a>). Auch ohne HTTPS wird das Kennwort nie im Klartext übertragen (Digest-Authentifizierung).</p>
+  <p><strong>Speichern &amp; verbinden</strong> prüft die Einstellungen zuerst und speichert sie erst, wenn der Router sie
+    annimmt. Stimmt etwas nicht – Benutzername, Kennwort, fehlende Berechtigung, falscher Port, Router nicht erreichbar –,
+    erklärt ein Dialog, was los ist.</p>
+  <p>Auch die Verbindungsseite bietet die Demo-Box an (<em>Keine FRITZ!Box? Teste die Demo-Box</em> ganz oben) und,
+    solange noch keine Box eingerichtet ist, <strong>Sicherung laden…</strong>.</p>
+  <p>Jede Verbindung hat ihre eigenen Schalter: <strong>Telefonbücher</strong>, <strong>Anrufliste</strong> und
+    <strong>Kurzwahlen</strong> (anfangs an) sowie <strong>Interne Gespräche</strong> (anfangs aus, siehe
+    <a href="#internal">Interne Gespräche</a>).</p>
+
+  <h2 id="dialling">3. Wählen</h2>
+  <ol class="steps">
+    <li><strong>Das Telefon wählen, das klingeln soll</strong> Unter <em>Klingeln an</em> wählst du dein DECT-Mobilteil (oder ein anderes Telefon, das die Box kennt).</li>
+    <li><strong>Eine Nummer eingeben</strong> Lange auf <kbd>0</kbd> drücken ergibt <kbd>+</kbd>; oder du nimmst eine aus den Telefonbüchern oder letzten Anrufen.
+      Wenn du das Piepen einer Telefontastatur magst, schalte in den Einstellungen <em>Tastentöne</em> ein (anfangs aus).</li>
+    <li><strong>Auf den grünen Knopf tippen</strong> Dein Telefon klingelt. Nimm ab – jetzt wählt die Box die Nummer.</li>
+  </ol>
+  <p>Die Nummer wird in Gruppen angezeigt, wie man Nummern schreibt (<code>030 1234567</code>) – auch in den Listen und
+    im Gesprächsstatus –, und steht sie in einem deiner Telefonbücher oder in den letzten Anrufen, sagt der Name darüber,
+    wem sie gehört – auch wenn du sie vollständig getippt hast. Ist nichts eingegeben, holt der grüne Knopf die zuletzt
+    gewählte Nummer zurück; ein weiterer Tipp wählt sie. Ein Tippfehler mittendrin? Tipp in der Nummer direkt hinter
+    ihn: <kbd>⌫</kbd> löscht ihn, die nächste Taste setzt die richtige Ziffer dorthin – die Ziffern danach bleiben.</p>
+  <p><strong>Zieh das Wählfeld nach unten</strong>, um alles neu von deiner FRITZ!Box zu lesen – nachdem du dort etwas
+    geändert oder das Netz gewechselt hast.</p>
+  <p><strong>Quer gehalten</strong> – Telefon oder Tablet – rückt die Tastatur nach rechts, die Nummer, das klingelnde
+    Telefon und die Knöpfe nach links; auf einem Telefon stehen der grüne und der rote Knopf neben den Tasten. Auf einem
+    hochkant gehaltenen Tablet behält das Wählfeld die Breite eines Telefons, mit größeren Tasten.</p>
+  <p>Solange ein Anruf läuft, ist der grüne Knopf für dessen Nummer aus – nochmals wählen würde nur wieder dein Telefon
+    klingeln lassen. Der rote Knopf bricht einen Anruf ab, der noch aufgebaut wird. Ist das Gespräch verbunden, beendest
+    du es am Telefon: Die Box kann ein verbundenes Gespräch nicht für dich auflegen. Das Fragezeichen neben
+    <em>Auflegen am Gerät selbst</em> öffnet die <a href="#faq-end-call">Antwort, warum</a>.</p>
+  <p><strong>Langes Drücken auf den grünen Knopf</strong> bietet mehr:</p>
+  <ul>
+    <li><strong>Anonym wählen</strong> – deine eigene Nummer wird für diesen Anruf unterdrückt (der Code <code>*31#</code> der Box).</li>
+    <li><strong>Von …</strong> – mit mehreren Internetrufnummern auf der Box geht der Anruf über die gewählte hinaus
+      statt über die, die für dein Telefon eingerichtet ist.</li>
+  </ul>
+  <h3>Durchwahlen, PINs und Sprachmenüs</h3>
+  <p>Ziffern, die erst nach dem Verbinden getippt werden – eine Durchwahl, eine Konferenz-PIN, eine Auswahl in einem
+    Sprachmenü –, folgen der Nummer nach einer Pause: <strong>lange auf <kbd>*</kbd> drücken</strong> ergibt ein <kbd>,</kbd>,
+    wie in <code>0301234567,42#</code>. Die Wählhilfe der Box kann solche Ziffern nicht als Töne senden, deshalb wählt
+    Pickelhaube nur die Nummer und sagt dir, was du tippen musst: unter dem Wählfeld vor dem Anruf und fett, sobald
+    verbunden ist (<em>Tippe jetzt 42# am Telefon</em>, mit dem Gesprächsstatus live). Nummern aus Kontakten oder Links
+    bringen ihre Durchwahl mit (<code>x 42</code>, <code>;ext=42</code>).</p>
+  <h3>Nummern von anderswo</h3>
+  <p>Pickelhaube versteht <code>tel:</code>-Links, du kannst sie also wählen, wenn du in Kontakte oder auf einer
+    Webseite auf eine Nummer tippst. Du kannst auch <strong>einen Text teilen</strong> – eine E-Mail-Signatur, eine
+    Nachricht – oder einen mit dem Einfügen-Knopf des leeren Nummernfelds einfügen: Die Telefonnummer darin wird
+    herausgesucht und zum Wählen bereinigt (aus <code>+49 (0)30 / 123 45-6</code> wird <code>+4930123456</code>); bei
+    mehreren fragt die App, welche.</p>
+  <p>Auf Wunsch bietet die Kontakte-App deines Telefons Pickelhaube direkt neben jeder Nummer an: Schalte
+    <em>Einstellungen › Telefonbücher › „Über FRITZ!Box anrufen“ in Kontakte</em> ein (anfangs aus; die App bittet darum,
+    die Kontakte lesen und ändern zu dürfen). Jeder Kontakt zeigt dann neben seinen Nummern eine Zeile
+    <strong>… über FRITZ!Box anrufen</strong>; ein Tipp öffnet Pickelhaube mit der Nummer im Wählfeld. Die Zeilen liegen
+    in einem eigenen Konto der App (<em>Pickelhaube</em> bei den Konten von Android) – deine Kontakte selbst werden nicht
+    verändert, und nichts wird irgendwohin synchronisiert. Die Zeilen folgen deinen Kontakten von selbst; schaltest du
+    die Option aus, verschwinden sie wieder.</p>
+  <h3>Hinweise im Wählfeld</h3>
+  <p>Über den Knöpfen weist das Wählfeld auf das hin, was einen Blick braucht: eine Internetrufnummer der Box, die nicht
+    beim Anbieter registriert ist (Anrufe darüber scheitern – ein Tipp prüft erneut), und <strong>neue verpasste
+    Anrufe</strong> auf der Box, seit du zuletzt in <em>Letzte</em> geschaut hast – ein Tipp auf diese Zeile zeigt nur
+    die verpassten Anrufe; auch der Adressbuch-Knopf zeigt ihre Anzahl.</p>
+  <p>Antwortet die Box einen Moment lang nicht – etwa direkt nach einem Netzwechsel –, sagt das Wählfeld es in einer
+    roten Zeile über den Knöpfen statt mit einer Meldung, die im Weg ist: Ein Tipp versucht es erneut. Klappt es wieder
+    nicht, erklärt eine Meldung, was du prüfen kannst.</p>
+
+  <h2 id="numbers">4. Eine Nummer aussuchen</h2>
+  <p>Der Adressbuch-Knopf links neben dem Nummernfeld öffnet <strong>Nummer wählen</strong>:</p>
+  <ul>
+    <li><strong>Letzte</strong> – zuletzt gewählte, angenommene oder verpasste Nummern aus der Anrufliste der FRITZ!Box
+      (auch Anrufe, die an den Telefonen selbst geführt wurden). Jede Nummer erscheint einmal, bei ihrem letzten Anruf,
+      unter dem Tag, an dem er war (<em>Heute</em>, <em>Gestern</em>, der Wochentag, danach das Datum). Der
+      <strong>Filter</strong> oben rechts in der Liste (ein Trichter mit dem Pfeil für verpasste Anrufe) zeigt nur die
+      Nummern, deren letzter Anruf verpasst wurde. Mehrere Anrufe derselben Art hintereinander zeigen ihre Anzahl hinter
+      dem Namen: <em>Mama (3)</em> – drei verpasste Anrufe seit eurem letzten Gespräch.</li>
+    <li><strong>Telefonbücher</strong> – die Telefonbücher auf der Box, auch Online-Telefonbücher, die sie abgleicht
+      (z. B. CardDAV). Suche nach Name oder Nummer. Auf Wunsch erscheinen die Kontakte deines Telefons als zusätzliches
+      Buch <em>Dieses Telefon</em> (anfangs aus; die App fragt einmal).</li>
+    <li><strong>Kurzwahl</strong> – siehe unten.</li>
+  </ul>
+  <p>Ein Tipp auf eine Nummer übernimmt sie ins Wählfeld; ihr <strong>grüner Anrufknopf</strong> ruft sie sofort an – in
+    den letzten Anrufen, den Kurzwahlen, den Telefonbüchern und bei den Telefonen der Box. <strong>Zurück</strong> direkt
+    danach führt wieder zur Liste, dorthin, wo du warst – praktisch, um gleich die nächste zu nehmen.</p>
+  <p>In <em>Letzte</em> sind neue verpasste Anrufe markiert, und mit mehreren eigenen Nummern auf der Box sagt jeder Anruf,
+    über welche er lief (<em>von 030 123456</em>, <em>an Büro</em>).</p>
+  <p><strong>Vorschläge beim Tippen:</strong> Ab der dritten Taste bietet die Zeile unter dem Nummernfeld die Nummern aus
+    Telefonbüchern und letzten Anrufen an, auf die das Getippte hinauslaufen könnte – Nummern, die damit beginnen (egal
+    wie sie geschrieben sind), und Namen, deren Buchstaben auf den getippten Tasten liegen (<kbd>2766</kbd> findet
+    <em>Arno</em>). Ein Tipp nimmt den besten; <em>3 weitere ▾</em> öffnet die anderen.</p>
+  <p>Langes Drücken auf eine Nummer bietet mehr: <em>Nummer kopieren</em>, <em>Zum Startbildschirm hinzufügen</em> (siehe
+    <a href="#shortcuts">Kacheln, Verknüpfungen und Widget</a>), <em>In die Kontakte übernehmen</em>, <em>An die
+    FRITZ!Box übergeben</em> (kopiert einen Kontakt des Telefons in eines der Telefonbücher der Box) und sie zur Kurzwahl
+    machen.</p>
+  <p>Unterschiedlich geschriebene Nummern (<code>+49 30 123456</code>, <code>030 123456</code>, <code>123456</code>) werden
+    als dieselbe erkannt, anhand der Landes- und Ortsvorwahl, die auf deiner Box eingestellt ist. Gewählt wird immer genau
+    die eingegebene Nummer.</p>
+
+  <h2 id="speed-dial">5. Kurzwahl</h2>
+  <ul>
+    <li><strong>Dieses Telefon: 1–9</strong> – auf dem Telefon gespeichert, gültig mit jeder Box. Drück im Wählfeld lange
+      auf die Ziffer; Ziffern mit einer Kurzwahl zeigen einen kleinen Punkt. Im Tab <em>Kurzwahl</em> sind die freien Plätze
+      in einer Zeile zusammengefasst – tipp darauf, um einen zu belegen.</li>
+    <li><strong>FRITZ!Box: 00–99</strong> – die Kurzwahlen aus den Telefonbüchern der Box, dieselben, die die Telefone mit
+      <code>**7</code> nutzen. Tipp die erste Ziffer und drück lange auf die zweite, oder tipp <code>**7</code> und die
+      Nummer. Solange die Box erreichbar ist, kannst du sie auch in der App festlegen, ersetzen und entfernen. Einträge,
+      die inzwischen auf der Box geändert wurden (etwa in ihrer Oberfläche gelöscht), werden übernommen: Die App liest die
+      Telefonbücher neu, wenn sie wieder in den Vordergrund kommt und wenn die Box eine Änderung deshalb ablehnt.</li>
+  </ul>
+  <p>Eine Kurzwahl zu entfernen oder eine Kopie zu löschen, die die App auf der Box angelegt hat, geschieht sofort – ein
+    Hinweis unten sagt es, mit <strong>Rückgängig</strong>, um es zurückzuholen.</p>
+
+  <h2 id="internal">6. Interne Gespräche</h2>
+  <p>Mit mehreren Telefonen an der Box kann Pickelhaube eines vom anderen aus anrufen – die Küche vom Arbeitszimmer,
+    kostenlos. Schalte auf der Verbindungsseite der Box <strong>Interne Gespräche</strong> ein; <em>Nummer wählen</em>
+    hat dann einen Tab <strong>Intern</strong> mit den Telefonen der Box und ihren internen Nummern: analoge Telefone
+    (<code>**1</code>, <code>**2</code>), DECT-Mobilteile (<code>**610</code> bis <code>**615</code>), IP-Telefone und
+    FRITZ!App Fon (<code>**620</code> …) sowie <em>Alle Telefone</em> (<code>**9</code>). Ihre Namen findest du auch in
+    den Vorschlägen beim Tippen.</p>
+  <p>Das Telefon unter <em>Klingeln an</em> klingelt zuerst und ruft dann das andere an; wähl dort also ein einzelnes
+    Telefon – eine Gruppe würde auch das angerufene Telefon klingeln lassen. Ein Telefon kann sich nicht selbst anrufen;
+    Pickelhaube sagt das, statt zu wählen.</p>
+
+  <h2 id="boxes">7. Mehrere FRITZ!Boxen</h2>
+  <p><em>Einstellungen › FRITZ!Box-Verbindungen</em> nimmt beliebig viele Boxen auf – Zuhause, Büro, Eltern –, jede
+    mit eigener Adresse, eigenem Benutzer, Kennwort und eigenen Optionen. Die Box des aktuellen Netzes wird automatisch
+    gewählt: beim Start, wenn das Netz wechselt, und wenn die App wieder in den Vordergrund kommt – oder sofort, wenn
+    du das Wählfeld nach unten ziehst. Der Titel des Wählfelds zeigt neben dem Helm die verwendete Box. Eine Box, die
+    nur über VPN oder MyFRITZ erreichbar ist, wird genommen, wenn im lokalen Netz keine deiner Boxen ist. Antwortet
+    keine – unterwegs, im Mobilfunknetz oder in einem anderen WLAN –, sagt es der Titel; tipp darauf, um zu sehen, was
+    hilft: das WLAN zuhause oder ein VPN in dein Heimnetz (die FRITZ!Box bietet ein eigenes an), mit einem Weg zu den
+    VPN-Einstellungen von Android und zum erneuten Suchen.</p>
+  <p>Damit es wirklich deine Box ist, prüft Pickelhaube die Gerätekennung und die Seriennummer der Box und lehnt eine
+    Box ab, deren Nummer von der gespeicherten abweicht. Jede Verbindungsseite zeigt außerdem Modell, FRITZ!OS-Version
+    und die Berechtigungen des eingerichteten Benutzers.</p>
+
+  <h2 id="status">8. Gesprächsstatus live</h2>
+  <p>Über den Knöpfen zeigt das Wählfeld, wie der Anruf verläuft: <em>abnehmen</em>, <em>wähle …</em>,
+    <em>verbunden</em> mit laufender Zeit und schließlich <em>Gespräch beendet</em> mit seiner Dauer (oder <em>nicht
+    angenommen</em> – dann ruft <strong>Erneut versuchen</strong> noch einmal an). Der Helm daneben spielt das Gespräch
+    mit – er klingelt, lauscht, nickt und winkt zum Abschied.</p>
+  <p>Dafür nutzt die App den <strong>Anrufmonitor</strong> der Box, der anfangs aus ist. Schalte ihn einmal ein, indem
+    du an einem Telefon an der Box <code>#96*5*</code> wählst (<code>#96*4*</code> schaltet ihn wieder aus).</p>
+  <p class="note warn">Der Anrufmonitor braucht keine Anmeldung und ist nicht verschlüsselt: Solange er an ist, kann jedes
+    Gerät in deinem Heimnetz die Anrufe der Box mitverfolgen, samt Nummern. Ohne ihn funktioniert Pickelhaube genauso –
+    sie zeigt dann nur <em>abnehmen</em>.</p>
+  <p>Interne Gespräche werden noch nicht verfolgt: Es ist nicht bekannt, ob der Anrufmonitor sie meldet.</p>
+
+  <h2 id="forwarding">9. Rufumleitung</h2>
+  <p>Das Umleitungssymbol in der oberen Leiste des Wählfelds listet die auf der Box eingerichteten Rufumleitungen, jede
+    mit einem Schalter. Die Box erlaubt einer App nur, sie ein- und auszuschalten; einrichten musst du sie auf der Box
+    selbst (<em>Telefonie › Rufbehandlung › Rufumleitung</em>).</p>
+
+  <h2 id="shortcuts">10. Kacheln, Verknüpfungen und Widget</h2>
+  <p>Drei Kacheln für die Schnelleinstellungen: <strong>Pickelhaube</strong> (öffnet das Wählfeld, zeigt, ob eine Box
+    erreichbar ist), <strong>Wahlwiederholung</strong> (öffnet das Wählfeld mit der letzten Nummer – den grünen Knopf
+    drückst du noch selbst) und <strong>Rufumleitung</strong>. Ab Android 13 fügt <em>Einstellungen › Kacheln in den
+    Schnelleinstellungen</em> sie für dich hinzu.</p>
+  <p>Langes Drücken auf das App-Symbol bietet <em>Wahlwiederholung</em> (wählt sofort), <em>Rufumleitung</em>,
+    <em>Rufnummer wählen</em> und welche FRITZ!Box von hier aus erreichbar ist.</p>
+  <p><strong>Ein Mensch auf dem Startbildschirm:</strong> Drück in den letzten Anrufen oder den Telefonbüchern lange auf
+    eine Nummer und wähl <em>Zum Startbildschirm hinzufügen</em>. Das Symbol zeigt die Initialen des Namens; ein Tipp
+    darauf wählt diese Nummer sofort – praktisch für die wenigen, die du ständig anrufst, oder für jemanden, dem die ganze
+    App zu viel ist.</p>
+  <p>Das Widget <strong>Nummern zum Wählen</strong> für den Startbildschirm enthält Nummern, die du aussuchst, jedes Widget
+    seine eigene Liste mit einem Titel nach Wunsch, in den Farben von Pickelhaube oder durchsichtig. Eingerichtet wird es
+    beim Platzieren (Nummern aus der Nummernauswahl hinzufügen, umsortieren, entfernen); das Pickelhaube-Symbol in seiner
+    Ecke öffnet die Einrichtung erneut. Ein Tipp auf einen Eintrag übernimmt die Nummer ins Wählfeld – gewählt wird erst
+    mit dem grünen Knopf.</p>
+
+  <h2 id="https">11. HTTPS und das Zertifikat des Routers</h2>
+  <p>Die FRITZ!Box verwendet ein selbstsigniertes Zertifikat. Pickelhaube vertraut ihm beim ersten Mal (<em>trust on
+    first use</em>): Bei der ersten HTTPS-Verbindung zeigt sie die Fingerabdrücke des Zertifikats. Vergleich sie mit dem,
+    was dein Browser für <code>https://fritz.box</code> anzeigt, und tipp dann auf <strong>Vertrauen</strong>. Von da an
+    wird nur dieses Zertifikat angenommen; zeigt die Box einmal ein anderes, bekommst du die Warnung <strong>Das Zertifikat
+    hat sich geändert!</strong> statt einer stillen Verbindung.</p>
+
+  <h2 id="confirm">12. Bestätigung an der Box</h2>
+  <p>Neuere FRITZ!OS-Versionen verlangen für Änderungen an Einstellungen eine zusätzliche Bestätigung. Zu ändern, welches
+    Telefon für die Wählhilfe klingelt, ist eine solche Änderung; das Wählen selbst nicht. Wenn nötig, sagt ein Dialog,
+    was zu tun ist – einen Knopf an der Box drücken oder einen angezeigten Code wählen –, und die App macht danach von
+    selbst weiter.</p>
+
+  <h2 id="backup">13. Sichern und übertragen</h2>
+  <p><em>Einstellungen › Sichern und übertragen</em> exportiert alle Verbindungen und Optionen in eine JSON-Datei und
+    importiert sie wieder. Kennwörter sind nur dabei, wenn du das möchtest, und werden dann mit einer Passphrase deiner
+    Wahl verschlüsselt.</p>
+
+  <h2 id="language">14. Sprache</h2>
+  <p>Deutsch, Englisch, Niederländisch, Französisch, Italienisch, Spanisch und Polnisch – automatisch (die Sprache des
+    Systems, als Globus 🌐 angezeigt) oder mit dem Flaggen-Knopf in den Einstellungen gewählt. Die Übersetzungen brauchen
+    noch eine Durchsicht durch Muttersprachler; Korrekturen sind sehr willkommen.</p>
+
+  <h3>Hilfe, Neuigkeiten und die Webseite</h3>
+  <p>Das <strong>(?)</strong> in der oberen Leiste der Willkommens-Tour öffnet den Teil dieser Anleitung, der zu ihrer
+    Seite gehört. Ganz unten in den Einstellungen, unter der Version, stehen <em>Neuigkeiten</em>, <em>Anleitung im
+    Web</em> und <em>Datenschutzerklärung</em>. Nach einem Update zeigt Pickelhaube einmal, was für dich neu ist – ein
+    paar Punkte, über dem Wählfeld; <em>Neuigkeiten</em> zeigt sie noch einmal. Die Webseite gibt es auf Deutsch und
+    Englisch.</p>
+
+  <h2 id="permissions">15. Berechtigungen</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Berechtigung</th><th>Wozu</th><th>Nötig?</th></tr></thead>
+      <tbody>
+        <tr><td>Netzwerkzugriff</td><td>Um mit deiner FRITZ!Box zu sprechen</td><td>Ja</td></tr>
+        <tr><td>Kontakte (<code>READ_CONTACTS</code>)</td><td>Die Kontakte des Telefons als zusätzliches Telefonbuch zeigen</td><td>Nein – nur, wenn du es einschaltest</td></tr>
+        <tr><td>Kontakte ändern (<code>WRITE_CONTACTS</code>)</td><td>Die Zeilen „… über FRITZ!Box anrufen“ in der Kontakte-App des Telefons anlegen</td><td>Nein – nur, wenn du es einschaltest</td></tr>
+        <tr><td>Anrufliste (<code>READ_CALL_LOG</code>)</td><td>Die Anrufe des Telefons selbst unter <em>Letzte</em> zeigen</td><td>Nein – und in der Version von Google Play nicht verfügbar (siehe unten)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="limits">16. Grenzen</h2>
+  <ul>
+    <li>Funktioniert nur, solange das Telefon im Heimnetz der Box ist oder per VPN damit verbunden.</li>
+    <li>Google Play erlaubt die Berechtigung für die Anrufliste nur der Standard-Telefon-App. Die Option, die Anrufe des
+      Telefons selbst unter <em>Letzte</em> einzubeziehen, funktioniert deshalb nur, wenn Pickelhaube nicht über Google
+      Play installiert wurde.</li>
+    <li>Rufumleitungen lassen sich ein- und ausschalten, aber nicht einrichten.</li>
+    <li>Die Wählhilfe der Box wählt nur: Sie sendet nach dem Verbinden keine Töne (siehe <a href="#dialling">Durchwahlen</a>)
+      und kann ein verbundenes Gespräch nicht beenden.</li>
+    <li>Die Box kennt nur ein Telefon für die Wählhilfe, und es zu ändern, erfordert bei neueren FRITZ!OS-Versionen eine
+      Bestätigung – deshalb gibt es keinen Weg, für einen einzelnen Anruf ein anderes Telefon klingeln zu lassen.</li>
+  </ul>
+
+  <h2 id="faq">17. Fragen und Antworten</h2>
+  <!-- The app links to the answers #faq-end-call and #faq-no-connection (WebPages.kt): keep these ids, as in guide.html. -->
+  <details id="faq-end-call">
+    <summary>Der rote „Abbrechen“-Knopf beendet mein Gespräch nicht – während des Gesprächs ist er sogar ausgegraut. Wie beende ich das Gespräch?</summary>
+    <p>Leg an dem Telefon auf, an dem du sprichst – dem Headset, dem Freisprecher oder dem Mobilteil, das geklingelt
+      hat –, genauso wie nach jedem anderen Gespräch damit. Sobald du abgenommen hast, läuft das Gespräch gar nicht mehr
+      über dein Smartphone: Es ist ein Gespräch dieses Telefons an der FRITZ!Box.</p>
+    <p>Pickelhaube wählt für ein Telefon an deiner FRITZ!Box: Sie baut den Anruf von dort aus auf. Ist das Gespräch
+      verbunden, ist diese Aufgabe erledigt, und das Gespräch liegt nicht mehr in der Hand von Pickelhaube. Darum kann der
+      rote Knopf einen Anruf nur abbrechen, solange er aufgebaut wird, und ist ausgegraut, sobald verbunden ist – das
+      Wählfeld zeigt dann „Auflegen am Gerät selbst“. Wie immer endet das Gespräch auch, wenn die andere Seite auflegt.</p>
+  </details>
+  <details id="faq-no-connection">
+    <summary>Die App verbindet sich nicht mit meiner FRITZ!Box. Was kann ich tun?</summary>
+    <p>Wenn die Verbindung scheitert, sagt ein Dialog, warum – dort fängst du am besten an. Das sind die üblichen
+      Ursachen, die häufigsten zuerst:</p>
+    <ul>
+      <li><strong>Der Router ist keine FRITZ!Box.</strong> Viele Haushalte haben einen Router eines anderen Herstellers,
+        oft einen vom Internetanbieter gestellten. Pickelhaube braucht die Schnittstelle für Apps, die nur eine FRITZ!Box
+        bietet (TR-064), und kann deshalb mit anderen Routern nicht arbeiten. Schau nach dem Namen auf dem Gerät, oder öffne
+        <code>http://fritz.box</code> im Browser des Telefons: Erscheint keine Anmeldeseite einer FRITZ!Box, ist der Router
+        sehr wahrscheinlich keine. Steht deine FRITZ!Box hinter einem anderen Router, sieh dir den Punkt zur Adresse
+        weiter unten an.</li>
+      <li><strong>Das Telefon ist nicht im Heimnetz der Box.</strong> Es muss im WLAN dieser Box sein – nicht im
+        Mobilfunknetz und nicht in ihrem Gast-WLAN, das Geräte von der Box selbst fernhält. Unterwegs hilft ein VPN ins
+        Heimnetz (siehe <a href="#boxes">Mehrere FRITZ!Boxen</a>).</li>
+      <li><strong>„Zugriff für Anwendungen zulassen“ ist aus.</strong> Ohne diese Einstellung antwortet die Box Apps
+        überhaupt nicht: <em>Heimnetz › Netzwerk › Netzwerkeinstellungen</em> (siehe <a href="#prepare">FRITZ!Box vorbereiten</a>).</li>
+      <li><strong>Der Benutzername ist falsch oder fehlt.</strong> Wenn du dich an der Box nur mit Kennwort anmeldest,
+        hat sie trotzdem einen von ihr angelegten Benutzernamen, etwa <code>fritz1234</code>. Er steht unter
+        <em>System › FRITZ!Box-Benutzer</em>, und die App bietet ihn im Feld für den Benutzernamen an (<kbd>▾</kbd>).</li>
+      <li><strong>Zu viele falsche Kennwörter.</strong> Nach fehlgeschlagenen Anmeldungen lehnt die Box weitere Versuche
+        eine Weile ab. Warte ein paar Minuten, bevor du es erneut versuchst.</li>
+      <li><strong>Die Adresse führt nicht zur Box.</strong> <code>fritz.box</code> funktioniert nur, wo die FRITZ!Box für
+        diesen Namen antwortet. Steht ein anderer Router, ein Mesh-System oder ein eigener DNS-Server dazwischen, gib
+        stattdessen die IP-Adresse der Box ein – <code>192.168.178.1</code>, sofern sie auf der Box nicht geändert wurde.</li>
+      <li><strong>HTTPS.</strong> Ist <em>HTTPS verwenden</em> an, versuch es einmal ohne; das Kennwort wird trotzdem nicht
+        im Klartext gesendet. Klappt es dann, findest du unter <a href="#https">HTTPS</a> mehr zu Port und Zertifikat.</li>
+    </ul>
+    <p>Immer noch kein Glück? Die <em>Technischen Details</em> des Dialogs lassen sich kopieren – schick sie über das
+      <a href="feedback.de.html">Feedback-Formular</a>. Sie enthalten nie dein Kennwort; Telefonnummern darin kannst du
+      durch <code>x</code> ersetzen.</p>
+  </details>
+
+  <p>Etwas ist hier nicht beantwortet? Frag über das <a href="feedback.de.html">Feedback-Formular</a>.</p>
+
+  <p>Technische Details und der Quellcode: <a href="https://github.com/arkascha/pickelhaube">github.com/arkascha/pickelhaube</a>.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Fußzeile">
+      <a href="index.de.html">Start</a>
+      <a href="guide.de.html">Anleitung</a>
+      <a href="changes.de.html">Versionsgeschichte</a>
+      <a href="feedback.de.html">Feedback</a>
+      <a href="privacy-policy.de.html">Datenschutzerklärung</a>
+      <a href="legal-notice.de.html">Impressum</a>
+      <a href="https://github.com/arkascha/pickelhaube">Quellcode</a>
+    </nav>
+    <p>Pickelhaube ist ein unabhängiges Projekt und steht in keiner Verbindung zur FRITZ! GmbH (vormals AVM).
+      FRITZ! und FRITZ!Box sind Marken der FRITZ! GmbH und werden hier nur genannt, um zu sagen, mit welchen Routern die App funktioniert.</p>
+  </div>
+</footer>
+<script>
+  // A link to one answer (guide.de.html#faq-…) opens it.
+  function openAnswer() {
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.tagName === 'DETAILS') target.open = true;
+  }
+  openAnswer();
+  window.addEventListener('hashchange', openAnswer);
+</script>
+</body>
+</html>

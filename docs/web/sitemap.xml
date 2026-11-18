@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The pages of the Pickelhaube web site for search engines. The legal notice is left out: it is marked noindex. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.rustygnome.org/pickelhaube/</loc></url>
-  <url><loc>https://www.rustygnome.org/pickelhaube/guide.html</loc></url>
-  <url><loc>https://www.rustygnome.org/pickelhaube/changes.html</loc></url>
-  <url><loc>https://www.rustygnome.org/pickelhaube/feedback.html</loc></url>
-  <url><loc>https://www.rustygnome.org/pickelhaube/privacy-policy.html</loc></url>
+<!--
+  The pages of the Pickelhaube web site for search engines, each in English and German, with the other language
+  named as its alternate. The legal notice is left out: it is marked noindex.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/index.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/index.de.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/index.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/guide.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/guide.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/guide.de.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/guide.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/changes.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/changes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/changes.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/changes.de.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/changes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/changes.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/feedback.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/feedback.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/feedback.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/feedback.de.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/feedback.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/feedback.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/privacy-policy.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/privacy-policy.de.html"/>
+  </url>
+  <url>
+    <loc>https://www.rustygnome.org/pickelhaube/privacy-policy.de.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.rustygnome.org/pickelhaube/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.rustygnome.org/pickelhaube/privacy-policy.de.html"/>
+  </url>
 </urlset>
