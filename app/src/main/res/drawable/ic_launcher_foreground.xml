@@ -16,6 +16,11 @@
         android:scaleX="0.92"
         android:scaleY="0.92">
 
+        <!-- The helmet itself, named for the splash screen's wobble (drawable/splash_icon.xml), around the brim's middle. -->
+        <group
+            android:name="helmet"
+            android:pivotX="54"
+            android:pivotY="55">
         <!-- spike -->
         <path
             android:fillColor="#F20400"
@@ -32,6 +37,7 @@
         <path
             android:fillColor="#F20400"
             android:pathData="M28.75,52.5 h50.5 a2.75,2.75 0 0 1 0,5.5 h-50.5 a2.75,2.75 0 0 1 0,-5.5 z" />
+        </group>
 
         <!-- handset (Material "call" glyph), centred at 54,75, rotated so both ends point down -->
         <group

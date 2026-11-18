@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The splash screen's icon (Android 12 and newer, see values-v31/themes.xml): the launcher icon's
+    helmet wobbles once on the handset, like the helmet in the dialer's title – tipped to one side,
+    back the other way, settling. The handset stays still. Android shows it only until the app has
+    drawn its first screen, so a quick start may cut it short; with animations switched off it is still.
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/ic_launcher_foreground">
+    <target android:name="helmet">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator android:propertyName="rotation" android:valueFrom="0" android:valueTo="-14"
+                    android:duration="140" android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator android:propertyName="rotation" android:valueFrom="-14" android:valueTo="11"
+                    android:duration="200" android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator android:propertyName="rotation" android:valueFrom="11" android:valueTo="-6"
+                    android:duration="170" android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator android:propertyName="rotation" android:valueFrom="-6" android:valueTo="3"
+                    android:duration="140" android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator android:propertyName="rotation" android:valueFrom="3" android:valueTo="0"
+                    android:duration="120" android:interpolator="@android:interpolator/fast_out_slow_in" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
