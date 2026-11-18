@@ -154,6 +154,9 @@ details p { margin: .5rem 0 .25rem; }
 .imprint { display: inline-block; max-width: 100%; background: #fff; padding: .75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
 .imprint img { display: block; max-width: 100%; height: auto; }
 
+/* The page for an address that does not exist (404.html): the puzzled mascot above it all. */
+.notfound > img { display: block; width: 160px; height: auto; margin: 0 0 1rem; }
+
 /* Version history */
 .release h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .75rem; }
 .release h2 .date { font-size: .9rem; font-weight: 400; color: var(--muted); }
