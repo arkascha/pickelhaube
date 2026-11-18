@@ -586,12 +586,13 @@
     <string name="welcome_start_dialling">Los telefonieren</string>
     <string name="settings_welcome_tour">Willkommens-Tour</string>
     <string name="settings_welcome_tour_hint">Schritt für Schritt durch die Einrichtung – fügt eine weitere FRITZ!\u2060Box hinzu</string>
-    <string name="web_guide">Anleitung im Web (Englisch)</string>
-    <string name="web_privacy_policy">Datenschutzerklärung (Englisch)</string>
-    <string name="web_feedback">Feedback geben (Englisch)</string>
+    <string name="web_language">de</string>
+    <string name="web_guide">Anleitung im Web</string>
+    <string name="web_privacy_policy">Datenschutzerklärung</string>
+    <string name="web_feedback">Feedback geben</string>
     <!-- A link in error dialogs to the guide's answer on connection problems. -->
-    <string name="web_help_connection">Weitere Ursachen und was hilft (Englisch)</string>
-    <string name="welcome_ready_more">Alles Weitere – in der Anleitung im Web (Englisch) ›</string>
+    <string name="web_help_connection">Weitere Ursachen und was hilft</string>
+    <string name="welcome_ready_more">Alles Weitere – in der Anleitung im Web ›</string>
     <string name="whats_new_title">Neu in %1$s</string>
     <string name="whats_new_ok">Alles klar</string>
     <string name="settings_whats_new">Neuigkeiten</string>

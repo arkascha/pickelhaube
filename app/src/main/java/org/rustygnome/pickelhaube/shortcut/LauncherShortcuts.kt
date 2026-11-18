@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -13,6 +12,7 @@ import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.AppLanguage
@@ -210,7 +210,7 @@ object LauncherShortcuts {
         val initials = initials(name) ?: return null
         // An adaptive icon is 108 dp with the visible part in the middle 72 dp (or less, by the mask).
         val size = (108 * context.resources.displayMetrics.density).toInt()
-        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(size, size)
         val canvas = Canvas(bitmap)
         canvas.drawColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

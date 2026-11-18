@@ -595,6 +595,8 @@
     <string name="welcome_start_dialling">Start dialling</string>
     <string name="settings_welcome_tour">Welcome tour</string>
     <string name="settings_welcome_tour_hint">Step by step through the setup – adds another FRITZ!\u2060Box</string>
+    <!-- The language of the web pages the app links to (WebPages.localized): "en" unless the pages exist in the language of these texts. -->
+    <string name="web_language" tools:ignore="MissingTranslation">en</string>
     <string name="web_guide">Guide on the web</string>
     <string name="web_privacy_policy">Privacy policy</string>
     <string name="web_feedback">Send feedback</string>
