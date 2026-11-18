@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- common -->
     <string name="back">Zurück</string>
     <string name="cancel">Abbrechen</string>
@@ -639,5 +639,9 @@
         <item>Der Helm macht mit: In Meldungen und Fragen schaut er ratlos, sucht oder prüft seine Liste, beim Wählen hüpft er mit, und er jubelt, wenn die Gegenseite abnimmt.</item>
         <item>Ab Android 12 wackelt der Helm beim Start der App; auf älterem Android trägt die App jetzt ihre eigenen Farben – das Blau und Messing des Helms.</item>
         <item>Namen wie FRITZ!\u2060Box werden am Zeilenende nicht mehr getrennt, und die Titel von Dialogen stehen mittig.</item>
+    </string-array>
+    <string-array name="whats_new_18" tools:ignore="InconsistentArrays">
+        <item>Jemand, den du ständig anrufst? Drück in „Letzte“ oder den Telefonbüchern lange auf die Nummer und wähl „Zum Startbildschirm hinzufügen“: Ein Tipp auf das Symbol ruft an.</item>
+        <item>Die Webseite gibt es jetzt auch auf Deutsch – die Links in der App führen direkt dorthin.</item>
     </string-array>
 </resources>

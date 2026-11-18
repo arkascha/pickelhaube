@@ -649,4 +649,7 @@
         <item>Desde Android 12 el casco se tambalea al abrir la app; en Android más antiguo la app luce ahora sus propios colores: el azul y el latón del casco.</item>
         <item>Nombres como FRITZ!\u2060Box ya no se cortan al final de una línea, y los títulos de los diálogos van centrados.</item>
     </string-array>
+    <string-array name="whats_new_18">
+        <item>¿Alguien a quien llamas a menudo? Mantén pulsado su número en Recientes o en Agendas y elige «Añadir a la pantalla de inicio»: un toque en el icono le llama.</item>
+    </string-array>
 </resources>

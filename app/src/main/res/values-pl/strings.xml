@@ -663,4 +663,7 @@
         <item>Od Androida 12 hełm chwieje się przy uruchamianiu aplikacji; na starszym Androidzie aplikacja ma teraz własne kolory – niebieski i mosiądz hełmu.</item>
         <item>Nazwy takie jak FRITZ!\u2060Box nie są już dzielone na końcu wiersza, a tytuły okien dialogowych są wyśrodkowane.</item>
     </string-array>
+    <string-array name="whats_new_18">
+        <item>Ktoś, do kogo dzwonisz bardzo często? Przytrzymaj jego numer w Ostatnich lub w książkach telefonicznych i wybierz „Dodaj do ekranu głównego”: jedno dotknięcie ikony dzwoni.</item>
+    </string-array>
 </resources>

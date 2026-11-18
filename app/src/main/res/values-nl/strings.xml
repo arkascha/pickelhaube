@@ -639,4 +639,7 @@
         <item>Vanaf Android 12 wiebelt de helm bij het starten van de app; op oudere Android-versies draagt de app nu zijn eigen kleuren – het blauw en messing van de helm.</item>
         <item>Namen als FRITZ!\u2060Box worden aan het eind van een regel niet meer afgebroken, en de titels van dialogen staan gecentreerd.</item>
     </string-array>
+    <string-array name="whats_new_18">
+        <item>Iemand die je steeds belt? Houd zijn nummer in Recent of de telefoonboeken ingedrukt en kies „Toevoegen aan startscherm”: één tik op het pictogram belt hem.</item>
+    </string-array>
 </resources>

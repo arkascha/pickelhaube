@@ -1,0 +1,8 @@
+<en-US>
+• Someone you call all the time? Long-press their number in Recent or the phone books and choose "Add to home screen": one tap on the icon calls them
+• The web page now has a German version; with the app in German, its links open the German pages
+</en-US>
+<de-DE>
+• Jemand, den du ständig anrufst? In „Letzte“ oder den Telefonbüchern lange auf die Nummer drücken, „Zum Startbildschirm hinzufügen“ wählen: Ein Tipp auf das Symbol ruft an
+• Die Webseite gibt es jetzt auch auf Deutsch – die Links in der App führen direkt dorthin
+</de-DE>

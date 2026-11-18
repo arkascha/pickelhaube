@@ -649,4 +649,7 @@
         <item>À partir d’Android 12, le casque vacille au démarrage de l’appli ; sur les Android plus anciens, l’appli porte désormais ses propres couleurs : le bleu et le laiton du casque.</item>
         <item>Les noms comme FRITZ!\u2060Box ne sont plus coupés en fin de ligne, et les titres des dialogues sont centrés.</item>
     </string-array>
+    <string-array name="whats_new_18">
+        <item>Quelqu’un que vous appelez souvent ? Appuyez longuement sur son numéro dans Récents ou Répertoires et choisissez « Ajouter à l’écran d’accueil » : un appui sur l’icône l’appelle.</item>
+    </string-array>
 </resources>
