@@ -17,7 +17,7 @@
     <string name="open_settings">Ouvrir les paramètres</string>
     <string name="settings">Paramètres</string>
     <string name="this_phone">Ce téléphone</string>
-    <string name="fritzbox">FRITZ!Box</string>
+    <string name="fritzbox">FRITZ!\u2060Box</string>
     <string name="settings_build_play">Version Google Play</string>
     <string name="settings_build_full">Version complète</string>
     <string name="settings_source_code">Code source sur GitHub ›</string>
@@ -35,7 +35,7 @@
     <string name="widget_setup_up">Monter</string>
     <string name="widget_setup_down">Descendre</string>
     <string name="widget_setup_remove">Retirer %1$s</string>
-    <string name="trademark_notice">Pickelhaube est un projet indépendant, sans lien avec FRITZ! GmbH (anciennement AVM). FRITZ! et FRITZ!Box sont des marques de FRITZ! GmbH.</string>
+    <string name="trademark_notice">Pickelhaube est un projet indépendant, sans lien avec FRITZ! GmbH (anciennement AVM). FRITZ! et FRITZ!\u2060Box sont des marques de FRITZ! GmbH.</string>
     <string name="phone_books">Répertoires</string>
 
     <!-- dialer -->
@@ -52,7 +52,7 @@
     <string name="dialer_choose_phone">Choisir un téléphone</string>
     <string name="dialer_ring_phone">Faire sonner</string>
     <string name="dialer_reload_phones">Recharger les téléphones depuis le routeur</string>
-    <string name="dialer_refresh">Tout relire depuis la FRITZ!Box</string>
+    <string name="dialer_refresh">Tout relire depuis la FRITZ!\u2060Box</string>
 
     <!-- number picker -->
     <string name="picker_title">Choisir un numéro</string>
@@ -72,7 +72,7 @@
     <string name="phonebook_no_match_headline">Cherché partout.</string>
     <string name="phonebook_none_enabled">Aucun répertoire n’est activé. Vous pouvez les activer dans les paramètres.</string>
     <string name="device_contacts_question_title">Inclure les contacts de ce téléphone ?</string>
-    <string name="device_contacts_question_text">Pickelhaube peut aussi afficher les contacts enregistrés sur ce téléphone à côté des répertoires de la FRITZ!Box. Pour cela, Android demande l’accès à vos contacts – ils ne quittent jamais le téléphone. Vous pourrez modifier ce choix plus tard dans les paramètres.</string>
+    <string name="device_contacts_question_text">Pickelhaube peut aussi afficher les contacts enregistrés sur ce téléphone à côté des répertoires de la FRITZ!\u2060Box. Pour cela, Android demande l’accès à vos contacts – ils ne quittent jamais le téléphone. Vous pourrez modifier ce choix plus tard dans les paramètres.</string>
     <string name="device_contacts_revoked">Les contacts de ce téléphone sont activés, mais Android n’autorise plus Pickelhaube à les lire.</string>
     <string name="number_type_home">Domicile</string>
     <string name="number_type_mobile">Mobile</string>
@@ -90,7 +90,7 @@
     <string name="recents_filter_missed">Appels manqués</string>
     <string name="recents_no_missed">Aucun appel manqué.</string>
     <string name="recents_none_enabled">Aucune liste d’appels n’est activée. Vous pouvez l’activer dans les paramètres.</string>
-    <string name="recents_box_load_failed">Impossible de charger la liste d’appels de la FRITZ!Box. Touchez Recharger pour réessayer.</string>
+    <string name="recents_box_load_failed">Impossible de charger la liste d’appels de la FRITZ!\u2060Box. Touchez Recharger pour réessayer.</string>
     <string name="recents_recorded_by_box">Enregistré par %1$s</string>
     <string name="recents_recorded_by_phone">Enregistré par ce téléphone</string>
     <string name="recents_dialled">Émis</string>
@@ -106,12 +106,12 @@
     </plurals>
 
     <!-- settings overview -->
-    <string name="settings_connections">Connexions FRITZ!Box</string>
-    <string name="settings_connections_hint">La FRITZ!Box du réseau dans lequel se trouve le téléphone est utilisée automatiquement. Ce n’est que si aucune n’y est trouvée que vous pouvez en choisir une vous-même.</string>
+    <string name="settings_connections">Connexions FRITZ!\u2060Box</string>
+    <string name="settings_connections_hint">La FRITZ!\u2060Box du réseau dans lequel se trouve le téléphone est utilisée automatiquement. Ce n’est que si aucune n’y est trouvée que vous pouvez en choisir une vous-même.</string>
     <string name="settings_box_here">Accessible</string>
     <string name="settings_box_not_here">Inaccessible</string>
     <string name="settings_box_never_recognised">Pas encore reconnue – seulement après une connexion</string>
-    <string name="settings_add_box">Ajouter une FRITZ!Box</string>
+    <string name="settings_add_box">Ajouter une FRITZ!\u2060Box</string>
     <string name="settings_in_use">Utilisée</string>
     <string name="settings_in_use_not_found">Utilisée, mais introuvable dans le réseau actuel</string>
     <string name="settings_in_use_not_working">Utilisée, mais ne fonctionne pas\u00A0: la dernière requête a échoué</string>
@@ -119,13 +119,13 @@
     <string name="settings_delete_title">Supprimer « %1$s » ?</string>
     <string name="settings_delete_text">La connexion, son mot de passe et son certificat de confiance sont supprimés de ce téléphone.</string>
     <string name="settings_device_contacts">Inclure les contacts de ce téléphone</string>
-    <string name="settings_device_contacts_hint">Affiche les contacts enregistrés sur ce téléphone à côté des répertoires de la FRITZ!Box. Nécessite l’accès à vos contacts ; ils ne quittent jamais le téléphone.</string>
+    <string name="settings_device_contacts_hint">Affiche les contacts enregistrés sur ce téléphone à côté des répertoires de la FRITZ!\u2060Box. Nécessite l’accès à vos contacts ; ils ne quittent jamais le téléphone.</string>
     <string name="settings_device_contacts_denied">Android n’autorise pas Pickelhaube à lire vos contacts. Vous pouvez l’autoriser dans les paramètres de l’appli.</string>
-    <string name="settings_contact_actions">« Appeler via la FRITZ!Box » dans Contacts</string>
-    <string name="settings_contact_actions_hint">Ajoute une ligne « Appeler … via la FRITZ!Box » à côté de chaque numéro dans l’appli Contacts du téléphone ; un appui ouvre Pickelhaube avec le numéro. Pour cela, Pickelhaube écrit ces lignes dans vos contacts, dans un compte à lui (« Pickelhaube » dans les comptes d’Android) – rien ne quitte le téléphone. Le désactiver les supprime.</string>
+    <string name="settings_contact_actions">« Appeler via la FRITZ!\u2060Box » dans Contacts</string>
+    <string name="settings_contact_actions_hint">Ajoute une ligne « Appeler … via la FRITZ!\u2060Box » à côté de chaque numéro dans l’appli Contacts du téléphone ; un appui ouvre Pickelhaube avec le numéro. Pour cela, Pickelhaube écrit ces lignes dans vos contacts, dans un compte à lui (« Pickelhaube » dans les comptes d’Android) – rien ne quitte le téléphone. Le désactiver les supprime.</string>
     <string name="settings_contact_actions_denied">Android n’autorise pas Pickelhaube à modifier vos contacts. Vous pouvez l’autoriser dans les paramètres de l’appli.</string>
     <!-- The row beside a number in the phone's contacts app; %1$s the number. -->
-    <string name="contact_action_detail">Appeler %1$s via la FRITZ!Box</string>
+    <string name="contact_action_detail">Appeler %1$s via la FRITZ!\u2060Box</string>
     <string name="settings_recents">Numéros récents</string>
     <string name="settings_call_log">Inclure les appels de ce téléphone</string>
     <string name="settings_call_log_hint">Propose aussi les numéros composés, reçus et manqués avec l’appli Téléphone de ce téléphone. Nécessite l’accès à votre journal d’appels ; il ne quitte jamais le téléphone.</string>
@@ -135,7 +135,7 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">Connexion FRITZ!Box</string>
+    <string name="connection_title">Connexion FRITZ!\u2060Box</string>
     <string name="connection_name">Nom affiché</string>
     <string name="connection_name_placeholder">par défaut : le nom de la box</string>
     <string name="connection_name_hint">Pour vous seulement : le nom de cette box dans Pickelhaube, p. ex. « Maison » ou « Bureau ». La box n’est pas cherchée par ce nom – elle est jointe à l’hôte ci-dessous.</string>
@@ -143,50 +143,50 @@
     <string name="connection_https">Utiliser HTTPS</string>
     <string name="connection_https_hint">Connexion chiffrée (port %1$d). Le certificat auto-signé de la box doit être confirmé une fois.</string>
     <string name="connection_port">Port TR-064</string>
-    <string name="connection_port_from_box">Le port HTTPS indiqué par cette FRITZ!Box</string>
-    <string name="connection_user">Nom d’utilisateur FRITZ!Box</string>
+    <string name="connection_port_from_box">Le port HTTPS indiqué par cette FRITZ!\u2060Box</string>
+    <string name="connection_user">Nom d’utilisateur FRITZ!\u2060Box</string>
     <string name="connection_user_last">Dernière connexion</string>
     <string name="connection_user_made_by_box">Créé par la box pour la connexion avec mot de passe seul</string>
     <string name="connection_user_current">Saisi actuellement</string>
     <string name="connection_user_taken_over">Repris : le seul utilisateur de cette box</string>
-    <string name="connection_user_hint">L’utilisateur avec lequel vous vous connectez à la FRITZ!Box. Si vous vous connectez uniquement avec un mot de passe, la box a tout de même créé un utilisateur pour cela, avec son propre nom (p. ex. fritz1234). Vous pouvez aussi créer un utilisateur rien que pour Pickelhaube sous Système › Utilisateurs FRITZ!Box ; il a besoin du droit Téléphonie.</string>
+    <string name="connection_user_hint">L’utilisateur avec lequel vous vous connectez à la FRITZ!\u2060Box. Si vous vous connectez uniquement avec un mot de passe, la box a tout de même créé un utilisateur pour cela, avec son propre nom (p. ex. fritz1234). Vous pouvez aussi créer un utilisateur rien que pour Pickelhaube sous Système › Utilisateurs FRITZ!\u2060Box ; il a besoin du droit Téléphonie.</string>
     <string name="connection_user_choose">Choisir un utilisateur de la box</string>
     <string name="connection_password">Mot de passe</string>
     <string name="connection_phonebooks">Répertoires</string>
-    <string name="connection_phonebooks_hint">Affiche les contacts enregistrés dans les répertoires de cette FRITZ!Box, y compris les répertoires en ligne qui y sont synchronisés (p. ex. CardDAV). Ils sont lus sur la FRITZ!Box au besoin et ne sont pas enregistrés sur le téléphone.</string>
+    <string name="connection_phonebooks_hint">Affiche les contacts enregistrés dans les répertoires de cette FRITZ!\u2060Box, y compris les répertoires en ligne qui y sont synchronisés (p. ex. CardDAV). Ils sont lus sur la FRITZ!\u2060Box au besoin et ne sont pas enregistrés sur le téléphone.</string>
     <string name="connection_call_list">Liste d’appels</string>
-    <string name="connection_call_list_hint">Les numéros récemment composés, reçus et manqués, de la liste d’appels de cette FRITZ!Box.</string>
+    <string name="connection_call_list_hint">Les numéros récemment composés, reçus et manqués, de la liste d’appels de cette FRITZ!\u2060Box.</string>
     <string name="connection_call_list_no_right">%1$s n’a pas ce droit sur la box, la liste d’appels ne peut donc pas être lue.</string>
     <string name="connection_host_other">%1$s mène ici à « %2$s » – cette box ne peut être vérifiée que dans son propre réseau.</string>
     <string name="connection_host_known">%1$s mène à « %2$s », déjà configurée.</string>
-    <string name="save_check_other_title">Une autre FRITZ!Box répond</string>
+    <string name="save_check_other_title">Une autre FRITZ!\u2060Box répond</string>
     <string name="save_check_other_text">À %1$s, c’est « %2$s » qui répond – pas « %3$s ». Aucune connexion à « %3$s » n’a donc été tentée : elle ne peut être vérifiée que dans son propre réseau. Enregistrer les modifications sans vérification ? La box utilisée reste la même.</string>
-    <string name="save_check_none_title">Aucune FRITZ!Box ne répond</string>
-    <string name="save_check_none_text">Aucune FRITZ!Box ne répond à %1$s, « %2$s » ne peut donc pas être vérifiée d’ici. Enregistrer les modifications sans vérification ? La box utilisée reste la même.</string>
+    <string name="save_check_none_title">Aucune FRITZ!\u2060Box ne répond</string>
+    <string name="save_check_none_text">Aucune FRITZ!\u2060Box ne répond à %1$s, « %2$s » ne peut donc pas être vérifiée d’ici. Enregistrer les modifications sans vérification ? La box utilisée reste la même.</string>
     <string name="save_check_known_title">Déjà configurée</string>
-    <string name="save_check_known_text">La FRITZ!Box à %1$s est déjà configurée, sous « %2$s ». L’ajouter quand même une seconde fois ?</string>
+    <string name="save_check_known_text">La FRITZ!\u2060Box à %1$s est déjà configurée, sous « %2$s ». L’ajouter quand même une seconde fois ?</string>
     <string name="save_unchecked">Enregistrer sans vérifier</string>
     <string name="save_anyway">Ajouter quand même</string>
-    <string name="connection_help_title">Préparer la FRITZ!Box</string>
+    <string name="connection_help_title">Préparer la FRITZ!\u2060Box</string>
     <string name="connection_help">Sur la box, activez « Autoriser l’accès aux applications » (Réseau domestique › Réseau › Paramètres réseau) et l’« Aide à la numérotation » (Téléphonie › Appels › Aide à la numérotation). L’utilisateur a besoin du droit Téléphonie.</string>
-    <string name="connection_demo_question">Pas de FRITZ!Box ?</string>
+    <string name="connection_demo_question">Pas de FRITZ!\u2060Box ?</string>
     <string name="connection_demo">Essayez la box de démonstration ›</string>
     <string name="connection_demo_title">La box de démonstration</string>
-    <string name="connection_demo_hint">Pas de FRITZ!Box sous la main ? Essayez Pickelhaube avec sa box de démonstration : hôte « demo », nom d’utilisateur et mot de passe « demo ». Elle a des annuaires et des appels à essayer, et ses appels ne sonnent nulle part.</string>
+    <string name="connection_demo_hint">Pas de FRITZ!\u2060Box sous la main ? Essayez Pickelhaube avec sa box de démonstration : hôte « demo », nom d’utilisateur et mot de passe « demo ». Elle a des annuaires et des appels à essayer, et ses appels ne sonnent nulle part.</string>
     <string name="connection_demo_fill">Remplir avec la box de démonstration</string>
     <string name="connection_connecting">Connexion…</string>
     <string name="connection_save">Enregistrer et connecter</string>
     <string name="connection_box_info">Informations sur l’appareil</string>
     <string name="connection_box_model">Modèle : %1$s</string>
-    <string name="connection_box_fritzos">FRITZ!OS : %1$s</string>
+    <string name="connection_box_fritzos">FRITZ!\u2060OS : %1$s</string>
     <string name="connection_box_serial">Numéro de série : %1$s</string>
     <string name="connection_box_country_code">Indicatif du pays : %1$s</string>
     <string name="connection_box_area_code">Indicatif régional : %1$s</string>
     <string name="connection_rights_title">Droits de l’utilisateur « %1$s »</string>
     <string name="connection_rights_title_short">Droits de « %1$s »</string>
-    <string name="connection_rights_hint">Ce que cet utilisateur peut faire sur la FRITZ!Box, selon la box. Modifiable sur la box sous Système › Utilisateurs FRITZ!Box.</string>
-    <string name="right_box_admin">Paramètres de la FRITZ!Box</string>
-    <string name="right_phone">Messages vocaux, fax, FRITZ!App Fon et liste d’appels</string>
+    <string name="connection_rights_hint">Ce que cet utilisateur peut faire sur la FRITZ!\u2060Box, selon la box. Modifiable sur la box sous Système › Utilisateurs FRITZ!\u2060Box.</string>
+    <string name="right_box_admin">Paramètres de la FRITZ!\u2060Box</string>
+    <string name="right_phone">Messages vocaux, fax, FRITZ!\u2060App Fon et liste d’appels</string>
     <string name="right_home_auto">Smart Home</string>
     <string name="right_nas">Accès aux contenus NAS</string>
     <string name="access_none">non</string>
@@ -196,13 +196,13 @@
     <string name="connection_trusted_cert">Certificat HTTPS de confiance</string>
     <string name="connection_no_cert">Aucun. Lors d’une connexion HTTPS, il vous sera demandé de confirmer le certificat du routeur.</string>
     <string name="connection_cert_trusted">Confirmé. En HTTPS, l’app ne se connecte qu’à la box qui présente exactement ce certificat.</string>
-    <string name="connection_delete_box">Supprimer cette FRITZ!Box</string>
+    <string name="connection_delete_box">Supprimer cette FRITZ!\u2060Box</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Le certificat a changé !</string>
     <string name="cert_trust_title">Faire confiance à ce certificat ?</string>
     <string name="cert_changed_text">Le routeur présente un autre certificat que celui auquel vous avez fait confiance auparavant. Cela arrive après une réinitialisation d’usine ou un changement de nom de la box – mais cela peut aussi signifier que quelqu’un intercepte la connexion. Ne continuez que si vous pouvez l’expliquer.</string>
-    <string name="cert_trust_text">Le routeur utilise un certificat auto-signé qui ne peut pas être vérifié automatiquement. Comparez l’empreinte SHA-256 avec celle que votre navigateur affiche pour https://fritz.box (ou avec le certificat dans l’interface web de la FRITZ!Box) avant de lui faire confiance.</string>
+    <string name="cert_trust_text">Le routeur utilise un certificat auto-signé qui ne peut pas être vérifié automatiquement. Comparez l’empreinte SHA-256 avec celle que votre navigateur affiche pour https://fritz.box (ou avec le certificat dans l’interface web de la FRITZ!\u2060Box) avant de lui faire confiance.</string>
     <string name="cert_trust_new">Faire confiance au nouveau certificat</string>
     <string name="cert_trust">Faire confiance</string>
     <string name="cert_expired">Ce certificat est en dehors de sa période de validité.</string>
@@ -224,32 +224,32 @@
     <string name="password_hide">Masquer le mot de passe</string>
 
     <!-- second factor -->
-    <string name="second_factor_title">Confirmer sur la FRITZ!Box</string>
-    <string name="second_factor_intro">Votre FRITZ!Box vous demande de confirmer cette étape avant de l’exécuter.</string>
-    <string name="second_factor_button">• Appuyez sur une touche de la FRITZ!Box.</string>
-    <string name="second_factor_dial">• Composez %1$s sur un téléphone raccordé à la FRITZ!Box.</string>
-    <string name="second_factor_or_dial">• Ou composez %1$s sur un téléphone raccordé à la FRITZ!Box.</string>
-    <string name="second_factor_other">Confirmez comme indiqué sur la FRITZ!Box.</string>
-    <string name="second_factor_other_methods">Confirmez comme indiqué sur la FRITZ!Box (%1$s).</string>
+    <string name="second_factor_title">Confirmer sur la FRITZ!\u2060Box</string>
+    <string name="second_factor_intro">Votre FRITZ!\u2060Box vous demande de confirmer cette étape avant de l’exécuter.</string>
+    <string name="second_factor_button">• Appuyez sur une touche de la FRITZ!\u2060Box.</string>
+    <string name="second_factor_dial">• Composez %1$s sur un téléphone raccordé à la FRITZ!\u2060Box.</string>
+    <string name="second_factor_or_dial">• Ou composez %1$s sur un téléphone raccordé à la FRITZ!\u2060Box.</string>
+    <string name="second_factor_other">Confirmez comme indiqué sur la FRITZ!\u2060Box.</string>
+    <string name="second_factor_other_methods">Confirmez comme indiqué sur la FRITZ!\u2060Box (%1$s).</string>
     <string name="second_factor_waiting">En attente de confirmation…</string>
 
     <!-- errors -->
     <string name="error_login_title">Échec de la connexion</string>
-    <string name="error_login">Le routeur a refusé le nom d’utilisateur « %1$s » ou le mot de passe. Si vous vous connectez à la box uniquement avec un mot de passe, utilisez le nom d’utilisateur généré automatiquement, indiqué sous Système › Utilisateurs FRITZ!Box.</string>
+    <string name="error_login">Le routeur a refusé le nom d’utilisateur « %1$s » ou le mot de passe. Si vous vous connectez à la box uniquement avec un mot de passe, utilisez le nom d’utilisateur généré automatiquement, indiqué sous Système › Utilisateurs FRITZ!\u2060Box.</string>
     <string name="error_empty_user">(vide)</string>
     <string name="error_not_confirmed_title">Non confirmé</string>
-    <string name="error_not_confirmed">La FRITZ!Box n’a pas reçu la confirmation à temps. Touchez Réessayer et confirmez sur la box (appuyez sur sa touche ou composez le code affiché sur un téléphone raccordé).</string>
-    <string name="error_other_box_title">Autre FRITZ!Box</string>
-    <string name="error_other_box">La FRITZ!Box à l’adresse %1$s n’est pas « %2$s » : son numéro de série diffère de celui enregistré. Si la box a été remplacée, supprimez cette connexion et ajoutez-la à nouveau.</string>
+    <string name="error_not_confirmed">La FRITZ!\u2060Box n’a pas reçu la confirmation à temps. Touchez Réessayer et confirmez sur la box (appuyez sur sa touche ou composez le code affiché sur un téléphone raccordé).</string>
+    <string name="error_other_box_title">Autre FRITZ!\u2060Box</string>
+    <string name="error_other_box">La FRITZ!\u2060Box à l’adresse %1$s n’est pas « %2$s » : son numéro de série diffère de celui enregistré. Si la box a été remplacée, supprimez cette connexion et ajoutez-la à nouveau.</string>
     <string name="error_confirmation_blocked_title">Confirmation bloquée</string>
-    <string name="error_confirmation_blocked">La FRITZ!Box bloque actuellement les confirmations (trop de tentatives). Attendez quelques minutes et réessayez.</string>
+    <string name="error_confirmation_blocked">La FRITZ!\u2060Box bloque actuellement les confirmations (trop de tentatives). Attendez quelques minutes et réessayez.</string>
     <string name="error_confirmation_busy_title">Confirmation déjà en cours</string>
-    <string name="error_confirmation_busy">Une autre confirmation est déjà en cours sur la FRITZ!Box. Terminez-la ou attendez-la, puis réessayez.</string>
+    <string name="error_confirmation_busy">Une autre confirmation est déjà en cours sur la FRITZ!\u2060Box. Terminez-la ou attendez-la, puis réessayez.</string>
     <string name="error_not_authorized_title">Non autorisé</string>
-    <string name="error_not_authorized">L’utilisateur « %1$s » est connecté mais n’a pas le droit d’utiliser cette fonction. Vérifiez ses droits sous Système › Utilisateurs FRITZ!Box.</string>
-    <string name="error_not_authorized_right">L’utilisateur « %1$s » est connecté mais n’a pas le droit « %2$s ». Accordez-le sous Système › Utilisateurs FRITZ!Box.</string>
+    <string name="error_not_authorized">L’utilisateur « %1$s » est connecté mais n’a pas le droit d’utiliser cette fonction. Vérifiez ses droits sous Système › Utilisateurs FRITZ!\u2060Box.</string>
+    <string name="error_not_authorized_right">L’utilisateur « %1$s » est connecté mais n’a pas le droit « %2$s ». Accordez-le sous Système › Utilisateurs FRITZ!\u2060Box.</string>
     <string name="error_no_dial_help_title">Aide à la numérotation indisponible</string>
-    <string name="error_no_dial_help">Le routeur ne propose pas cette fonction via TR-064 (FRITZ!OS obsolète ?).</string>
+    <string name="error_no_dial_help">Le routeur ne propose pas cette fonction via TR-064 (FRITZ!\u2060OS obsolète ?).</string>
     <string name="error_technical_details">Détails techniques</string>
     <string name="copy">Copier</string>
     <string name="error_router_title">Erreur du routeur</string>
@@ -293,7 +293,7 @@
     <string name="status_hanging_up">Raccrochage…</string>
     <string name="status_call_cancelled">Appel annulé</string>
     <string name="status_waiting_cert">En attente de la décision sur le certificat…</string>
-    <string name="status_waiting_confirmation">En attente de confirmation sur la FRITZ!Box…</string>
+    <string name="status_waiting_confirmation">En attente de confirmation sur la FRITZ!\u2060Box…</string>
     <plurals name="status_connected">
         <item quantity="one">Connecté – %d téléphone trouvé</item>
         <item quantity="many">Connecté – %d téléphones trouvés</item>
@@ -317,20 +317,20 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s dans ce réseau n’est pas configurée</string>
-    <string name="notice_unknown_box_generic">Une FRITZ!Box de ce réseau n’est pas configurée</string>
-    <string name="notice_no_known_box">Aucune de vos FRITZ!Box accessible</string>
-    <string name="notice_no_network">Pas de réseau – aucune FRITZ!Box accessible</string>
-    <string name="notice_mobile_data">Données mobiles – aucune FRITZ!Box accessible</string>
-    <string name="notice_other_network">Aucune de vos FRITZ!Box dans ce réseau</string>
-    <string name="notice_vpn_no_box">VPN actif – mais aucune FRITZ!Box accessible</string>
+    <string name="notice_unknown_box_generic">Une FRITZ!\u2060Box de ce réseau n’est pas configurée</string>
+    <string name="notice_no_known_box">Aucune de vos FRITZ!\u2060Box accessible</string>
+    <string name="notice_no_network">Pas de réseau – aucune FRITZ!\u2060Box accessible</string>
+    <string name="notice_mobile_data">Données mobiles – aucune FRITZ!\u2060Box accessible</string>
+    <string name="notice_other_network">Aucune de vos FRITZ!\u2060Box dans ce réseau</string>
+    <string name="notice_vpn_no_box">VPN actif – mais aucune FRITZ!\u2060Box accessible</string>
     <string name="not_at_home_what_now">Que faire ?</string>
     <string name="not_at_home_title">Pas à la maison ?</string>
     <string name="not_at_home_title_offline">Pas de réseau</string>
-    <string name="not_at_home_how">Pickelhaube n’atteint votre FRITZ!Box que depuis son réseau domestique : à la maison par son Wi-Fi, ou d’ailleurs via un VPN vers celui-ci – la FRITZ!Box en propose un elle-même.</string>
-    <string name="not_at_home_offline">Le téléphone n’a pas de connexion réseau pour le moment. Dès qu’il en aura une, Pickelhaube recherchera de lui-même votre FRITZ!Box.</string>
+    <string name="not_at_home_how">Pickelhaube n’atteint votre FRITZ!\u2060Box que depuis son réseau domestique : à la maison par son Wi-Fi, ou d’ailleurs via un VPN vers celui-ci – la FRITZ!\u2060Box en propose un elle-même.</string>
+    <string name="not_at_home_offline">Le téléphone n’a pas de connexion réseau pour le moment. Dès qu’il en aura une, Pickelhaube recherchera de lui-même votre FRITZ!\u2060Box.</string>
     <string name="not_at_home_mobile">Le téléphone utilise les données mobiles. À la maison, activez le Wi-Fi ; ailleurs, connectez un VPN vers votre réseau domestique.</string>
-    <string name="not_at_home_other_network">Ce réseau n’est celui d’aucune de vos FRITZ!Box. Hors de chez vous, connectez un VPN vers votre réseau domestique.</string>
-    <string name="not_at_home_vpn">Un VPN est actif, mais aucune FRITZ!Box n’a répondu à travers lui. Vérifiez qu’il mène à votre réseau domestique et que la connexion de la box utilise une adresse accessible par lui, comme 192.168.178.1.</string>
+    <string name="not_at_home_other_network">Ce réseau n’est celui d’aucune de vos FRITZ!\u2060Box. Hors de chez vous, connectez un VPN vers votre réseau domestique.</string>
+    <string name="not_at_home_vpn">Un VPN est actif, mais aucune FRITZ!\u2060Box n’a répondu à travers lui. Vérifiez qu’il mène à votre réseau domestique et que la connexion de la box utilise une adresse accessible par lui, comme 192.168.178.1.</string>
     <string name="not_at_home_search_again">Rechercher à nouveau</string>
     <string name="not_at_home_vpn_settings">Paramètres VPN</string>
     <string name="not_at_home_network_settings">Paramètres réseau</string>
@@ -339,11 +339,11 @@
     <string name="call_log_failed_plain">Impossible de lire le journal d’appels du téléphone. Cela ne fonctionne que si Pickelhaube n’a pas été installé depuis Google Play.</string>
     <string name="speed_dial">Numéros abrégés</string>
     <string name="speed_dial_none_enabled">Aucun numéro abrégé n’est activé. Vous pouvez les activer dans les paramètres.</string>
-    <string name="speed_dial_phone_help">Les numéros abrégés 1 à 9 sont enregistrés sur ce téléphone et fonctionnent avec toutes les FRITZ!Box. Sur le clavier, appuyez longuement sur le chiffre. Touchez un emplacement libre pour choisir son numéro dans les répertoires ; appuyez longuement sur un emplacement occupé pour le modifier ou le supprimer.</string>
-    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box, tels qu’ils se composent sur ses téléphones avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
-    <string name="speed_dial_box_failed">Les numéros abrégés de la FRITZ!Box n’ont pas pu être chargés. Touchez Recharger pour réessayer.</string>
-    <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FRITZ!Box.</string>
-    <string name="speed_dial_box_none_headline">Pas encore de favoris sur la FRITZ!Box.</string>
+    <string name="speed_dial_phone_help">Les numéros abrégés 1 à 9 sont enregistrés sur ce téléphone et fonctionnent avec toutes les FRITZ!\u2060Box. Sur le clavier, appuyez longuement sur le chiffre. Touchez un emplacement libre pour choisir son numéro dans les répertoires ; appuyez longuement sur un emplacement occupé pour le modifier ou le supprimer.</string>
+    <string name="speed_dial_box_help">Les numéros abrégés configurés dans les répertoires de cette FRITZ!\u2060Box, tels qu’ils se composent sur ses téléphones avec **7. Sur le clavier, touchez le premier chiffre et appuyez longuement sur le second, ou saisissez **7 suivi du numéro. En bas, créez-en un nouveau ; un appui long sur l’un d’eux le modifie ou le supprime.</string>
+    <string name="speed_dial_box_failed">Les numéros abrégés de la FRITZ!\u2060Box n’ont pas pu être chargés. Touchez Recharger pour réessayer.</string>
+    <string name="speed_dial_box_none">Aucun numéro abrégé n’est configuré dans les répertoires de cette FRITZ!\u2060Box.</string>
+    <string name="speed_dial_box_none_headline">Pas encore de favoris sur la FRITZ!\u2060Box.</string>
     <string name="speed_dial_free">Libre</string>
     <plurals name="speed_dial_free_slots">
         <item quantity="one">%d emplacement libre – à configurer</item>
@@ -358,33 +358,33 @@
     <string name="speed_dial_choose_number">Touchez le numéro pour le numéro abrégé %1$s.</string>
     <string name="speed_dial_for">Numéro abrégé pour %1$s</string>
     <string name="speed_dial_make">Définir comme numéro abrégé</string>
-    <string name="speed_dial_make_box">Définir comme numéro abrégé de la FRITZ!Box</string>
-    <string name="speed_dial_box_for">Numéro abrégé de la FRITZ!Box pour %1$s</string>
-    <string name="speed_dial_box_new_entry">Le numéro ne figure encore dans aucun répertoire de la FRITZ!Box. Nouvelle entrée dans :</string>
-    <string name="speed_dial_box_online">« %1$s » ne figure que dans le répertoire en ligne « %2$s », que la FRITZ!Box ne peut pas modifier. Pour le numéro abrégé, une entrée est créée dans un répertoire propre à la FRITZ!Box.</string>
-    <string name="copy_delete">Supprimer la copie sur la FRITZ!Box</string>
-    <string name="status_deleting_copy">Suppression de la copie de « %1$s » sur la FRITZ!Box…</string>
-    <string name="status_copy_deleted">Copie de « %1$s » sur la FRITZ!Box supprimée.</string>
+    <string name="speed_dial_make_box">Définir comme numéro abrégé de la FRITZ!\u2060Box</string>
+    <string name="speed_dial_box_for">Numéro abrégé de la FRITZ!\u2060Box pour %1$s</string>
+    <string name="speed_dial_box_new_entry">Le numéro ne figure encore dans aucun répertoire de la FRITZ!\u2060Box. Nouvelle entrée dans :</string>
+    <string name="speed_dial_box_online">« %1$s » ne figure que dans le répertoire en ligne « %2$s », que la FRITZ!\u2060Box ne peut pas modifier. Pour le numéro abrégé, une entrée est créée dans un répertoire propre à la FRITZ!\u2060Box.</string>
+    <string name="copy_delete">Supprimer la copie sur la FRITZ!\u2060Box</string>
+    <string name="status_deleting_copy">Suppression de la copie de « %1$s » sur la FRITZ!\u2060Box…</string>
+    <string name="status_copy_deleted">Copie de « %1$s » sur la FRITZ!\u2060Box supprimée.</string>
     <string name="undo">Annuler</string>
     <string name="speed_dial_removed_phone">Numéro abrégé %1$s (%2$s) supprimé.</string>
-    <string name="status_restoring_copy">Remise de « %1$s » sur la FRITZ!Box…</string>
-    <string name="status_copy_restored">« %1$s » est de retour sur la FRITZ!Box.</string>
-    <string name="status_restore_book_gone">Impossible de remettre « %1$s » : le répertoire « %2$s » n’est plus sur la FRITZ!Box.</string>
-    <string name="speed_dial_box_add">Nouveau numéro abrégé de la FRITZ!Box</string>
-    <string name="speed_dial_choose_number_box">Touchez le numéro pour le numéro abrégé %1$s de la FRITZ!Box.</string>
-    <string name="speed_dial_choose_number_box_new">Touchez le numéro pour un nouveau numéro abrégé de la FRITZ!Box.</string>
-    <string name="status_setting_speed_dial">Configuration du numéro abrégé %1$s sur la FRITZ!Box…</string>
-    <string name="status_speed_dial_set">Numéro abrégé %1$s de la FRITZ!Box : %2$s</string>
-    <string name="status_removing_speed_dial">Suppression du numéro abrégé %1$s de la FRITZ!Box…</string>
-    <string name="status_speed_dial_removed">Numéro abrégé %1$s supprimé de la FRITZ!Box.</string>
-    <string name="status_phonebook_changed_on_box">Les répertoires ont été modifiés entre-temps sur la FRITZ!Box et ont été relus.</string>
-    <string name="status_phonebook_gone">« %1$s » ne fait plus partie des répertoires de la FRITZ!Box – %2$s n’a pas été transmis.</string>
+    <string name="status_restoring_copy">Remise de « %1$s » sur la FRITZ!\u2060Box…</string>
+    <string name="status_copy_restored">« %1$s » est de retour sur la FRITZ!\u2060Box.</string>
+    <string name="status_restore_book_gone">Impossible de remettre « %1$s » : le répertoire « %2$s » n’est plus sur la FRITZ!\u2060Box.</string>
+    <string name="speed_dial_box_add">Nouveau numéro abrégé de la FRITZ!\u2060Box</string>
+    <string name="speed_dial_choose_number_box">Touchez le numéro pour le numéro abrégé %1$s de la FRITZ!\u2060Box.</string>
+    <string name="speed_dial_choose_number_box_new">Touchez le numéro pour un nouveau numéro abrégé de la FRITZ!\u2060Box.</string>
+    <string name="status_setting_speed_dial">Configuration du numéro abrégé %1$s sur la FRITZ!\u2060Box…</string>
+    <string name="status_speed_dial_set">Numéro abrégé %1$s de la FRITZ!\u2060Box : %2$s</string>
+    <string name="status_removing_speed_dial">Suppression du numéro abrégé %1$s de la FRITZ!\u2060Box…</string>
+    <string name="status_speed_dial_removed">Numéro abrégé %1$s supprimé de la FRITZ!\u2060Box.</string>
+    <string name="status_phonebook_changed_on_box">Les répertoires ont été modifiés entre-temps sur la FRITZ!\u2060Box et ont été relus.</string>
+    <string name="status_phonebook_gone">« %1$s » ne fait plus partie des répertoires de la FRITZ!\u2060Box – %2$s n’a pas été transmis.</string>
     <string name="contact_to_phone">Ajouter aux contacts du téléphone</string>
-    <string name="contact_to_box">Transmettre à la FRITZ!Box</string>
-    <string name="hand_over_text">« %1$s » sera ajouté à ce répertoire de la FRITZ!Box « %2$s » :</string>
+    <string name="contact_to_box">Transmettre à la FRITZ!\u2060Box</string>
+    <string name="hand_over_text">« %1$s » sera ajouté à ce répertoire de la FRITZ!\u2060Box « %2$s » :</string>
     <string name="hand_over_duplicate">Le numéro %1$s y figure déjà, chez « %2$s ».</string>
     <string name="hand_over">Transmettre</string>
-    <string name="status_handing_over">Transmission de « %1$s » à la FRITZ!Box…</string>
+    <string name="status_handing_over">Transmission de « %1$s » à la FRITZ!\u2060Box…</string>
     <string name="status_handed_over">« %1$s » figure maintenant dans le répertoire « %2$s ».</string>
     <string name="no_contacts_app">Aucune application de contacts sur ce téléphone.</string>
     <string name="number_actions">Plus d’actions</string>
@@ -393,19 +393,19 @@
     <string name="number_copy_label">Numéro de téléphone</string>
     <string name="dialer_speed_dial_label">Numéro abrégé %1$s : %2$s</string>
     <string name="settings_phone_speed_dials">Numéros abrégés de ce téléphone</string>
-    <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>
+    <string name="settings_phone_speed_dials_hint">Numéros abrégés 1 à 9, choisis dans les répertoires et enregistrés sur ce téléphone ; ils fonctionnent donc avec toutes les FRITZ!\u2060Box. Pour en utiliser un, appuyez longuement sur son chiffre sur le clavier.</string>
     <string name="settings_keypad">Clavier</string>
     <string name="settings_key_tones">Tonalités du clavier</string>
     <string name="settings_key_tones_hint">Une courte tonalité à chaque touche, comme sur le clavier d’un téléphone. Elle n’est jouée que sur ce téléphone et ne passe pas dans l’appel. Muette tant que le téléphone est en mode silencieux ou vibreur.</string>
     <string name="connection_speed_dials">Numéros abrégés</string>
-    <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!Box (00 à 99, tels qu’ils se composent sur ses téléphones avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
+    <string name="connection_speed_dials_hint">Les numéros abrégés configurés dans les répertoires de cette FRITZ!\u2060Box (00 à 99, tels qu’ils se composent sur ses téléphones avec **7). Pour en utiliser un, touchez le premier chiffre sur le clavier et appuyez longuement sur le second. Fonctionne aussi avec les répertoires désactivés.</string>
     <string name="connection_internal_calls">Appels internes</string>
-    <string name="connection_internal_calls_hint">Les téléphones de cette FRITZ!Box, pour appeler l’un depuis l’autre : un onglet « Interne » dans Choisir un numéro, et leurs noms dans les suggestions pendant la saisie. Utile seulement avec plusieurs téléphones.</string>
+    <string name="connection_internal_calls_hint">Les téléphones de cette FRITZ!\u2060Box, pour appeler l’un depuis l’autre : un onglet « Interne » dans Choisir un numéro, et leurs noms dans les suggestions pendant la saisie. Utile seulement avec plusieurs téléphones.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Rappel</string>
     <string name="tile_redial_none">Aucun numéro composé</string>
-    <string name="tile_no_box">Aucune FRITZ!Box accessible</string>
+    <string name="tile_no_box">Aucune FRITZ!\u2060Box accessible</string>
     <string name="tile_deflection">Renvoi d’appel</string>
     <string name="tile_deflection_switching">Changement…</string>
     <string name="tile_deflection_failed">Échec du changement</string>
@@ -440,9 +440,9 @@
     <string name="settings_file_invalid">Ce n\'est pas un fichier de réglages de Pickelhaube (ou il provient d\'une version plus récente)</string>
     <string name="settings_imported">Réglages importés</string>
     <plurals name="settings_import_text">
-        <item quantity="one">Le fichier contient %d connexion FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
-        <item quantity="many">Le fichier contient %d connexions FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
-        <item quantity="other">Le fichier contient %d connexions FRITZ!Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
+        <item quantity="one">Le fichier contient %d connexion FRITZ!\u2060Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
+        <item quantity="many">Le fichier contient %d connexions FRITZ!\u2060Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
+        <item quantity="other">Le fichier contient %d connexions FRITZ!\u2060Box. L\'importer remplace toutes les connexions et options de l\'application.</item>
     </plurals>
     <string name="settings_tile_add">Ajouter « %1$s »</string>
     <string name="settings_tile_added">« %1$s » a été ajouté aux réglages rapides.</string>
@@ -453,10 +453,10 @@
     <string name="deflections">Renvoi d’appel</string>
     <string name="deflections_on">Renvoi d’appel : activé</string>
     <string name="deflections_off">Renvoi d’appel : désactivé</string>
-    <string name="deflections_hint">Les renvois d’appel configurés sur la FRITZ!Box « %1$s », à activer et désactiver. Ils se configurent et se modifient uniquement sur la FRITZ!Box elle-même (Téléphonie › Gestion des appels › Renvoi d’appel).</string>
+    <string name="deflections_hint">Les renvois d’appel configurés sur la FRITZ!\u2060Box « %1$s », à activer et désactiver. Ils se configurent et se modifient uniquement sur la FRITZ!\u2060Box elle-même (Téléphonie › Gestion des appels › Renvoi d’appel).</string>
     <string name="deflections_loading">Lecture des renvois d’appel…</string>
     <string name="deflections_failed">Impossible de lire les renvois d’appel. Touchez Recharger pour réessayer.</string>
-    <string name="deflections_none">Aucun renvoi d’appel n’est configuré sur cette FRITZ!Box.</string>
+    <string name="deflections_none">Aucun renvoi d’appel n’est configuré sur cette FRITZ!\u2060Box.</string>
     <string name="deflections_none_headline">Chaque appel arrive directement chez toi.</string>
     <string name="deflections_tile_hint">La vignette « Renvoi d’appel » des réglages rapides commute celui qui est coché.</string>
     <string name="deflection_all">Tous les appels</string>
@@ -481,14 +481,14 @@
 
     <!-- live call status -->
     <string name="settings_call_status">État de l’appel</string>
-    <string name="settings_call_status_switch">Suivre les appels sur la FRITZ!Box</string>
-    <string name="settings_call_status_hint">Pendant l’appel, le clavier indique où il en est : numérotation, connecté avec sa durée, terminé ou sans réponse. La FRITZ!Box le signale par son moniteur d’appels, qui doit être activé une fois : composez #96*5* sur un téléphone connecté à la box (#96*4* le désactive).</string>
+    <string name="settings_call_status_switch">Suivre les appels sur la FRITZ!\u2060Box</string>
+    <string name="settings_call_status_hint">Pendant l’appel, le clavier indique où il en est : numérotation, connecté avec sa durée, terminé ou sans réponse. La FRITZ!\u2060Box le signale par son moniteur d’appels, qui doit être activé une fois : composez #96*5* sur un téléphone connecté à la box (#96*4* le désactive).</string>
     <string name="settings_call_status_privacy">Le moniteur d’appels ne demande aucune connexion et n’est pas chiffré : une fois activé, tout appareil du réseau domestique peut suivre les appels de la box, numéros compris. Pickelhaube ne s’y connecte que pendant l’un de ses propres appels.</string>
     <string name="settings_call_monitor_on">%1$s : moniteur d’appels activé</string>
     <string name="settings_call_monitor_off">%1$s : moniteur d’appels désactivé – composez #96*5* sur un téléphone qui y est connecté</string>
     <string name="settings_call_monitor_unknown">%1$s : pas encore vérifié</string>
     <string name="settings_call_monitor_check">Vérifier à nouveau</string>
-    <string name="call_monitor_off_hint">L’état de l’appel est désactivé sur la FRITZ!Box : composez #96*5* sur un téléphone qui y est connecté</string>
+    <string name="call_monitor_off_hint">L’état de l’appel est désactivé sur la FRITZ!\u2060Box : composez #96*5* sur un téléphone qui y est connecté</string>
     <string name="call_dialling">Appel de %1$s…</string>
     <string name="call_dialling_from">Appel de %1$s depuis %2$s…</string>
     <string name="call_connected">Connecté avec %1$s · %2$s</string>
@@ -520,8 +520,8 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_dial_number">Composer un numéro</string>
     <string name="shortcut_box_reachable">%1$s accessible</string>
-    <string name="shortcut_box_unknown">Chercher la FRITZ!Box</string>
-    <string name="shortcut_box_looking">Recherche de votre FRITZ!Box…</string>
+    <string name="shortcut_box_unknown">Chercher la FRITZ!\u2060Box</string>
+    <string name="shortcut_box_looking">Recherche de votre FRITZ!\u2060Box…</string>
     <string name="shortcut_deflection_on">Renvoi activé</string>
     <string name="shortcut_deflection_off">Renvoi désactivé</string>
     <string name="shortcut_deflection_on_long">Renvoi activé → %1$s</string>
@@ -540,8 +540,8 @@
         <item quantity="other">%1$d nouveaux appels manqués sur %2$s – afficher</item>
     </plurals>
     <string name="picker_tab_internal">Interne</string>
-    <string name="internal_loading">Lecture des téléphones de la FRITZ!Box…</string>
-    <string name="internal_none">La FRITZ!Box n’indique aucun téléphone pour les appels internes.</string>
+    <string name="internal_loading">Lecture des téléphones de la FRITZ!\u2060Box…</string>
+    <string name="internal_none">La FRITZ!\u2060Box n’indique aucun téléphone pour les appels internes.</string>
     <string name="internal_all_phones">Tous les téléphones</string>
     <string name="internal_kind_analogue">Téléphone analogique</string>
     <string name="internal_kind_dect">Combiné DECT</string>
@@ -551,32 +551,32 @@
     <string name="error_call_itself">%1$s est le téléphone qui sonne pour l’aide à la numérotation : il ne peut pas s’appeler lui-même. Choisissez un autre téléphone sous Faire sonner.</string>
     <string name="welcome_skip">Passer</string>
     <string name="welcome_next">Suivant</string>
-    <string name="welcome_hello">Bonjour ! Je t’aide à appeler depuis ta FRITZ!Box : tu choisis le numéro ici sur ton smartphone – et ton téléphone de la FRITZ!Box passe l’appel.</string>
-    <string name="welcome_hello_next">D’abord, j’ai besoin d’une connexion à ta FRITZ!Box. Cela prend environ deux minutes.</string>
+    <string name="welcome_hello">Bonjour ! Je t’aide à appeler depuis ta FRITZ!\u2060Box : tu choisis le numéro ici sur ton smartphone – et ton téléphone de la FRITZ!\u2060Box passe l’appel.</string>
+    <string name="welcome_hello_next">D’abord, j’ai besoin d’une connexion à ta FRITZ!\u2060Box. Cela prend environ deux minutes.</string>
     <string name="welcome_start">C’est parti</string>
-    <string name="welcome_prepare_title">Ce dont ta FRITZ!Box a besoin</string>
+    <string name="welcome_prepare_title">Ce dont ta FRITZ!\u2060Box a besoin</string>
     <string name="welcome_prepare">Trois réglages sur la box – une fois activés, tu peux les oublier.</string>
     <string name="welcome_prepare_access_title">Accès pour les applications</string>
     <string name="welcome_prepare_access">Réseau domestique › Réseau › Paramètres réseau – la porte à laquelle je frappe.</string>
     <string name="welcome_prepare_dial_help_title">Aide à la numérotation</string>
     <string name="welcome_prepare_dial_help">Téléphonie › Appels › Aide à la numérotation – permet à la box de composer pour un de ses téléphones.</string>
     <string name="welcome_prepare_user_title">Un utilisateur avec droit de téléphonie</string>
-    <string name="welcome_prepare_user">Système › Utilisateurs FRITZ!Box – celui avec lequel tu te connectes à la box convient.</string>
+    <string name="welcome_prepare_user">Système › Utilisateurs FRITZ!\u2060Box – celui avec lequel tu te connectes à la box convient.</string>
     <string name="welcome_prepare_how">Montre-moi comment ›</string>
-    <string name="welcome_find_title">Où est ta FRITZ!Box ?</string>
+    <string name="welcome_find_title">Où est ta FRITZ!\u2060Box ?</string>
     <string name="welcome_find">En général, elle répond sous fritz.box – il n’y a alors rien à changer ici.</string>
     <string name="welcome_find_found">Trouvée : %1$s !</string>
     <string name="welcome_find_set_up">Trouvée : %1$s – elle est déjà configurée, sous « %2$s ».</string>
     <string name="welcome_find_none">Pas de réponse de %1$s. Ce téléphone est-il dans le même Wi-Fi que la box ? Tu peux continuer quand même, par exemple via un VPN.</string>
     <string name="welcome_name_hint">À toi de choisir, p. ex. « Maison ». Laissé vide, la box s’appelle « %1$s ».</string>
     <string name="welcome_login_title">Qui es-tu sur la box ?</string>
-    <string name="welcome_login">Connecte-toi à ta FRITZ!Box : avec un utilisateur qui existe sur la box, et son mot de passe – les mêmes que pour l’interface web de la box (fritz.box). Tu ne choisis pas de nouveau mot de passe ici.</string>
-    <string name="welcome_password_label">Mot de passe de cet utilisateur FRITZ!Box</string>
+    <string name="welcome_login">Connecte-toi à ta FRITZ!\u2060Box : avec un utilisateur qui existe sur la box, et son mot de passe – les mêmes que pour l’interface web de la box (fritz.box). Tu ne choisis pas de nouveau mot de passe ici.</string>
+    <string name="welcome_password_label">Mot de passe de cet utilisateur FRITZ!\u2060Box</string>
     <string name="welcome_password_factory">Pas sûr duquel ? Ta box est livrée avec un mot de passe imprimé sur une étiquette, généralement en dessous. Il aurait dû être changé lors de la première configuration – c’est alors celui choisi à ce moment qui vaut.</string>
-    <string name="welcome_login_tip">Astuce : le plus sûr est un utilisateur rien que pour Pickelhaube, avec seulement le droit de téléphonie. Pickelhaube ne peut pas le créer – tu le crées toi-même dans l’interface web de la box (fritz.box), sous Système › Utilisateurs FRITZ!Box, puis tu le saisis ici.</string>
+    <string name="welcome_login_tip">Astuce : le plus sûr est un utilisateur rien que pour Pickelhaube, avec seulement le droit de téléphonie. Pickelhaube ne peut pas le créer – tu le crées toi-même dans l’interface web de la box (fritz.box), sous Système › Utilisateurs FRITZ!\u2060Box, puis tu le saisis ici.</string>
     <string name="welcome_address">Adresse</string>
     <string name="welcome_connect_title">Prêt à se connecter</string>
-    <string name="welcome_connect">Je me connecte maintenant à ta FRITZ!Box et regarde quels téléphones elle a.</string>
+    <string name="welcome_connect">Je me connecte maintenant à ta FRITZ!\u2060Box et regarde quels téléphones elle a.</string>
     <string name="welcome_connect_button">Se connecter</string>
     <string name="welcome_connecting">Connexion…</string>
     <string name="welcome_connect_failed">Hm, ça n’a pas marché – le message disait pourquoi. Reviens modifier tes données, ou ouvre tous les réglages.</string>
@@ -584,9 +584,9 @@
     <string name="welcome_change_password">Ressaisir le mot de passe</string>
     <string name="welcome_all_settings">Tous les réglages</string>
     <string name="welcome_ready_title">C’est prêt !</string>
-    <string name="welcome_ready_ring">Quand tu composes, ta FRITZ!Box fait d’abord sonner %1$s – décroche, et la box compose le numéro.</string>
-    <string name="welcome_ready_ring_unset">Ta FRITZ!Box n’a pas encore de téléphone pour l’aide à la numérotation – je prends %1$s. Lors de ton premier appel, la box demandera peut-être une confirmation.</string>
-    <string name="welcome_ready_no_phone">Ta FRITZ!Box n’indique aucun téléphone pour l’aide à la numérotation. Un téléphone y est-il branché ?</string>
+    <string name="welcome_ready_ring">Quand tu composes, ta FRITZ!\u2060Box fait d’abord sonner %1$s – décroche, et la box compose le numéro.</string>
+    <string name="welcome_ready_ring_unset">Ta FRITZ!\u2060Box n’a pas encore de téléphone pour l’aide à la numérotation – je prends %1$s. Lors de ton premier appel, la box demandera peut-être une confirmation.</string>
+    <string name="welcome_ready_no_phone">Ta FRITZ!\u2060Box n’indique aucun téléphone pour l’aide à la numérotation. Un téléphone y est-il branché ?</string>
     <string name="welcome_ready_ring_change">Tu peux choisir un autre téléphone sous « Faire sonner » dans le clavier – la box demandera peut-être une confirmation.</string>
     <string name="welcome_ready_tips">Bon à savoir</string>
     <string name="welcome_tip_picker">Le bouton carnet d’adresses à côté du numéro ouvre tes appels récents et tes annuaires.</string>
@@ -594,7 +594,7 @@
     <string name="welcome_tip_tiles">Les tuiles des réglages rapides et un widget sur l’écran d’accueil t’amènent ici plus vite – voir les réglages.</string>
     <string name="welcome_start_dialling">Commencer à appeler</string>
     <string name="settings_welcome_tour">Visite de bienvenue</string>
-    <string name="settings_welcome_tour_hint">Pas à pas à travers la configuration – ajoute une autre FRITZ!Box</string>
+    <string name="settings_welcome_tour_hint">Pas à pas à travers la configuration – ajoute une autre FRITZ!\u2060Box</string>
     <string name="web_guide">Guide sur le web (en anglais)</string>
     <string name="web_privacy_policy">Politique de confidentialité (en anglais)</string>
     <string name="web_feedback">Donner votre avis (en anglais)</string>
@@ -606,14 +606,14 @@
     <string name="settings_whats_new">Nouveautés</string>
     <string-array name="whats_new_8">
         <item>L’aide est maintenant à un appui : « Guide sur le web » et la politique de confidentialité sont en bas des réglages.</item>
-        <item>Une autre FRITZ!Box ? Réglages › Visite de bienvenue la configure pas à pas – elle cherche la box et vérifie la connexion.</item>
+        <item>Une autre FRITZ!\u2060Box ? Réglages › Visite de bienvenue la configure pas à pas – elle cherche la box et vérifie la connexion.</item>
         <item>Choisir un utilisateur dans la liste de la page de connexion n’ouvre plus le clavier.</item>
     </string-array>
     <string-array name="whats_new_11">
-        <item>Tire le clavier vers le bas pour tout relire depuis ta FRITZ!Box – par exemple après y avoir changé quelque chose.</item>
+        <item>Tire le clavier vers le bas pour tout relire depuis ta FRITZ!\u2060Box – par exemple après y avoir changé quelque chose.</item>
         <item>Le casque s’y met : il se tient à côté du nom de ta box, joue tes appels et se balance pendant que l’appli parle à la box.</item>
         <item>Des tonalités de clavier comme sur un téléphone – à activer dans Réglages › Clavier.</item>
-        <item>Les répertoires modifiés sur la FRITZ!Box elle-même ne gênent plus les numéros abrégés ni la transmission de contacts.</item>
+        <item>Les répertoires modifiés sur la FRITZ!\u2060Box elle-même ne gênent plus les numéros abrégés ni la transmission de contacts.</item>
     </string-array>
     <string-array name="whats_new_12">
         <item>Les appels récents sont regroupés par jour, et le filtre en haut à droite n’affiche que les appels manqués – toucher la ligne des appels manqués dans le clavier les ouvre.</item>
@@ -632,8 +632,8 @@
         <item>Dans les numéros abrégés, les emplacements libres de ce téléphone sont regroupés sur une ligne.</item>
     </string-array>
     <string-array name="whats_new_14">
-        <item>« Appeler via la FRITZ!Box » directement dans l’app Contacts du téléphone : activez-le dans les paramètres, et chaque numéro d’un contact reçoit une ligne qui l’ouvre ici.</item>
-        <item>Pas à la maison ? Quand aucune FRITZ!Box ne répond, le titre du clavier dit pourquoi – touchez-le pour voir ce qui aide : le Wi-Fi de la maison, ou un VPN vers votre réseau domestique.</item>
+        <item>« Appeler via la FRITZ!\u2060Box » directement dans l’app Contacts du téléphone : activez-le dans les paramètres, et chaque numéro d’un contact reçoit une ligne qui l’ouvre ici.</item>
+        <item>Pas à la maison ? Quand aucune FRITZ!\u2060Box ne répond, le titre du clavier dit pourquoi – touchez-le pour voir ce qui aide : le Wi-Fi de la maison, ou un VPN vers votre réseau domestique.</item>
     </string-array>
     <string-array name="whats_new_15">
         <item>Quelque chose à dire ? Les paramètres ont maintenant un lien vers le formulaire d’avis du site web – pour un problème, une idée ou un compliment.</item>

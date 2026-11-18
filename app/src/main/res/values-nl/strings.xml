@@ -17,7 +17,7 @@
     <string name="open_settings">Instellingen openen</string>
     <string name="settings">Instellingen</string>
     <string name="this_phone">Deze telefoon</string>
-    <string name="fritzbox">FRITZ!Box</string>
+    <string name="fritzbox">FRITZ!\u2060Box</string>
     <string name="settings_build_play">Google Play-versie</string>
     <string name="settings_build_full">Volledige versie</string>
     <string name="settings_source_code">Broncode op GitHub ›</string>
@@ -35,7 +35,7 @@
     <string name="widget_setup_up">Omhoog</string>
     <string name="widget_setup_down">Omlaag</string>
     <string name="widget_setup_remove">%1$s verwijderen</string>
-    <string name="trademark_notice">Pickelhaube is een onafhankelijk project en heeft geen banden met FRITZ! GmbH (voorheen AVM). FRITZ! en FRITZ!Box zijn merken van FRITZ! GmbH.</string>
+    <string name="trademark_notice">Pickelhaube is een onafhankelijk project en heeft geen banden met FRITZ! GmbH (voorheen AVM). FRITZ! en FRITZ!\u2060Box zijn merken van FRITZ! GmbH.</string>
     <string name="phone_books">Telefoonboeken</string>
 
     <!-- dialer -->
@@ -52,7 +52,7 @@
     <string name="dialer_choose_phone">Telefoon kiezen</string>
     <string name="dialer_ring_phone">Laten overgaan op</string>
     <string name="dialer_reload_phones">Telefoons opnieuw van de router laden</string>
-    <string name="dialer_refresh">Alles opnieuw van de FRITZ!Box lezen</string>
+    <string name="dialer_refresh">Alles opnieuw van de FRITZ!\u2060Box lezen</string>
 
     <!-- number picker -->
     <string name="picker_title">Nummer kiezen</string>
@@ -72,7 +72,7 @@
     <string name="phonebook_no_match_headline">Overal gezocht.</string>
     <string name="phonebook_none_enabled">Er zijn geen telefoonboeken ingeschakeld. Je kunt ze in de instellingen inschakelen.</string>
     <string name="device_contacts_question_title">Contacten van deze telefoon opnemen?</string>
-    <string name="device_contacts_question_text">Pickelhaube kan naast de telefoonboeken van de FRITZ!Box ook de contacten tonen die op deze telefoon zijn opgeslagen. Daarvoor vraagt Android toegang tot je contacten – ze verlaten de telefoon nooit. Je kunt dit later in de instellingen wijzigen.</string>
+    <string name="device_contacts_question_text">Pickelhaube kan naast de telefoonboeken van de FRITZ!\u2060Box ook de contacten tonen die op deze telefoon zijn opgeslagen. Daarvoor vraagt Android toegang tot je contacten – ze verlaten de telefoon nooit. Je kunt dit later in de instellingen wijzigen.</string>
     <string name="device_contacts_revoked">De contacten van deze telefoon zijn ingeschakeld, maar Android staat Pickelhaube niet meer toe ze te lezen.</string>
     <string name="number_type_home">Thuis</string>
     <string name="number_type_mobile">Mobiel</string>
@@ -90,7 +90,7 @@
     <string name="recents_filter_missed">Gemiste oproepen</string>
     <string name="recents_no_missed">Geen gemiste oproepen.</string>
     <string name="recents_none_enabled">Er is geen gesprekkenlijst ingeschakeld. Je kunt deze in de instellingen inschakelen.</string>
-    <string name="recents_box_load_failed">De gesprekkenlijst van de FRITZ!Box kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
+    <string name="recents_box_load_failed">De gesprekkenlijst van de FRITZ!\u2060Box kon niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
     <string name="recents_recorded_by_box">Vastgelegd door %1$s</string>
     <string name="recents_recorded_by_phone">Vastgelegd door deze telefoon</string>
     <string name="recents_dialled">Gebeld</string>
@@ -106,12 +106,12 @@
     </plurals>
 
     <!-- settings overview -->
-    <string name="settings_connections">FRITZ!Box-verbindingen</string>
-    <string name="settings_connections_hint">De FRITZ!Box van het netwerk waarin de telefoon zich bevindt, wordt automatisch gebruikt. Alleen als daar geen ervan wordt gevonden, kun je er zelf een kiezen.</string>
+    <string name="settings_connections">FRITZ!\u2060Box-verbindingen</string>
+    <string name="settings_connections_hint">De FRITZ!\u2060Box van het netwerk waarin de telefoon zich bevindt, wordt automatisch gebruikt. Alleen als daar geen ervan wordt gevonden, kun je er zelf een kiezen.</string>
     <string name="settings_box_here">Bereikbaar</string>
     <string name="settings_box_not_here">Niet bereikbaar</string>
     <string name="settings_box_never_recognised">Nog niet herkend – pas na een verbinding ermee</string>
-    <string name="settings_add_box">FRITZ!Box toevoegen</string>
+    <string name="settings_add_box">FRITZ!\u2060Box toevoegen</string>
     <string name="settings_in_use">In gebruik</string>
     <string name="settings_in_use_not_found">In gebruik, maar niet gevonden in het huidige netwerk</string>
     <string name="settings_in_use_not_working">In gebruik, maar werkt niet: het laatste verzoek is mislukt</string>
@@ -119,13 +119,13 @@
     <string name="settings_delete_title">‘%1$s’ verwijderen?</string>
     <string name="settings_delete_text">De verbinding, het wachtwoord en het vertrouwde certificaat worden van deze telefoon verwijderd.</string>
     <string name="settings_device_contacts">Contacten van deze telefoon opnemen</string>
-    <string name="settings_device_contacts_hint">Toont de op deze telefoon opgeslagen contacten naast de telefoonboeken van de FRITZ!Box. Vereist toegang tot je contacten; ze verlaten de telefoon nooit.</string>
+    <string name="settings_device_contacts_hint">Toont de op deze telefoon opgeslagen contacten naast de telefoonboeken van de FRITZ!\u2060Box. Vereist toegang tot je contacten; ze verlaten de telefoon nooit.</string>
     <string name="settings_device_contacts_denied">Android staat Pickelhaube niet toe je contacten te lezen. Je kunt het toestaan in de app-instellingen.</string>
-    <string name="settings_contact_actions">‘Bellen via FRITZ!Box’ in Contacten</string>
-    <string name="settings_contact_actions_hint">Voegt in de contacten-app van de telefoon naast elk nummer een regel ‘… bellen via FRITZ!Box’ toe; erop tikken opent Pickelhaube met het nummer. Daarvoor schrijft Pickelhaube deze regels in je contacten, in een eigen account (‘Pickelhaube’ bij de accounts van Android) – niets verlaat de telefoon. Uitzetten verwijdert ze weer.</string>
+    <string name="settings_contact_actions">‘Bellen via FRITZ!\u2060Box’ in Contacten</string>
+    <string name="settings_contact_actions_hint">Voegt in de contacten-app van de telefoon naast elk nummer een regel ‘… bellen via FRITZ!\u2060Box’ toe; erop tikken opent Pickelhaube met het nummer. Daarvoor schrijft Pickelhaube deze regels in je contacten, in een eigen account (‘Pickelhaube’ bij de accounts van Android) – niets verlaat de telefoon. Uitzetten verwijdert ze weer.</string>
     <string name="settings_contact_actions_denied">Android staat Pickelhaube niet toe je contacten te wijzigen. Je kunt het toestaan in de app-instellingen.</string>
     <!-- The row beside a number in the phone's contacts app; %1$s the number. -->
-    <string name="contact_action_detail">%1$s bellen via FRITZ!Box</string>
+    <string name="contact_action_detail">%1$s bellen via FRITZ!\u2060Box</string>
     <string name="settings_recents">Recente nummers</string>
     <string name="settings_call_log">Gesprekken van deze telefoon opnemen</string>
     <string name="settings_call_log_hint">Biedt ook de nummers aan die met de telefoon-app van deze telefoon zijn gebeld, aangenomen of gemist. Vereist toegang tot je gesprekkenlijst; die verlaat de telefoon nooit.</string>
@@ -135,7 +135,7 @@
     <string name="settings_language_system">Auto</string>
 
     <!-- connection page -->
-    <string name="connection_title">FRITZ!Box-verbinding</string>
+    <string name="connection_title">FRITZ!\u2060Box-verbinding</string>
     <string name="connection_name">Weergavenaam</string>
     <string name="connection_name_placeholder">standaard: de eigen naam van de box</string>
     <string name="connection_name_hint">Alleen voor jou: hoe deze box in Pickelhaube heet, bijv. „Thuis” of „Kantoor”. Er wordt niet naar deze naam gezocht – de box wordt bereikt via de host hieronder.</string>
@@ -143,50 +143,50 @@
     <string name="connection_https">HTTPS gebruiken</string>
     <string name="connection_https_hint">Versleutelde verbinding (poort %1$d). Het zelfondertekende certificaat van de box moet één keer worden bevestigd.</string>
     <string name="connection_port">TR-064-poort</string>
-    <string name="connection_port_from_box">De HTTPS-poort die deze FRITZ!Box heeft gemeld</string>
-    <string name="connection_user">FRITZ!Box-gebruikersnaam</string>
+    <string name="connection_port_from_box">De HTTPS-poort die deze FRITZ!\u2060Box heeft gemeld</string>
+    <string name="connection_user">FRITZ!\u2060Box-gebruikersnaam</string>
     <string name="connection_user_last">Laatst aangemeld</string>
     <string name="connection_user_made_by_box">Door de box aangemaakt voor inloggen met alleen een wachtwoord</string>
     <string name="connection_user_current">Nu ingevuld</string>
     <string name="connection_user_taken_over">Overgenomen: de enige gebruiker van deze box</string>
-    <string name="connection_user_hint">De gebruiker waarmee je op de FRITZ!Box inlogt. Log je alleen met een wachtwoord in, dan heeft de box daarvoor toch een gebruiker aangemaakt, met een eigen naam (bijv. fritz1234). Je kunt ook een gebruiker alleen voor Pickelhaube aanmaken onder Systeem › FRITZ!Box-gebruikers; die heeft het recht voor telefonie nodig.</string>
+    <string name="connection_user_hint">De gebruiker waarmee je op de FRITZ!\u2060Box inlogt. Log je alleen met een wachtwoord in, dan heeft de box daarvoor toch een gebruiker aangemaakt, met een eigen naam (bijv. fritz1234). Je kunt ook een gebruiker alleen voor Pickelhaube aanmaken onder Systeem › FRITZ!\u2060Box-gebruikers; die heeft het recht voor telefonie nodig.</string>
     <string name="connection_user_choose">Een gebruiker van de box kiezen</string>
     <string name="connection_password">Wachtwoord</string>
     <string name="connection_phonebooks">Telefoonboeken</string>
-    <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FRITZ!Box, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FRITZ!Box gelezen en niet op de telefoon opgeslagen.</string>
+    <string name="connection_phonebooks_hint">Toont de contacten uit de telefoonboeken van deze FRITZ!\u2060Box, inclusief online telefoonboeken die ermee gesynchroniseerd worden (bijv. CardDAV). Ze worden indien nodig van de FRITZ!\u2060Box gelezen en niet op de telefoon opgeslagen.</string>
     <string name="connection_call_list">Gesprekkenlijst</string>
-    <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!Box.</string>
+    <string name="connection_call_list_hint">De recent gebelde, aangenomen en gemiste nummers uit de gesprekkenlijst van deze FRITZ!\u2060Box.</string>
     <string name="connection_call_list_no_right">%1$s heeft dit recht op de box niet, daarom kan de gesprekkenlijst niet worden gelezen.</string>
     <string name="connection_host_other">%1$s leidt hier naar ‘%2$s’ – deze box kan alleen in zijn eigen netwerk worden gecontroleerd.</string>
     <string name="connection_host_known">%1$s leidt naar ‘%2$s’, die al is ingesteld.</string>
-    <string name="save_check_other_title">Een andere FRITZ!Box antwoordt</string>
+    <string name="save_check_other_title">Een andere FRITZ!\u2060Box antwoordt</string>
     <string name="save_check_other_text">Op %1$s antwoordt ‘%2$s’ – niet ‘%3$s’. Daarom is niet bij ‘%3$s’ ingelogd: die kan alleen in zijn eigen netwerk worden gecontroleerd. De wijzigingen zonder controle opslaan? De gebruikte box blijft dezelfde.</string>
-    <string name="save_check_none_title">Geen FRITZ!Box antwoordt</string>
-    <string name="save_check_none_text">Op %1$s antwoordt geen FRITZ!Box, dus ‘%2$s’ kan van hieruit niet worden gecontroleerd. De wijzigingen zonder controle opslaan? De gebruikte box blijft dezelfde.</string>
+    <string name="save_check_none_title">Geen FRITZ!\u2060Box antwoordt</string>
+    <string name="save_check_none_text">Op %1$s antwoordt geen FRITZ!\u2060Box, dus ‘%2$s’ kan van hieruit niet worden gecontroleerd. De wijzigingen zonder controle opslaan? De gebruikte box blijft dezelfde.</string>
     <string name="save_check_known_title">Al ingesteld</string>
-    <string name="save_check_known_text">De FRITZ!Box op %1$s is al ingesteld, als ‘%2$s’. Toch nog een keer toevoegen?</string>
+    <string name="save_check_known_text">De FRITZ!\u2060Box op %1$s is al ingesteld, als ‘%2$s’. Toch nog een keer toevoegen?</string>
     <string name="save_unchecked">Opslaan zonder controle</string>
     <string name="save_anyway">Toch toevoegen</string>
-    <string name="connection_help_title">De FRITZ!Box instellen</string>
+    <string name="connection_help_title">De FRITZ!\u2060Box instellen</string>
     <string name="connection_help">Schakel op de box “Toegang voor toepassingen toestaan” in (Thuisnetwerk › Netwerk › Netwerkinstellingen) en de “Kieshulp” (Telefonie › Gesprekken › Kieshulp). De gebruiker heeft het recht voor telefonie nodig.</string>
-    <string name="connection_demo_question">Geen FRITZ!Box?</string>
+    <string name="connection_demo_question">Geen FRITZ!\u2060Box?</string>
     <string name="connection_demo">Probeer de demobox ›</string>
     <string name="connection_demo_title">De demobox</string>
-    <string name="connection_demo_hint">Geen FRITZ!Box bij de hand? Probeer Pickelhaube uit met de demobox: host “demo”, gebruikersnaam en wachtwoord “demo”. Hij heeft telefoonboeken en gesprekken om uit te proberen, en zijn gesprekken gaan nergens over.</string>
+    <string name="connection_demo_hint">Geen FRITZ!\u2060Box bij de hand? Probeer Pickelhaube uit met de demobox: host “demo”, gebruikersnaam en wachtwoord “demo”. Hij heeft telefoonboeken en gesprekken om uit te proberen, en zijn gesprekken gaan nergens over.</string>
     <string name="connection_demo_fill">Demobox invullen</string>
     <string name="connection_connecting">Verbinden…</string>
     <string name="connection_save">Opslaan &amp; verbinden</string>
     <string name="connection_box_info">Apparaatgegevens</string>
     <string name="connection_box_model">Model: %1$s</string>
-    <string name="connection_box_fritzos">FRITZ!OS: %1$s</string>
+    <string name="connection_box_fritzos">FRITZ!\u2060OS: %1$s</string>
     <string name="connection_box_serial">Serienummer: %1$s</string>
     <string name="connection_box_country_code">Landnummer: %1$s</string>
     <string name="connection_box_area_code">Netnummer: %1$s</string>
     <string name="connection_rights_title">Rechten van gebruiker ‘%1$s’</string>
     <string name="connection_rights_title_short">Rechten van ‘%1$s’</string>
-    <string name="connection_rights_hint">Wat deze gebruiker op de FRITZ!Box mag, zoals de box het meldt. Te wijzigen op de box onder Systeem › FRITZ!Box-gebruikers.</string>
-    <string name="right_box_admin">FRITZ!Box-instellingen</string>
-    <string name="right_phone">Spraakberichten, faxberichten, FRITZ!App Fon en gesprekkenlijst</string>
+    <string name="connection_rights_hint">Wat deze gebruiker op de FRITZ!\u2060Box mag, zoals de box het meldt. Te wijzigen op de box onder Systeem › FRITZ!\u2060Box-gebruikers.</string>
+    <string name="right_box_admin">FRITZ!\u2060Box-instellingen</string>
+    <string name="right_phone">Spraakberichten, faxberichten, FRITZ!\u2060App Fon en gesprekkenlijst</string>
     <string name="right_home_auto">Smart Home</string>
     <string name="right_nas">Toegang tot NAS-inhoud</string>
     <string name="access_none">nee</string>
@@ -196,13 +196,13 @@
     <string name="connection_trusted_cert">Vertrouwd HTTPS-certificaat</string>
     <string name="connection_no_cert">Geen. Bij een verbinding via HTTPS word je gevraagd het certificaat van de router te bevestigen.</string>
     <string name="connection_cert_trusted">Bevestigd. Via HTTPS maakt de app alleen verbinding met de box die precies dit certificaat toont.</string>
-    <string name="connection_delete_box">Deze FRITZ!Box verwijderen</string>
+    <string name="connection_delete_box">Deze FRITZ!\u2060Box verwijderen</string>
 
     <!-- certificates -->
     <string name="cert_changed_title">Het certificaat is gewijzigd!</string>
     <string name="cert_trust_title">Dit certificaat vertrouwen?</string>
     <string name="cert_changed_text">De router toont een ander certificaat dan het certificaat dat je eerder vertrouwde. Dat gebeurt na een fabrieksreset of een gewijzigde naam van de box – maar het kan ook betekenen dat iemand de verbinding onderschept. Ga alleen verder als je het kunt verklaren.</string>
-    <string name="cert_trust_text">De router gebruikt een zelfondertekend certificaat dat niet automatisch kan worden gecontroleerd. Vergelijk de SHA-256-vingerafdruk met die welke je browser voor https://fritz.box toont (of met het certificaat in de webinterface van de FRITZ!Box) voordat je het vertrouwt.</string>
+    <string name="cert_trust_text">De router gebruikt een zelfondertekend certificaat dat niet automatisch kan worden gecontroleerd. Vergelijk de SHA-256-vingerafdruk met die welke je browser voor https://fritz.box toont (of met het certificaat in de webinterface van de FRITZ!\u2060Box) voordat je het vertrouwt.</string>
     <string name="cert_trust_new">Nieuw certificaat vertrouwen</string>
     <string name="cert_trust">Vertrouwen</string>
     <string name="cert_expired">Dit certificaat valt buiten zijn geldigheidsperiode.</string>
@@ -224,32 +224,32 @@
     <string name="password_hide">Wachtwoord verbergen</string>
 
     <!-- second factor -->
-    <string name="second_factor_title">Bevestigen op de FRITZ!Box</string>
-    <string name="second_factor_intro">Je FRITZ!Box vraagt je deze stap te bevestigen voordat hij hem uitvoert.</string>
-    <string name="second_factor_button">• Druk op een knop van de FRITZ!Box.</string>
-    <string name="second_factor_dial">• Bel %1$s op een telefoon die op de FRITZ!Box is aangesloten.</string>
-    <string name="second_factor_or_dial">• Of bel %1$s op een telefoon die op de FRITZ!Box is aangesloten.</string>
-    <string name="second_factor_other">Bevestig zoals op de FRITZ!Box aangegeven.</string>
-    <string name="second_factor_other_methods">Bevestig zoals op de FRITZ!Box aangegeven (%1$s).</string>
+    <string name="second_factor_title">Bevestigen op de FRITZ!\u2060Box</string>
+    <string name="second_factor_intro">Je FRITZ!\u2060Box vraagt je deze stap te bevestigen voordat hij hem uitvoert.</string>
+    <string name="second_factor_button">• Druk op een knop van de FRITZ!\u2060Box.</string>
+    <string name="second_factor_dial">• Bel %1$s op een telefoon die op de FRITZ!\u2060Box is aangesloten.</string>
+    <string name="second_factor_or_dial">• Of bel %1$s op een telefoon die op de FRITZ!\u2060Box is aangesloten.</string>
+    <string name="second_factor_other">Bevestig zoals op de FRITZ!\u2060Box aangegeven.</string>
+    <string name="second_factor_other_methods">Bevestig zoals op de FRITZ!\u2060Box aangegeven (%1$s).</string>
     <string name="second_factor_waiting">Wachten op bevestiging…</string>
 
     <!-- errors -->
     <string name="error_login_title">Inloggen mislukt</string>
-    <string name="error_login">De router heeft gebruikersnaam ‘%1$s’ of het wachtwoord geweigerd. Als je op de box alleen met een wachtwoord inlogt, gebruik dan de automatisch aangemaakte gebruikersnaam onder Systeem › FRITZ!Box-gebruikers.</string>
+    <string name="error_login">De router heeft gebruikersnaam ‘%1$s’ of het wachtwoord geweigerd. Als je op de box alleen met een wachtwoord inlogt, gebruik dan de automatisch aangemaakte gebruikersnaam onder Systeem › FRITZ!\u2060Box-gebruikers.</string>
     <string name="error_empty_user">(leeg)</string>
     <string name="error_not_confirmed_title">Niet bevestigd</string>
-    <string name="error_not_confirmed">De FRITZ!Box heeft de bevestiging niet op tijd ontvangen. Tik op Opnieuw en bevestig op de box (druk op de knop, of bel de getoonde code op een aangesloten telefoon).</string>
-    <string name="error_other_box_title">Andere FRITZ!Box</string>
-    <string name="error_other_box">De FRITZ!Box op %1$s is niet “%2$s”: het serienummer wijkt af van het opgeslagen nummer. Is de box vervangen, verwijder deze verbinding dan en voeg hem opnieuw toe.</string>
+    <string name="error_not_confirmed">De FRITZ!\u2060Box heeft de bevestiging niet op tijd ontvangen. Tik op Opnieuw en bevestig op de box (druk op de knop, of bel de getoonde code op een aangesloten telefoon).</string>
+    <string name="error_other_box_title">Andere FRITZ!\u2060Box</string>
+    <string name="error_other_box">De FRITZ!\u2060Box op %1$s is niet “%2$s”: het serienummer wijkt af van het opgeslagen nummer. Is de box vervangen, verwijder deze verbinding dan en voeg hem opnieuw toe.</string>
     <string name="error_confirmation_blocked_title">Bevestiging geblokkeerd</string>
-    <string name="error_confirmation_blocked">De FRITZ!Box blokkeert momenteel bevestigingen (te veel pogingen). Wacht een paar minuten en probeer het opnieuw.</string>
+    <string name="error_confirmation_blocked">De FRITZ!\u2060Box blokkeert momenteel bevestigingen (te veel pogingen). Wacht een paar minuten en probeer het opnieuw.</string>
     <string name="error_confirmation_busy_title">Bevestiging al bezig</string>
-    <string name="error_confirmation_busy">Er loopt al een andere bevestiging op de FRITZ!Box. Rond die af of wacht erop, en probeer het dan opnieuw.</string>
+    <string name="error_confirmation_busy">Er loopt al een andere bevestiging op de FRITZ!\u2060Box. Rond die af of wacht erop, en probeer het dan opnieuw.</string>
     <string name="error_not_authorized_title">Niet gemachtigd</string>
-    <string name="error_not_authorized">Gebruiker ‘%1$s’ is ingelogd, maar mag deze functie niet gebruiken. Controleer de rechten onder Systeem › FRITZ!Box-gebruikers.</string>
-    <string name="error_not_authorized_right">Gebruiker ‘%1$s’ is ingelogd, maar mist het recht ‘%2$s’. Verleen het onder Systeem › FRITZ!Box-gebruikers.</string>
+    <string name="error_not_authorized">Gebruiker ‘%1$s’ is ingelogd, maar mag deze functie niet gebruiken. Controleer de rechten onder Systeem › FRITZ!\u2060Box-gebruikers.</string>
+    <string name="error_not_authorized_right">Gebruiker ‘%1$s’ is ingelogd, maar mist het recht ‘%2$s’. Verleen het onder Systeem › FRITZ!\u2060Box-gebruikers.</string>
     <string name="error_no_dial_help_title">Kieshulp niet beschikbaar</string>
-    <string name="error_no_dial_help">De router biedt deze functie niet via TR-064 aan (verouderd FRITZ!OS?).</string>
+    <string name="error_no_dial_help">De router biedt deze functie niet via TR-064 aan (verouderd FRITZ!\u2060OS?).</string>
     <string name="error_technical_details">Technische details</string>
     <string name="copy">Kopiëren</string>
     <string name="error_router_title">Routerfout</string>
@@ -293,7 +293,7 @@
     <string name="status_hanging_up">Ophangen…</string>
     <string name="status_call_cancelled">Gesprek geannuleerd</string>
     <string name="status_waiting_cert">Wachten op beslissing over het certificaat…</string>
-    <string name="status_waiting_confirmation">Wachten op bevestiging op de FRITZ!Box…</string>
+    <string name="status_waiting_confirmation">Wachten op bevestiging op de FRITZ!\u2060Box…</string>
     <plurals name="status_connected">
         <item quantity="one">Verbonden – %d telefoon gevonden</item>
         <item quantity="other">Verbonden – %d telefoons gevonden</item>
@@ -313,20 +313,20 @@
 
     <!-- notes -->
     <string name="notice_unknown_box">%1$s in dit netwerk is niet ingesteld</string>
-    <string name="notice_unknown_box_generic">Een FRITZ!Box in dit netwerk is niet ingesteld</string>
-    <string name="notice_no_known_box">Geen van je FRITZ!Boxen bereikbaar</string>
-    <string name="notice_no_network">Geen netwerk – geen FRITZ!Box bereikbaar</string>
-    <string name="notice_mobile_data">Mobiele data – geen FRITZ!Box bereikbaar</string>
-    <string name="notice_other_network">Geen van je FRITZ!Boxen in dit netwerk</string>
-    <string name="notice_vpn_no_box">VPN aan – maar geen FRITZ!Box bereikbaar</string>
+    <string name="notice_unknown_box_generic">Een FRITZ!\u2060Box in dit netwerk is niet ingesteld</string>
+    <string name="notice_no_known_box">Geen van je FRITZ!\u2060Boxen bereikbaar</string>
+    <string name="notice_no_network">Geen netwerk – geen FRITZ!\u2060Box bereikbaar</string>
+    <string name="notice_mobile_data">Mobiele data – geen FRITZ!\u2060Box bereikbaar</string>
+    <string name="notice_other_network">Geen van je FRITZ!\u2060Boxen in dit netwerk</string>
+    <string name="notice_vpn_no_box">VPN aan – maar geen FRITZ!\u2060Box bereikbaar</string>
     <string name="not_at_home_what_now">Wat nu?</string>
     <string name="not_at_home_title">Niet thuis?</string>
     <string name="not_at_home_title_offline">Geen netwerk</string>
-    <string name="not_at_home_how">Pickelhaube bereikt je FRITZ!Box alleen vanuit zijn thuisnetwerk: thuis via zijn wifi, of van elders via een VPN daarheen – de FRITZ!Box biedt er zelf een.</string>
-    <string name="not_at_home_offline">De telefoon heeft op dit moment geen netwerkverbinding. Zodra hij er weer een heeft, zoekt Pickelhaube je FRITZ!Box vanzelf opnieuw.</string>
+    <string name="not_at_home_how">Pickelhaube bereikt je FRITZ!\u2060Box alleen vanuit zijn thuisnetwerk: thuis via zijn wifi, of van elders via een VPN daarheen – de FRITZ!\u2060Box biedt er zelf een.</string>
+    <string name="not_at_home_offline">De telefoon heeft op dit moment geen netwerkverbinding. Zodra hij er weer een heeft, zoekt Pickelhaube je FRITZ!\u2060Box vanzelf opnieuw.</string>
     <string name="not_at_home_mobile">De telefoon gebruikt mobiele data. Thuis zet je wifi aan; onderweg verbind je een VPN met je thuisnetwerk.</string>
-    <string name="not_at_home_other_network">Dit netwerk is niet dat van een van je FRITZ!Boxen. Onderweg verbind je een VPN met je thuisnetwerk.</string>
-    <string name="not_at_home_vpn">Er staat een VPN aan, maar geen FRITZ!Box antwoordde erdoorheen. Controleer of het naar je thuisnetwerk leidt en of de verbinding met de box een adres gebruikt dat erdoorheen bereikbaar is, zoals 192.168.178.1.</string>
+    <string name="not_at_home_other_network">Dit netwerk is niet dat van een van je FRITZ!\u2060Boxen. Onderweg verbind je een VPN met je thuisnetwerk.</string>
+    <string name="not_at_home_vpn">Er staat een VPN aan, maar geen FRITZ!\u2060Box antwoordde erdoorheen. Controleer of het naar je thuisnetwerk leidt en of de verbinding met de box een adres gebruikt dat erdoorheen bereikbaar is, zoals 192.168.178.1.</string>
     <string name="not_at_home_search_again">Opnieuw zoeken</string>
     <string name="not_at_home_vpn_settings">VPN-instellingen</string>
     <string name="not_at_home_network_settings">Netwerkinstellingen</string>
@@ -335,11 +335,11 @@
     <string name="call_log_failed_plain">De gesprekkenlijst van de telefoon kon niet worden gelezen. Dit werkt alleen als Pickelhaube niet via Google Play is geïnstalleerd.</string>
     <string name="speed_dial">Snelkiezen</string>
     <string name="speed_dial_none_enabled">Er zijn geen snelkeuzes ingeschakeld. Je kunt ze in de instellingen inschakelen.</string>
-    <string name="speed_dial_phone_help">De snelkeuzes 1 tot 9 zijn op deze telefoon opgeslagen en werken met elke FRITZ!Box. Houd in het kiesscherm het cijfer ingedrukt. Tik op een vrije om het nummer uit de telefoonboeken te kiezen; houd een ingestelde ingedrukt om die te wijzigen of te verwijderen.</string>
-    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld, zoals ze op de telefoons met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
-    <string name="speed_dial_box_failed">De snelkeuzes van de FRITZ!Box konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
-    <string name="speed_dial_box_none">In de telefoonboeken van deze FRITZ!Box zijn geen snelkeuzes ingesteld.</string>
-    <string name="speed_dial_box_none_headline">Nog geen favorieten op de FRITZ!Box.</string>
+    <string name="speed_dial_phone_help">De snelkeuzes 1 tot 9 zijn op deze telefoon opgeslagen en werken met elke FRITZ!\u2060Box. Houd in het kiesscherm het cijfer ingedrukt. Tik op een vrije om het nummer uit de telefoonboeken te kiezen; houd een ingestelde ingedrukt om die te wijzigen of te verwijderen.</string>
+    <string name="speed_dial_box_help">De snelkeuzes die in de telefoonboeken van deze FRITZ!\u2060Box zijn ingesteld, zoals ze op de telefoons met **7 worden gekozen. Tik in het kiesscherm op het eerste cijfer en houd het tweede ingedrukt – of voer **7 en het nummer in. Onderaan maak je een nieuwe aan; lang drukken op een snelkeuze wijzigt of verwijdert die.</string>
+    <string name="speed_dial_box_failed">De snelkeuzes van de FRITZ!\u2060Box konden niet worden geladen. Tik op opnieuw laden om het nog eens te proberen.</string>
+    <string name="speed_dial_box_none">In de telefoonboeken van deze FRITZ!\u2060Box zijn geen snelkeuzes ingesteld.</string>
+    <string name="speed_dial_box_none_headline">Nog geen favorieten op de FRITZ!\u2060Box.</string>
     <string name="speed_dial_free">Niet ingesteld</string>
     <plurals name="speed_dial_free_slots">
         <item quantity="one">%d vrije plek – om in te stellen</item>
@@ -354,33 +354,33 @@
     <string name="speed_dial_choose_number">Tik op het nummer voor snelkeuze %1$s.</string>
     <string name="speed_dial_for">Snelkeuze voor %1$s</string>
     <string name="speed_dial_make">Als snelkeuze instellen</string>
-    <string name="speed_dial_make_box">Als snelkeuze van de FRITZ!Box instellen</string>
-    <string name="speed_dial_box_for">Snelkeuze van de FRITZ!Box voor %1$s</string>
-    <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FRITZ!Box. Nieuwe vermelding in:</string>
-    <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FRITZ!Box niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FRITZ!Box.</string>
-    <string name="copy_delete">Kopie op FRITZ!Box verwijderen</string>
-    <string name="status_deleting_copy">Kopie van ‘%1$s’ op de FRITZ!Box wordt verwijderd…</string>
-    <string name="status_copy_deleted">Kopie van ‘%1$s’ op de FRITZ!Box verwijderd.</string>
+    <string name="speed_dial_make_box">Als snelkeuze van de FRITZ!\u2060Box instellen</string>
+    <string name="speed_dial_box_for">Snelkeuze van de FRITZ!\u2060Box voor %1$s</string>
+    <string name="speed_dial_box_new_entry">Het nummer staat nog in geen enkel telefoonboek van de FRITZ!\u2060Box. Nieuwe vermelding in:</string>
+    <string name="speed_dial_box_online">‘%1$s’ staat alleen in het online telefoonboek ‘%2$s’, dat de FRITZ!\u2060Box niet kan wijzigen. Voor de snelkeuze krijgt het contact een vermelding in een eigen telefoonboek van de FRITZ!\u2060Box.</string>
+    <string name="copy_delete">Kopie op FRITZ!\u2060Box verwijderen</string>
+    <string name="status_deleting_copy">Kopie van ‘%1$s’ op de FRITZ!\u2060Box wordt verwijderd…</string>
+    <string name="status_copy_deleted">Kopie van ‘%1$s’ op de FRITZ!\u2060Box verwijderd.</string>
     <string name="undo">Ongedaan maken</string>
     <string name="speed_dial_removed_phone">Snelkiesnummer %1$s (%2$s) verwijderd.</string>
-    <string name="status_restoring_copy">„%1$s” wordt teruggezet op de FRITZ!Box…</string>
-    <string name="status_copy_restored">„%1$s” staat weer op de FRITZ!Box.</string>
-    <string name="status_restore_book_gone">„%1$s” kon niet worden teruggezet: het telefoonboek „%2$s” staat niet meer op de FRITZ!Box.</string>
-    <string name="speed_dial_box_add">Nieuwe snelkeuze van de FRITZ!Box</string>
-    <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FRITZ!Box.</string>
-    <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FRITZ!Box.</string>
-    <string name="status_setting_speed_dial">Snelkeuze %1$s wordt op de FRITZ!Box ingesteld…</string>
-    <string name="status_speed_dial_set">Snelkeuze %1$s van de FRITZ!Box: %2$s</string>
-    <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FRITZ!Box verwijderd…</string>
-    <string name="status_speed_dial_removed">Snelkeuze %1$s van de FRITZ!Box verwijderd.</string>
-    <string name="status_phonebook_changed_on_box">De telefoonboeken zijn intussen op de FRITZ!Box gewijzigd en opnieuw gelezen.</string>
-    <string name="status_phonebook_gone">‘%1$s’ hoort niet meer bij de telefoonboeken van de FRITZ!Box – %2$s is niet overgedragen.</string>
+    <string name="status_restoring_copy">„%1$s” wordt teruggezet op de FRITZ!\u2060Box…</string>
+    <string name="status_copy_restored">„%1$s” staat weer op de FRITZ!\u2060Box.</string>
+    <string name="status_restore_book_gone">„%1$s” kon niet worden teruggezet: het telefoonboek „%2$s” staat niet meer op de FRITZ!\u2060Box.</string>
+    <string name="speed_dial_box_add">Nieuwe snelkeuze van de FRITZ!\u2060Box</string>
+    <string name="speed_dial_choose_number_box">Tik op het nummer voor snelkeuze %1$s van de FRITZ!\u2060Box.</string>
+    <string name="speed_dial_choose_number_box_new">Tik op het nummer voor een nieuwe snelkeuze van de FRITZ!\u2060Box.</string>
+    <string name="status_setting_speed_dial">Snelkeuze %1$s wordt op de FRITZ!\u2060Box ingesteld…</string>
+    <string name="status_speed_dial_set">Snelkeuze %1$s van de FRITZ!\u2060Box: %2$s</string>
+    <string name="status_removing_speed_dial">Snelkeuze %1$s wordt van de FRITZ!\u2060Box verwijderd…</string>
+    <string name="status_speed_dial_removed">Snelkeuze %1$s van de FRITZ!\u2060Box verwijderd.</string>
+    <string name="status_phonebook_changed_on_box">De telefoonboeken zijn intussen op de FRITZ!\u2060Box gewijzigd en opnieuw gelezen.</string>
+    <string name="status_phonebook_gone">‘%1$s’ hoort niet meer bij de telefoonboeken van de FRITZ!\u2060Box – %2$s is niet overgedragen.</string>
     <string name="contact_to_phone">Overnemen in de contacten</string>
-    <string name="contact_to_box">Doorgeven aan de FRITZ!Box</string>
-    <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FRITZ!Box ‘%2$s’:</string>
+    <string name="contact_to_box">Doorgeven aan de FRITZ!\u2060Box</string>
+    <string name="hand_over_text">‘%1$s’ komt in dit telefoonboek van de FRITZ!\u2060Box ‘%2$s’:</string>
     <string name="hand_over_duplicate">Het nummer %1$s staat er al, bij ‘%2$s’.</string>
     <string name="hand_over">Doorgeven</string>
-    <string name="status_handing_over">‘%1$s’ wordt doorgegeven aan de FRITZ!Box…</string>
+    <string name="status_handing_over">‘%1$s’ wordt doorgegeven aan de FRITZ!\u2060Box…</string>
     <string name="status_handed_over">‘%1$s’ staat nu in telefoonboek ‘%2$s’.</string>
     <string name="no_contacts_app">Geen contacten-app op deze telefoon gevonden.</string>
     <string name="number_actions">Meer acties</string>
@@ -389,19 +389,19 @@
     <string name="number_copy_label">Telefoonnummer</string>
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>
     <string name="settings_phone_speed_dials">Snelkeuzes van deze telefoon</string>
-    <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
+    <string name="settings_phone_speed_dials_hint">Snelkeuzes 1 tot 9, gekozen uit de telefoonboeken en op deze telefoon opgeslagen, zodat ze met elke FRITZ!\u2060Box werken. Houd om er een te gebruiken het cijfer in het kiesscherm ingedrukt.</string>
     <string name="settings_keypad">Kiesscherm</string>
     <string name="settings_key_tones">Toetstonen</string>
     <string name="settings_key_tones_hint">Een korte toon bij elke toets, zoals bij het kiesscherm van een telefoon. Alleen op deze telefoon te horen, hij gaat niet mee in het gesprek. Stil zolang de telefoon op stil of trillen staat.</string>
     <string name="connection_speed_dials">Snelkeuzes</string>
-    <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FRITZ!Box zijn ingesteld (00 tot 99, zoals ze op de telefoons met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
+    <string name="connection_speed_dials_hint">De snelkeuzes die in de telefoonboeken van deze FRITZ!\u2060Box zijn ingesteld (00 tot 99, zoals ze op de telefoons met **7 worden gekozen). Tik om er een te gebruiken op het eerste cijfer in het kiesscherm en houd het tweede ingedrukt. Werkt ook als de telefoonboeken zijn uitgeschakeld.</string>
     <string name="connection_internal_calls">Interne gesprekken</string>
-    <string name="connection_internal_calls_hint">De telefoons van deze FRITZ!Box, om de ene vanaf de andere te bellen: een tabblad ‘Intern’ bij Nummer kiezen, en hun namen in de suggesties tijdens het typen. Alleen zinvol met meerdere telefoons.</string>
+    <string name="connection_internal_calls_hint">De telefoons van deze FRITZ!\u2060Box, om de ene vanaf de andere te bellen: een tabblad ‘Intern’ bij Nummer kiezen, en hun namen in de suggesties tijdens het typen. Alleen zinvol met meerdere telefoons.</string>
 
     <!-- quick settings tiles -->
     <string name="tile_redial">Opnieuw kiezen</string>
     <string name="tile_redial_none">Nog niets gekozen</string>
-    <string name="tile_no_box">Geen FRITZ!Box bereikbaar</string>
+    <string name="tile_no_box">Geen FRITZ!\u2060Box bereikbaar</string>
     <string name="tile_deflection">Doorschakeling</string>
     <string name="tile_deflection_switching">Bezig met schakelen…</string>
     <string name="tile_deflection_failed">Schakelen mislukt</string>
@@ -435,8 +435,8 @@
     <string name="settings_file_invalid">Geen instellingenbestand van Pickelhaube (of een van een nieuwere versie)</string>
     <string name="settings_imported">Instellingen geïmporteerd</string>
     <plurals name="settings_import_text">
-        <item quantity="one">Het bestand bevat %d FRITZ!Box-verbinding. Importeren vervangt alle verbindingen en opties van de app.</item>
-        <item quantity="other">Het bestand bevat %d FRITZ!Box-verbindingen. Importeren vervangt alle verbindingen en opties van de app.</item>
+        <item quantity="one">Het bestand bevat %d FRITZ!\u2060Box-verbinding. Importeren vervangt alle verbindingen en opties van de app.</item>
+        <item quantity="other">Het bestand bevat %d FRITZ!\u2060Box-verbindingen. Importeren vervangt alle verbindingen en opties van de app.</item>
     </plurals>
     <string name="settings_tile_add">‘%1$s’ toevoegen</string>
     <string name="settings_tile_added">‘%1$s’ is aan de snelle instellingen toegevoegd.</string>
@@ -447,10 +447,10 @@
     <string name="deflections">Doorschakeling</string>
     <string name="deflections_on">Doorschakeling – aan</string>
     <string name="deflections_off">Doorschakeling – uit</string>
-    <string name="deflections_hint">De doorschakelingen die op de FRITZ!Box ‘%1$s’ zijn ingesteld, om aan en uit te zetten. Instellen en wijzigen kan alleen op de FRITZ!Box zelf (Telefonie › Oproepbeheer › Doorschakeling).</string>
+    <string name="deflections_hint">De doorschakelingen die op de FRITZ!\u2060Box ‘%1$s’ zijn ingesteld, om aan en uit te zetten. Instellen en wijzigen kan alleen op de FRITZ!\u2060Box zelf (Telefonie › Oproepbeheer › Doorschakeling).</string>
     <string name="deflections_loading">Doorschakelingen worden gelezen…</string>
     <string name="deflections_failed">De doorschakelingen konden niet worden gelezen. Tik op opnieuw laden om het nog eens te proberen.</string>
-    <string name="deflections_none">Op deze FRITZ!Box is geen doorschakeling ingesteld.</string>
+    <string name="deflections_none">Op deze FRITZ!\u2060Box is geen doorschakeling ingesteld.</string>
     <string name="deflections_none_headline">Elk gesprek komt rechtstreeks bij jou.</string>
     <string name="deflections_tile_hint">De tegel ‘Doorschakeling’ in de snelle instellingen schakelt de gemarkeerde.</string>
     <string name="deflection_all">Alle oproepen</string>
@@ -475,14 +475,14 @@
 
     <!-- live call status -->
     <string name="settings_call_status">Gespreksstatus</string>
-    <string name="settings_call_status_switch">Gesprekken op de FRITZ!Box volgen</string>
-    <string name="settings_call_status_hint">Terwijl je belt, toont het kiesscherm hoe het gesprek verloopt: wordt gekozen, verbonden met de duur, beëindigd of niet beantwoord. De FRITZ!Box meldt dit via zijn gespreksmonitor, die eenmalig moet worden ingeschakeld: kies #96*5* op een telefoon die op de box is aangesloten (#96*4* schakelt hem weer uit).</string>
+    <string name="settings_call_status_switch">Gesprekken op de FRITZ!\u2060Box volgen</string>
+    <string name="settings_call_status_hint">Terwijl je belt, toont het kiesscherm hoe het gesprek verloopt: wordt gekozen, verbonden met de duur, beëindigd of niet beantwoord. De FRITZ!\u2060Box meldt dit via zijn gespreksmonitor, die eenmalig moet worden ingeschakeld: kies #96*5* op een telefoon die op de box is aangesloten (#96*4* schakelt hem weer uit).</string>
     <string name="settings_call_status_privacy">De gespreksmonitor vraagt geen aanmelding en is niet versleuteld: staat hij aan, dan kan elk apparaat in het thuisnetwerk de gesprekken van de box volgen, nummers inbegrepen. Pickelhaube maakt alleen verbinding zolang een van zijn eigen gesprekken loopt.</string>
     <string name="settings_call_monitor_on">%1$s: gespreksmonitor aan</string>
     <string name="settings_call_monitor_off">%1$s: gespreksmonitor uit – kies #96*5* op een telefoon die erop is aangesloten</string>
     <string name="settings_call_monitor_unknown">%1$s: nog niet gecontroleerd</string>
     <string name="settings_call_monitor_check">Opnieuw controleren</string>
-    <string name="call_monitor_off_hint">De gespreksstatus staat uit op de FRITZ!Box: kies #96*5* op een telefoon die erop is aangesloten</string>
+    <string name="call_monitor_off_hint">De gespreksstatus staat uit op de FRITZ!\u2060Box: kies #96*5* op een telefoon die erop is aangesloten</string>
     <string name="call_dialling">%1$s wordt gebeld…</string>
     <string name="call_dialling_from">%1$s wordt gebeld vanaf %2$s…</string>
     <string name="call_connected">Verbonden met %1$s · %2$s</string>
@@ -512,8 +512,8 @@
     <!-- launcher shortcuts (long press on the app icon) -->
     <string name="shortcut_dial_number">Nummer bellen</string>
     <string name="shortcut_box_reachable">%1$s bereikbaar</string>
-    <string name="shortcut_box_unknown">FRITZ!Box zoeken</string>
-    <string name="shortcut_box_looking">Je FRITZ!Box wordt gezocht…</string>
+    <string name="shortcut_box_unknown">FRITZ!\u2060Box zoeken</string>
+    <string name="shortcut_box_looking">Je FRITZ!\u2060Box wordt gezocht…</string>
     <string name="shortcut_deflection_on">Doorschakeling aan</string>
     <string name="shortcut_deflection_off">Doorschakeling uit</string>
     <string name="shortcut_deflection_on_long">Doorschakeling aan → %1$s</string>
@@ -530,8 +530,8 @@
         <item quantity="other">%1$d nieuwe gemiste oproepen bij %2$s – tonen</item>
     </plurals>
     <string name="picker_tab_internal">Intern</string>
-    <string name="internal_loading">Telefoons van de FRITZ!Box worden gelezen…</string>
-    <string name="internal_none">De FRITZ!Box noemt geen telefoons voor interne gesprekken.</string>
+    <string name="internal_loading">Telefoons van de FRITZ!\u2060Box worden gelezen…</string>
+    <string name="internal_none">De FRITZ!\u2060Box noemt geen telefoons voor interne gesprekken.</string>
     <string name="internal_all_phones">Alle telefoons</string>
     <string name="internal_kind_analogue">Analoge telefoon</string>
     <string name="internal_kind_dect">DECT-handset</string>
@@ -541,32 +541,32 @@
     <string name="error_call_itself">%1$s is de telefoon die voor de kieshulp rinkelt: hij kan zichzelf niet bellen. Kies een andere telefoon bij Laten overgaan op.</string>
     <string name="welcome_skip">Overslaan</string>
     <string name="welcome_next">Volgende</string>
-    <string name="welcome_hello">Hallo! Ik help je bellen via je FRITZ!Box: je kiest het nummer hier op je smartphone – en je FRITZ!Box-telefoon belt.</string>
-    <string name="welcome_hello_next">Eerst heb ik een verbinding met je FRITZ!Box nodig. Dat duurt ongeveer twee minuten.</string>
+    <string name="welcome_hello">Hallo! Ik help je bellen via je FRITZ!\u2060Box: je kiest het nummer hier op je smartphone – en je FRITZ!\u2060Box-telefoon belt.</string>
+    <string name="welcome_hello_next">Eerst heb ik een verbinding met je FRITZ!\u2060Box nodig. Dat duurt ongeveer twee minuten.</string>
     <string name="welcome_start">Aan de slag</string>
-    <string name="welcome_prepare_title">Wat je FRITZ!Box nodig heeft</string>
+    <string name="welcome_prepare_title">Wat je FRITZ!\u2060Box nodig heeft</string>
     <string name="welcome_prepare">Drie instellingen op de box – staan ze eenmaal aan, dan kun je ze vergeten.</string>
     <string name="welcome_prepare_access_title">Toegang voor toepassingen</string>
     <string name="welcome_prepare_access">Thuisnetwerk › Netwerk › Netwerkinstellingen – de deur waarop ik klop.</string>
     <string name="welcome_prepare_dial_help_title">Kieshulp</string>
     <string name="welcome_prepare_dial_help">Telefonie › Gesprekken › Kieshulp – laat de box kiezen voor een van zijn telefoons.</string>
     <string name="welcome_prepare_user_title">Een gebruiker met telefonierecht</string>
-    <string name="welcome_prepare_user">Systeem › FRITZ!Box-gebruikers – de gebruiker waarmee je op de box inlogt is goed.</string>
+    <string name="welcome_prepare_user">Systeem › FRITZ!\u2060Box-gebruikers – de gebruiker waarmee je op de box inlogt is goed.</string>
     <string name="welcome_prepare_how">Laat zien hoe ›</string>
-    <string name="welcome_find_title">Waar is je FRITZ!Box?</string>
+    <string name="welcome_find_title">Waar is je FRITZ!\u2060Box?</string>
     <string name="welcome_find">Meestal antwoordt hij op fritz.box – dan hoeft hier niets te veranderen.</string>
     <string name="welcome_find_found">Gevonden: %1$s!</string>
     <string name="welcome_find_set_up">Gevonden: %1$s – hij is al ingesteld, als ‘%2$s’.</string>
     <string name="welcome_find_none">Geen antwoord van %1$s. Zit deze telefoon in hetzelfde wifi als de box? Je kunt toch doorgaan, bijvoorbeeld via een VPN.</string>
     <string name="welcome_name_hint">Jouw keuze, bijv. ‘Thuis’. Leeg gelaten heet de box ‘%1$s’.</string>
     <string name="welcome_login_title">Wie ben je op de box?</string>
-    <string name="welcome_login">Meld je aan bij je FRITZ!Box: met een gebruiker die op de box bestaat, en zijn wachtwoord – dezelfde als voor de webinterface van de box (fritz.box). Je kiest hier geen nieuw wachtwoord.</string>
-    <string name="welcome_password_label">Wachtwoord van deze FRITZ!Box-gebruiker</string>
+    <string name="welcome_login">Meld je aan bij je FRITZ!\u2060Box: met een gebruiker die op de box bestaat, en zijn wachtwoord – dezelfde als voor de webinterface van de box (fritz.box). Je kiest hier geen nieuw wachtwoord.</string>
+    <string name="welcome_password_label">Wachtwoord van deze FRITZ!\u2060Box-gebruiker</string>
     <string name="welcome_password_factory">Niet zeker welk? Je box kwam met een wachtwoord op een sticker, meestal aan de onderkant. Het had bij de eerste installatie gewijzigd moeten worden – dan geldt het toen gekozen wachtwoord.</string>
-    <string name="welcome_login_tip">Tip: het veiligst is een eigen gebruiker voor Pickelhaube, met alleen telefonierecht. Pickelhaube kan hem niet aanmaken – je maakt hem zelf aan in de webinterface van de box (fritz.box), onder Systeem › FRITZ!Box-gebruikers, en voert hem dan hier in.</string>
+    <string name="welcome_login_tip">Tip: het veiligst is een eigen gebruiker voor Pickelhaube, met alleen telefonierecht. Pickelhaube kan hem niet aanmaken – je maakt hem zelf aan in de webinterface van de box (fritz.box), onder Systeem › FRITZ!\u2060Box-gebruikers, en voert hem dan hier in.</string>
     <string name="welcome_address">Adres</string>
     <string name="welcome_connect_title">Klaar om te verbinden</string>
-    <string name="welcome_connect">Ik log nu in op je FRITZ!Box en kijk welke telefoons hij heeft.</string>
+    <string name="welcome_connect">Ik log nu in op je FRITZ!\u2060Box en kijk welke telefoons hij heeft.</string>
     <string name="welcome_connect_button">Verbinden</string>
     <string name="welcome_connecting">Verbinden…</string>
     <string name="welcome_connect_failed">Hm, dat lukte niet – de melding zei waarom. Ga terug en pas je gegevens aan, of open alle instellingen.</string>
@@ -574,9 +574,9 @@
     <string name="welcome_change_password">Wachtwoord opnieuw invoeren</string>
     <string name="welcome_all_settings">Alle instellingen</string>
     <string name="welcome_ready_title">Klaar!</string>
-    <string name="welcome_ready_ring">Als je kiest, laat je FRITZ!Box eerst %1$s overgaan – neem op, en de box kiest het nummer.</string>
-    <string name="welcome_ready_ring_unset">Je FRITZ!Box heeft nog geen telefoon voor de kieshulp ingesteld – ik neem %1$s. Bij je eerste gesprek vraagt de box misschien om bevestiging.</string>
-    <string name="welcome_ready_no_phone">Je FRITZ!Box noemt geen telefoon voor de kieshulp. Is er een telefoon aangesloten?</string>
+    <string name="welcome_ready_ring">Als je kiest, laat je FRITZ!\u2060Box eerst %1$s overgaan – neem op, en de box kiest het nummer.</string>
+    <string name="welcome_ready_ring_unset">Je FRITZ!\u2060Box heeft nog geen telefoon voor de kieshulp ingesteld – ik neem %1$s. Bij je eerste gesprek vraagt de box misschien om bevestiging.</string>
+    <string name="welcome_ready_no_phone">Je FRITZ!\u2060Box noemt geen telefoon voor de kieshulp. Is er een telefoon aangesloten?</string>
     <string name="welcome_ready_ring_change">Een andere telefoon kies je bij ‘Laten overgaan op’ in het kiesscherm – de box vraagt misschien om bevestiging.</string>
     <string name="welcome_ready_tips">Goed om te weten</string>
     <string name="welcome_tip_picker">De adresboekknop naast het nummer opent je recente gesprekken en telefoonboeken.</string>
@@ -584,7 +584,7 @@
     <string name="welcome_tip_tiles">Snelle-instellingentegels en een widget op het startscherm brengen je hier sneller – zie de instellingen.</string>
     <string name="welcome_start_dialling">Beginnen met bellen</string>
     <string name="settings_welcome_tour">Welkomstrondleiding</string>
-    <string name="settings_welcome_tour_hint">Stap voor stap door de instelling – voegt nog een FRITZ!Box toe</string>
+    <string name="settings_welcome_tour_hint">Stap voor stap door de instelling – voegt nog een FRITZ!\u2060Box toe</string>
     <string name="web_guide">Handleiding op het web (Engels)</string>
     <string name="web_privacy_policy">Privacybeleid (Engels)</string>
     <string name="web_feedback">Feedback geven (Engels)</string>
@@ -596,14 +596,14 @@
     <string name="settings_whats_new">Wat is er nieuw</string>
     <string-array name="whats_new_8">
         <item>Hulp is nu één tik verwijderd: ‘Handleiding op het web’ en het privacybeleid staan onderaan de instellingen.</item>
-        <item>Nog een FRITZ!Box? Instellingen › Welkomstrondleiding stelt hem stap voor stap in – zoekt de box en controleert de aanmelding.</item>
+        <item>Nog een FRITZ!\u2060Box? Instellingen › Welkomstrondleiding stelt hem stap voor stap in – zoekt de box en controleert de aanmelding.</item>
         <item>Een gebruiker kiezen uit de lijst op de verbindingspagina opent het toetsenbord niet meer.</item>
     </string-array>
     <string-array name="whats_new_11">
-        <item>Trek het kiesscherm omlaag om alles opnieuw van je FRITZ!Box te lezen – bijvoorbeeld nadat je daar iets hebt veranderd.</item>
+        <item>Trek het kiesscherm omlaag om alles opnieuw van je FRITZ!\u2060Box te lezen – bijvoorbeeld nadat je daar iets hebt veranderd.</item>
         <item>De helm doet mee: hij staat naast de naam van je box, speelt je gesprekken na en wiebelt terwijl de app met de box praat.</item>
         <item>Toetstonen zoals bij het kiesscherm van een telefoon – zet ze aan via Instellingen › Kiesscherm.</item>
-        <item>Telefoonboeken die op de FRITZ!Box zelf zijn gewijzigd, zitten snelkeuzes en het overdragen van contacten niet meer in de weg.</item>
+        <item>Telefoonboeken die op de FRITZ!\u2060Box zelf zijn gewijzigd, zitten snelkeuzes en het overdragen van contacten niet meer in de weg.</item>
     </string-array>
     <string-array name="whats_new_12">
         <item>Recente oproepen staan per dag, en het filter rechtsboven toont alleen de gemiste – een tik op de regel over gemiste oproepen in het kiesscherm opent ze.</item>
@@ -622,8 +622,8 @@
         <item>Bij de snelkiesnummers zijn de vrije plekken van deze telefoon samengevoegd tot één regel.</item>
     </string-array>
     <string-array name="whats_new_14">
-        <item>‘Bellen via FRITZ!Box’ direct in de contacten-app van je telefoon: zet het aan in de instellingen, en elk nummer van een contact krijgt een regel die het hier opent.</item>
-        <item>Niet thuis? Als geen FRITZ!Box antwoordt, zegt de titel van de kiezer waarom – tik erop om te zien wat helpt: de wifi thuis, of een VPN naar je thuisnetwerk.</item>
+        <item>‘Bellen via FRITZ!\u2060Box’ direct in de contacten-app van je telefoon: zet het aan in de instellingen, en elk nummer van een contact krijgt een regel die het hier opent.</item>
+        <item>Niet thuis? Als geen FRITZ!\u2060Box antwoordt, zegt de titel van de kiezer waarom – tik erop om te zien wat helpt: de wifi thuis, of een VPN naar je thuisnetwerk.</item>
     </string-array>
     <string-array name="whats_new_15">
         <item>Iets te zeggen? In de instellingen staat nu een link naar het feedbackformulier op de website – voor een probleem, een idee of een compliment.</item>

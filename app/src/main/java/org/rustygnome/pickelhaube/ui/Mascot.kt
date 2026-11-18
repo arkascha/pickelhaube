@@ -123,6 +123,5 @@ internal fun DialogMascot(pose: MascotPose) {
  */
 @Composable
 internal fun DialogTitle(text: String) {
-    // Not "FRITZ!" and "Box" on two lines: a line may break after a "!", so a word joiner holds them together.
-    Text(text.replace("FRITZ!Box", "FRITZ!\u2060Box"), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+    Text(text, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
