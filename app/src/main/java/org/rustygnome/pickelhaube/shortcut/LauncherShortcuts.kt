@@ -4,7 +4,13 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -43,6 +49,9 @@ object LauncherShortcuts {
     const val ACTION_PICKER = "org.rustygnome.pickelhaube.action.PICKER"
 
     private const val ID_REDIAL = "redial"
+
+    /** Shortcuts on the home screen that dial one number ([pinCall]): this and the number. */
+    private const val ID_CALL_PREFIX = "call:"
 
     /** An entry of earlier versions, removed again. */
     private const val ID_SPEED_DIALS = "speed_dials"
@@ -121,7 +130,7 @@ object LauncherShortcuts {
                 .setShortLabel(name ?: number)
                 .setLongLabel(name?.let { texts.getString(R.string.shortcut_redial_named, it, number) } ?: number)
                 .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_redial))
-                .setIntent(aliasIntent(context, ACTION_DIAL_NOW).setData(Uri.fromParts("tel", number, null)))
+                .setIntent(dialNowIntent(context, number))
                 .setRank(0)
                 .build(),
         )
@@ -169,6 +178,57 @@ object LauncherShortcuts {
                 .build(),
         )
     }
+
+    /** Whether the launcher can take a shortcut onto the home screen ([pinCall]). */
+    fun canPin(context: Context): Boolean =
+        runCatching { ShortcutManagerCompat.isRequestPinShortcutSupported(context) }.getOrDefault(false)
+
+    /**
+     * Asks the launcher to put a shortcut onto the home screen that dials [number] at once, like
+     * "Redial": named [name] (or the number), its icon the name's initials on the app's blue (a phone
+     * for a number only) – the launcher adds the app's badge. The launcher asks the user to confirm and
+     * places it; one per number: asked again, the launcher keeps the one there. Pinned shortcuts stay
+     * when the app's own entries go ([removeAll]).
+     */
+    fun pinCall(context: Context, number: String, name: String?) {
+        val label = name?.takeIf { it.isNotBlank() && it != number }
+        val shortcut = ShortcutInfoCompat.Builder(context, ID_CALL_PREFIX + number.filter { it.isDigit() || it in "+*#" })
+            .setShortLabel(label ?: number)
+            .setLongLabel(label?.let { context.getString(R.string.shortcut_redial_named, it, number) } ?: number)
+            .setIcon(label?.let { initialsIcon(context, it) } ?: IconCompat.createWithResource(context, R.drawable.ic_shortcut_redial))
+            .setIntent(dialNowIntent(context, number))
+            .build()
+        runCatching { ShortcutManagerCompat.requestPinShortcut(context, shortcut, null) }
+    }
+
+    /** Dials [number] at once, through [ALIAS]: what "Redial" and the shortcuts of [pinCall] start. */
+    fun dialNowIntent(context: Context, number: String): Intent =
+        aliasIntent(context, ACTION_DIAL_NOW).setData(Uri.fromParts("tel", number, null))
+
+    /** The first letters of up to two words of [name], white on the app icon's blue, as an adaptive icon. */
+    private fun initialsIcon(context: Context, name: String): IconCompat? {
+        val initials = initials(name) ?: return null
+        // An adaptive icon is 108 dp with the visible part in the middle 72 dp (or less, by the mask).
+        val size = (108 * context.resources.displayMetrics.density).toInt()
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textAlign = Paint.Align.CENTER
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            textSize = size * if (initials.length > 1) 0.26f else 0.32f
+        }
+        // Centred on the middle, not on the baseline.
+        val y = size / 2f - (paint.descent() + paint.ascent()) / 2f
+        canvas.drawText(initials, size / 2f, y, paint)
+        return IconCompat.createWithAdaptiveBitmap(bitmap)
+    }
+
+    /** "Anna Becker" → "AB", "Mum" → "M", "Dr. Weber, dentist" → "DW"; null: no letter in it (a number). */
+    internal fun initials(name: String): String? =
+        name.split(' ', ',', '-', '.').filter { word -> word.firstOrNull()?.isLetter() == true }
+            .take(2).joinToString("") { it.first().uppercase() }.takeIf { it.isNotEmpty() }
 
     /** Everything goes; e.g. once the last connection was deleted. */
     fun removeAll(context: Context) {

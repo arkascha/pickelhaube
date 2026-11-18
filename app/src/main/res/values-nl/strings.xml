@@ -385,6 +385,7 @@
     <string name="no_contacts_app">Geen contacten-app op deze telefoon gevonden.</string>
     <string name="number_actions">Meer acties</string>
     <string name="number_copy">Nummer kopiëren</string>
+    <string name="number_to_home">Toevoegen aan startscherm</string>
     <string name="number_copied">Nummer gekopieerd</string>
     <string name="number_copy_label">Telefoonnummer</string>
     <string name="dialer_speed_dial_label">Snelkeuze %1$s: %2$s</string>

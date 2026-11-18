@@ -393,6 +393,7 @@
     <string name="no_contacts_app">No contacts app found on this phone.</string>
     <string name="number_actions">More actions</string>
     <string name="number_copy">Copy number</string>
+    <string name="number_to_home">Add to home screen</string>
     <string name="number_copied">Number copied</string>
     <string name="number_copy_label">Phone number</string>
     <string name="dialer_speed_dial_label">Speed dial %1$s: %2$s</string>

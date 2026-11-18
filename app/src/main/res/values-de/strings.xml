@@ -385,6 +385,7 @@
     <string name="no_contacts_app">Auf diesem Telefon ist keine Kontakte-App vorhanden.</string>
     <string name="number_actions">Weitere Aktionen</string>
     <string name="number_copy">Nummer kopieren</string>
+    <string name="number_to_home">Zum Startbildschirm hinzufügen</string>
     <string name="number_copied">Nummer kopiert</string>
     <string name="number_copy_label">Telefonnummer</string>
     <string name="dialer_speed_dial_label">Kurzwahl %1$s: %2$s</string>

@@ -389,6 +389,7 @@
     <string name="no_contacts_app">No hay ninguna app de contactos en este teléfono.</string>
     <string name="number_actions">Más acciones</string>
     <string name="number_copy">Copiar número</string>
+    <string name="number_to_home">Añadir a la pantalla de inicio</string>
     <string name="number_copied">Número copiado</string>
     <string name="number_copy_label">Número de teléfono</string>
     <string name="dialer_speed_dial_label">Marcación rápida %1$s: %2$s</string>

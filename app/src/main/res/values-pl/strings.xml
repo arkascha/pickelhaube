@@ -397,6 +397,7 @@
     <string name="no_contacts_app">Na tym telefonie nie ma aplikacji kontaktów.</string>
     <string name="number_actions">Więcej działań</string>
     <string name="number_copy">Kopiuj numer</string>
+    <string name="number_to_home">Dodaj do ekranu głównego</string>
     <string name="number_copied">Numer skopiowany</string>
     <string name="number_copy_label">Numer telefonu</string>
     <string name="dialer_speed_dial_label">Szybkie wybieranie %1$s: %2$s</string>

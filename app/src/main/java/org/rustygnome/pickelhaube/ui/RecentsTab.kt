@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.tr064.DialingCodes
@@ -253,6 +254,7 @@ fun RecentsTab(
                 val toBox = stringResource(R.string.contact_to_box)
                 val toPhone = stringResource(R.string.contact_to_phone)
                 val copy = stringResource(R.string.number_copy)
+                val toHome = stringResource(R.string.number_to_home).takeIf { remember { LauncherShortcuts.canPin(context) } }
                 val makeSpeedDial = stringResource(R.string.speed_dial_make)
                 val makeBoxSpeedDial = stringResource(R.string.speed_dial_make_box)
                 val days = remember(shown, now) { byDay(shown, ZoneId.systemDefault()) }
@@ -275,6 +277,7 @@ fun RecentsTab(
                                 val contact = PhonebookContact(call.name ?: call.number, listOf(PhonebookNumber(call.number, "other")), "")
                                 val actions = listOfNotNull(
                                     NumberAction(copy) { copyNumber(context, call.number) },
+                                    toHome?.let { NumberAction(it) { LauncherShortcuts.pinCall(context, call.number, call.name) } },
                                     NumberAction(toPhone) { takeOverIntoDeviceContacts(context, contact) },
                                     if (localBooks.isNotEmpty()) NumberAction(toBox) { handOverFor = contact } else null,
                                     phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact } },

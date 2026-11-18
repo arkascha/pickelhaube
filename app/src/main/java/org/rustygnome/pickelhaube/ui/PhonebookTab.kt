@@ -61,6 +61,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import org.rustygnome.pickelhaube.R
+import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.ui.theme.TextRoles
 import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SpeedDial
@@ -280,6 +281,7 @@ fun PhonebookTab(
                         val toBox = stringResource(R.string.contact_to_box)
                         val toPhone = stringResource(R.string.contact_to_phone)
                         val copyLabel = stringResource(R.string.number_copy)
+                        val toHome = stringResource(R.string.number_to_home).takeIf { remember { LauncherShortcuts.canPin(context) } }
                         val deleteCopyLabel = stringResource(R.string.copy_delete)
                         val copy = onlineCopies.firstOrNull { it.entry.bookId == contact.bookId && it.entry.uid == contact.uid }
                         ContactRow(
@@ -298,6 +300,7 @@ fun PhonebookTab(
                             actions = { number ->
                                 listOfNotNull(
                                     NumberAction(copyLabel) { copyNumber(context, number.number) },
+                                    toHome?.let { NumberAction(it) { LauncherShortcuts.pinCall(context, number.number, contact.name) } },
                                     phoneSpeedDials?.let { NumberAction(makeSpeedDial) { speedDialFor = contact.name to number.number } },
                                     if (boxSpeedDials != null && localBooks.isNotEmpty()) {
                                         NumberAction(makeBoxSpeedDial) {
