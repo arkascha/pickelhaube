@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.NumberText
-import org.rustygnome.pickelhaube.data.DeviceContacts
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
@@ -77,7 +76,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             get() = this@DialerViewModel.verifyingSettings
             set(value) { this@DialerViewModel.verifyingSettings = value }
         override fun showDialer() = this@DialerViewModel.showDialer()
-        override fun openPicker() = this@DialerViewModel.openPicker()
+        override fun openPicker() = picker.open()
         override fun startOver() = this@DialerViewModel.startOver()
         override fun dismissError() = boxActions.dismissError()
         override fun numberKeys() = this@DialerViewModel.numberKeys()
@@ -88,7 +87,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         override fun preloadFromBox() = this@DialerViewModel.preloadFromBox()
         override fun runWhenIdle(key: String, action: () -> Unit) = boxActions.runWhenIdle(key, action)
         override fun startQueuedRequests() = boxActions.startQueuedRequests()
-        override fun reloadRouterPhonebooks() = this@DialerViewModel.reloadRouterPhonebooks()
+        override fun reloadRouterPhonebooks() = picker.reloadRouterPhonebooks()
     }
 
     /** The box' certificate: pinning, viewing, forgetting. */
@@ -126,6 +125,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The box' calls and this phone's, missed calls and line status. */
     internal val calls = CallsPart(host)
+
+    /** The number picker: the phone books, this phone's contacts, taking a number from them. */
+    internal val picker: PickerPart = PickerPart(host, calls, speedDials, widget)
 
     /**
      * True while settings entered on the settings screen are being verified. The edited
@@ -382,7 +384,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         // Possibly switched meanwhile – from the quick settings tile, or on the box.
         if (_state.value.deflections != null) deflections.preload()
         // The phone books (and the box' speed dials in them) may have been changed on the box meanwhile.
-        if (_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
+        if (_state.value.phonebooksLoaded && !_state.value.noBoxReachable) picker.reloadRouterPhonebooks()
         // Calls may have been missed while the app was in the background.
         calls.preloadMissed()
         calls.preloadLines()
@@ -400,7 +402,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         deflections.preload()
         calls.preloadMissed()
         calls.preloadLines()
-        if (_state.value.phonebooksLoaded) reloadRouterPhonebooks() else speedDials.preload()
+        if (_state.value.phonebooksLoaded) picker.reloadRouterPhonebooks() else speedDials.preload()
         // Which box, then its phones – or, if another one is reachable now, everything of that one.
         network.detectAndLoad()
     }
@@ -411,58 +413,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         network.stopWatching()
         super.onCleared()
     }
-
-    // --- phone books ------------------------------------------------------------------
-
-    /**
-     * Opens the number picker. The recent calls are read anew each time (they change with every
-     * call); the phone books only the first time.
-     */
-    /** Opens the number picker on "Recent" – [missedOnly]: with just the missed calls (from the dialer's line about them). */
-    fun openPicker(missedOnly: Boolean = false) {
-        _state.update {
-            it.copy(
-                showPicker = true,
-                pickerTab = PickerTab.RECENT,
-                recentsMissedOnly = missedOnly,
-                // Opened anew: at the top of its lists, without the search of the last time.
-                pickerSession = it.pickerSession + 1,
-                backToPicker = false,
-                assigningSpeedDial = null,
-                addingToWidget = false,
-                newCallsSince = null,
-                askForDeviceContacts = !it.deviceContactsEnabled &&
-                    !settings.deviceContactsNeverAsk,
-            )
-        }
-        calls.markMissedSeen()
-        // Without a reachable box only the phone's own sources; "reload" still tries the box.
-        if (_state.value.noBoxReachable) calls.loadPhoneCalls() else calls.reloadRecents()
-        if (!_state.value.phonebooksLoaded && !_state.value.noBoxReachable) reloadRouterPhonebooks()
-        if (_state.value.deviceContacts == null) loadDeviceContacts()
-    }
-
-    /** "Back" in the dialer after a number was picked: the picker again, as it was left – nothing read anew. */
-    fun reopenPicker() = _state.update { it.copy(showPicker = true, backToPicker = false) }
-
-    /** The app was left (not just turned): coming back, "back" no longer leads to the picker left before. */
-    fun onLeftApp() = _state.update { it.copy(backToPicker = false) }
-
-    /** "Recent": just the missed calls, or all calls. */
-    fun setRecentsMissedOnly(missedOnly: Boolean) = _state.update { it.copy(recentsMissedOnly = missedOnly) }
-
-    fun closePicker() {
-        // What was removed there stays removed: "Undo" went with the picker.
-        speedDials.dropUndo()
-        _state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
-    }
-
-    fun selectPickerTab(tab: PickerTab) {
-        _state.update { it.copy(pickerTab = tab, assigningSpeedDial = null) }
-        calls.markMissedSeen()
-    }
-
-    fun openLanguage() = _state.update { it.copy(showLanguage = true) }
 
     // --- starting over -----------------------------------------------------------------
 
@@ -508,7 +458,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 keyTonesEnabled = settings.keyTonesEnabled,
             )
         }
-        if (settings.deviceContactsEnabled) loadDeviceContacts()
+        if (settings.deviceContactsEnabled) picker.loadDeviceContacts()
         if (settings.callLogEnabled) calls.loadPhoneCalls()
         DeflectionTileService.refresh(app)
         RedialTileService.refresh(app)
@@ -519,109 +469,24 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun openLanguage() = _state.update { it.copy(showLanguage = true) }
+
     fun closeLanguage() = _state.update { it.copy(showLanguage = false) }
 
-    /** The picker's reload button: recent calls and phone books. */
-    fun reloadPicker() {
-        // The box' phones come with the list of phones for dial help.
-        if (_state.value.pickerTab == PickerTab.INTERNAL) refreshPhones()
-        calls.reloadRecents()
-        loadDeviceContacts()
-        reloadRouterPhonebooks()
-    }
-
-    /**
-     * (Re)reads the contacts stored on this device. Does nothing without the contacts
-     * permission; the phone book screen calls this again once it is granted.
-     */
-    fun loadDeviceContacts() {
-        val app = getApplication<Application>()
-        if (!_state.value.deviceContactsEnabled || !DeviceContacts.hasPermission(app)) return
-        viewModelScope.launch {
-            val book = withContext(Dispatchers.IO) { runCatching { DeviceContacts.load(app) }.getOrNull() }
-            if (book != null) {
-                _state.update { it.copy(deviceContacts = book) }
-                completeRedialName()
-            }
-        }
-    }
-
-    /**
-     * Switches the optional "this phone's contacts" feature. The settings screen only enables it
-     * once Android granted the contacts permission. Disabling stops reading the contacts at once
-     * (the permission itself can only be revoked in the Android settings).
-     */
     /** Switches the keypad's tones on or off. */
     fun setKeyTonesEnabled(enabled: Boolean) {
         settings.keyTonesEnabled = enabled
         _state.update { it.copy(keyTonesEnabled = enabled) }
     }
 
-    fun setDeviceContactsEnabled(enabled: Boolean) {
-        settings.deviceContactsEnabled = enabled
-        // Switching it off on purpose also means: don't keep asking about it.
-        if (!enabled) settings.deviceContactsNeverAsk = true
-        _state.update {
-            it.copy(
-                deviceContactsEnabled = enabled,
-                deviceContacts = if (enabled) it.deviceContacts else null,
-                askForDeviceContacts = false,
-            )
-        }
-        if (enabled) loadDeviceContacts()
-    }
-
-    private fun reloadRouterPhonebooks() {
-        // Also read for the box' speed dials, which come from its phone books.
-        val profile = settings.activeProfile()
-        if (profile != null && !profile.phonebooksEnabled && !profile.speedDialsEnabled) return
-        if (_state.value.busy) return boxActions.runWhenIdle("phonebooks", ::reloadRouterPhonebooks)
-        boxActions.run(uiText(R.string.phonebook_loading)) { dialer ->
-            val books = dialer.loadPhonebooks()
-            _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-            completeRedialName()
-            UiText.Plural(R.plurals.status_contacts_loaded, books.sumOf { it.contacts.size })
-        }
-    }
-
-    /** Hands [contact] over to the box' phone book [book] as a new entry, then reads the phone books anew. */
-    fun handOverToBox(book: Phonebook, contact: PhonebookContact) =
-        host.runOnBoxEntries(uiText(R.string.status_handing_over, contact.name), retry = true) { dialer ->
-            // Looked for by its name: read again, its id may have changed – or it is gone.
-            val target = _state.value.phonebooks.firstOrNull { !it.online && it.name == book.name }
-            if (target == null) {
-                uiText(R.string.status_phonebook_gone, book.name, contact.name).also { host.toast(it) }
-            } else {
-                dialer.addToPhonebook(target.id, target.name, contact)
-                val books = dialer.loadPhonebooks()
-                _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
-                uiText(R.string.status_handed_over, contact.name, target.name)
-            }
-        }
-
-    /** Answer to the "include this phone's contacts?" question on the picker's phone book tab. */
-    fun answerDeviceContactsQuestion(answer: DeviceContactsAnswer) {
-        _state.update { it.copy(askForDeviceContacts = false) }
-        when (answer) {
-            DeviceContactsAnswer.ALLOWED -> setDeviceContactsEnabled(true)
-            // Only for this visit: asked again the next time the phone books are opened.
-            DeviceContactsAnswer.NOT_NOW -> Unit
-            DeviceContactsAnswer.NEVER -> settings.deviceContactsNeverAsk = true
-        }
-    }
-
-    /** A number was tapped in the picker (recent calls or phone books): put it into the dialer and go back. */
-    fun pickNumber(number: String) {
-        if (_state.value.addingToWidget) return widget.add(nameFor(number).orEmpty(), number)
-        _state.update { it.copy(number = number, numberLabel = null, showPicker = false, backToPicker = true) }
-    }
+    // --- calling from the picker (see PickerPart) ------------------------------------
 
     /**
      * The call button of a number in the picker: the number into the dialer – "back" there leads to
      * the picker again – and dialled right away (once the box is free, should it be busy).
      */
     fun callFromPicker(number: String) {
-        pickNumber(number)
+        picker.pickNumber(number)
         dialNow()
     }
 
@@ -640,19 +505,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** Dials the number in the field – once the box is free, should it be busy. */
     private fun dialNow() {
         if (_state.value.busy) boxActions.runWhenIdle("dial") { dial() } else dial()
-    }
-
-    /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
-    fun pickContactNumber(name: String, number: String) {
-        when (val assignment = _state.value.assigningSpeedDial) {
-            null -> if (_state.value.addingToWidget) widget.add(name, number) else pickNumber(number)
-            is SpeedDialAssignment.Phone -> {
-                speedDials.setPhone(assignment.slot, name, number)
-                _state.update { it.copy(assigningSpeedDial = null, pickerTab = PickerTab.SPEED_DIALS) }
-            }
-            // The phone book tab asks what is still open, then calls setBoxSpeedDial.
-            is SpeedDialAssignment.Box -> Unit
-        }
     }
 
     /** Compares numbers however they are written, by the rules of the box in use (see [numberKey]). */
@@ -805,7 +657,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 callStatus.clearDialActive()
                 throw e
             }
-            val name = nameFor(number)
+            val name = picker.nameFor(number)
             // Redial brings the later digits back as well.
             settings.lastDialledNumber = split.written
             settings.lastDialledName = name
@@ -815,14 +667,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             phone?.let { uiText(R.string.status_pick_up, FritzDialer.displayName(it), number) }
                 ?: uiText(R.string.status_pick_up_any, number)
         }
-    }
-
-    /** Whose [number] is, as far as the phone books and recent calls loaded so far tell. */
-    private fun nameFor(number: String): String? {
-        val key = numberKeys()
-        val state = _state.value
-        val books = state.phonebooks + listOfNotNull(state.deviceContacts)
-        return nameOf(key(number), books.flatMap { it.contacts }, state.boxCalls + state.phoneCalls.orEmpty(), key)
     }
 
     // --- launcher shortcuts -----------------------------------------------------------
@@ -848,20 +692,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun openPickerFromShortcut() {
         if (!settings.isConfigured()) return
         showDialer()
-        openPicker()
-    }
-
-    /**
-     * The phone books were read: if the name of the number dialled last was not known when it was
-     * dialled (phone books not loaded yet, or dialled before names were kept), the "Redial" shortcut
-     * gets it now.
-     */
-    private fun completeRedialName() {
-        val number = settings.lastDialledNumber ?: return
-        if (settings.lastDialledName != null) return
-        val name = nameFor(number) ?: return
-        settings.lastDialledName = name
-        LauncherShortcuts.updateRedial(getApplication(), number, name)
+        picker.open()
     }
 
     /** Leaves whatever page is open for the dialer; unsaved changes on a connection page are dropped. */

@@ -154,7 +154,7 @@ class MainActivity : ComponentActivity() {
                             if (state.addingToWidget || state.assigningSpeedDial != null) null else viewModel::callFromPicker
                         // While setting up a speed dial, "back" only cancels that.
                         BackHandler {
-                            if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.closePicker()
+                            if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.picker.close()
                         }
                         val session = state.pickerSession
                         // Opened anew: what was kept of the last time is let go.
@@ -168,17 +168,17 @@ class MainActivity : ComponentActivity() {
                         quietError = state.quietError,
                         onRetry = viewModel.boxActions::retry,
                         onQuietErrorGone = viewModel.boxActions::dismissError,
-                            onTabChange = viewModel::selectPickerTab,
+                            onTabChange = viewModel.picker::selectTab,
                             busy = state.busy,
-                            onReload = viewModel::reloadPicker,
-                            onBack = viewModel::closePicker,
+                            onReload = viewModel.picker::reload,
+                            onBack = viewModel.picker::close,
                             recents = {
                                 RecentsTab(
                                     boxCalls = state.boxCalls,
                                     boxCallsLoaded = state.boxCallsLoaded,
                                     newSince = state.newCallsSince,
                                     missedOnly = state.recentsMissedOnly,
-                                    onMissedOnlyChange = viewModel::setRecentsMissedOnly,
+                                    onMissedOnlyChange = viewModel.picker::setRecentsMissedOnly,
                                     boxName = state.activeProfile?.name,
                                     dialingCodes = state.activeProfile?.dialingCodes,
                                     ownNumbers = state.ownNumbers,
@@ -192,11 +192,11 @@ class MainActivity : ComponentActivity() {
                                     callLogEnabled = state.callLogEnabled,
                                     callLogProblem = state.callLogProblem,
                                     busy = state.busy,
-                                    onPick = viewModel::pickNumber,
+                                    onPick = viewModel.picker::pickNumber,
                                     onCall = callFromPicker,
                                     callEnabled = !state.noBoxReachable,
                                     boxBooks = boxBooks,
-                                    onHandOver = viewModel::handOverToBox,
+                                    onHandOver = viewModel.picker::handOverToBox,
                                     phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
                                     onSetSpeedDial = viewModel.speedDials::setPhone,
                                     boxSpeedDials = editableBoxSpeedDials,
@@ -215,7 +215,7 @@ class MainActivity : ComponentActivity() {
                                     dialingCodes = state.activeProfile?.dialingCodes,
                                     loaded = state.phonebooksLoaded,
                                     busy = state.busy,
-                                    onPick = viewModel::pickContactNumber,
+                                    onPick = viewModel.picker::pickContactNumber,
                                     onCall = callFromPicker?.let { call -> { _: String, number: String -> call(number) } },
                                     callEnabled = !state.noBoxReachable,
                                     phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
@@ -228,11 +228,11 @@ class MainActivity : ComponentActivity() {
                                     onCancelAssigning = viewModel.speedDials::cancelAssigning,
                                     boxBooks = boxBooks,
                                     boxName = state.activeProfile?.name,
-                                    onHandOver = viewModel::handOverToBox,
-                                    onDeviceContactsAllowed = viewModel::loadDeviceContacts,
-                                    onDisableDeviceContacts = { viewModel.setDeviceContactsEnabled(false) },
+                                    onHandOver = viewModel.picker::handOverToBox,
+                                    onDeviceContactsAllowed = viewModel.picker::loadDeviceContacts,
+                                    onDisableDeviceContacts = { viewModel.picker.setDeviceContactsEnabled(false) },
                                     askForDeviceContacts = state.askForDeviceContacts,
-                                    onDeviceContactsAnswer = viewModel::answerDeviceContactsQuestion,
+                                    onDeviceContactsAnswer = viewModel.picker::answerDeviceContactsQuestion,
                                 )
                             },
                             speedDials = {
@@ -350,7 +350,7 @@ class MainActivity : ComponentActivity() {
                             onBack = viewModel::closeSettings,
                             onOpenLanguage = viewModel::openLanguage,
                             deviceContactsEnabled = state.deviceContactsEnabled,
-                            onDeviceContactsChange = viewModel::setDeviceContactsEnabled,
+                            onDeviceContactsChange = viewModel.picker::setDeviceContactsEnabled,
                             callLogEnabled = state.callLogEnabled,
                             callLogProblem = state.callLogProblem,
                             onEnableCallLog = viewModel.calls::enablePhoneCalls,
@@ -373,7 +373,7 @@ class MainActivity : ComponentActivity() {
                         )
                     } else {
                         // A number just picked: "back" leads to the picker again, as it was left.
-                        BackHandler(enabled = state.backToPicker) { viewModel.reopenPicker() }
+                        BackHandler(enabled = state.backToPicker) { viewModel.picker.reopen() }
                         DialerScreen(
                             state = state,
                             onNumberChange = viewModel::onNumberChange,
@@ -388,8 +388,8 @@ class MainActivity : ComponentActivity() {
                             onSelectPhone = viewModel::selectPhone,
                             onRefresh = viewModel::refreshPhones,
                             onOpenSettings = viewModel::openSettings,
-                            onOpenPicker = { viewModel.openPicker() },
-                            onShowMissedCalls = { viewModel.openPicker(missedOnly = true) },
+                            onOpenPicker = { viewModel.picker.open() },
+                            onShowMissedCalls = { viewModel.picker.open(missedOnly = true) },
                             onPaste = { viewModel.takeNumbersFrom(it, fromClipboard = true) },
                             onChooseNumber = viewModel::chooseNumber,
                             onDismissNumberChoice = viewModel::dismissNumberChoice,
@@ -457,7 +457,7 @@ class MainActivity : ComponentActivity() {
     override fun onStop() {
         super.onStop()
         // Left, not just turned: "back" no longer leads to the picker left before.
-        if (!isChangingConfigurations) viewModel.onLeftApp()
+        if (!isChangingConfigurations) viewModel.picker.onLeftApp()
     }
 
     override fun onNewIntent(intent: Intent) {
