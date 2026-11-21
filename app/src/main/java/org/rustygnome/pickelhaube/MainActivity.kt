@@ -166,8 +166,8 @@ class MainActivity : ComponentActivity() {
                             onUndo = viewModel.speedDials::undo,
                             onUndoGone = { viewModel.speedDials.dropUndo(it) },
                         quietError = state.quietError,
-                        onRetry = viewModel::retry,
-                        onQuietErrorGone = viewModel::dismissError,
+                        onRetry = viewModel.boxActions::retry,
+                        onQuietErrorGone = viewModel.boxActions::dismissError,
                             onTabChange = viewModel::selectPickerTab,
                             busy = state.busy,
                             onReload = viewModel::reloadPicker,
@@ -378,7 +378,7 @@ class MainActivity : ComponentActivity() {
                             state = state,
                             onNumberChange = viewModel::onNumberChange,
                             onFieldChange = viewModel::editField,
-                            onRetry = viewModel::retry,
+                            onRetry = viewModel.boxActions::retry,
                             onDigit = viewModel::appendDigit,
                             onLongDigit = viewModel::longPressDigit,
                             onBackspace = viewModel::backspace,
@@ -409,23 +409,23 @@ class MainActivity : ComponentActivity() {
                         canRetry = state.canRetry,
                         // Within the settings (e.g. a box chosen by hand there) the user is where they would lead.
                         offerSettings = !state.showSettings,
-                        onRetry = viewModel::retry,
+                        onRetry = viewModel.boxActions::retry,
                         onOpenSettings = viewModel::openSettingsFromError,
                         // In the welcome tour, a rejected login leads back to the password instead of just closing.
-                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel.welcome::changePassword else viewModel::dismissError,
+                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel.welcome::changePassword else viewModel.boxActions::dismissError,
                         dismissLabel = stringResource(
                             if (state.showWelcome && state.loginRejected) R.string.welcome_change_password else R.string.close,
                         ),
                     )
                 }
                 state.secondFactor?.let { challenge ->
-                    SecondFactorDialog(challenge = challenge, onCancel = viewModel::cancelSecondFactor)
+                    SecondFactorDialog(challenge = challenge, onCancel = viewModel.boxActions::cancelSecondFactor)
                 }
                 state.certificatePrompt?.let { prompt ->
                     TrustCertificateDialog(
                         prompt = prompt,
-                        onTrust = viewModel::trustCertificate,
-                        onReject = viewModel::rejectCertificate,
+                        onTrust = viewModel.boxActions::trustCertificate,
+                        onReject = viewModel.boxActions::rejectCertificate,
                     )
                 }
                 // After an update, once: over the dialer when nothing else is open; asked for in the settings, there.

@@ -14,7 +14,6 @@ import org.rustygnome.pickelhaube.data.SpeedDials
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
-import org.rustygnome.pickelhaube.tr064.AuthenticationException
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
@@ -24,15 +23,9 @@ import org.rustygnome.pickelhaube.tr064.InternalPhone
 import org.rustygnome.pickelhaube.tr064.PhonebookContact
 import org.rustygnome.pickelhaube.tr064.PhonebookNumber
 import org.rustygnome.pickelhaube.tr064.RecentCall
-import org.rustygnome.pickelhaube.tr064.Tr064Exception
-import org.rustygnome.pickelhaube.tr064.UntrustedCertificateException
 import org.rustygnome.pickelhaube.tr064.OwnNumber
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,9 +41,6 @@ import kotlinx.coroutines.withContext
 
 /** Besides digits, what the number field takes from a hardware keyboard or a paste: + * # and the pauses. */
 private const val DIALLABLE = "+*#,;pPwWxX"
-
-/** How long to wait for the user to confirm on the box before giving up. */
-private const val SECOND_FACTOR_TIMEOUT_MILLIS = 120_000L
 
 class DialerViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -89,17 +79,23 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         override fun showDialer() = this@DialerViewModel.showDialer()
         override fun openPicker() = this@DialerViewModel.openPicker()
         override fun startOver() = this@DialerViewModel.startOver()
-        override fun dismissError() = this@DialerViewModel.dismissError()
+        override fun dismissError() = boxActions.dismissError()
         override fun numberKeys() = this@DialerViewModel.numberKeys()
         override fun activateProfile(id: String) = this@DialerViewModel.activateProfile(id)
         override fun refreshPhones() = this@DialerViewModel.refreshPhones()
-        override fun runOnBox(progress: UiText, block: BoxAction) = this@DialerViewModel.runOnBox(progress, block)
+        override fun runOnBox(progress: UiText, block: BoxAction) = boxActions.run(progress, block)
         override fun loadPhones(dialer: FritzDialer, internal: Boolean) = this@DialerViewModel.loadPhones(dialer, internal)
         override fun preloadFromBox() = this@DialerViewModel.preloadFromBox()
-        override fun runWhenIdle(key: String, action: () -> Unit) = this@DialerViewModel.runWhenIdle(key, action)
-        override fun startQueuedRequests() = this@DialerViewModel.startQueuedRequests()
+        override fun runWhenIdle(key: String, action: () -> Unit) = boxActions.runWhenIdle(key, action)
+        override fun startQueuedRequests() = boxActions.startQueuedRequests()
         override fun reloadRouterPhonebooks() = this@DialerViewModel.reloadRouterPhonebooks()
     }
+
+    /** The box' certificate: pinning, viewing, forgetting. */
+    internal val certificates: CertificatesPart = CertificatesPart(host)
+
+    /** Everything done on the box: one at a time, queued, errors, the certificate question, the second factor. */
+    internal val boxActions: BoxActionsPart = BoxActionsPart(host, certificates)
 
     /** The home screen widget's setup, and a tap on one of its rows. */
     internal val widget = WidgetPart(host)
@@ -130,18 +126,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The box' calls and this phone's, missed calls and line status. */
     internal val calls = CallsPart(host)
-
-    /** The box' certificate: pinning, viewing, forgetting. */
-    internal val certificates = CertificatesPart(host)
-
-    /** Action interrupted by an untrusted certificate; re-run once the user trusts it. */
-    private var pendingAction: Pair<UiText, BoxAction>? = null
-
-    /** The last action that failed, for "Retry". */
-    private var failedAction: Pair<UiText, BoxAction>? = null
-
-    /** The action running is "try again" after a quiet note: should it fail as well, then in full. */
-    private var retryingQuietly = false
 
     /**
      * True while settings entered on the settings screen are being verified. The edited
@@ -320,24 +304,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    fun dismissError() {
-        failedAction = null
-        _state.update { it.copy(error = null, canRetry = false, quietError = null) }
-        // Tapped while the failed one was running: its turn now that the error has been read.
-        startQueuedAction()
-    }
-
-    fun retry() {
-        val action = failedAction ?: return
-        // Tried again after a quiet note: failing once more, it is shown in full.
-        retryingQuietly = _state.value.quietError != null
-        dismissError()
-        runOnBox(action.first, action.second)
-    }
-
     /** From the error dialog: go to the settings of the box in use to fix the connection. */
     fun openSettingsFromError() {
-        dismissError()
+        boxActions.dismissError()
         // From the welcome tour: on to the full connection page, with what was entered there.
         if (_state.value.showWelcome) return welcome.leave(toForm = true)
         val active = settings.activeProfile()
@@ -441,35 +410,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     override fun onCleared() {
         network.stopWatching()
         super.onCleared()
-    }
-
-    // --- the certificate prompt -------------------------------------------------------
-
-    /** User accepted the presented certificate: pin it (see [CertificatesPart]) and retry what was interrupted. */
-    fun trustCertificate() {
-        if (!certificates.trustPresented()) return
-        val action = pendingAction
-        pendingAction = null
-        if (action != null) runOnBox(action.first, action.second) else startQueuedAction()
-    }
-
-    fun rejectCertificate() {
-        failedAction = pendingAction
-        pendingAction = null
-        // Without the box' certificate, nothing tapped meanwhile can reach it either.
-        queuedActions.clear()
-        _state.update {
-            it.copy(
-                certificatePrompt = null,
-                status = null,
-                canRetry = failedAction != null,
-                error = BoxError(
-                    uiText(R.string.error_cert_rejected_title),
-                    uiText(R.string.error_cert_rejected),
-                    settingsRelated = true,
-                ),
-            )
-        }
     }
 
     // --- phone books ------------------------------------------------------------------
@@ -635,8 +575,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         // Also read for the box' speed dials, which come from its phone books.
         val profile = settings.activeProfile()
         if (profile != null && !profile.phonebooksEnabled && !profile.speedDialsEnabled) return
-        if (_state.value.busy) return runWhenIdle("phonebooks", ::reloadRouterPhonebooks)
-        runOnBox(uiText(R.string.phonebook_loading)) { dialer ->
+        if (_state.value.busy) return boxActions.runWhenIdle("phonebooks", ::reloadRouterPhonebooks)
+        boxActions.run(uiText(R.string.phonebook_loading)) { dialer ->
             val books = dialer.loadPhonebooks()
             _state.update { it.copy(phonebooks = books, phonebooksLoaded = true) }
             completeRedialName()
@@ -699,7 +639,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Dials the number in the field – once the box is free, should it be busy. */
     private fun dialNow() {
-        if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
+        if (_state.value.busy) boxActions.runWhenIdle("dial") { dial() } else dial()
     }
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */
@@ -726,10 +666,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun refreshPhones() {
         // Another request is running (e.g. for the previous box): reload once it is done.
-        if (_state.value.busy) return runWhenIdle("phones", ::refreshPhones)
+        if (_state.value.busy) return boxActions.runWhenIdle("phones", ::refreshPhones)
         // While a connection is being edited, the request goes to the edited address instead.
         val profile = settings.activeProfile()?.takeIf { !_state.value.showConnectionSettings }
-        runOnBox(uiText(R.string.status_loading_phones)) { dialer ->
+        boxActions.run(uiText(R.string.status_loading_phones)) { dialer ->
             profile?.let { verifyAndLearn(dialer, it) }
             loadPhones(dialer)
         }
@@ -771,43 +711,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         calls.preloadLines()
     }
 
-    /**
-     * Box requests that came in while another one was running (one per [runWhenIdle] key, so
-     * repeated requests are not repeated). They start one after the other once the running one
-     * succeeded – not after a failure, whose error dialog or certificate question they would replace.
-     */
-    private val whenIdle = LinkedHashMap<String, () -> Unit>()
-
-    private fun runWhenIdle(key: String, action: () -> Unit) {
-        whenIdle[key] = action
-    }
-
-    /**
-     * Actions tapped while the box was busy (another action, or reading in the background) – they
-     * used to be dropped, so the tap seemed to do nothing. They run one after the other, each once
-     * (the same one tapped twice is queued once), before the requests of [whenIdle]; also after a
-     * failure, but only once its error has been read ([dismissError]) and not while the box' certificate
-     * is in question.
-     */
-    private val queuedActions = ArrayDeque<Pair<UiText, BoxAction>>()
-
-    /** The next of [queuedActions], if the box is free for it; true if one was started. */
-    private fun startQueuedAction(): Boolean {
-        val state = _state.value
-        if (state.busy || state.error != null || state.certificatePrompt != null) return false
-        val (progress, block) = queuedActions.removeFirstOrNull() ?: return false
-        runOnBox(progress, block)
-        return true
-    }
-
-    private fun startQueuedRequests() {
-        if (startQueuedAction()) return
-        while (whenIdle.isNotEmpty() && !_state.value.busy) {
-            val key = whenIdle.keys.first()
-            whenIdle.remove(key)?.invoke()
-        }
-    }
-
     /** Reads the phones for dial help – and, if [internal] (switched on for the box), its phones for internal calls. */
     private fun loadPhones(dialer: FritzDialer, internal: Boolean = settings.activeProfile()?.internalCallsEnabled == true): UiText {
         val phones = dialer.listPhones()
@@ -827,7 +730,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     fun selectPhone(name: String) {
         _state.update { it.copy(selectedPhone = name) }
-        runOnBox(uiText(R.string.status_selecting, FritzDialer.displayName(name))) { dialer ->
+        boxActions.run(uiText(R.string.status_selecting, FritzDialer.displayName(name))) { dialer ->
             dialer.ensureDialPhone(name)
             uiText(R.string.status_ring_on, FritzDialer.displayName(name))
         }
@@ -883,7 +786,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             }
             return
         }
-        runOnBox(uiText(R.string.status_dialling, number)) { dialer ->
+        boxActions.run(uiText(R.string.status_dialling, number)) { dialer ->
             // Only changes the box setting if needed: a change may require confirmation on the box.
             if (phone != null) dialer.ensureDialPhone(phone)
             callStatus.markDialActive()
@@ -937,7 +840,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             network.awaitDetection()
             // Changed meanwhile by hand, or no box to dial through.
             if (_state.value.number != number || _state.value.noBoxReachable) return@launch
-            if (_state.value.busy) runWhenIdle("dial") { dial() } else dial()
+            if (_state.value.busy) boxActions.runWhenIdle("dial") { dial() } else dial()
         }
     }
 
@@ -977,154 +880,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun hangup() = runOnBox(uiText(R.string.status_hanging_up)) { dialer ->
+    fun hangup() = boxActions.run(uiText(R.string.status_hanging_up)) { dialer ->
         dialer.hangup()
         callStatus.stopFollowing()
         callStatus.clearDialActive()
         _state.update { it.copy(callProgress = null) }
         uiText(R.string.status_call_cancelled)
-    }
-
-    private fun runOnBox(progress: UiText, block: BoxAction) {
-        val waiting = _state.value
-        if (waiting.busy || waiting.certificatePrompt != null) {
-            if (queuedActions.none { it.first == progress }) queuedActions.addLast(progress to block)
-            return
-        }
-        failedAction = null
-        _state.update { it.copy(busy = true, status = progress, error = null, canRetry = false, quietError = null, loginRejected = false) }
-        viewModelScope.launch {
-            val config = _state.value.config
-            val result = runCatching {
-                withContext(Dispatchers.IO) { block(FritzDialer(config)) }
-            }
-            val error = result.exceptionOrNull()
-            when {
-                error == null -> _state.update {
-                    // It answered, so it is reachable after all (e.g. a reload while none was found).
-                    it.copy(busy = false, status = result.getOrNull(), activeBoxWorking = true, activeBoxSeen = true)
-                }
-
-                error is Tr064Exception && error.secondFactorRequired ->
-                    confirmAndRepeat(progress, block, config)
-
-                error is UntrustedCertificateException -> {
-                    pendingAction = progress to block
-                    _state.update {
-                        it.copy(
-                            busy = false,
-                            status = uiText(R.string.status_waiting_cert),
-                            certificatePrompt = CertificatePrompt(error.certificate, error.previouslyTrusted),
-                        )
-                    }
-                }
-
-                else -> {
-                    failedAction = progress to block
-                    // Refused: ask the box what the user may do, to name the missing right.
-                    val rights = if (error is Tr064Exception && error.errorCode == Tr064Exception.NOT_AUTHORIZED) {
-                        withContext(Dispatchers.IO) { readUserRights(FritzDialer(config)) }
-                    } else null
-                    // They have changed, apparently: keep them for the connection page as well.
-                    if (rights != null && !verifyingSettings) {
-                        settings.activeProfile()?.takeIf { it.config.host == config.host && it.config.username == config.username }
-                            ?.let { profile ->
-                                settings.updateUserRights(profile.id, rights)
-                                _state.update { it.copy(profiles = settings.profiles()) }
-                            }
-                    }
-                    val described = describeError(error, config, rights)
-                    // Likely to pass: quietly, in the dialer or the picker – unless "try again" after it failed the
-                    // same way, then in full, with what to check. Elsewhere (settings, the tour, …) always in full.
-                    val shown = _state.value
-                    val dialerOrPicker = !shown.showSettings && !shown.showWelcome && !shown.showDeflections && shown.widgetSetup == null
-                    val quiet = described.passing && !retryingQuietly && !verifyingSettings && dialerOrPicker
-                    _state.update {
-                        it.copy(
-                            busy = false,
-                            status = null,
-                            error = described.takeUnless { quiet },
-                            quietError = described.takeIf { quiet },
-                            canRetry = true,
-                            loginRejected = error is AuthenticationException,
-                            // A failed check of edited settings says nothing about the box in use.
-                            activeBoxWorking = if (verifyingSettings) it.activeBoxWorking else false,
-                        )
-                    }
-                }
-            }
-            retryingQuietly = false
-            if (error == null) startQueuedRequests()
-        }
-    }
-
-    // --- second factor ----------------------------------------------------------------
-
-    private var secondFactorJob: Job? = null
-
-    /**
-     * The box refused [block] with 866: start a second-factor confirmation, show how to
-     * confirm (dialog), wait for it, then repeat [block] with the confirmation token.
-     */
-    private fun confirmAndRepeat(progress: UiText, block: BoxAction, config: FritzConfig) {
-        _state.update { it.copy(busy = true, status = uiText(R.string.status_waiting_confirmation)) }
-        secondFactorJob = viewModelScope.launch {
-            val result = runCatching {
-                withContext(Dispatchers.IO) {
-                    val auth = FritzDialer(config)
-                    val challenge = auth.startSecondFactor()
-                    _state.update { it.copy(secondFactor = challenge) }
-
-                    val deadline = System.currentTimeMillis() + SECOND_FACTOR_TIMEOUT_MILLIS
-                    var authState = FritzDialer.STATE_WAITING
-                    while (authState == FritzDialer.STATE_WAITING && System.currentTimeMillis() < deadline) {
-                        delay(1_000)
-                        authState = auth.secondFactorState()
-                    }
-                    if (authState == FritzDialer.STATE_WAITING) {
-                        runCatching { auth.stopSecondFactor() }
-                        throw SecondFactorNotConfirmedException()
-                    }
-                    // Whatever the final state is called, the repeated action tells whether
-                    // the confirmation was accepted (it fails with 866 again if not).
-                    _state.update { it.copy(secondFactor = null, status = progress) }
-                    block(FritzDialer(config, challenge.token))
-                }
-            }
-            val error = result.exceptionOrNull()
-            if (error is CancellationException) return@launch
-            _state.update { it.copy(secondFactor = null, busy = false) }
-            if (error == null) {
-                _state.update { it.copy(status = result.getOrNull(), activeBoxWorking = true) }
-                startQueuedRequests()
-            } else {
-                failedAction = progress to block
-                val shown = if (error is Tr064Exception && error.secondFactorRequired) {
-                    SecondFactorNotConfirmedException()
-                } else error
-                _state.update {
-                    it.copy(
-                        status = null,
-                        error = describeError(shown, config),
-                        canRetry = true,
-                        loginRejected = shown is AuthenticationException,
-                        activeBoxWorking = if (verifyingSettings) it.activeBoxWorking else false,
-                    )
-                }
-            }
-        }
-    }
-
-    /** User cancelled the confirmation dialog. */
-    fun cancelSecondFactor() {
-        secondFactorJob?.cancel()
-        secondFactorJob = null
-        val config = _state.value.config
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { FritzDialer(config).stopSecondFactor() }
-        }
-        _state.update { it.copy(secondFactor = null, busy = false, status = null) }
-        startQueuedAction()
     }
 
     // Runs last: all fields above are initialised by now (Kotlin initialises in source order).

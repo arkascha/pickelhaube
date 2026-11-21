@@ -6,7 +6,7 @@ import org.rustygnome.pickelhaube.tr064.CertificateInfo
 /**
  * The box' self-signed certificate: pinned when the user trusts the presented one, shown and
  * forgotten from the connection page. What was interrupted by the prompt is the view model's
- * business (see [DialerViewModel.trustCertificate], [DialerViewModel.rejectCertificate]).
+ * business (see [BoxActionsPart.trustCertificate], [BoxActionsPart.rejectCertificate]).
  */
 internal class CertificatesPart(private val host: DialerHost) {
 
