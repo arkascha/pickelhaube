@@ -58,12 +58,13 @@ class SettingsRepository(context: Context) {
 
     // --- FritzBox connections ---------------------------------------------------------
 
+    /**
+     * The stored connections. Decoded (passwords decrypted with the Keystore) only when the stored
+     * text changed since the last time, by any instance in this process.
+     */
     fun profiles(): List<BoxProfile> {
         val json = prefs.getString(KEY_PROFILES, null) ?: return emptyList()
-        return runCatching {
-            val array = JSONArray(json)
-            (0 until array.length()).map { fromJson(array.getJSONObject(it)) }
-        }.getOrDefault(emptyList())
+        return profileCache.get(json)
     }
 
     /** Inserts or replaces (by id) a connection. */
@@ -89,52 +90,47 @@ class SettingsRepository(context: Context) {
     fun setMissedSeenUntil(id: String, time: Long) = prefs.edit { putLong(KEY_MISSED_SEEN + id, time) }
 
     /** Changes only the trusted certificate of a stored connection (null = forget). */
-    fun updateTrustedCert(id: String, certDer: String?) {
-        val profile = profiles().firstOrNull { it.id == id } ?: return
-        saveProfile(profile.copy(config = profile.config.copy(trustedCertDer = certDer)))
-    }
+    fun updateTrustedCert(id: String, certDer: String?) =
+        updateProfile(id) { it.copy(config = it.config.copy(trustedCertDer = certDer)) }
 
     /** Stores the learned device id of a connection. */
-    fun updateDeviceId(id: String, deviceId: String, model: String?) {
-        val profile = profiles().firstOrNull { it.id == id } ?: return
-        saveProfile(profile.copy(deviceId = deviceId, model = model ?: profile.model))
-    }
+    fun updateDeviceId(id: String, deviceId: String, model: String?) =
+        updateProfile(id) { it.copy(deviceId = deviceId, model = model ?: it.model) }
 
     /** Stores what the box of a connection reported about itself; unknown values are kept. */
-    fun updateBoxInfo(id: String, info: BoxInfo) {
-        val profile = profiles().firstOrNull { it.id == id } ?: return
-        val updated = profile.copy(
-            model = info.model ?: profile.model,
-            softwareVersion = info.softwareVersion ?: profile.softwareVersion,
-            serialNumber = info.serialNumber ?: profile.serialNumber,
+    fun updateBoxInfo(id: String, info: BoxInfo) = updateProfile(id) {
+        it.copy(
+            model = info.model ?: it.model,
+            softwareVersion = info.softwareVersion ?: it.softwareVersion,
+            serialNumber = info.serialNumber ?: it.serialNumber,
         )
-        if (updated != profile) saveProfile(updated)
     }
 
     /** Stores the country and area code of a connection's box. */
-    fun updateDialingCodes(id: String, codes: DialingCodes) {
-        val profile = profiles().firstOrNull { it.id == id } ?: return
-        if (profile.dialingCodes != codes) saveProfile(profile.copy(dialingCodes = codes))
-    }
+    fun updateDialingCodes(id: String, codes: DialingCodes) = updateProfile(id) { it.copy(dialingCodes = codes) }
 
     /** Stores the rights of a connection's user. */
-    fun updateUserRights(id: String, rights: UserRights) {
-        val profile = profiles().firstOrNull { it.id == id } ?: return
-        if (profile.userRights != rights) saveProfile(profile.copy(userRights = rights))
-    }
+    fun updateUserRights(id: String, rights: UserRights) = updateProfile(id) { it.copy(userRights = rights) }
 
     /** Stores whether a connection's box accepted a call monitor connection. */
-    fun updateCallMonitor(id: String, available: Boolean) {
+    fun updateCallMonitor(id: String, available: Boolean) = updateProfile(id) { it.copy(callMonitor = available) }
+
+    /** Changes the stored connection [id] (if there is one), saved only if that changed anything. */
+    private inline fun updateProfile(id: String, change: (BoxProfile) -> BoxProfile) {
         val profile = profiles().firstOrNull { it.id == id } ?: return
-        if (profile.callMonitor != available) saveProfile(profile.copy(callMonitor = available))
+        val updated = change(profile)
+        if (updated != profile) saveProfile(updated)
     }
 
     var activeProfileId: String?
-        get() = prefs.getString(KEY_ACTIVE, null)?.takeIf { id -> profiles().any { it.id == id } }
-            ?: profiles().firstOrNull()?.id
+        get() = activeIn(profiles())?.id
         set(value) = prefs.edit { if (value != null) putString(KEY_ACTIVE, value) else remove(KEY_ACTIVE) }
 
-    fun activeProfile(): BoxProfile? = activeProfileId?.let { id -> profiles().firstOrNull { it.id == id } }
+    fun activeProfile(): BoxProfile? = activeIn(profiles())
+
+    /** The chosen connection among [list], else its first. */
+    private fun activeIn(list: List<BoxProfile>): BoxProfile? =
+        prefs.getString(KEY_ACTIVE, null)?.let { id -> list.firstOrNull { it.id == id } } ?: list.firstOrNull()
 
     fun isConfigured(): Boolean = profiles().isNotEmpty()
 
@@ -285,9 +281,6 @@ class SettingsRepository(context: Context) {
     // The password is stored encrypted with a key from the Android Keystore.
     private fun toJson(p: BoxProfile) = p.toJson(storedPassword = SecretCipher.encrypt(p.config.password))
 
-    private fun fromJson(o: JSONObject) =
-        boxProfileFromJson(o, o.optString("password").takeIf { it.isNotEmpty() }?.let(SecretCipher::decrypt).orEmpty())
-
     /** Earlier versions stored a single connection in separate keys: turn it into the first entry. */
     private fun migrateSingleConnection() {
         if (prefs.contains(KEY_PROFILES) || !prefs.contains(LEGACY_HOST)) return
@@ -309,6 +302,17 @@ class SettingsRepository(context: Context) {
     }
 
     private companion object {
+        /** Shared by all instances: the view model, tiles, shortcuts and widgets read the same connections. */
+        val profileCache = DecodedCache { json ->
+            runCatching {
+                val array = JSONArray(json)
+                (0 until array.length()).map { i ->
+                    val o = array.getJSONObject(i)
+                    boxProfileFromJson(o, o.optString("password").takeIf { it.isNotEmpty() }?.let(SecretCipher::decrypt).orEmpty())
+                }
+            }.getOrDefault(emptyList())
+        }
+
         const val KEY_PROFILES = "boxes"
         const val KEY_ACTIVE = "active_box"
         const val KEY_DEVICE_CONTACTS = "device_contacts_enabled"
