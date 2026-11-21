@@ -6,7 +6,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import org.rustygnome.pickelhaube.R
 import org.rustygnome.pickelhaube.data.BoxProfile
-import org.rustygnome.pickelhaube.data.NumberText
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.data.SpeedDial
 import org.rustygnome.pickelhaube.data.SpeedDials
@@ -14,32 +13,14 @@ import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
-import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
-import org.rustygnome.pickelhaube.tr064.Phonebook
-import org.rustygnome.pickelhaube.tr064.InternalPhone
-import org.rustygnome.pickelhaube.tr064.PhonebookContact
-import org.rustygnome.pickelhaube.tr064.PhonebookNumber
-import org.rustygnome.pickelhaube.tr064.RecentCall
 import org.rustygnome.pickelhaube.tr064.OwnNumber
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
-/** Besides digits, what the number field takes from a hardware keyboard or a paste: + * # and the pauses. */
-private const val DIALLABLE = "+*#,;pPwWxX"
 
 class DialerViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -129,182 +110,14 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     /** The number picker: the phone books, this phone's contacts, taking a number from them. */
     internal val picker: PickerPart = PickerPart(host, calls, speedDials, widget)
 
+    /** The number field: typing, editing, filling it from elsewhere, the suggestions. */
+    internal val numberInput = NumberInputPart(host, widget)
+
     /**
      * True while settings entered on the settings screen are being verified. The edited
      * config is only persisted once the router accepted it.
      */
     private var verifyingSettings = false
-
-    // --- number input ---------------------------------------------------------------
-
-    // A number changed by hand is no longer the one picked: "back" leaves the app again.
-    fun onNumberChange(value: String) = _state.update { it.copy(number = value, numberLabel = null, backToPicker = false) }
-
-    /** A key of the keypad: its character at the cursor (in place of what is selected), the cursor after it. */
-    fun appendDigit(c: Char) = _state.update {
-        val (number, cursor) = typed(it.number, it.cursor, c)
-        it.copy(number = number, fieldCursor = FieldCursor(number, cursor), numberLabel = null, backToPicker = false)
-    }
-
-    /** ⌫: the character before the cursor (or what is selected) deleted; at the start of the field, nothing. */
-    fun backspace() = _state.update {
-        val (number, cursor) = deletedBefore(it.number, it.cursor) ?: return@update it
-        it.copy(number = number, fieldCursor = FieldCursor(number, cursor), numberLabel = null, backToPicker = false)
-    }
-
-    /**
-     * The number field itself: the cursor set (a tap between two digits) or a selection made – or, from a
-     * hardware keyboard or "Paste" in its menu, the text changed: only what can be dialled is kept.
-     */
-    fun editField(text: String, start: Int, end: Int) {
-        val state = _state.value
-        if (text == state.number) {
-            _state.update { it.copy(fieldCursor = FieldCursor(it.number, start, end)) }
-            return
-        }
-        val kept = text.filter { it.isDigit() || it in DIALLABLE }
-        // Where the cursor was, counted in what is kept.
-        val at = text.take(end.coerceIn(0, text.length)).count { it.isDigit() || it in DIALLABLE }
-        _state.update {
-            it.copy(number = kept, fieldCursor = FieldCursor(kept, at), numberLabel = null, backToPicker = false)
-        }
-    }
-
-    /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
-    fun pickInternalPhone(number: String, label: String) {
-        if (_state.value.addingToWidget) return widget.add(label, number)
-        _state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false, backToPicker = true) }
-    }
-
-    /** A suggestion was tapped: its number into the dialer, with whose it is as the field's label. */
-    fun takeSuggestion(suggestion: Suggestion) = _state.update {
-        it.copy(number = NumberText.clean(suggestion.number), numberLabel = suggestion.name?.let(UiText::Raw), backToPicker = false)
-    }
-
-    /** What the numbers to suggest are taken from; a change prepares them anew. The lists are compared as the same ones mostly. */
-    private data class SuggestionSources(
-        val phonebooks: List<Phonebook>,
-        val deviceContacts: Phonebook?,
-        val internalPhones: List<InternalPhone>,
-        val boxCalls: List<RecentCall>,
-        val phoneCalls: List<RecentCall>?,
-        val codes: DialingCodes?,
-    )
-
-    /**
-     * Keeps [UiState.suggestions] and [UiState.matchedName] up to date with the number typed – never on
-     * the main thread, and never holding up typing: the phone books and calls are made ready to be
-     * searched ([SuggestionIndex]) only when they change, a key press then only searches them, and a
-     * search still running when the next key is pressed is broken off. A number taken from a suggestion,
-     * the picker or a speed dial is not offered to itself once more; one typed in full is.
-     */
-    private fun watchSuggestions() = viewModelScope.launch {
-        val countryIso = deviceCountryIso(getApplication())
-        val index = _state
-            .map { s ->
-                SuggestionSources(
-                    phonebooks = if (s.activeProfile?.phonebooksEnabled != false) s.phonebooks else emptyList(),
-                    deviceContacts = s.deviceContacts,
-                    internalPhones = s.internalPhones,
-                    boxCalls = s.boxCalls,
-                    phoneCalls = s.phoneCalls,
-                    codes = s.activeProfile?.dialingCodes,
-                )
-            }
-            .distinctUntilChanged()
-            // Each one made ready to the end and used – one cut short by the next change (as they come in
-            // one after the other after connecting) would leave none at all for a while; changes meanwhile
-            // are taken together into the next one.
-            .conflate()
-            .map { sources ->
-                withContext(Dispatchers.Default) {
-                    // Android's number formatting reads its tables on first use: here, not on the main thread
-                    // when the number field is first shown grouped (see NumberGrouping).
-                    phoneNumberFormat(countryIso, sources.codes)("0301234567")
-                    val key = { n: String -> numberKey(n, countryIso, sources.codes) }
-                    // The box' phones, by their names, too ("Kitchen"); "all phones" has none to type.
-                    val internal = sources.internalPhones.filter { it.name.isNotEmpty() }
-                        .map { PhonebookContact(it.name, listOf(PhonebookNumber(it.number, "intern")), "") }
-                    val contacts = (sources.phonebooks + listOfNotNull(sources.deviceContacts)).flatMap { it.contacts } + internal
-                    SuggestionIndex(contacts, sources.boxCalls + sources.phoneCalls.orEmpty(), key, sources.codes) to key
-                }
-            }
-        val typing = _state.map { it.number to (it.numberLabel != null) }.distinctUntilChanged()
-        combine(typing, index) { typed, prepared -> typed to prepared }
-            .collectLatest { (typed, prepared) ->
-                val (number, labelled) = typed
-                val (searchable, key) = prepared
-                val (found, matched) = withContext(Dispatchers.Default) {
-                    // A number typed in full that is somebody's: their name as the field's label.
-                    val matched = if (labelled) null else searchable.nameOf(number)
-                    val wanted = key(FritzDialer.sanitizeNumber(number))
-                    searchable.suggest(number) { ensureActive() }
-                        // Not the number taken from a suggestion, the picker or a speed dial once more. One typed
-                        // in full keeps its suggestion: it was there a key before, and should not vanish now.
-                        .filterNot { labelled && key(it.number) == wanted } to matched
-                }
-                _state.update { it.copy(suggestions = found, matchedName = matched) }
-            }
-    }
-
-    /** Called with the number from a tel: link (ACTION_DIAL / ACTION_VIEW). */
-    fun prefill(number: String) = _state.update { it.copy(number = NumberText.clean(number), numberLabel = null, backToPicker = false) }
-
-    /**
-     * A text shared from another app ([fromClipboard]: pasted) – an email, a signature, a web page: its
-     * phone number into the dialer, or – with several – the one chosen from them.
-     */
-    fun takeNumbersFrom(text: String, fromClipboard: Boolean) {
-        if (settings.isConfigured()) showDialer()
-        val numbers = NumberText.extract(text)
-        when (numbers.size) {
-            0 -> _state.update {
-                it.copy(
-                    error = BoxError(
-                        uiText(R.string.error_no_number_found_title),
-                        uiText(if (fromClipboard) R.string.error_no_number_in_clipboard else R.string.error_no_number_in_text),
-                        false,
-                    ),
-                    canRetry = false,
-                )
-            }
-            1 -> prefill(numbers.single())
-            else -> _state.update { it.copy(numberChoice = numbers) }
-        }
-    }
-
-    fun chooseNumber(number: String) {
-        _state.update { it.copy(numberChoice = null) }
-        prefill(number)
-    }
-
-    fun dismissNumberChoice() = _state.update { it.copy(numberChoice = null) }
-
-    /**
-     * Long press on a digit of the dial pad: a speed dial if there is one for it (see
-     * [SpeedDials.forLongPress]); otherwise like a tap – except "0", which gives "+". A long press
-     * on "*" gives a pause ",".
-     */
-    fun longPressDigit(digit: Char) {
-        // A pause: what follows is typed on the phone once the call is connected.
-        if (digit == '*') return appendDigit(',')
-        val state = _state.value
-        val speedDial = SpeedDials.forLongPress(
-            state.number, digit, state.usablePhoneSpeedDials, state.usableBoxSpeedDials,
-        )
-        if (speedDial != null) useSpeedDial(speedDial) else appendDigit(if (digit == '0') '+' else digit)
-    }
-
-    /** Puts a speed dial's number into the field, with its slot and name as the field's label. */
-    fun useSpeedDial(speedDial: SpeedDial) = _state.update {
-        it.copy(
-            number = speedDial.number,
-            numberLabel = uiText(R.string.dialer_speed_dial_label, speedDial.slot, speedDial.name),
-            showPicker = false,
-            // Taken in the picker's speed dial tab: "back" leads there again; a long press in the dialer has none behind it.
-            backToPicker = it.showPicker,
-        )
-    }
 
     /** From the error dialog: go to the settings of the box in use to fix the connection. */
     fun openSettingsFromError() {
@@ -492,13 +305,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The call button of a speed dial in the picker: like [callFromPicker], the field saying which speed dial it is. */
     fun callSpeedDialFromPicker(speedDial: SpeedDial) {
-        useSpeedDial(speedDial)
+        numberInput.useSpeedDial(speedDial)
         dialNow()
     }
 
     /** The call button of one of the box' phones in the picker: like [callFromPicker], the field saying which phone. */
     fun callInternalFromPicker(number: String, name: String) {
-        pickInternalPhone(number, name)
+        numberInput.pickInternalPhone(number, name)
         dialNow()
     }
 
@@ -605,7 +418,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
         // A box speed dial entered as on a handset (**712): dial – and show – the number it stands for.
         SpeedDials.forCode(FritzDialer.sanitizeNumber(_state.value.number), _state.value.usableBoxSpeedDials)
-            ?.let(::useSpeedDial)
+            ?.let(numberInput::useSpeedDial)
         // The box dials only the number; what follows a pause is typed on the phone once connected.
         val split = FritzDialer.splitExtension(_state.value.number)
         val number = split.number
@@ -678,7 +491,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun dialFromShortcut(number: String) {
         if (!settings.isConfigured()) return
         showDialer()
-        prefill(number)
+        numberInput.prefill(number)
         viewModelScope.launch {
             // Where are we? The app may have been in the background for long (onStart comes after this).
             network.awaitDetection()
@@ -728,7 +541,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             LauncherShortcuts.publish(getApplication())
             }
         network.watch()
-        watchSuggestions()
+        numberInput.watchSuggestions()
         whatsNew.check()
     }
 }

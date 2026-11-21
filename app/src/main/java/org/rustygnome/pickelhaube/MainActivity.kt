@@ -242,7 +242,7 @@ class MainActivity : ComponentActivity() {
                                     boxName = state.activeProfile?.name,
                                     boxLoaded = state.phonebooksLoaded,
                                     busy = state.busy,
-                                    onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.useSpeedDial(it) },
+                                    onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.numberInput.useSpeedDial(it) },
                                     onCall = callFromPicker?.let { { speedDial: SpeedDial -> viewModel.callSpeedDialFromPicker(speedDial) } },
                                     callEnabled = !state.noBoxReachable,
                                     onAssign = viewModel.speedDials::startAssigning,
@@ -258,7 +258,7 @@ class MainActivity : ComponentActivity() {
                                 InternalPhonesTab(
                                     phones = state.internalPhones,
                                     busy = state.busy,
-                                    onPick = viewModel::pickInternalPhone,
+                                    onPick = viewModel.numberInput::pickInternalPhone,
                                     onCall = callFromPicker?.let { { number: String, name: String -> viewModel.callInternalFromPicker(number, name) } },
                                     callEnabled = !state.noBoxReachable,
                                     ringPhone = state.selectedPhone,
@@ -376,12 +376,12 @@ class MainActivity : ComponentActivity() {
                         BackHandler(enabled = state.backToPicker) { viewModel.picker.reopen() }
                         DialerScreen(
                             state = state,
-                            onNumberChange = viewModel::onNumberChange,
-                            onFieldChange = viewModel::editField,
+                            onNumberChange = viewModel.numberInput::onNumberChange,
+                            onFieldChange = viewModel.numberInput::editField,
                             onRetry = viewModel.boxActions::retry,
-                            onDigit = viewModel::appendDigit,
-                            onLongDigit = viewModel::longPressDigit,
-                            onBackspace = viewModel::backspace,
+                            onDigit = viewModel.numberInput::appendDigit,
+                            onLongDigit = viewModel.numberInput::longPressDigit,
+                            onBackspace = viewModel.numberInput::backspace,
                             onDial = { viewModel.dial() },
                             onDialHidden = { viewModel.dial(withhold = true) },
                             onHangup = viewModel::hangup,
@@ -390,13 +390,13 @@ class MainActivity : ComponentActivity() {
                             onOpenSettings = viewModel::openSettings,
                             onOpenPicker = { viewModel.picker.open() },
                             onShowMissedCalls = { viewModel.picker.open(missedOnly = true) },
-                            onPaste = { viewModel.takeNumbersFrom(it, fromClipboard = true) },
-                            onChooseNumber = viewModel::chooseNumber,
-                            onDismissNumberChoice = viewModel::dismissNumberChoice,
+                            onPaste = { viewModel.numberInput.takeNumbersFrom(it, fromClipboard = true) },
+                            onChooseNumber = viewModel.numberInput::chooseNumber,
+                            onDismissNumberChoice = viewModel.numberInput::dismissNumberChoice,
                             onOpenDeflections = viewModel.deflections::open,
                             onCheckLines = viewModel.calls::checkLines,
                             onDialFrom = { viewModel.dial(from = it) },
-                            onSuggestion = viewModel::takeSuggestion,
+                            onSuggestion = viewModel.numberInput::takeSuggestion,
                             onPullRefresh = viewModel::refresh,
                         )
                     }
@@ -501,17 +501,17 @@ class MainActivity : ComponentActivity() {
         }
         // Text shared from another app (e.g. an email signature): the phone number in it.
         if (intent.action == Intent.ACTION_SEND && intent.type?.startsWith("text/") == true) {
-            intent.getStringExtra(Intent.EXTRA_TEXT)?.let { viewModel.takeNumbersFrom(it, fromClipboard = false) }
+            intent.getStringExtra(Intent.EXTRA_TEXT)?.let { viewModel.numberInput.takeNumbersFrom(it, fromClipboard = false) }
             return
         }
         val data: Uri = intent.data ?: return
         if (data.scheme == "tel") {
-            data.schemeSpecificPart?.let(viewModel::prefill)
+            data.schemeSpecificPart?.let(viewModel.numberInput::prefill)
         }
         // A "Call via FRITZ!Box" row tapped in the contacts app: its number, read from the row (if it is one).
         if (data.scheme == "content") {
             lifecycleScope.launch {
-                withContext(Dispatchers.IO) { ContactActions.numberOf(applicationContext, data) }?.let(viewModel::prefill)
+                withContext(Dispatchers.IO) { ContactActions.numberOf(applicationContext, data) }?.let(viewModel.numberInput::prefill)
             }
         }
     }
