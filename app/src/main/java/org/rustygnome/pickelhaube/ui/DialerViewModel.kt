@@ -16,7 +16,6 @@ import org.rustygnome.pickelhaube.tile.DeflectionTileService
 import org.rustygnome.pickelhaube.tile.RedialTileService
 import org.rustygnome.pickelhaube.tr064.AuthenticationException
 import org.rustygnome.pickelhaube.tr064.BoxDiscovery
-import org.rustygnome.pickelhaube.tr064.CertificateInfo
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.FritzDialer
@@ -131,6 +130,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** The box' calls and this phone's, missed calls and line status. */
     internal val calls = CallsPart(host)
+
+    /** The box' certificate: pinning, viewing, forgetting. */
+    internal val certificates = CertificatesPart(host)
 
     /** Action interrupted by an untrusted certificate; re-run once the user trusts it. */
     private var pendingAction: Pair<UiText, BoxAction>? = null
@@ -441,15 +443,11 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         super.onCleared()
     }
 
-    // --- certificates -----------------------------------------------------------------
+    // --- the certificate prompt -------------------------------------------------------
 
-    /** User accepted the presented certificate: pin it and retry what was interrupted. */
+    /** User accepted the presented certificate: pin it (see [CertificatesPart]) and retry what was interrupted. */
     fun trustCertificate() {
-        val prompt = _state.value.certificatePrompt ?: return
-        val config = _state.value.config.copy(trustedCertDer = prompt.certificate.derBase64)
-        // While verifying new settings, everything is persisted together once the login works.
-        if (!verifyingSettings) persistedProfileId()?.let { settings.updateTrustedCert(it, config.trustedCertDer) }
-        _state.update { it.copy(config = config, certificatePrompt = null) }
+        if (!certificates.trustPresented()) return
         val action = pendingAction
         pendingAction = null
         if (action != null) runOnBox(action.first, action.second) else startQueuedAction()
@@ -472,23 +470,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 ),
             )
         }
-    }
-
-    fun showTrustedCertificate() {
-        val info = _state.value.config.trustedCertDer?.let(CertificateInfo::fromDerBase64) ?: return
-        _state.update { it.copy(viewedCertificate = info) }
-    }
-
-    fun closeCertificateView() = _state.update { it.copy(viewedCertificate = null) }
-
-    /** The stored connection a certificate decision belongs to: the edited one, else the active one. */
-    private fun persistedProfileId(): String? =
-        if (_state.value.showConnectionSettings) _state.value.editingProfileId else settings.activeProfileId
-
-    fun forgetCertificate() {
-        val config = _state.value.config.copy(trustedCertDer = null)
-        if (!verifyingSettings) persistedProfileId()?.let { settings.updateTrustedCert(it, null) }
-        _state.update { it.copy(config = config, viewedCertificate = null) }
     }
 
     // --- phone books ------------------------------------------------------------------

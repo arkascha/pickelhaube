@@ -315,8 +315,8 @@ class MainActivity : ComponentActivity() {
                                 onSave = viewModel.connections::save,
                                 onBack = viewModel.connections::close,
                                 onDelete = state.editingProfileId?.let { id -> { viewModel.connections.delete(id) } },
-                                onShowCertificate = viewModel::showTrustedCertificate,
-                                onForgetCertificate = viewModel::forgetCertificate,
+                                onShowCertificate = viewModel.certificates::show,
+                                onForgetCertificate = viewModel.certificates::forget,
                                 // Nothing set up yet (e.g. just installed): the settings may come from a file instead.
                                 importOffer = if (state.profiles.isEmpty()) {
                                     {
@@ -440,8 +440,8 @@ class MainActivity : ComponentActivity() {
                 state.viewedCertificate?.let { info ->
                     ViewCertificateDialog(
                         info = info,
-                        onClose = viewModel::closeCertificateView,
-                        onForget = viewModel::forgetCertificate,
+                        onClose = viewModel.certificates::close,
+                        onForget = viewModel.certificates::forget,
                     )
                 }
             }
