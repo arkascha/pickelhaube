@@ -434,6 +434,7 @@
     <string name="settings_import_confirm">Vervangen</string>
     <string name="settings_wrong_passphrase">Verkeerde wachtzin</string>
     <string name="settings_file_invalid">Geen instellingenbestand van Pickelhaube (of een van een nieuwere versie)</string>
+    <string name="settings_file_unreadable">Het bestand kon niet worden gelezen</string>
     <string name="settings_imported">Instellingen geïmporteerd</string>
     <plurals name="settings_import_text">
         <item quantity="one">Het bestand bevat %d FRITZ!\u2060Box-verbinding. Importeren vervangt alle verbindingen en opties van de app.</item>

@@ -434,6 +434,7 @@
     <string name="settings_import_confirm">Ersetzen</string>
     <string name="settings_wrong_passphrase">Falsche Passphrase</string>
     <string name="settings_file_invalid">Keine Einstellungsdatei von Pickelhaube (oder eine einer neueren Version)</string>
+    <string name="settings_file_unreadable">Die Datei konnte nicht gelesen werden</string>
     <string name="settings_imported">Einstellungen importiert</string>
     <plurals name="settings_import_text">
         <item quantity="one">Die Datei enthält %d FRITZ!\u2060Box-Verbindung. Der Import ersetzt alle Verbindungen und Optionen der App.</item>

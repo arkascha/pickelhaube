@@ -439,6 +439,7 @@
     <string name="settings_import_confirm">Reemplazar</string>
     <string name="settings_wrong_passphrase">Frase de contraseña incorrecta</string>
     <string name="settings_file_invalid">No es un archivo de ajustes de Pickelhaube (o es de una versión más reciente)</string>
+    <string name="settings_file_unreadable">No se pudo leer el archivo</string>
     <string name="settings_imported">Ajustes importados</string>
     <plurals name="settings_import_text">
         <item quantity="one">El archivo contiene %d conexión FRITZ!\u2060Box. Importarlo reemplaza todas las conexiones y opciones de la app.</item>

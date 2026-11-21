@@ -1,12 +1,14 @@
 package org.rustygnome.pickelhaube.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import org.rustygnome.pickelhaube.tr064.BoxInfo
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.UserRights
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.util.UUID
 
@@ -172,9 +174,11 @@ class SettingsRepository(context: Context) {
 
     /** This phone's speed dials: name and number are stored as copies, so they work everywhere. */
     var phoneSpeedDials: List<SpeedDial>
-        get() = runCatching {
-            speedDialsFromJson(JSONArray(prefs.getString(KEY_PHONE_SPEED_DIALS, null) ?: return emptyList()))
-        }.getOrDefault(emptyList())
+        get() {
+            val array = readArray(prefs.getString(KEY_PHONE_SPEED_DIALS, null) ?: return emptyList(), "speed dials")
+            // One that cannot be read is left out, not all of them.
+            return array.readEach({ i, e -> Log.w(TAG, "speed dial $i unreadable", e) }, ::speedDialFromJson).sortedBy { it.slot }
+        }
         set(value) = prefs.edit { putString(KEY_PHONE_SPEED_DIALS, value.toJson().toString()) }
 
     /** The number dialled last (with any box), for the "Redial" tile; null before the first call. */
@@ -304,13 +308,21 @@ class SettingsRepository(context: Context) {
     private companion object {
         /** Shared by all instances: the view model, tiles, shortcuts and widgets read the same connections. */
         val profileCache = DecodedCache { json ->
-            runCatching {
-                val array = JSONArray(json)
-                (0 until array.length()).map { i ->
-                    val o = array.getJSONObject(i)
-                    boxProfileFromJson(o, o.optString("password").takeIf { it.isNotEmpty() }?.let(SecretCipher::decrypt).orEmpty())
-                }
-            }.getOrDefault(emptyList())
+            // One connection that cannot be read is left out, not all of them: saving the next one
+            // would otherwise write the list without the others.
+            readArray(json, "connections").readEach({ i, e -> Log.w(TAG, "stored connection $i unreadable", e) }) { o ->
+                boxProfileFromJson(o, o.optString("password").takeIf { it.isNotEmpty() }?.let(SecretCipher::decrypt).orEmpty())
+            }
+        }
+
+        const val TAG = "SettingsRepository"
+
+        /** The stored [json] as an array; empty (and logged) if it is none at all. */
+        fun readArray(json: String, what: String): JSONArray = try {
+            JSONArray(json)
+        } catch (e: JSONException) {
+            Log.w(TAG, "stored $what unreadable", e)
+            JSONArray()
         }
 
         const val KEY_PROFILES = "boxes"
@@ -426,7 +438,6 @@ internal fun List<SpeedDial>.toJson(): JSONArray = JSONArray().also { array ->
 }
 
 internal fun speedDialsFromJson(array: JSONArray): List<SpeedDial> =
-    (0 until array.length()).map { i ->
-        val o = array.getJSONObject(i)
-        SpeedDial(o.getString("slot"), o.optString("name"), o.getString("number"))
-    }.sortedBy { it.slot }
+    (0 until array.length()).map { i -> speedDialFromJson(array.getJSONObject(i)) }.sortedBy { it.slot }
+
+internal fun speedDialFromJson(o: JSONObject) = SpeedDial(o.getString("slot"), o.optString("name"), o.getString("number"))

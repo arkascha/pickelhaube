@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import org.json.JSONArray
 import org.json.JSONObject
+import org.rustygnome.pickelhaube.data.readEach
 
 /** A number offered by a dial widget, with whose number it is. */
 data class WidgetEntry(val name: String, val number: String)
@@ -44,7 +45,8 @@ data class WidgetList(
             val array = o.optJSONArray("entries") ?: JSONArray()
             WidgetList(
                 o.optString("title"),
-                (0 until array.length()).map { i -> array.getJSONObject(i).let { WidgetEntry(it.optString("name"), it.getString("number")) } },
+                // One entry that cannot be read is left out, not the whole list.
+                array.readEach { WidgetEntry(it.optString("name"), it.getString("number")) },
                 o.optBoolean("transparent"),
             )
         }.getOrDefault(WidgetList())

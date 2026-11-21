@@ -17,6 +17,12 @@ class WidgetListTest {
         assertEquals(WidgetList(), WidgetList.fromJson("{}"))
     }
 
+    @Test
+    fun `an unreadable entry is left out, not the whole list`() {
+        val json = """{"title":"Family","entries":[{"name":"Anna","number":"+491715550000"},{"name":"Nobody"}]}"""
+        assertEquals(WidgetList("Family", listOf(WidgetEntry("Anna", "+491715550000"))), WidgetList.fromJson(json))
+    }
+
     private val anna = WidgetEntry("Anna", "+491715550000")
     private val bernd = WidgetEntry("Bernd", "0305551234")
     private val clara = WidgetEntry("Clara", "0405550000")

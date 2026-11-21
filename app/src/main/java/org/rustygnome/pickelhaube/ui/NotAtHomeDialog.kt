@@ -64,7 +64,9 @@ internal fun NotAtHomeDialog(kind: NetworkKind?, onSearchAgain: () -> Unit, onDi
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY)
                         else -> Intent(Settings.ACTION_WIRELESS_SETTINGS)
                     }
+                    // Not every device has that page: then at least its settings.
                     runCatching { context.startActivity(intent) }
+                        .recoverCatching { context.startActivity(Intent(Settings.ACTION_SETTINGS)) }
                     onDismiss()
                 }) {
                     Text(stringResource(if (noNetwork) R.string.not_at_home_network_settings else R.string.not_at_home_vpn_settings))

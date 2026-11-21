@@ -67,7 +67,12 @@ internal class TransferPart(private val host: DialerHost) {
             val (text, info) = result.getOrNull() ?: (null to null)
             importText = text
             state.update { it.copy(transferBusy = false, pendingImport = info, importError = null) }
-            if (info == null) toast(R.string.settings_file_invalid)
+            if (info == null) {
+                // Not readable at all (the file gone, the app it came from refusing it), or not a settings file.
+                val error = result.exceptionOrNull()
+                val unreadable = (error is IOException && error !is InvalidSettingsFileException) || error is SecurityException
+                toast(if (unreadable) R.string.settings_file_unreadable else R.string.settings_file_invalid)
+            }
         }
     }
 
