@@ -40,6 +40,7 @@
 
     <!-- dialer -->
     <string name="dialer_number_label">Número a marcar</string>
+    <string name="dialer_demo_strip">Router de demostración – contactos inventados, las llamadas no llegan a nadie</string>
     <string name="dialer_choose_number">Elegir de las llamadas recientes o de las agendas</string>
     <string name="dialer_dial">Llamar</string>
     <string name="dialer_redial">Último número marcado</string>
@@ -109,6 +110,7 @@
     <string name="settings_connections">Conexiones FRITZ!\u2060Box</string>
     <string name="settings_connections_hint">La FRITZ!\u2060Box de la red en la que está el teléfono se usa automáticamente. Solo si allí no se encuentra ninguna, puedes elegir una tú.</string>
     <string name="settings_box_here">Accesible</string>
+    <string name="settings_box_demo">Solo existe en la app – nunca se elige automáticamente</string>
     <string name="settings_box_not_here">No accesible</string>
     <string name="settings_box_never_recognised">Aún no reconocida – solo tras conectarse a ella</string>
     <string name="settings_add_box">Añadir FRITZ!\u2060Box</string>

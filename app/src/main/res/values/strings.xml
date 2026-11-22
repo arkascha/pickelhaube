@@ -48,6 +48,7 @@
 
     <!-- dialer -->
     <string name="dialer_number_label">Number to dial</string>
+    <string name="dialer_demo_strip">Demo box – made-up contacts, calls reach no one</string>
     <string name="dialer_choose_number">Choose from recent calls or phone books</string>
     <string name="dialer_dial">Dial</string>
     <string name="dialer_redial">Last number dialled</string>
@@ -117,6 +118,7 @@
     <string name="settings_connections">FRITZ!\u2060Box connections</string>
     <string name="settings_connections_hint">The FRITZ!\u2060Box of the network the phone is in is used automatically. Only if none of them is found there can you choose one by hand.</string>
     <string name="settings_box_here">Reachable</string>
+    <string name="settings_box_demo">Exists only in the app – never chosen automatically</string>
     <string name="settings_box_not_here">Not reachable</string>
     <string name="settings_box_never_recognised">Not recognised yet – once connected to it</string>
     <string name="settings_add_box">Add FRITZ!\u2060Box</string>

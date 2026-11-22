@@ -73,6 +73,8 @@ fun SettingsScreen(
     activeIssue: ActiveBoxIssue?,
     /** The boxes (ids) that answered the last detection; null before the first one. */
     boxesSeen: Set<String>?,
+    /** Whether a box can be asked about its call monitor now (see [boxesToAsk]). */
+    callMonitorsCheckable: Boolean,
     /** Not even the box in use is reachable: then none counts as in use, all can be chosen. */
     noBoxReachable: Boolean,
     /** A request to the box is running – e.g. trying the one just chosen by hand. */
@@ -255,7 +257,7 @@ fun SettingsScreen(
                     onChange = onCallStatusChange,
                     profiles = profiles,
                     checking = checkingCallMonitors,
-                    canCheck = !boxesSeen.isNullOrEmpty(),
+                    canCheck = callMonitorsCheckable,
                     onCheck = onCheckCallMonitors,
                 )
             }
@@ -326,6 +328,8 @@ private fun ProfileRow(
 ) {
     val presence = when {
         trying -> stringResource(R.string.status_connecting, profile.config.host)
+        // It answers everywhere: never found in a network, only chosen by hand.
+        profile.isDemo -> stringResource(R.string.settings_box_demo)
         // Recognised only by its device id, learned once logged in to it.
         profile.deviceId == null -> stringResource(R.string.settings_box_never_recognised)
         seen == true -> stringResource(R.string.settings_box_here)
@@ -339,8 +343,9 @@ private fun ProfileRow(
         supportingContent = presence?.let {
             {
                 Text(
-                    it, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    color = if (seen == false && !trying) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
+                    // The demo box' note is longer: it says why it is never chosen on its own.
+                    it, maxLines = if (profile.isDemo) 2 else 1, overflow = TextOverflow.Ellipsis,
+                    color = if (seen == false && !trying && !profile.isDemo) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
                 )
             }
         },

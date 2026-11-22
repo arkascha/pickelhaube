@@ -240,7 +240,8 @@ internal class ConnectionsPart(private val host: DialerHost) {
                     activeProfileId = profile.id,
                     // It just answered its device description (if not: it is not a FritzBox we can recognise).
                     activeBoxSeen = identity != null,
-                    boxesSeen = if (identity != null) it.boxesSeen.orEmpty() + profile.id else it.boxesSeen,
+                    // Not the demo box, which answers everywhere (see seenByDeviceId).
+                    boxesSeen = if (identity != null && !profile.isDemo) it.boxesSeen.orEmpty() + profile.id else it.boxesSeen,
                     editingProfileId = null,
                     networkNotice = null,
                     phonebooks = emptyList(),

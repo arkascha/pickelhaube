@@ -40,6 +40,7 @@
 
     <!-- dialer -->
     <string name="dialer_number_label">Telefoonnummer</string>
+    <string name="dialer_demo_strip">Demobox – verzonnen contacten, oproepen bereiken niemand</string>
     <string name="dialer_choose_number">Kiezen uit recente gesprekken of telefoonboeken</string>
     <string name="dialer_dial">Bellen</string>
     <string name="dialer_redial">Laatst gekozen nummer</string>
@@ -109,6 +110,7 @@
     <string name="settings_connections">FRITZ!\u2060Box-verbindingen</string>
     <string name="settings_connections_hint">De FRITZ!\u2060Box van het netwerk waarin de telefoon zich bevindt, wordt automatisch gebruikt. Alleen als daar geen ervan wordt gevonden, kun je er zelf een kiezen.</string>
     <string name="settings_box_here">Bereikbaar</string>
+    <string name="settings_box_demo">Bestaat alleen in de app – wordt nooit automatisch gekozen</string>
     <string name="settings_box_not_here">Niet bereikbaar</string>
     <string name="settings_box_never_recognised">Nog niet herkend – pas na een verbinding ermee</string>
     <string name="settings_add_box">FRITZ!\u2060Box toevoegen</string>

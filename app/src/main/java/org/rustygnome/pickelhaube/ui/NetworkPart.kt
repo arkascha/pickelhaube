@@ -165,7 +165,8 @@ internal fun BoxProfile.answeredAmong(found: List<BoxIdentity>): Boolean = found
 
 /** The [profiles] (ids) among the [found] boxes by device id only: a connection without one is not known to be the box at its host. */
 internal fun seenByDeviceId(profiles: List<BoxProfile>, found: List<BoxIdentity>): Set<String> =
-    profiles.filter { p -> found.any { box -> box.udn == p.deviceId } }.map { p -> p.id }.toSet()
+    // Not the demo box: it answers everywhere, so it would always count as a box found here.
+    profiles.filter { p -> !p.isDemo && found.any { box -> box.udn == p.deviceId } }.map { p -> p.id }.toSet()
 
 /** The box answering at the network's [gateway] when it is none of the configured ones ([match] null): to mention it. */
 internal fun unknownGatewayBox(found: List<BoxIdentity>, gateway: String?, match: BoxProfile?): BoxIdentity? =

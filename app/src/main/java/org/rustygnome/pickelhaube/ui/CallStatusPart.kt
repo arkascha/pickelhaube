@@ -173,7 +173,7 @@ internal class CallStatusPart(private val host: DialerHost) {
      */
     fun checkMonitors() {
         if (state.value.checkingCallMonitors) return
-        val seen = state.value.boxesSeen.orEmpty()
+        val seen = state.value.boxesToAsk
         val profiles = settings.profiles().filter { it.id in seen }
         if (profiles.isEmpty()) return
         state.update { it.copy(checkingCallMonitors = true) }

@@ -75,6 +75,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.background
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -247,6 +248,9 @@ fun DialerScreen(
             ) {
                 if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             }
+
+            // The demo box in use: its contacts are made up and its calls ring nowhere – say so all along.
+            if (state.activeProfile?.isDemo == true) DemoStrip()
 
             // Wide and low (a phone turned, a tablet across): the keypad beside the rest, which scrolls if it must.
             // Otherwise one column – on a tablet held upright no wider than a phone's, the keys a little larger.
@@ -500,6 +504,21 @@ fun DialerScreen(
             }
         }
     }
+}
+
+/** Under the top bar while the demo box is in use: it is no real box. */
+@Composable
+private fun DemoStrip() {
+    Text(
+        stringResource(R.string.dialer_demo_strip),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.onTertiaryContainer,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+    )
 }
 
 /** Several numbers in a shared or pasted text: which one goes into the dialer. */

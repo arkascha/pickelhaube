@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import org.rustygnome.pickelhaube.tr064.BoxInfo
+import org.rustygnome.pickelhaube.tr064.DemoBox
 import org.rustygnome.pickelhaube.tr064.DialingCodes
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 import org.rustygnome.pickelhaube.tr064.UserRights
@@ -43,6 +44,12 @@ data class BoxProfile(
     val callMonitor: Boolean? = null,
 ) {
     val info: BoxInfo get() = BoxInfo(model, softwareVersion, serialNumber)
+
+    /**
+     * The box that exists only inside the app ([DemoBox]). It answers from any network, so it is never
+     * taken for the box of the network the phone is in: it is used only when chosen by hand.
+     */
+    val isDemo: Boolean get() = DemoBox.isDemo(config.host)
 }
 
 /** Whether a call forwarding is switched on, and where it forwards to. */

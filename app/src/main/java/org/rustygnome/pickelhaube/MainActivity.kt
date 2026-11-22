@@ -1,6 +1,7 @@
 package org.rustygnome.pickelhaube
 
 import org.rustygnome.pickelhaube.ui.onlineCopies
+import org.rustygnome.pickelhaube.ui.boxesToAsk
 import org.rustygnome.pickelhaube.ui.numberKey
 import org.rustygnome.pickelhaube.ui.deviceCountryIso
 import androidx.compose.ui.platform.LocalContext
@@ -339,6 +340,7 @@ class MainActivity : ComponentActivity() {
                             activeProfileId = state.activeProfileId,
                             activeIssue = state.activeBoxIssue,
                             boxesSeen = state.boxesSeen,
+                            callMonitorsCheckable = state.boxesToAsk.isNotEmpty(),
                             noBoxReachable = state.noBoxReachable,
                             busy = state.busy,
                             networkNotice = state.networkNotice,

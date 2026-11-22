@@ -36,25 +36,27 @@ object BoxRecognition {
 
     /**
      * The configured box among the [found] ones, by device id: one answering at a [local] host (the
-     * gateway, "fritz.box") wins over one answering only at its configured host.
+     * gateway, "fritz.box") wins over one answering only at its configured host. Never the demo box: it
+     * answers everywhere, and would stand in for the real one whenever that is out of reach.
      */
     internal fun match(found: List<BoxIdentity>, local: List<String>, profiles: List<BoxProfile>): BoxProfile? {
+        val real = profiles.filterNot { it.isDemo }
         fun matchIn(boxes: List<BoxIdentity>) =
-            boxes.firstNotNullOfOrNull { identity -> profiles.firstOrNull { it.deviceId == identity.udn } }
+            boxes.firstNotNullOfOrNull { identity -> real.firstOrNull { it.deviceId == identity.udn } }
         return matchIn(found.filter { it.host in local }) ?: matchIn(found)
     }
 
     /**
      * The configured box reachable from the current network, looked for as the app does: by device id,
-     * or – for a connection without one – the box in use when its host answered. For the quick
-     * settings tiles and the launcher shortcuts, which work without the app running.
+     * or – for a connection without one, or the demo box chosen by hand – the box in use when its host
+     * answered. For the quick settings tiles and the launcher shortcuts, which work without the app running.
      */
     suspend fun reachableBox(context: Context, settings: SettingsRepository): BoxProfile? {
         val profiles = settings.profiles()
         if (profiles.isEmpty()) return null
         val recognition = recognise(context, profiles)
         return recognition.match ?: settings.activeProfile()?.takeIf { p ->
-            p.deviceId == null && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
+            (p.deviceId == null || p.isDemo) && recognition.found.any { box -> box.host.equals(p.config.host, ignoreCase = true) }
         }
     }
 }

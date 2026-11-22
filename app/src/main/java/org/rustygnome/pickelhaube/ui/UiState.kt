@@ -283,6 +283,10 @@ data class SaveCheck(val host: String, val name: String, val check: HostCheck)
 val UiState.noKnownBoxFound: Boolean
     get() = boxesSeen?.isEmpty() == true
 
+/** The boxes that can be asked something now: those found here, and the demo box while in use (it is never "found"). */
+val UiState.boxesToAsk: Set<String>
+    get() = boxesSeen.orEmpty() + listOfNotNull(activeProfile?.takeIf { it.isDemo && activeBoxSeen == true }?.id)
+
 /**
  * Not even the box in use answered at its configured host: nothing is loaded from it on its own
  * (each request would only run into a timeout), and dialling is not possible.

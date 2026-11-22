@@ -8,6 +8,7 @@ import org.junit.Test
 import org.rustygnome.pickelhaube.data.BoxProfile
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.tr064.BoxIdentity
+import org.rustygnome.pickelhaube.tr064.DemoBox
 import org.rustygnome.pickelhaube.tr064.FritzConfig
 
 class NetworkMatchTest {
@@ -26,6 +27,20 @@ class NetworkMatchTest {
         // Elsewhere, only the office answers – at its configured host.
         val away = listOf(box("uuid:office", "office.example.org"))
         assertEquals(office, BoxRecognition.match(away, listOf("10.0.0.1", "fritz.box"), listOf(home, office)))
+    }
+
+    @Test
+    fun `the demo box, answering everywhere, is never taken for the box of a network`() {
+        val demo = BoxProfile(id = "demo", name = "Demo", config = FritzConfig(host = DemoBox.HOST), deviceId = "uuid:demo")
+        // Away from home: only the demo answers – the box in use is not switched to it.
+        val away = listOf(box("uuid:demo", DemoBox.HOST))
+        assertNull(BoxRecognition.match(away, listOf("10.0.0.1", "fritz.box"), listOf(home, demo)))
+        // At home: the real one, as before.
+        val atHome = away + box("uuid:home", "192.168.178.1")
+        assertEquals(home, BoxRecognition.match(atHome, listOf("192.168.178.1", "fritz.box"), listOf(demo, home)))
+        // Nor does it count as a box found here.
+        assertEquals(setOf("home"), seenByDeviceId(listOf(home, demo), atHome))
+        assertTrue(seenByDeviceId(listOf(home, demo), away).isEmpty())
     }
 
     @Test
