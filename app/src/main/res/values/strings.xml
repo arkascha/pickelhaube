@@ -657,4 +657,10 @@
     <string-array name="whats_new_18" tools:ignore="InconsistentArrays">
         <item>Someone you call all the time? Long-press their number in Recent or the phone books and choose “Add to home screen”: one tap on the icon calls them.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Who’s who at a glance: in Recent and the phone books each name has a coloured circle with its initials – people with the same initials get different colours.</item>
+        <item>Pages slide in and out, and the back gesture shows where it leads while you swipe: let go to go back, or swipe back to stay.</item>
+        <item>The demo box is no longer used on its own when your FRITZ!\u2060Box is out of reach; while you use it, a strip in the dialer says so.</item>
+        <item>The helmet in the title shows how things stand: it looks around while your box is being searched for, and looks puzzled when something went wrong.</item>
+    </string-array>
 </resources>

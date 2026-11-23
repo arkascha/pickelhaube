@@ -655,4 +655,10 @@
     <string-array name="whats_new_18">
         <item>Qualcuno che chiami di continuo? Tieni premuto il suo numero in Recenti o nelle Rubriche e scegli “Aggiungi alla schermata Home”: un tocco sull’icona lo chiama.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Chi è chi a colpo d’occhio: in Recenti e nelle Rubriche ogni nome ha un cerchio colorato con le sue iniziali – persone con le stesse iniziali hanno colori diversi.</item>
+        <item>Le pagine entrano ed escono scorrendo, e il gesto Indietro mostra dove porta mentre scorri: rilascia per tornare indietro, o scorri all’indietro per restare.</item>
+        <item>La box demo non viene più usata da sola quando la tua FRITZ!\u2060Box non è raggiungibile; mentre la usi, una striscia nel tastierino lo segnala.</item>
+        <item>Il casco nel titolo mostra come stanno le cose: si guarda intorno mentre si cerca la tua box, e fa un’aria perplessa quando qualcosa è andato storto.</item>
+    </string-array>
 </resources>

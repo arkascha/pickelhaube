@@ -669,4 +669,10 @@
     <string-array name="whats_new_18">
         <item>Ktoś, do kogo dzwonisz bardzo często? Przytrzymaj jego numer w Ostatnich lub w książkach telefonicznych i wybierz „Dodaj do ekranu głównego”: jedno dotknięcie ikony dzwoni.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Kto jest kim, na pierwszy rzut oka: w Ostatnich i w książkach telefonicznych każde imię ma kolorowe kółko z inicjałami – osoby o tych samych inicjałach mają różne kolory.</item>
+        <item>Strony wsuwają się i wysuwają, a gest wstecz już podczas przesuwania pokazuje, dokąd prowadzi: puść, by wrócić, albo przesuń z powrotem, by zostać.</item>
+        <item>Router demonstracyjny nie jest już używany sam z siebie, gdy twój FRITZ!\u2060Box jest poza zasięgiem; gdy go używasz, mówi o tym pasek w wybieraniu.</item>
+        <item>Hełm w tytule pokazuje, jak stoją sprawy: rozgląda się, gdy szukany jest twój router, i robi zdziwioną minę, gdy coś poszło nie tak.</item>
+    </string-array>
 </resources>

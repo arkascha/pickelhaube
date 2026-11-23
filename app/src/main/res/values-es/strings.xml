@@ -655,4 +655,10 @@
     <string-array name="whats_new_18">
         <item>¿Alguien a quien llamas a menudo? Mantén pulsado su número en Recientes o en Agendas y elige «Añadir a la pantalla de inicio»: un toque en el icono le llama.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Quién es quién de un vistazo: en Recientes y en Agendas cada nombre tiene un círculo de color con sus iniciales; las personas con las mismas iniciales tienen colores distintos.</item>
+        <item>Las páginas entran y salen deslizándose, y el gesto de volver muestra adónde lleva mientras deslizas: suelta para volver o desliza de vuelta para quedarte.</item>
+        <item>El router de demostración ya no se usa por sí solo cuando tu FRITZ!\u2060Box no está al alcance; mientras lo usas, una franja en el marcador lo indica.</item>
+        <item>El casco del título muestra cómo van las cosas: mira a su alrededor mientras se busca tu router y pone cara de extrañeza cuando algo ha fallado.</item>
+    </string-array>
 </resources>

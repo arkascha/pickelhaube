@@ -645,4 +645,10 @@
     <string-array name="whats_new_18">
         <item>Iemand die je steeds belt? Houd zijn nummer in Recent of de telefoonboeken ingedrukt en kies „Toevoegen aan startscherm”: één tik op het pictogram belt hem.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Wie is wie, in één oogopslag: in Recent en de telefoonboeken heeft elke naam een gekleurde cirkel met de initialen – mensen met dezelfde initialen krijgen verschillende kleuren.</item>
+        <item>Pagina’s schuiven in en uit beeld, en het teruggebaar laat al tijdens het vegen zien waar het heen gaat: loslaten gaat terug, terugvegen blijft.</item>
+        <item>De demobox wordt niet meer vanzelf gebruikt als je FRITZ!\u2060Box niet bereikbaar is; terwijl je hem gebruikt, meldt een strook in het kiesscherm dat.</item>
+        <item>De helm in de titel laat zien hoe het ervoor staat: hij kijkt rond terwijl je box wordt gezocht, en kijkt verbaasd als er iets misging.</item>
+    </string-array>
 </resources>

@@ -655,4 +655,10 @@
     <string-array name="whats_new_18">
         <item>Quelqu’un que vous appelez souvent ? Appuyez longuement sur son numéro dans Récents ou Répertoires et choisissez « Ajouter à l’écran d’accueil » : un appui sur l’icône l’appelle.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Qui est qui, d’un coup d’œil : dans Récents et Répertoires, chaque nom a un cercle coloré avec ses initiales – les personnes aux mêmes initiales ont des couleurs différentes.</item>
+        <item>Les pages glissent à l’ouverture et à la fermeture, et le geste retour montre où il mène pendant que vous glissez : relâchez pour revenir, ou revenez en arrière pour rester.</item>
+        <item>La box de démonstration n’est plus utilisée d’elle-même quand votre FRITZ!\u2060Box est hors de portée ; quand vous l’utilisez, un bandeau dans le clavier l’indique.</item>
+        <item>Le casque du titre montre où en sont les choses : il regarde autour de lui pendant la recherche de votre box, et prend un air perplexe quand quelque chose a échoué.</item>
+    </string-array>
 </resources>

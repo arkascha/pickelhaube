@@ -647,4 +647,10 @@
         <item>Jemand, den du ständig anrufst? Drück in „Letzte“ oder den Telefonbüchern lange auf die Nummer und wähl „Zum Startbildschirm hinzufügen“: Ein Tipp auf das Symbol ruft an.</item>
         <item>Die Webseite gibt es jetzt auch auf Deutsch – die Links in der App führen direkt dorthin.</item>
     </string-array>
+    <string-array name="whats_new_19">
+        <item>Wer ist wer, auf einen Blick: In „Letzte“ und den Telefonbüchern hat jeder Name einen farbigen Kreis mit seinen Initialen – Leute mit gleichen Initialen bekommen verschiedene Farben.</item>
+        <item>Seiten gleiten herein und hinaus, und die Zurück-Geste zeigt schon beim Wischen, wohin sie führt: Loslassen geht zurück, Zurückwischen bleibt.</item>
+        <item>Die Demo-Box springt nicht mehr von selbst ein, wenn deine FRITZ!\u2060Box nicht erreichbar ist; nutzt du sie, sagt es ein Streifen im Wählfeld.</item>
+        <item>Der Helm im Titel zeigt, wie es steht: Er schaut sich um, während deine Box gesucht wird, und guckt verdutzt, wenn etwas schiefging.</item>
+    </string-array>
 </resources>
