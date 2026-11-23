@@ -8,8 +8,8 @@ reads it; the Google Play listing is the same:
 - `<locale>/title.txt`, `short_description.txt`, `full_description.txt` – en-US and de-DE
 - `<locale>/images/phoneScreenshots/` – taken on the emulator with the demo box, 1080×1920
 - `en-US/images/icon.png` (512×512) and `featureGraphic.png` (1024×500) – for both languages
-- `<locale>/changelogs/<version code>.txt` – "What's new" per version, max. 500 characters each;
-  `scripts/play-release-notes.sh` prints a version's notes in the Play Console's `<en-US>…</en-US>` format
+- `<locale>/changelogs/<version code>.txt` – "What's new" per version, max. 500 characters each (Google Play's
+  and F-Droid's limit); for the Play Console, copy each language's file into its field
 
 The privacy policy (`web/privacy-policy.html`) has to match what the app does: when a release changes what the app stores,
 reads or sends, update it along with the code.
