@@ -1,0 +1,29 @@
+Categories:
+  - Connectivity
+  - Phone & SMS
+License: GPL-3.0-only
+WebSite: https://www.rustygnome.org/pickelhaube/
+SourceCode: https://github.com/arkascha/pickelhaube
+IssueTracker: https://github.com/arkascha/pickelhaube/issues
+Changelog: https://www.rustygnome.org/pickelhaube/changes.html
+
+AutoName: Pickelhaube
+
+RepoType: git
+Repo: https://github.com/arkascha/pickelhaube.git
+Binaries: https://github.com/arkascha/pickelhaube/releases/download/v%v/pickelhaube-%v-full.apk
+
+Builds:
+  - versionName: 1.14.1
+    versionCode: 20
+    commit: 7ff014a2a70158487c00034550f3f5d4df881422
+    subdir: app
+    gradle:
+      - full
+
+AllowedAPKSigningKeys: 7d2c1ff906286487d29551d27d21eaa9d95173a50c7fb20d7249cc8a91dc8b4e
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.14.1
+CurrentVersionCode: 20

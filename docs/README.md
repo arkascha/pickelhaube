@@ -11,6 +11,11 @@ reads it; the Google Play listing is the same:
 - `<locale>/changelogs/<version code>.txt` – "What's new" per version, max. 500 characters each (Google Play's
   and F-Droid's limit); for the Play Console, copy each language's file into its field
 
+- `fdroid/org.rustygnome.pickelhaube.yml` – the app's build recipe for F-Droid, as submitted to
+  `metadata/` of gitlab.com/fdroid/fdroiddata (the copy there is the one F-Droid uses). F-Droid builds each
+  new `vX.Y.Z` tag on its own and ships the GitHub APK if its own build matches it byte for byte – so the
+  APK attached to a release must be built from exactly the tagged commit, with a clean working tree.
+
 The privacy policy (`web/privacy-policy.html`) has to match what the app does: when a release changes what the app stores,
 reads or sends, update it along with the code.
 
