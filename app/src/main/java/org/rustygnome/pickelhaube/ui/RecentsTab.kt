@@ -335,8 +335,12 @@ private fun RecentRow(
     val lines = if (large) 2 else 1
     Box {
         ListItem(
-            leadingContent = onCall?.let { dial ->
-                { CallButton(call.number, call.name, enabled = callEnabled) { dial(call.number) } }
+            // The call button (unless picking for a widget or a speed dial), then whose the call is.
+            leadingContent = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    onCall?.let { dial -> CallButton(call.number, call.name, enabled = callEnabled) { dial(call.number) } }
+                    InitialsCircle(call.name)
+                }
             },
             overlineContent = when {
                 large -> {

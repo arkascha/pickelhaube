@@ -481,10 +481,13 @@ private fun ContactRow(
 ) {
     val haptics = LocalHapticFeedback.current
     Column(Modifier.padding(vertical = 8.dp)) {
+        // The circle above the numbers' call buttons, the name in line with the numbers.
         Row(
-            Modifier.padding(horizontal = 16.dp),
+            Modifier.padding(start = 8.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            InitialsCircle(contact.name)
+            Spacer(Modifier.width(4.dp))
             Text(
                 contact.name,
                 style = MaterialTheme.typography.titleMedium,
