@@ -745,6 +745,13 @@ off). A second argument runs one test class or test: `scripts/instrumented-tests
   help, and changing it (`X_AVM-DE_DialSetConfig`) has to be confirmed on the box (tested on a
   7530 AX) – twice per call, to switch and to switch back.
 
+## License
+
+Pickelhaube is free software: you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation, version 3 of the License
+(see [LICENSE](LICENSE)). It is distributed in the hope that it will be useful, but without any
+warranty; without even the implied warranty of merchantability or fitness for a particular purpose.
+
 ## Trademarks
 
 Pickelhaube is an independent project and is not affiliated with FRITZ! GmbH (formerly AVM).
