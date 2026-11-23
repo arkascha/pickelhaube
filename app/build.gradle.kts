@@ -87,10 +87,11 @@ android {
     }
 
     // No dependency list in the APK's signing block: only Google can read it (it is encrypted with its key),
-    // and F-Droid accepts no such blob. Google Play gets the same from the bundle uploaded there.
+    // and F-Droid accepts no such blob. The bundle for Google Play keeps it – Play uses it to warn about
+    // libraries with known problems.
     dependenciesInfo {
         includeInApk = false
-        includeInBundle = false
+        includeInBundle = true
     }
 
     // The language can be chosen in the app, so an app bundle must keep all translations.
