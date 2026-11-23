@@ -158,6 +158,7 @@ fun DialerScreen(
                             description = stringResource(R.string.app_name),
                             number = state.number,
                             connectedSince = (state.callProgress as? CallProgress.Connected)?.since,
+                            rest = helmetRest(state),
                         )
                         Spacer(Modifier.width(12.dp))
                         // The box in use as the title, centred beside the helmet – or, in its place, a note

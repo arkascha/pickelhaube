@@ -30,6 +30,9 @@ import kotlinx.coroutines.delay
  * pulled down for a refresh, it nods forward as far as pulled. Still while Android's animations are
  * switched off – the progress bar below the title says that the app is busy all the same.
  *
+ * At rest it shows how things stand ([rest]): looking around while no box is found, puzzled while
+ * an error is shown – else just looking out.
+ *
  * It takes part in dialling, too: each change of the [number] (a key pressed) makes it hop, and it
  * looks down at the keypad for a moment; when the other side answers ([connectedSince]), it cheers
  * with a double hop. Without animations it only changes its look.
@@ -47,9 +50,11 @@ fun TitleHelmet(
     number: String = "",
     /** When the call in progress was answered ([android.os.SystemClock.elapsedRealtime]); null: none is. */
     connectedSince: Long? = null,
+    /** Its pose at rest (see [helmetRest]). */
+    rest: MascotPose = MascotPose.IDLE,
 ) {
     val animate = rememberAnimationsOn()
-    val blinking = rememberBlinking(MascotPose.IDLE, animate)
+    val blinking = rememberBlinking(rest, animate)
     // Upwards in dp, for the hops.
     val hop = remember { Animatable(0f) }
     var lookingDown by remember { mutableStateOf(false) }
@@ -115,8 +120,8 @@ fun TitleHelmet(
                     cheering -> MascotPose.CHEERING.drawable
                     // At the keypad below, as a key was pressed.
                     lookingDown -> MascotPose.NODDING.drawable
-                    blinking -> MascotPose.IDLE.blinkDrawable!!
-                    else -> MascotPose.IDLE.drawable
+                    blinking -> rest.blinkDrawable ?: rest.drawable
+                    else -> rest.drawable
                 },
             ),
             contentDescription = description,
@@ -140,6 +145,16 @@ fun TitleHelmet(
 }
 
 private const val HEAD_SCALE = 1.4f
+
+/**
+ * The title helmet's pose at rest, as things stand: puzzled while an error is shown (also a quiet
+ * note), looking around while no box is found or it is still being looked for, else just looking out.
+ */
+fun helmetRest(state: UiState): MascotPose = when {
+    state.error != null || state.quietError != null -> MascotPose.PUZZLED
+    state.activeBoxSeen == null || state.noBoxReachable -> MascotPose.SEARCHING
+    else -> MascotPose.IDLE
+}
 
 /** At the refresh point of a pull: how far the head nods forward, and is lowered (dp). */
 private const val PULL_DEGREES = 80f
