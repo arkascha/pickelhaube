@@ -3,7 +3,10 @@ package org.rustygnome.pickelhaube
 import org.rustygnome.pickelhaube.ui.onlineCopies
 import org.rustygnome.pickelhaube.ui.boxesToAsk
 import org.rustygnome.pickelhaube.ui.Page
-import org.rustygnome.pickelhaube.ui.pageTransition
+import org.rustygnome.pickelhaube.ui.AnimatedPages
+import org.rustygnome.pickelhaube.ui.BackStep
+import org.rustygnome.pickelhaube.ui.UiState
+import org.rustygnome.pickelhaube.ui.closing
 import org.rustygnome.pickelhaube.ui.page
 import org.rustygnome.pickelhaube.ui.isOpen
 import org.rustygnome.pickelhaube.ui.numberKey
@@ -26,7 +29,6 @@ import org.rustygnome.pickelhaube.ui.phoneNumberFormat
 import org.rustygnome.pickelhaube.ui.LocalNumberDisplay
 import org.rustygnome.pickelhaube.ui.NumberDisplay
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.activity.compose.setContent
@@ -68,6 +70,21 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: DialerViewModel by viewModels()
 
+    /**
+     * "Back" on the pages that close to the one underneath – swiped, that one shows coming (see
+     * AnimatedPages): where it leads, and doing it. Null on the others, which handle "back" themselves.
+     */
+    private fun backStep(state: UiState): BackStep? = when (state.page) {
+        Page.DEFLECTIONS -> BackStep(state.closing(Page.DEFLECTIONS), viewModel.deflections::close)
+        Page.LANGUAGE -> BackStep(state.closing(Page.LANGUAGE), viewModel::closeLanguage)
+        // While setting up a speed dial, "back" only cancels that: the picker stays.
+        Page.PICKER -> if (state.assigningSpeedDial == null) BackStep(state.closing(Page.PICKER), viewModel.picker::close) else null
+        // Not before a first box is saved: the settings cannot be left yet.
+        Page.CONNECTION -> if (state.settingsSaved) BackStep(state.closing(Page.CONNECTION), viewModel.connections::close) else null
+        Page.SETTINGS -> BackStep(state.closing(Page.SETTINGS, Page.CONNECTION, Page.LANGUAGE), viewModel::closeSettings)
+        else -> null
+    }
+
     /** Before Android 13: apply the language chosen in the settings (from then on Android does it). */
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(AppLanguage.wrap(newBase))
@@ -93,13 +110,8 @@ class MainActivity : ComponentActivity() {
                 }
                 CompositionLocalProvider(LocalNumberDisplay provides numberDisplay) {
                     // Which page shows is decided in one place (UiState.page); the others stay open underneath.
-                    // Each page drawn with the state it had: one sliding away keeps showing what it showed.
-                    AnimatedContent(
-                        targetState = state,
-                        contentKey = { it.page },
-                        transitionSpec = { pageTransition(initialState.page, targetState.page) },
-                        label = "page",
-                    ) { shown ->
+                    // Each page drawn with its own state; "back" on the pages opened over others follows the gesture.
+                    AnimatedPages(state, back = ::backStep) { shown ->
                         when (shown.page) {
                             Page.WELCOME -> {
                                 val firstStart = shown.profiles.isEmpty()
@@ -136,7 +148,6 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             Page.DEFLECTIONS -> {
-                                BackHandler { viewModel.deflections.close() }
                                 DeflectionsScreen(
                                     boxName = shown.activeProfile?.name,
                                     deflections = shown.deflections,
@@ -149,7 +160,6 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             Page.LANGUAGE -> {
-                                BackHandler { viewModel.closeLanguage() }
                                 LanguageScreen(onBack = viewModel::closeLanguage)
                             }
                             Page.PICKER -> {
@@ -170,10 +180,8 @@ class MainActivity : ComponentActivity() {
                                 // A number's call button – not while picking one for a widget or a speed dial.
                                 val callFromPicker: ((String) -> Unit)? =
                                     if (shown.addingToWidget || shown.assigningSpeedDial != null) null else viewModel::callFromPicker
-                                // While setting up a speed dial, "back" only cancels that.
-                                BackHandler {
-                                    if (shown.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.picker.close()
-                                }
+                                // While setting up a speed dial, "back" only cancels that (else see backStep).
+                                BackHandler(enabled = shown.assigningSpeedDial != null) { viewModel.speedDials.cancelAssigning() }
                                 val session = shown.pickerSession
                                 // Opened anew: what was kept of the last time is let go.
                                 LaunchedEffect(session) { if (session > 1) pickerStates.removeState("picker-${session - 1}") }
@@ -304,14 +312,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             Page.CONNECTION -> {
-                                val canGoBack = shown.settingsSaved
-                                BackHandler(enabled = canGoBack) { viewModel.connections.close() }
                                 // A fresh form for every box being edited (or added).
                                 key(shown.editingProfileId ?: "new") {
                                     val edited = shown.profiles.firstOrNull { it.id == shown.editingProfileId }
                                     ConnectionSettingsScreen(
                                         initial = shown.config,
-                                        canGoBack = canGoBack,
+                                        canGoBack = shown.settingsSaved,
                                         hasTrustedCert = shown.config.trustedCertDer != null,
                                         busy = shown.busy,
                                         status = shown.status,
@@ -355,7 +361,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                             Page.SETTINGS -> {
-                                BackHandler { viewModel.closeSettings() }
                                 SettingsScreen(
                                     profiles = shown.profiles,
                                     activeProfileId = shown.activeProfileId,
