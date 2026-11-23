@@ -38,5 +38,5 @@ internal class CertificatesPart(private val host: DialerHost) {
 
     /** The stored connection a certificate decision belongs to: the edited one, else the active one. */
     private fun persistedProfileId(): String? =
-        if (state.value.showConnectionSettings) state.value.editingProfileId else settings.activeProfileId
+        if (state.value.isOpen(Page.CONNECTION)) state.value.editingProfileId else settings.activeProfileId
 }

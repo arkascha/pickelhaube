@@ -31,10 +31,8 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
             config = settings.activeProfile()?.config ?: FritzConfig(),
             profiles = settings.profiles(),
             activeProfileId = settings.activeProfileId,
-            showSettings = !settings.isConfigured(),
-            showConnectionSettings = !settings.isConfigured(),
             // Nothing set up yet: the welcome tour comes first, in front of the page for the first box.
-            showWelcome = !settings.isConfigured(),
+            openPages = if (settings.isConfigured()) emptySet() else setOf(Page.SETTINGS, Page.CONNECTION, Page.WELCOME),
             settingsSaved = settings.isConfigured(),
             deviceContactsEnabled = settings.deviceContactsEnabled,
             callLogEnabled = settings.callLogEnabled,
@@ -123,10 +121,10 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun openSettingsFromError() {
         boxActions.dismissError()
         // From the welcome tour: on to the full connection page, with what was entered there.
-        if (_state.value.showWelcome) return welcome.leave(toForm = true)
+        if (_state.value.isOpen(Page.WELCOME)) return welcome.leave(toForm = true)
         val active = settings.activeProfile()
         if (active != null) {
-            _state.update { it.copy(showSettings = true) }
+            _state.update { it.opening(Page.SETTINGS) }
             connections.edit(active.id)
         } else {
             openSettings()
@@ -137,7 +135,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Opens the settings; without any box configured directly on the "add" page. */
     fun openSettings() {
-        _state.update { it.copy(showSettings = true) }
+        _state.update { it.opening(Page.SETTINGS) }
         if (!settings.isConfigured()) connections.add()
     }
 
@@ -145,10 +143,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     fun closeSettings() {
         verifyingSettings = false
         _state.update {
-            it.copy(
-                showSettings = false,
-                showConnectionSettings = false,
-                showLanguage = false,
+            it.closing(Page.SETTINGS, Page.CONNECTION, Page.LANGUAGE).copy(
                 editingProfileId = null,
                 config = activeConfig(),
                 error = null,
@@ -166,7 +161,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 // Chosen by hand, it may well not be the box of this network.
                 activeBoxSeen = network.seenInNetwork(profile),
                 activeBoxWorking = null,
-                config = if (it.showConnectionSettings) it.config else profile.config,
+                config = if (it.isOpen(Page.CONNECTION)) it.config else profile.config,
             )
         }
         refreshPhones()
@@ -224,14 +219,13 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun startOver() {
         val app = getApplication<Application>()
         _state.update {
-            it.withoutBoxData().copy(
+            // Imported instead of entering the first box: on to the settings with the boxes now there.
+            val imported = if (settings.isConfigured()) it.closing(Page.CONNECTION, Page.WELCOME) else it
+            imported.withoutBoxData().copy(
                 config = settings.activeProfile()?.config ?: FritzConfig(),
                 profiles = settings.profiles(),
                 activeProfileId = settings.activeProfileId,
                 settingsSaved = settings.isConfigured(),
-                // Imported instead of entering the first box: on to the settings with the boxes now there.
-                showConnectionSettings = it.showConnectionSettings && !settings.isConfigured(),
-                showWelcome = it.showWelcome && !settings.isConfigured(),
                 editingProfileId = if (settings.isConfigured()) null else it.editingProfileId,
                 activeBoxSeen = null,
                 activeBoxWorking = null,
@@ -258,9 +252,9 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun openLanguage() = _state.update { it.copy(showLanguage = true) }
+    fun openLanguage() = _state.update { it.opening(Page.LANGUAGE) }
 
-    fun closeLanguage() = _state.update { it.copy(showLanguage = false) }
+    fun closeLanguage() = _state.update { it.closing(Page.LANGUAGE) }
 
     /** Switches the keypad's tones on or off. */
     fun setKeyTonesEnabled(enabled: Boolean) {
@@ -309,7 +303,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         // Another request is running (e.g. for the previous box): reload once it is done.
         if (_state.value.busy) return boxActions.runWhenIdle("phones", ::refreshPhones)
         // While a connection is being edited, the request goes to the edited address instead.
-        val profile = settings.activeProfile()?.takeIf { !_state.value.showConnectionSettings }
+        val profile = settings.activeProfile()?.takeIf { !_state.value.isOpen(Page.CONNECTION) }
         boxActions.run(uiText(R.string.status_loading_phones)) { dialer ->
             profile?.let { verifyAndLearn(dialer, it) }
             loadPhones(dialer)
@@ -488,12 +482,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun showDialer() {
         verifyingSettings = false
         _state.update {
-            it.copy(
-                showSettings = false,
-                showConnectionSettings = false,
-                showLanguage = false,
-                showDeflections = false,
-                showPicker = false,
+            it.closing(Page.SETTINGS, Page.CONNECTION, Page.LANGUAGE, Page.DEFLECTIONS, Page.PICKER).copy(
                 editingProfileId = null,
                 config = activeConfig(),
             )

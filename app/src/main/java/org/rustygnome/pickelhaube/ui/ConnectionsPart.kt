@@ -25,8 +25,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
 
     /** Connection page for a new FritzBox. */
     fun add() = state.update {
-        it.copy(
-            showConnectionSettings = true,
+        it.opening(Page.CONNECTION).copy(
             editingProfileId = null,
             editingName = "",
             config = FritzConfig(),
@@ -41,8 +40,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
     fun edit(id: String) {
         val profile = settings.profiles().firstOrNull { it.id == id } ?: return
         state.update {
-            it.copy(
-                showConnectionSettings = true,
+            it.opening(Page.CONNECTION).copy(
                 editingProfileId = id,
                 editingName = profile.name,
                 config = profile.config,
@@ -84,13 +82,13 @@ internal class ConnectionsPart(private val host: DialerHost) {
         usersJob = host.scope.launch {
             // Another box there would offer its own users – and they would mean nothing for this one.
             val check = checkHost(config.host)
-            if (!state.value.showConnectionSettings) return@launch
+            if (!state.value.isOpen(Page.CONNECTION)) return@launch
             if (check is HostCheck.OtherBox || check is HostCheck.AlreadySetUp) {
                 state.update { it.copy(hostNote = HostNote(config.host, check)) }
             }
             if (check is HostCheck.OtherBox) return@launch
             val users = withContext(Dispatchers.IO) { runCatching { BoxUsers.list(config) }.getOrNull() }
-            if (users != null && state.value.showConnectionSettings) state.update { it.copy(boxUsers = users) }
+            if (users != null && state.value.isOpen(Page.CONNECTION)) state.update { it.copy(boxUsers = users) }
         }
     }
 
@@ -102,7 +100,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
         securityPortJob = this.host.scope.launch {
             if (checkHost(host) is HostCheck.OtherBox) return@launch
             val port = withContext(Dispatchers.IO) { BoxDiscovery.securityPort(host) } ?: return@launch
-            if (state.value.showConnectionSettings) state.update { it.copy(securityPort = SecurityPort(host, port)) }
+            if (state.value.isOpen(Page.CONNECTION)) state.update { it.copy(securityPort = SecurityPort(host, port)) }
         }
     }
 
@@ -118,8 +116,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
         host.verifyingSettings = false
         pendingSave = null
         state.update {
-            it.copy(
-                showConnectionSettings = false,
+            it.closing(Page.CONNECTION).copy(
                 editingProfileId = null,
                 hostNote = null,
                 saveCheck = null,
@@ -155,7 +152,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
         host.scope.launch {
             val check = checkHost(request.config.host)
             state.update { it.copy(busy = false, status = null) }
-            if (!state.value.showConnectionSettings) return@launch
+            if (!state.value.isOpen(Page.CONNECTION)) return@launch
             if (check == HostCheck.Expected) {
                 saveChecked(request)
             } else {
@@ -190,11 +187,9 @@ internal class ConnectionsPart(private val host: DialerHost) {
         LauncherShortcuts.publish(host.app)
         val active = settings.activeProfileId == profile.id
         state.update {
-            it.copy(
+            it.withPage(Page.SETTINGS, it.settingsSaved).closing(Page.CONNECTION).copy(
                 profiles = settings.profiles(),
                 editingProfileId = null,
-                showSettings = it.settingsSaved,
-                showConnectionSettings = false,
                 config = activeConfig(),
             )
         }
@@ -236,7 +231,7 @@ internal class ConnectionsPart(private val host: DialerHost) {
             // First setup: straight to the dialer. Later changes: back to the settings overview.
             state.update {
                 // Its phones were read just above, for this very box.
-                it.withoutBoxData(keepPhones = true).copy(
+                it.withoutBoxData(keepPhones = true).withPage(Page.SETTINGS, it.settingsSaved).closing(Page.CONNECTION).copy(
                     profiles = settings.profiles(),
                     activeProfileId = profile.id,
                     // It just answered its device description (if not: it is not a FritzBox we can recognise).
@@ -244,11 +239,9 @@ internal class ConnectionsPart(private val host: DialerHost) {
                     // Not the demo box, which answers everywhere (see seenByDeviceId).
                     boxesSeen = if (identity != null && !profile.isDemo) it.boxesSeen.orEmpty() + profile.id else it.boxesSeen,
                     editingProfileId = null,
-                    showSettings = it.settingsSaved,
-                    showConnectionSettings = false,
                     settingsSaved = true,
                     // Connected from the welcome tour: it goes on to its last page.
-                    welcomeConnected = it.showWelcome,
+                    welcomeConnected = it.isOpen(Page.WELCOME),
                 )
             }
             message
@@ -261,12 +254,12 @@ internal class ConnectionsPart(private val host: DialerHost) {
         settings.deleteProfile(id)
         val remaining = settings.profiles()
         state.update {
-            it.copy(
+            // The page of the box deleted closes with it.
+            (if (it.editingProfileId == id) it.closing(Page.CONNECTION) else it).copy(
                 profiles = remaining,
                 activeProfileId = settings.activeProfileId,
                 boxesSeen = it.boxesSeen?.minus(id),
                 settingsSaved = remaining.isNotEmpty(),
-                showConnectionSettings = if (it.editingProfileId == id) false else it.showConnectionSettings,
                 editingProfileId = if (it.editingProfileId == id) null else it.editingProfileId,
             )
         }

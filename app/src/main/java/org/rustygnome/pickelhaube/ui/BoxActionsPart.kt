@@ -177,7 +177,7 @@ internal class BoxActionsPart(private val host: DialerHost, private val certific
                     // Likely to pass: quietly, in the dialer or the picker – unless "try again" after it failed the
                     // same way, then in full, with what to check. Elsewhere (settings, the tour, …) always in full.
                     val shown = state.value
-                    val dialerOrPicker = !shown.showSettings && !shown.showWelcome && !shown.showDeflections && shown.widgetSetup == null
+                    val dialerOrPicker = listOf(Page.SETTINGS, Page.WELCOME, Page.DEFLECTIONS, Page.WIDGET_SETUP).none(shown::isOpen)
                     val quiet = described.passing && !retryingQuietly && !host.verifyingSettings && dialerOrPicker
                     state.update {
                         it.copy(

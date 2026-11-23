@@ -21,7 +21,7 @@ internal class CallsPart(private val host: DialerHost) {
     fun reloadRecents() {
         loadPhoneCalls()
         if (settings.activeProfile()?.callListEnabled == false) return
-        if (state.value.busy) return host.runWhenIdle("recents") { if (state.value.showPicker) reloadRecents() }
+        if (state.value.busy) return host.runWhenIdle("recents") { if (state.value.isOpen(Page.PICKER)) reloadRecents() }
         host.runOnBox(uiText(R.string.recents_loading)) { dialer ->
             val calls = dialer.loadRecentCalls()
             state.update { it.copy(boxCalls = calls, boxCallsLoaded = true) }
@@ -82,7 +82,7 @@ internal class CallsPart(private val host: DialerHost) {
     /** "Recent" shows the box' calls: they count as seen from now on (marked as new while it stays open). */
     fun markMissedSeen() {
         val shown = state.value
-        if (!shown.showPicker || shown.pickerTab != PickerTab.RECENT || !shown.boxCallsLoaded) return
+        if (!shown.isOpen(Page.PICKER) || shown.pickerTab != PickerTab.RECENT || !shown.boxCallsLoaded) return
         val id = settings.activeProfileId ?: return
         val seen = settings.missedSeenUntil(id) ?: 0L
         settings.setMissedSeenUntil(id, MissedCalls.seenUntil(shown.boxCalls, seen))

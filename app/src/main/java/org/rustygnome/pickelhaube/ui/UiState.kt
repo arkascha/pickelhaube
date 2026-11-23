@@ -137,8 +137,6 @@ data class UiState(
     val whatsNew: List<Int>? = null,
     /** The note was asked for in the settings: shown there and then, not only over the dialer. */
     val whatsNewRequested: Boolean = false,
-    /** The welcome tour is shown: on first start, or started again from the settings (see [WelcomeScreen]). */
-    val showWelcome: Boolean = false,
     /** The welcome tour asked which box answers at the entered host (null: not asked yet). */
     val welcomeBox: WelcomeBox? = null,
     /** The last request failed because the box rejected user name or password (the tour offers changing them). */
@@ -161,25 +159,22 @@ data class UiState(
     val networkNotice: UiText? = null,
     /** The kind of network the last detection ran in: says why no box answered, and what may help. */
     val networkKind: NetworkKind? = null,
-    val showSettings: Boolean = false,
-    /** The connection sub-page of the settings is open. */
-    val showConnectionSettings: Boolean = false,
+    /**
+     * The pages open over the dialer; which one is shown is [page]. Several at once: the welcome tour
+     * over the page for a new box over the settings, the language over the settings, the picker under
+     * the settings opened from an error. The widget setup is open while there is a [widgetSetup].
+     */
+    val openPages: Set<Page> = emptySet(),
     /** A working configuration has been saved before, so the settings screen may be left. */
     val settingsSaved: Boolean = false,
     /** Non-null while the "trust this certificate?" dialog is shown. */
     val certificatePrompt: CertificatePrompt? = null,
     /** Non-null while the trusted certificate is shown read-only. */
     val viewedCertificate: CertificateInfo? = null,
-    /** The language screen is open. */
-    val showLanguage: Boolean = false,
-    /** The call deflections screen is open. */
-    val showDeflections: Boolean = false,
     /** The call deflections of the box in use, as last read (null: not read, or reading failed). */
     val deflections: List<CallDeflection>? = null,
     /** The call deflection the quick settings tile switches for the box in use, as chosen (null: not chosen). */
     val tileDeflection: Int? = null,
-    /** The number picker (tabs "Recent", "Speed dial" and "Phone books") is open. */
-    val showPicker: Boolean = false,
     val pickerTab: PickerTab = PickerTab.RECENT,
     /** Choosing the number for a speed dial in the phone books tab. */
     val assigningSpeedDial: SpeedDialAssignment? = null,
@@ -220,6 +215,57 @@ data class UiState(
     /** A settings file is being written or read. */
     val transferBusy: Boolean = false,
 )
+
+/** The app's pages: the dialer, and those opened over it (see [UiState.openPages]). */
+enum class Page {
+    DIALER,
+    /** The welcome tour: on first start, or started again from the settings (see [WelcomeScreen]). */
+    WELCOME,
+    /** The call deflections of the box in use. */
+    DEFLECTIONS,
+    /** The app's language, from the settings. */
+    LANGUAGE,
+    /** The number picker: "Recent", "Speed dial", the phone books and the box' phones. */
+    PICKER,
+    /** The setup of a dial widget (open while there is a [UiState.widgetSetup]). */
+    WIDGET_SETUP,
+    /** The page of one box, new or existing – a sub-page of the settings. */
+    CONNECTION,
+    SETTINGS,
+}
+
+/** Whether [page] is open – shown, or under another one. */
+fun UiState.isOpen(page: Page): Boolean = when (page) {
+    Page.DIALER -> true
+    Page.WIDGET_SETUP -> widgetSetup != null
+    else -> page in openPages
+}
+
+/** With [pages] open as well; those open already stay where they are. */
+fun UiState.opening(vararg pages: Page): UiState = copy(openPages = openPages + pages)
+
+/** With [pages] closed. */
+fun UiState.closing(vararg pages: Page): UiState = copy(openPages = openPages - pages.toSet())
+
+/** With [page] open or closed, as [open] says. */
+fun UiState.withPage(page: Page, open: Boolean): UiState = if (open) opening(page) else closing(page)
+
+/**
+ * The page shown, of those open – the one place that decides it. The welcome tour and the call
+ * deflections come before all others; the language and a box' page only within the settings; the
+ * picker gives way to the settings opened over it; the widget setup waits until there is a box.
+ */
+val UiState.page: Page
+    get() = when {
+        isOpen(Page.WELCOME) -> Page.WELCOME
+        isOpen(Page.DEFLECTIONS) -> Page.DEFLECTIONS
+        isOpen(Page.SETTINGS) && isOpen(Page.LANGUAGE) -> Page.LANGUAGE
+        isOpen(Page.PICKER) && !isOpen(Page.SETTINGS) -> Page.PICKER
+        isOpen(Page.WIDGET_SETUP) && profiles.isNotEmpty() -> Page.WIDGET_SETUP
+        isOpen(Page.SETTINGS) && isOpen(Page.CONNECTION) -> Page.CONNECTION
+        isOpen(Page.SETTINGS) -> Page.SETTINGS
+        else -> Page.DIALER
+    }
 
 /**
  * Without anything read from the box in use or about the network – for another box, or the same one

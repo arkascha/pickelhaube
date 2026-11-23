@@ -71,7 +71,7 @@ internal class NumberInputPart(private val host: DialerHost, private val widget:
     /** A phone of the box was tapped in the picker: its internal number into the dialer, with its name as the field's label. */
     fun pickInternalPhone(number: String, label: String) {
         if (state.value.addingToWidget) return widget.add(label, number)
-        state.update { it.copy(number = number, numberLabel = UiText.Raw(label), showPicker = false, backToPicker = true) }
+        state.update { it.closing(Page.PICKER).copy(number = number, numberLabel = UiText.Raw(label), backToPicker = true) }
     }
 
     /** A suggestion was tapped: its number into the dialer, with whose it is as the field's label. */
@@ -195,12 +195,11 @@ internal class NumberInputPart(private val host: DialerHost, private val widget:
 
     /** Puts a speed dial's number into the field, with its slot and name as the field's label. */
     fun useSpeedDial(speedDial: SpeedDial) = state.update {
-        it.copy(
+        it.closing(Page.PICKER).copy(
             number = speedDial.number,
             numberLabel = uiText(R.string.dialer_speed_dial_label, speedDial.slot, speedDial.name),
-            showPicker = false,
             // Taken in the picker's speed dial tab: "back" leads there again; a long press in the dialer has none behind it.
-            backToPicker = it.showPicker,
+            backToPicker = it.isOpen(Page.PICKER),
         )
     }
 }

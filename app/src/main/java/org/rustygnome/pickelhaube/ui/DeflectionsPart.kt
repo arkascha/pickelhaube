@@ -20,7 +20,7 @@ internal class DeflectionsPart(private val host: DialerHost) {
     /** Opens the call deflections of the box in use, read anew. */
     fun open() {
         state.update {
-            it.copy(showDeflections = true, tileDeflection = settings.activeProfileId?.let(settings::tileDeflection))
+            it.opening(Page.DEFLECTIONS).copy(tileDeflection = settings.activeProfileId?.let(settings::tileDeflection))
         }
         load()
     }
@@ -51,7 +51,7 @@ internal class DeflectionsPart(private val host: DialerHost) {
         }
     }
 
-    fun close() = state.update { it.copy(showDeflections = false) }
+    fun close() = state.update { it.closing(Page.DEFLECTIONS) }
 
     fun load() = host.runOnBox(uiText(R.string.status_loading_deflections)) { dialer ->
         val deflections = dialer.loadDeflections()

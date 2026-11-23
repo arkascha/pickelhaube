@@ -2,6 +2,9 @@ package org.rustygnome.pickelhaube
 
 import org.rustygnome.pickelhaube.ui.onlineCopies
 import org.rustygnome.pickelhaube.ui.boxesToAsk
+import org.rustygnome.pickelhaube.ui.Page
+import org.rustygnome.pickelhaube.ui.page
+import org.rustygnome.pickelhaube.ui.isOpen
 import org.rustygnome.pickelhaube.ui.numberKey
 import org.rustygnome.pickelhaube.ui.deviceCountryIso
 import androidx.compose.ui.platform.LocalContext
@@ -87,320 +90,331 @@ class MainActivity : ComponentActivity() {
                     NumberDisplay(phoneNumberFormat(deviceCountryIso(displayContext), dialingCodes))::show
                 }
                 CompositionLocalProvider(LocalNumberDisplay provides numberDisplay) {
-                    if (state.showWelcome) {
-                        val firstStart = state.profiles.isEmpty()
-                        WelcomeScreen(
-                            firstStart = firstStart,
-                            box = state.welcomeBox,
-                            boxUsers = state.boxUsers,
-                            busy = state.busy,
-                            connected = state.welcomeConnected,
-                            changePasswordRequest = state.welcomeChangePassword,
-                            onChangePasswordShown = viewModel.welcome::passwordChangeShown,
-                            loginRejected = state.loginRejected,
-                            ringPhone = state.selectedPhone,
-                            ringPhoneOnBox = state.dialPhoneOnBox,
-                            saveCheck = state.saveCheck,
-                            onSaveUnchecked = viewModel.connections::saveUnchecked,
-                            onSaveAnyway = viewModel.connections::saveAnyway,
-                            onDismissSaveCheck = viewModel.connections::dismissSaveCheck,
-                            onFindBox = viewModel.welcome::find,
-                            onConnect = viewModel.welcome::connect,
-                            onDemo = viewModel.welcome::connectDemo,
-                            onLeave = viewModel.welcome::leave,
-                            onFinish = viewModel.welcome::finish,
-                            restoreOffer = {
-                                SettingsImportOffer(
-                                    busy = state.transferBusy,
-                                    pendingImport = state.pendingImport,
-                                    importError = state.importError,
-                                    onOpenImport = viewModel.transfer::openFile,
-                                    onImport = ::importSettings,
-                                    onCancelImport = viewModel.transfer::cancelImport,
-                                )
-                            },
-                        )
-                    } else if (state.showDeflections) {
-                        BackHandler { viewModel.deflections.close() }
-                        DeflectionsScreen(
-                            boxName = state.activeProfile?.name,
-                            deflections = state.deflections,
-                            busy = state.busy,
-                            tileDeflection = state.tileDeflection,
-                            onChooseTile = { viewModel.deflections.chooseTile(it.id) },
-                            onToggle = { deflection, enabled -> viewModel.deflections.setEnabled(deflection.id, enabled) },
-                            onReload = viewModel.deflections::load,
-                            onBack = viewModel.deflections::close,
-                        )
-                    } else if (state.showLanguage && state.showSettings) {
-                        BackHandler { viewModel.closeLanguage() }
-                        LanguageScreen(onBack = viewModel::closeLanguage)
-                    } else if (state.showPicker && !state.showSettings) {
-                        val routerBooksEnabled = state.activeProfile?.phonebooksEnabled ?: true
-                        // The box' phone books a contact can be handed over to: only while it is there.
-                        val boxBooks = if (state.phonebooksLoaded && !state.noBoxReachable) state.phonebooks else emptyList()
-                        val boxSpeedDialsEnabled = state.activeProfile?.speedDialsEnabled ?: true
-                        val boxSpeedDials = remember(state.phonebooks) { SpeedDials.fromPhonebooks(state.phonebooks) }
-                        // The box' speed dials as far as they can be set up now.
-                        val editableBoxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled && boxBooks.any { !it.online } }
-                        // Entries the box' own phone books have as copies of online contacts: they may be deleted.
-                        val context = LocalContext.current
-                        val dialingCodes = state.activeProfile?.dialingCodes
-                        val onlineCopies = remember(boxBooks, dialingCodes) {
-                            val countryIso = deviceCountryIso(context)
-                            onlineCopies(boxBooks) { numberKey(it, countryIso, dialingCodes) }
-                        }
-                        // A number's call button – not while picking one for a widget or a speed dial.
-                        val callFromPicker: ((String) -> Unit)? =
-                            if (state.addingToWidget || state.assigningSpeedDial != null) null else viewModel::callFromPicker
-                        // While setting up a speed dial, "back" only cancels that.
-                        BackHandler {
-                            if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.picker.close()
-                        }
-                        val session = state.pickerSession
-                        // Opened anew: what was kept of the last time is let go.
-                        LaunchedEffect(session) { if (session > 1) pickerStates.removeState("picker-${session - 1}") }
-                        pickerStates.SaveableStateProvider("picker-$session") {
-                        NumberPickerScreen(
-                            tab = state.pickerTab,
-                            undoOffer = state.undoOffer,
-                            onUndo = viewModel.speedDials::undo,
-                            onUndoGone = { viewModel.speedDials.dropUndo(it) },
-                        quietError = state.quietError,
-                        onRetry = viewModel.boxActions::retry,
-                        onQuietErrorGone = viewModel.boxActions::dismissError,
-                            onTabChange = viewModel.picker::selectTab,
-                            busy = state.busy,
-                            onReload = viewModel.picker::reload,
-                            onBack = viewModel.picker::close,
-                            recents = {
-                                RecentsTab(
-                                    boxCalls = state.boxCalls,
-                                    boxCallsLoaded = state.boxCallsLoaded,
-                                    newSince = state.newCallsSince,
-                                    missedOnly = state.recentsMissedOnly,
-                                    onMissedOnlyChange = viewModel.picker::setRecentsMissedOnly,
-                                    boxName = state.activeProfile?.name,
-                                    dialingCodes = state.activeProfile?.dialingCodes,
-                                    ownNumbers = state.ownNumbers,
-                                    contacts = remember(state.phonebooks, routerBooksEnabled, state.deviceContacts, state.deviceContactsEnabled) {
-                                        val books = (if (routerBooksEnabled) state.phonebooks else emptyList()) +
-                                            listOfNotNull(state.deviceContacts?.takeIf { state.deviceContactsEnabled })
-                                        books.flatMap { it.contacts }
-                                    },
-                                    boxCallsEnabled = state.activeProfile?.callListEnabled ?: true,
-                                    phoneCalls = state.phoneCalls,
-                                    callLogEnabled = state.callLogEnabled,
-                                    callLogProblem = state.callLogProblem,
-                                    busy = state.busy,
-                                    onPick = viewModel.picker::pickNumber,
-                                    onCall = callFromPicker,
-                                    callEnabled = !state.noBoxReachable,
-                                    boxBooks = boxBooks,
-                                    onHandOver = viewModel.picker::handOverToBox,
-                                    phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                    onSetSpeedDial = viewModel.speedDials::setPhone,
-                                    boxSpeedDials = editableBoxSpeedDials,
-                                    onSetBoxSpeedDial = viewModel.speedDials::setBox,
-                                    onReloadCallLog = viewModel.calls::loadPhoneCalls,
-                                    onDisableCallLog = viewModel.calls::disablePhoneCalls,
-                                )
-                            },
-                            phonebooks = {
-                                PhonebookTab(
-                                    // Possibly read only for the box' speed dials: then not shown here.
-                                    routerBooks = if (routerBooksEnabled) state.phonebooks else emptyList(),
-                                    routerBooksEnabled = routerBooksEnabled,
-                                    deviceContacts = state.deviceContacts,
-                                    deviceContactsEnabled = state.deviceContactsEnabled,
-                                    dialingCodes = state.activeProfile?.dialingCodes,
-                                    loaded = state.phonebooksLoaded,
-                                    busy = state.busy,
-                                    onPick = viewModel.picker::pickContactNumber,
-                                    onCall = callFromPicker?.let { call -> { _: String, number: String -> call(number) } },
-                                    callEnabled = !state.noBoxReachable,
-                                    phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                    onSetSpeedDial = viewModel.speedDials::setPhone,
-                                    assigningSpeedDial = state.assigningSpeedDial,
-                                    boxSpeedDials = editableBoxSpeedDials,
-                                    onSetBoxSpeedDial = viewModel.speedDials::setBox,
-                                    onlineCopies = onlineCopies,
-                                    onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
-                                    onCancelAssigning = viewModel.speedDials::cancelAssigning,
-                                    boxBooks = boxBooks,
-                                    boxName = state.activeProfile?.name,
-                                    onHandOver = viewModel.picker::handOverToBox,
-                                    onDeviceContactsAllowed = viewModel.picker::loadDeviceContacts,
-                                    onDisableDeviceContacts = { viewModel.picker.setDeviceContactsEnabled(false) },
-                                    askForDeviceContacts = state.askForDeviceContacts,
-                                    onDeviceContactsAnswer = viewModel.picker::answerDeviceContactsQuestion,
-                                )
-                            },
-                            speedDials = {
-                                SpeedDialTab(
-                                    phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
-                                    boxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled },
-                                    boxName = state.activeProfile?.name,
-                                    boxLoaded = state.phonebooksLoaded,
-                                    busy = state.busy,
-                                    onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.numberInput.useSpeedDial(it) },
-                                    onCall = callFromPicker?.let { { speedDial: SpeedDial -> viewModel.callSpeedDialFromPicker(speedDial) } },
-                                    callEnabled = !state.noBoxReachable,
-                                    onAssign = viewModel.speedDials::startAssigning,
-                                    onRemove = viewModel.speedDials::removePhone,
-                                    boxEditable = editableBoxSpeedDials != null,
-                                    onAssignBox = viewModel.speedDials::startAssigningBox,
-                                    onRemoveBox = viewModel.speedDials::removeBox,
-                                    onlineCopies = onlineCopies,
-                                    onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
-                                )
-                            },
-                            internal = {
-                                InternalPhonesTab(
-                                    phones = state.internalPhones,
-                                    busy = state.busy,
-                                    onPick = viewModel.numberInput::pickInternalPhone,
-                                    onCall = callFromPicker?.let { { number: String, name: String -> viewModel.callInternalFromPicker(number, name) } },
-                                    callEnabled = !state.noBoxReachable,
-                                    ringPhone = state.selectedPhone,
-                                )
-                            },
-                            showInternal = state.activeProfile?.internalCallsEnabled == true,
-                        )
-                        }
-                    } else if (state.widgetSetup != null && state.profiles.isNotEmpty()) {
-                        val setup = state.widgetSetup!!
-                        // Done or not: back to where the widget was placed or tapped.
-                        val leave = { moveTaskToBack(true) }
-                        BackHandler { viewModel.widget.cancel(); leave() }
-                        WidgetSetupScreen(
-                            list = setup.list,
-                            onTitleChange = viewModel.widget::setTitle,
-                            onTransparentChange = viewModel.widget::setTransparent,
-                            onAdd = viewModel.widget::startAdding,
-                            onRemove = viewModel.widget::remove,
-                            onMove = viewModel.widget::move,
-                            onSave = { viewModel.widget.save(); leave() },
-                            onCancel = { viewModel.widget.cancel(); leave() },
-                        )
-                    } else if (state.showSettings && state.showConnectionSettings) {
-                        val canGoBack = state.settingsSaved
-                        BackHandler(enabled = canGoBack) { viewModel.connections.close() }
-                        // A fresh form for every box being edited (or added).
-                        key(state.editingProfileId ?: "new") {
-                            val edited = state.profiles.firstOrNull { it.id == state.editingProfileId }
-                            ConnectionSettingsScreen(
-                                initial = state.config,
-                                canGoBack = canGoBack,
-                                hasTrustedCert = state.config.trustedCertDer != null,
-                                busy = state.busy,
-                                status = state.status,
-                                initialName = state.editingName,
-                                isNew = state.editingProfileId == null,
-                                initialPhonebooksEnabled = edited?.phonebooksEnabled ?: true,
-                                initialCallListEnabled = edited?.callListEnabled ?: true,
-                                initialSpeedDialsEnabled = edited?.speedDialsEnabled ?: true,
-                                initialInternalCallsEnabled = edited?.internalCallsEnabled ?: false,
-                                boxInfo = edited?.info,
-                                dialingCodes = edited?.dialingCodes,
-                                userRights = edited?.userRights,
+                    // Which page shows is decided in one place (UiState.page); the others stay open underneath.
+                    when (state.page) {
+                        Page.WELCOME -> {
+                            val firstStart = state.profiles.isEmpty()
+                            WelcomeScreen(
+                                firstStart = firstStart,
+                                box = state.welcomeBox,
                                 boxUsers = state.boxUsers,
-                                securityPort = state.securityPort,
-                                onLookUpSecurityPort = viewModel.connections::lookUpSecurityPort,
-                                onLookUpUsers = viewModel.connections::lookUpUsers,
-                                hostNote = state.hostNote,
+                                busy = state.busy,
+                                connected = state.welcomeConnected,
+                                changePasswordRequest = state.welcomeChangePassword,
+                                onChangePasswordShown = viewModel.welcome::passwordChangeShown,
+                                loginRejected = state.loginRejected,
+                                ringPhone = state.selectedPhone,
+                                ringPhoneOnBox = state.dialPhoneOnBox,
                                 saveCheck = state.saveCheck,
                                 onSaveUnchecked = viewModel.connections::saveUnchecked,
                                 onSaveAnyway = viewModel.connections::saveAnyway,
                                 onDismissSaveCheck = viewModel.connections::dismissSaveCheck,
-                                onSave = viewModel.connections::save,
-                                onBack = viewModel.connections::close,
-                                onDelete = state.editingProfileId?.let { id -> { viewModel.connections.delete(id) } },
-                                onShowCertificate = viewModel.certificates::show,
-                                onForgetCertificate = viewModel.certificates::forget,
-                                // Nothing set up yet (e.g. just installed): the settings may come from a file instead.
-                                importOffer = if (state.profiles.isEmpty()) {
-                                    {
-                                        SettingsImportOffer(
-                                            busy = state.transferBusy,
-                                            pendingImport = state.pendingImport,
-                                            importError = state.importError,
-                                            onOpenImport = viewModel.transfer::openFile,
-                                            onImport = ::importSettings,
-                                            onCancelImport = viewModel.transfer::cancelImport,
-                                        )
-                                    }
-                                } else null,
+                                onFindBox = viewModel.welcome::find,
+                                onConnect = viewModel.welcome::connect,
+                                onDemo = viewModel.welcome::connectDemo,
+                                onLeave = viewModel.welcome::leave,
+                                onFinish = viewModel.welcome::finish,
+                                restoreOffer = {
+                                    SettingsImportOffer(
+                                        busy = state.transferBusy,
+                                        pendingImport = state.pendingImport,
+                                        importError = state.importError,
+                                        onOpenImport = viewModel.transfer::openFile,
+                                        onImport = ::importSettings,
+                                        onCancelImport = viewModel.transfer::cancelImport,
+                                    )
+                                },
                             )
                         }
-                    } else if (state.showSettings) {
-                        BackHandler { viewModel.closeSettings() }
-                        SettingsScreen(
-                            profiles = state.profiles,
-                            activeProfileId = state.activeProfileId,
-                            activeIssue = state.activeBoxIssue,
-                            boxesSeen = state.boxesSeen,
-                            callMonitorsCheckable = state.boxesToAsk.isNotEmpty(),
-                            noBoxReachable = state.noBoxReachable,
-                            busy = state.busy,
-                            networkNotice = state.networkNotice,
-                            onEditProfile = viewModel.connections::edit,
-                            onActivateProfile = viewModel::activateProfile,
-                            onAddProfile = viewModel.connections::add,
-                            onStartWelcomeTour = viewModel.welcome::start,
-                            onShowWhatsNew = viewModel.whatsNew::show,
-                            onBack = viewModel::closeSettings,
-                            onOpenLanguage = viewModel::openLanguage,
-                            deviceContactsEnabled = state.deviceContactsEnabled,
-                            onDeviceContactsChange = viewModel.picker::setDeviceContactsEnabled,
-                            callLogEnabled = state.callLogEnabled,
-                            callLogProblem = state.callLogProblem,
-                            onEnableCallLog = viewModel.calls::enablePhoneCalls,
-                            onDisableCallLog = viewModel.calls::disablePhoneCalls,
-                            phoneSpeedDialsEnabled = state.phoneSpeedDialsEnabled,
-                            onPhoneSpeedDialsChange = viewModel.speedDials::setPhoneEnabled,
-                            keyTonesEnabled = state.keyTonesEnabled,
-                            onKeyTonesChange = viewModel::setKeyTonesEnabled,
-                            callStatusEnabled = state.callStatusEnabled,
-                            onCallStatusChange = viewModel.callStatus::setEnabled,
-                            checkingCallMonitors = state.checkingCallMonitors,
-                            onCheckCallMonitors = viewModel.callStatus::checkMonitors,
-                            transferBusy = state.transferBusy,
-                            pendingImport = state.pendingImport,
-                            importError = state.importError,
-                            onExportSettings = viewModel.transfer::export,
-                            onOpenSettingsFile = viewModel.transfer::openFile,
-                            onImportSettings = ::importSettings,
-                            onCancelImport = viewModel.transfer::cancelImport,
-                        )
-                    } else {
-                        // A number just picked: "back" leads to the picker again, as it was left.
-                        BackHandler(enabled = state.backToPicker) { viewModel.picker.reopen() }
-                        DialerScreen(
-                            state = state,
-                            onNumberChange = viewModel.numberInput::onNumberChange,
-                            onFieldChange = viewModel.numberInput::editField,
+                        Page.DEFLECTIONS -> {
+                            BackHandler { viewModel.deflections.close() }
+                            DeflectionsScreen(
+                                boxName = state.activeProfile?.name,
+                                deflections = state.deflections,
+                                busy = state.busy,
+                                tileDeflection = state.tileDeflection,
+                                onChooseTile = { viewModel.deflections.chooseTile(it.id) },
+                                onToggle = { deflection, enabled -> viewModel.deflections.setEnabled(deflection.id, enabled) },
+                                onReload = viewModel.deflections::load,
+                                onBack = viewModel.deflections::close,
+                            )
+                        }
+                        Page.LANGUAGE -> {
+                            BackHandler { viewModel.closeLanguage() }
+                            LanguageScreen(onBack = viewModel::closeLanguage)
+                        }
+                        Page.PICKER -> {
+                            val routerBooksEnabled = state.activeProfile?.phonebooksEnabled ?: true
+                            // The box' phone books a contact can be handed over to: only while it is there.
+                            val boxBooks = if (state.phonebooksLoaded && !state.noBoxReachable) state.phonebooks else emptyList()
+                            val boxSpeedDialsEnabled = state.activeProfile?.speedDialsEnabled ?: true
+                            val boxSpeedDials = remember(state.phonebooks) { SpeedDials.fromPhonebooks(state.phonebooks) }
+                            // The box' speed dials as far as they can be set up now.
+                            val editableBoxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled && boxBooks.any { !it.online } }
+                            // Entries the box' own phone books have as copies of online contacts: they may be deleted.
+                            val context = LocalContext.current
+                            val dialingCodes = state.activeProfile?.dialingCodes
+                            val onlineCopies = remember(boxBooks, dialingCodes) {
+                                val countryIso = deviceCountryIso(context)
+                                onlineCopies(boxBooks) { numberKey(it, countryIso, dialingCodes) }
+                            }
+                            // A number's call button – not while picking one for a widget or a speed dial.
+                            val callFromPicker: ((String) -> Unit)? =
+                                if (state.addingToWidget || state.assigningSpeedDial != null) null else viewModel::callFromPicker
+                            // While setting up a speed dial, "back" only cancels that.
+                            BackHandler {
+                                if (state.assigningSpeedDial != null) viewModel.speedDials.cancelAssigning() else viewModel.picker.close()
+                            }
+                            val session = state.pickerSession
+                            // Opened anew: what was kept of the last time is let go.
+                            LaunchedEffect(session) { if (session > 1) pickerStates.removeState("picker-${session - 1}") }
+                            pickerStates.SaveableStateProvider("picker-$session") {
+                            NumberPickerScreen(
+                                tab = state.pickerTab,
+                                undoOffer = state.undoOffer,
+                                onUndo = viewModel.speedDials::undo,
+                                onUndoGone = { viewModel.speedDials.dropUndo(it) },
+                            quietError = state.quietError,
                             onRetry = viewModel.boxActions::retry,
-                            onDigit = viewModel.numberInput::appendDigit,
-                            onLongDigit = viewModel.numberInput::longPressDigit,
-                            onBackspace = viewModel.numberInput::backspace,
-                            onDial = { viewModel.dial() },
-                            onDialHidden = { viewModel.dial(withhold = true) },
-                            onHangup = viewModel::hangup,
-                            onSelectPhone = viewModel::selectPhone,
-                            onRefresh = viewModel::refreshPhones,
-                            onOpenSettings = viewModel::openSettings,
-                            onOpenPicker = { viewModel.picker.open() },
-                            onShowMissedCalls = { viewModel.picker.open(missedOnly = true) },
-                            onPaste = { viewModel.numberInput.takeNumbersFrom(it, fromClipboard = true) },
-                            onChooseNumber = viewModel.numberInput::chooseNumber,
-                            onDismissNumberChoice = viewModel.numberInput::dismissNumberChoice,
-                            onOpenDeflections = viewModel.deflections::open,
-                            onCheckLines = viewModel.calls::checkLines,
-                            onDialFrom = { viewModel.dial(from = it) },
-                            onSuggestion = viewModel.numberInput::takeSuggestion,
-                            onPullRefresh = viewModel::refresh,
-                        )
+                            onQuietErrorGone = viewModel.boxActions::dismissError,
+                                onTabChange = viewModel.picker::selectTab,
+                                busy = state.busy,
+                                onReload = viewModel.picker::reload,
+                                onBack = viewModel.picker::close,
+                                recents = {
+                                    RecentsTab(
+                                        boxCalls = state.boxCalls,
+                                        boxCallsLoaded = state.boxCallsLoaded,
+                                        newSince = state.newCallsSince,
+                                        missedOnly = state.recentsMissedOnly,
+                                        onMissedOnlyChange = viewModel.picker::setRecentsMissedOnly,
+                                        boxName = state.activeProfile?.name,
+                                        dialingCodes = state.activeProfile?.dialingCodes,
+                                        ownNumbers = state.ownNumbers,
+                                        contacts = remember(state.phonebooks, routerBooksEnabled, state.deviceContacts, state.deviceContactsEnabled) {
+                                            val books = (if (routerBooksEnabled) state.phonebooks else emptyList()) +
+                                                listOfNotNull(state.deviceContacts?.takeIf { state.deviceContactsEnabled })
+                                            books.flatMap { it.contacts }
+                                        },
+                                        boxCallsEnabled = state.activeProfile?.callListEnabled ?: true,
+                                        phoneCalls = state.phoneCalls,
+                                        callLogEnabled = state.callLogEnabled,
+                                        callLogProblem = state.callLogProblem,
+                                        busy = state.busy,
+                                        onPick = viewModel.picker::pickNumber,
+                                        onCall = callFromPicker,
+                                        callEnabled = !state.noBoxReachable,
+                                        boxBooks = boxBooks,
+                                        onHandOver = viewModel.picker::handOverToBox,
+                                        phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
+                                        onSetSpeedDial = viewModel.speedDials::setPhone,
+                                        boxSpeedDials = editableBoxSpeedDials,
+                                        onSetBoxSpeedDial = viewModel.speedDials::setBox,
+                                        onReloadCallLog = viewModel.calls::loadPhoneCalls,
+                                        onDisableCallLog = viewModel.calls::disablePhoneCalls,
+                                    )
+                                },
+                                phonebooks = {
+                                    PhonebookTab(
+                                        // Possibly read only for the box' speed dials: then not shown here.
+                                        routerBooks = if (routerBooksEnabled) state.phonebooks else emptyList(),
+                                        routerBooksEnabled = routerBooksEnabled,
+                                        deviceContacts = state.deviceContacts,
+                                        deviceContactsEnabled = state.deviceContactsEnabled,
+                                        dialingCodes = state.activeProfile?.dialingCodes,
+                                        loaded = state.phonebooksLoaded,
+                                        busy = state.busy,
+                                        onPick = viewModel.picker::pickContactNumber,
+                                        onCall = callFromPicker?.let { call -> { _: String, number: String -> call(number) } },
+                                        callEnabled = !state.noBoxReachable,
+                                        phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
+                                        onSetSpeedDial = viewModel.speedDials::setPhone,
+                                        assigningSpeedDial = state.assigningSpeedDial,
+                                        boxSpeedDials = editableBoxSpeedDials,
+                                        onSetBoxSpeedDial = viewModel.speedDials::setBox,
+                                        onlineCopies = onlineCopies,
+                                        onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
+                                        onCancelAssigning = viewModel.speedDials::cancelAssigning,
+                                        boxBooks = boxBooks,
+                                        boxName = state.activeProfile?.name,
+                                        onHandOver = viewModel.picker::handOverToBox,
+                                        onDeviceContactsAllowed = viewModel.picker::loadDeviceContacts,
+                                        onDisableDeviceContacts = { viewModel.picker.setDeviceContactsEnabled(false) },
+                                        askForDeviceContacts = state.askForDeviceContacts,
+                                        onDeviceContactsAnswer = viewModel.picker::answerDeviceContactsQuestion,
+                                    )
+                                },
+                                speedDials = {
+                                    SpeedDialTab(
+                                        phoneSpeedDials = state.phoneSpeedDials.takeIf { state.phoneSpeedDialsEnabled },
+                                        boxSpeedDials = boxSpeedDials.takeIf { boxSpeedDialsEnabled },
+                                        boxName = state.activeProfile?.name,
+                                        boxLoaded = state.phonebooksLoaded,
+                                        busy = state.busy,
+                                        onPick = { if (state.addingToWidget) viewModel.widget.add(it.name, it.number) else viewModel.numberInput.useSpeedDial(it) },
+                                        onCall = callFromPicker?.let { { speedDial: SpeedDial -> viewModel.callSpeedDialFromPicker(speedDial) } },
+                                        callEnabled = !state.noBoxReachable,
+                                        onAssign = viewModel.speedDials::startAssigning,
+                                        onRemove = viewModel.speedDials::removePhone,
+                                        boxEditable = editableBoxSpeedDials != null,
+                                        onAssignBox = viewModel.speedDials::startAssigningBox,
+                                        onRemoveBox = viewModel.speedDials::removeBox,
+                                        onlineCopies = onlineCopies,
+                                        onDeleteCopy = viewModel.speedDials::deleteOnlineCopy,
+                                    )
+                                },
+                                internal = {
+                                    InternalPhonesTab(
+                                        phones = state.internalPhones,
+                                        busy = state.busy,
+                                        onPick = viewModel.numberInput::pickInternalPhone,
+                                        onCall = callFromPicker?.let { { number: String, name: String -> viewModel.callInternalFromPicker(number, name) } },
+                                        callEnabled = !state.noBoxReachable,
+                                        ringPhone = state.selectedPhone,
+                                    )
+                                },
+                                showInternal = state.activeProfile?.internalCallsEnabled == true,
+                            )
+                            }
+                        }
+                        Page.WIDGET_SETUP -> {
+                            // Shown only while there is one (see UiState.page).
+                            val setup = state.widgetSetup!!
+                            // Done or not: back to where the widget was placed or tapped.
+                            val leave = { moveTaskToBack(true) }
+                            BackHandler { viewModel.widget.cancel(); leave() }
+                            WidgetSetupScreen(
+                                list = setup.list,
+                                onTitleChange = viewModel.widget::setTitle,
+                                onTransparentChange = viewModel.widget::setTransparent,
+                                onAdd = viewModel.widget::startAdding,
+                                onRemove = viewModel.widget::remove,
+                                onMove = viewModel.widget::move,
+                                onSave = { viewModel.widget.save(); leave() },
+                                onCancel = { viewModel.widget.cancel(); leave() },
+                            )
+                        }
+                        Page.CONNECTION -> {
+                            val canGoBack = state.settingsSaved
+                            BackHandler(enabled = canGoBack) { viewModel.connections.close() }
+                            // A fresh form for every box being edited (or added).
+                            key(state.editingProfileId ?: "new") {
+                                val edited = state.profiles.firstOrNull { it.id == state.editingProfileId }
+                                ConnectionSettingsScreen(
+                                    initial = state.config,
+                                    canGoBack = canGoBack,
+                                    hasTrustedCert = state.config.trustedCertDer != null,
+                                    busy = state.busy,
+                                    status = state.status,
+                                    initialName = state.editingName,
+                                    isNew = state.editingProfileId == null,
+                                    initialPhonebooksEnabled = edited?.phonebooksEnabled ?: true,
+                                    initialCallListEnabled = edited?.callListEnabled ?: true,
+                                    initialSpeedDialsEnabled = edited?.speedDialsEnabled ?: true,
+                                    initialInternalCallsEnabled = edited?.internalCallsEnabled ?: false,
+                                    boxInfo = edited?.info,
+                                    dialingCodes = edited?.dialingCodes,
+                                    userRights = edited?.userRights,
+                                    boxUsers = state.boxUsers,
+                                    securityPort = state.securityPort,
+                                    onLookUpSecurityPort = viewModel.connections::lookUpSecurityPort,
+                                    onLookUpUsers = viewModel.connections::lookUpUsers,
+                                    hostNote = state.hostNote,
+                                    saveCheck = state.saveCheck,
+                                    onSaveUnchecked = viewModel.connections::saveUnchecked,
+                                    onSaveAnyway = viewModel.connections::saveAnyway,
+                                    onDismissSaveCheck = viewModel.connections::dismissSaveCheck,
+                                    onSave = viewModel.connections::save,
+                                    onBack = viewModel.connections::close,
+                                    onDelete = state.editingProfileId?.let { id -> { viewModel.connections.delete(id) } },
+                                    onShowCertificate = viewModel.certificates::show,
+                                    onForgetCertificate = viewModel.certificates::forget,
+                                    // Nothing set up yet (e.g. just installed): the settings may come from a file instead.
+                                    importOffer = if (state.profiles.isEmpty()) {
+                                        {
+                                            SettingsImportOffer(
+                                                busy = state.transferBusy,
+                                                pendingImport = state.pendingImport,
+                                                importError = state.importError,
+                                                onOpenImport = viewModel.transfer::openFile,
+                                                onImport = ::importSettings,
+                                                onCancelImport = viewModel.transfer::cancelImport,
+                                            )
+                                        }
+                                    } else null,
+                                )
+                            }
+                        }
+                        Page.SETTINGS -> {
+                            BackHandler { viewModel.closeSettings() }
+                            SettingsScreen(
+                                profiles = state.profiles,
+                                activeProfileId = state.activeProfileId,
+                                activeIssue = state.activeBoxIssue,
+                                boxesSeen = state.boxesSeen,
+                                callMonitorsCheckable = state.boxesToAsk.isNotEmpty(),
+                                noBoxReachable = state.noBoxReachable,
+                                busy = state.busy,
+                                networkNotice = state.networkNotice,
+                                onEditProfile = viewModel.connections::edit,
+                                onActivateProfile = viewModel::activateProfile,
+                                onAddProfile = viewModel.connections::add,
+                                onStartWelcomeTour = viewModel.welcome::start,
+                                onShowWhatsNew = viewModel.whatsNew::show,
+                                onBack = viewModel::closeSettings,
+                                onOpenLanguage = viewModel::openLanguage,
+                                deviceContactsEnabled = state.deviceContactsEnabled,
+                                onDeviceContactsChange = viewModel.picker::setDeviceContactsEnabled,
+                                callLogEnabled = state.callLogEnabled,
+                                callLogProblem = state.callLogProblem,
+                                onEnableCallLog = viewModel.calls::enablePhoneCalls,
+                                onDisableCallLog = viewModel.calls::disablePhoneCalls,
+                                phoneSpeedDialsEnabled = state.phoneSpeedDialsEnabled,
+                                onPhoneSpeedDialsChange = viewModel.speedDials::setPhoneEnabled,
+                                keyTonesEnabled = state.keyTonesEnabled,
+                                onKeyTonesChange = viewModel::setKeyTonesEnabled,
+                                callStatusEnabled = state.callStatusEnabled,
+                                onCallStatusChange = viewModel.callStatus::setEnabled,
+                                checkingCallMonitors = state.checkingCallMonitors,
+                                onCheckCallMonitors = viewModel.callStatus::checkMonitors,
+                                transferBusy = state.transferBusy,
+                                pendingImport = state.pendingImport,
+                                importError = state.importError,
+                                onExportSettings = viewModel.transfer::export,
+                                onOpenSettingsFile = viewModel.transfer::openFile,
+                                onImportSettings = ::importSettings,
+                                onCancelImport = viewModel.transfer::cancelImport,
+                            )
+                        }
+                        Page.DIALER -> {
+                            // A number just picked: "back" leads to the picker again, as it was left.
+                            BackHandler(enabled = state.backToPicker) { viewModel.picker.reopen() }
+                            DialerScreen(
+                                state = state,
+                                onNumberChange = viewModel.numberInput::onNumberChange,
+                                onFieldChange = viewModel.numberInput::editField,
+                                onRetry = viewModel.boxActions::retry,
+                                onDigit = viewModel.numberInput::appendDigit,
+                                onLongDigit = viewModel.numberInput::longPressDigit,
+                                onBackspace = viewModel.numberInput::backspace,
+                                onDial = { viewModel.dial() },
+                                onDialHidden = { viewModel.dial(withhold = true) },
+                                onHangup = viewModel::hangup,
+                                onSelectPhone = viewModel::selectPhone,
+                                onRefresh = viewModel::refreshPhones,
+                                onOpenSettings = viewModel::openSettings,
+                                onOpenPicker = { viewModel.picker.open() },
+                                onShowMissedCalls = { viewModel.picker.open(missedOnly = true) },
+                                onPaste = { viewModel.numberInput.takeNumbersFrom(it, fromClipboard = true) },
+                                onChooseNumber = viewModel.numberInput::chooseNumber,
+                                onDismissNumberChoice = viewModel.numberInput::dismissNumberChoice,
+                                onOpenDeflections = viewModel.deflections::open,
+                                onCheckLines = viewModel.calls::checkLines,
+                                onDialFrom = { viewModel.dial(from = it) },
+                                onSuggestion = viewModel.numberInput::takeSuggestion,
+                                onPullRefresh = viewModel::refresh,
+                            )
+                        }
                     }
                 }
 
@@ -410,13 +424,13 @@ class MainActivity : ComponentActivity() {
                         error = error,
                         canRetry = state.canRetry,
                         // Within the settings (e.g. a box chosen by hand there) the user is where they would lead.
-                        offerSettings = !state.showSettings,
+                        offerSettings = !state.isOpen(Page.SETTINGS),
                         onRetry = viewModel.boxActions::retry,
                         onOpenSettings = viewModel::openSettingsFromError,
                         // In the welcome tour, a rejected login leads back to the password instead of just closing.
-                        onDismiss = if (state.showWelcome && state.loginRejected) viewModel.welcome::changePassword else viewModel.boxActions::dismissError,
+                        onDismiss = if (state.page == Page.WELCOME && state.loginRejected) viewModel.welcome::changePassword else viewModel.boxActions::dismissError,
                         dismissLabel = stringResource(
-                            if (state.showWelcome && state.loginRejected) R.string.welcome_change_password else R.string.close,
+                            if (state.page == Page.WELCOME && state.loginRejected) R.string.welcome_change_password else R.string.close,
                         ),
                     )
                 }
@@ -432,8 +446,7 @@ class MainActivity : ComponentActivity() {
                 }
                 // After an update, once: over the dialer when nothing else is open; asked for in the settings, there.
                 state.whatsNew?.let { versions ->
-                    val onDialer = !state.showWelcome && !state.showSettings && !state.showPicker && !state.showDeflections &&
-                        state.widgetSetup == null
+                    val onDialer = state.page == Page.DIALER
                     val nothingElse = state.error == null && state.secondFactor == null && state.certificatePrompt == null
                     if (nothingElse && (onDialer || state.whatsNewRequested)) {
                         WhatsNewDialog(versions, onDismiss = viewModel.whatsNew::dismiss)

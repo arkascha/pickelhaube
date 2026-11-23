@@ -21,7 +21,7 @@ internal class WelcomePart(private val host: DialerHost, private val connections
     /** Starts the welcome tour again from the settings: its connect step adds another box. */
     fun start() {
         connections.add()
-        state.update { it.copy(showWelcome = true, welcomeBox = null, welcomeConnected = false) }
+        state.update { it.opening(Page.WELCOME).copy(welcomeBox = null, welcomeConnected = false) }
     }
 
     private var findJob: Job? = null
@@ -78,12 +78,9 @@ internal class WelcomePart(private val host: DialerHost, private val connections
         findJob?.cancel()
         val firstStart = !settings.isConfigured()
         state.update {
-            it.copy(
-                showWelcome = false,
+            it.closing(Page.WELCOME).opening(Page.SETTINGS).withPage(Page.CONNECTION, firstStart || toForm).copy(
                 welcomeBox = null,
                 welcomeConnected = false,
-                showSettings = true,
-                showConnectionSettings = firstStart || toForm,
                 editingProfileId = null,
                 editingName = if (toForm) it.editingName else "",
                 config = if (toForm) it.config else FritzConfig(),
@@ -94,12 +91,9 @@ internal class WelcomePart(private val host: DialerHost, private val connections
 
     /** The tour's last page: on to the dialer. */
     fun finish() = state.update {
-        it.copy(
-            showWelcome = false,
+        it.closing(Page.WELCOME, Page.SETTINGS, Page.CONNECTION).copy(
             welcomeBox = null,
             welcomeConnected = false,
-            showSettings = false,
-            showConnectionSettings = false,
         )
     }
 }

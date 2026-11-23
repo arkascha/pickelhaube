@@ -34,8 +34,7 @@ internal class PickerPart(
      */
     fun open(missedOnly: Boolean = false) {
         state.update {
-            it.copy(
-                showPicker = true,
+            it.opening(Page.PICKER).copy(
                 pickerTab = PickerTab.RECENT,
                 recentsMissedOnly = missedOnly,
                 // Opened anew: at the top of its lists, without the search of the last time.
@@ -56,7 +55,7 @@ internal class PickerPart(
     }
 
     /** "Back" in the dialer after a number was picked: the picker again, as it was left – nothing read anew. */
-    fun reopen() = state.update { it.copy(showPicker = true, backToPicker = false) }
+    fun reopen() = state.update { it.opening(Page.PICKER).copy(backToPicker = false) }
 
     /** The app was left (not just turned): coming back, "back" no longer leads to the picker left before. */
     fun onLeftApp() = state.update { it.copy(backToPicker = false) }
@@ -67,7 +66,7 @@ internal class PickerPart(
     fun close() {
         // What was removed there stays removed: "Undo" went with the picker.
         speedDials.dropUndo()
-        state.update { it.copy(showPicker = false, assigningSpeedDial = null, addingToWidget = false) }
+        state.update { it.closing(Page.PICKER).copy(assigningSpeedDial = null, addingToWidget = false) }
     }
 
     fun selectTab(tab: PickerTab) {
@@ -89,7 +88,7 @@ internal class PickerPart(
     /** A number was tapped in the picker (recent calls or phone books): put it into the dialer and go back. */
     fun pickNumber(number: String) {
         if (state.value.addingToWidget) return widget.add(nameFor(number).orEmpty(), number)
-        state.update { it.copy(number = number, numberLabel = null, showPicker = false, backToPicker = true) }
+        state.update { it.closing(Page.PICKER).copy(number = number, numberLabel = null, backToPicker = true) }
     }
 
     /** A contact's number was tapped in the phone books: for the dialer, or for the speed dial being set up. */

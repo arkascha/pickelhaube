@@ -43,7 +43,7 @@ internal class WidgetPart(private val host: DialerHost) {
     /** Back from the picker with [number] (and whose it is) – once only, the first place kept. */
     fun add(name: String, number: String) {
         edit { it.plus(WidgetEntry(name, number)) }
-        state.update { it.copy(showPicker = false, addingToWidget = false) }
+        state.update { it.closing(Page.PICKER).copy(addingToWidget = false) }
     }
 
     fun save() {
