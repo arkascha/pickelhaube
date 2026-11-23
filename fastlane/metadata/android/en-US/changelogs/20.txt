@@ -1,0 +1,2 @@
+• Pickelhaube is free software under the GNU General Public License, version 3, and gets ready for F-Droid
+• No changes in the app itself
