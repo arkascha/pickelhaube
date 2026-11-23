@@ -11,8 +11,7 @@ import org.rustygnome.pickelhaube.data.AppLanguage
 import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.tile.DeflectionTileService
-import org.rustygnome.pickelhaube.tr064.FritzDialer
-import org.rustygnome.pickelhaube.tr064.forTile
+import org.rustygnome.pickelhaube.tile.TileDeflection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -74,22 +73,15 @@ class DeflectionShortcutActivity : QuietShortcutActivity() {
     override val starting = R.string.tile_deflection_switching
 
     override suspend fun run(context: Context): String {
-        val settings = SettingsRepository(context)
-        val box = BoxRecognition.reachableBox(context, settings)
-        LauncherShortcuts.updateBox(context, box)
-        if (box == null) return context.getString(R.string.tile_no_box)
-        val dialer = FritzDialer(box.config)
-        val deflection = runCatching { dialer.loadDeflections() }.getOrNull()
-            ?.forTile(settings.tileDeflection(box.id))
-            ?: return context.getString(R.string.shortcut_deflection_unknown)
-        val on = !deflection.enabled
-        if (runCatching { dialer.setDeflectionEnabled(deflection.id, on) }.isFailure) {
-            return context.getString(R.string.tile_deflection_failed)
+        // The same one the tile switches, the same way (see TileDeflection).
+        val found = when (val reading = TileDeflection.read(context)) {
+            is TileDeflection.Reading.Found -> reading
+            TileDeflection.Reading.NoBox -> return context.getString(R.string.tile_no_box)
+            TileDeflection.Reading.Unreadable, TileDeflection.Reading.NoneSetUp ->
+                return context.getString(R.string.shortcut_deflection_unknown)
         }
-        // As the box has it now.
-        val now = runCatching { dialer.loadDeflections() }.getOrNull()?.forTile(settings.tileDeflection(box.id))
-            ?: deflection.copy(enabled = on)
-        LauncherShortcuts.updateDeflection(context, now)
+        val now = TileDeflection.switch(context, found.box, found.deflection)
+            ?: return context.getString(R.string.tile_deflection_failed)
         DeflectionTileService.refresh(context)
         return context.getString(if (now.enabled) R.string.status_deflection_on_done else R.string.status_deflection_off_done)
     }

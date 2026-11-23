@@ -20,14 +20,11 @@ import org.rustygnome.pickelhaube.data.BoxRecognition
 import org.rustygnome.pickelhaube.data.SettingsRepository
 import org.rustygnome.pickelhaube.shortcut.LauncherShortcuts
 import org.rustygnome.pickelhaube.tr064.CallDeflection
-import org.rustygnome.pickelhaube.tr064.FritzDialer
-import org.rustygnome.pickelhaube.tr064.forTile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Quick settings tile "Pickelhaube": opens the dialer. It is active (highlighted) while a FritzBox is
@@ -195,14 +192,9 @@ class DeflectionTileService : TileService() {
             // Shown at once; corrected below if the box did otherwise.
             show(box, deflection.copy(enabled = on), getString(R.string.tile_deflection_switching))
             actions.launch {
-                val result = withContext(Dispatchers.IO) {
-                    runCatching { FritzDialer(box.config).setDeflectionEnabled(deflection.id, on) }
-                }
-                if (result.isFailure) {
-                    show(box, deflection, getString(R.string.tile_deflection_failed))
-                } else {
-                    read()
-                }
+                // As the box has it then – switched by the launcher shortcut the same way (see TileDeflection).
+                val now = TileDeflection.switch(this@DeflectionTileService, box, deflection)
+                if (now == null) show(box, deflection, getString(R.string.tile_deflection_failed)) else show(box, now, null)
             }
         }
         // Not from a locked phone: forwarding calls elsewhere is nothing for anyone at hand.
@@ -211,15 +203,12 @@ class DeflectionTileService : TileService() {
 
     /** Reads the forwardings of the reachable box and shows the one for the tile. */
     private suspend fun read() {
-        val settings = SettingsRepository(this)
-        val box = reachableBox(settings) ?: return unavailable(getString(R.string.tile_no_box))
-        val deflections = withContext(Dispatchers.IO) { runCatching { FritzDialer(box.config).loadDeflections() }.getOrNull() }
-            ?: return unavailable(getString(R.string.tile_deflection_unreadable))
-        val deflection = deflections.forTile(settings.tileDeflection(box.id))
-        // The launcher shortcut switches the same one.
-        LauncherShortcuts.updateDeflection(this, deflection)
-        if (deflection == null) return unavailable(getString(R.string.tile_deflection_none))
-        show(box, deflection, null)
+        when (val reading = TileDeflection.read(this)) {
+            is TileDeflection.Reading.Found -> show(reading.box, reading.deflection, null)
+            TileDeflection.Reading.NoBox -> unavailable(getString(R.string.tile_no_box))
+            TileDeflection.Reading.Unreadable -> unavailable(getString(R.string.tile_deflection_unreadable))
+            TileDeflection.Reading.NoneSetUp -> unavailable(getString(R.string.tile_deflection_none))
+        }
     }
 
     private fun show(box: BoxProfile, deflection: CallDeflection, note: String?) {
