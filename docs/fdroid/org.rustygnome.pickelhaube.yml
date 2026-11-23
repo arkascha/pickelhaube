@@ -12,7 +12,8 @@ AutoName: Pickelhaube
 
 RepoType: git
 Repo: https://github.com/arkascha/pickelhaube.git
-Binaries: https://github.com/arkascha/pickelhaube/releases/download/v%v/pickelhaube-%v-full.apk
+Binaries: 
+  https://github.com/arkascha/pickelhaube/releases/download/v%v/pickelhaube-%v-full.apk
 
 Builds:
   - versionName: 1.14.1
