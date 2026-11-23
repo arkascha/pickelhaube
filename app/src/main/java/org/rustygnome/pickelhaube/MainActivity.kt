@@ -3,6 +3,8 @@ package org.rustygnome.pickelhaube
 import org.rustygnome.pickelhaube.ui.onlineCopies
 import org.rustygnome.pickelhaube.ui.boxesToAsk
 import org.rustygnome.pickelhaube.ui.Page
+import org.rustygnome.pickelhaube.ui.LocalNameHues
+import org.rustygnome.pickelhaube.ui.nameHues
 import org.rustygnome.pickelhaube.ui.AnimatedPages
 import org.rustygnome.pickelhaube.ui.BackStep
 import org.rustygnome.pickelhaube.ui.UiState
@@ -108,7 +110,14 @@ class MainActivity : ComponentActivity() {
                 val numberDisplay = remember(dialingCodes) {
                     NumberDisplay(phoneNumberFormat(deviceCountryIso(displayContext), dialingCodes))::show
                 }
-                CompositionLocalProvider(LocalNumberDisplay provides numberDisplay) {
+                // Names with the same initials in different colours, the same in all lists (see nameHues).
+                val nameHues = remember(state.phonebooks, state.deviceContacts, state.boxCalls, state.phoneCalls) {
+                    nameHues(
+                        (state.phonebooks + listOfNotNull(state.deviceContacts)).flatMap { book -> book.contacts.map { it.name } } +
+                            (state.boxCalls + state.phoneCalls.orEmpty()).mapNotNull { it.name },
+                    )
+                }
+                CompositionLocalProvider(LocalNumberDisplay provides numberDisplay, LocalNameHues provides nameHues) {
                     // Which page shows is decided in one place (UiState.page); the others stay open underneath.
                     // Each page drawn with its own state; "back" on the pages opened over others follows the gesture.
                     AnimatedPages(state, back = ::backStep) { shown ->
