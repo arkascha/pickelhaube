@@ -221,6 +221,27 @@ data class UiState(
     val transferBusy: Boolean = false,
 )
 
+/**
+ * Without anything read from the box in use or about the network – for another box, or the same one
+ * read anew. The one place for it: a field added for the box' data belongs here, or it would outlast
+ * a change of box. [keepPhones]: its phones were just read for the box that follows (saving a
+ * connection reads them before anything else).
+ */
+fun UiState.withoutBoxData(keepPhones: Boolean = false): UiState = copy(
+    phones = if (keepPhones) phones else emptyList(),
+    internalPhones = if (keepPhones) internalPhones else emptyList(),
+    selectedPhone = if (keepPhones) selectedPhone else null,
+    phonebooks = emptyList(),
+    phonebooksLoaded = false,
+    boxCalls = emptyList(),
+    newMissedCalls = 0,
+    lines = emptyList(),
+    ownNumbers = emptyList(),
+    boxCallsLoaded = false,
+    deflections = null,
+    networkNotice = null,
+)
+
 /** The FritzBox in use, if any. */
 val UiState.activeProfile: BoxProfile?
     get() = profiles.firstOrNull { it.id == activeProfileId }

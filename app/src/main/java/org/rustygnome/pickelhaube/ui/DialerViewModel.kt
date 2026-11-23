@@ -161,24 +161,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
         val profile = settings.profiles().firstOrNull { it.id == id } ?: return
         settings.activeProfileId = id
         _state.update {
-            it.copy(
+            it.withoutBoxData().copy(
                 activeProfileId = id,
                 // Chosen by hand, it may well not be the box of this network.
                 activeBoxSeen = network.seenInNetwork(profile),
                 activeBoxWorking = null,
                 config = if (it.showConnectionSettings) it.config else profile.config,
-                phones = emptyList(),
-                internalPhones = emptyList(),
-                selectedPhone = null,
-                phonebooks = emptyList(),
-                phonebooksLoaded = false,
-                boxCalls = emptyList(),
-                newMissedCalls = 0,
-                lines = emptyList(),
-                ownNumbers = emptyList(),
-                boxCallsLoaded = false,
-                deflections = null,
-                networkNotice = null,
             )
         }
         refreshPhones()
@@ -236,7 +224,7 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private fun startOver() {
         val app = getApplication<Application>()
         _state.update {
-            it.copy(
+            it.withoutBoxData().copy(
                 config = settings.activeProfile()?.config ?: FritzConfig(),
                 profiles = settings.profiles(),
                 activeProfileId = settings.activeProfileId,
@@ -248,18 +236,6 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
                 activeBoxSeen = null,
                 activeBoxWorking = null,
                 boxesSeen = null,
-                networkNotice = null,
-                phones = emptyList(),
-                internalPhones = emptyList(),
-                selectedPhone = null,
-                phonebooks = emptyList(),
-                phonebooksLoaded = false,
-                boxCalls = emptyList(),
-                newMissedCalls = 0,
-                lines = emptyList(),
-                ownNumbers = emptyList(),
-                boxCallsLoaded = false,
-                deflections = null,
                 deviceContactsEnabled = settings.deviceContactsEnabled,
                 deviceContacts = null,
                 callLogEnabled = settings.callLogEnabled,

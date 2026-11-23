@@ -235,7 +235,8 @@ internal class ConnectionsPart(private val host: DialerHost) {
             LauncherShortcuts.updateBox(host.app, profile)
             // First setup: straight to the dialer. Later changes: back to the settings overview.
             state.update {
-                it.copy(
+                // Its phones were read just above, for this very box.
+                it.withoutBoxData(keepPhones = true).copy(
                     profiles = settings.profiles(),
                     activeProfileId = profile.id,
                     // It just answered its device description (if not: it is not a FritzBox we can recognise).
@@ -243,15 +244,6 @@ internal class ConnectionsPart(private val host: DialerHost) {
                     // Not the demo box, which answers everywhere (see seenByDeviceId).
                     boxesSeen = if (identity != null && !profile.isDemo) it.boxesSeen.orEmpty() + profile.id else it.boxesSeen,
                     editingProfileId = null,
-                    networkNotice = null,
-                    phonebooks = emptyList(),
-                    phonebooksLoaded = false,
-                    boxCalls = emptyList(),
-                    newMissedCalls = 0,
-                    lines = emptyList(),
-                    ownNumbers = emptyList(),
-                    boxCallsLoaded = false,
-                    deflections = null,
                     showSettings = it.settingsSaved,
                     showConnectionSettings = false,
                     settingsSaved = true,
