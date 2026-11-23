@@ -1,0 +1,3 @@
+• Welcome tour: on first start, a friendly guide leads step by step to the connection with your FRITZ!Box – it looks for the box, asks for user and password, and says which phone will ring. Again any time under Settings › Welcome tour
+• Choosing a user from the list no longer brings up the keyboard
+• Lighter placeholder texts in empty fields

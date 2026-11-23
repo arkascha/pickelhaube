@@ -1,0 +1,3 @@
+• Fixed: a speed dial whose entry was deleted in the FRITZ!Box web interface could no longer be changed or removed until the app was restarted – the app now reads the phone books again and carries out the change
+• Phone books are read again when the app comes back to the foreground
+• "What's new" in the settings names the version its notes belong to

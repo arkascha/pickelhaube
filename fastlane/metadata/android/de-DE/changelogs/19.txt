@@ -1,12 +1,4 @@
-<en-US>
-• Who's who at a glance: names in Recent and the phone books have a coloured circle with their initials, in different colours for the same initials
-• Pages slide in and out; the back gesture shows where it leads while you swipe
-• The demo box is never used on its own when your FRITZ!Box is out of reach, and is clearly marked while in use
-• The helmet in the title shows how things stand: searching for your box, or puzzled after an error
-</en-US>
-<de-DE>
 • Wer ist wer: Namen in „Letzte“ und den Telefonbüchern haben einen farbigen Kreis mit ihren Initialen, bei gleichen Initialen in verschiedenen Farben
 • Seiten gleiten herein und hinaus; die Zurück-Geste zeigt beim Wischen, wohin sie führt
 • Die Demo-Box springt nie mehr von selbst ein, wenn deine FRITZ!Box nicht erreichbar ist, und ist markiert, solange du sie nutzt
 • Der Helm im Titel zeigt, wie es steht: auf der Suche nach deiner Box oder verdutzt nach einem Fehler
-</de-DE>

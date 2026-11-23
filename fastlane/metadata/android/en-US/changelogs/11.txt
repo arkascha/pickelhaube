@@ -1,0 +1,5 @@
+• Pull the dialer down to read everything from your FRITZ!Box again
+• The helmet joins in: beside your box's name in the dialer, acting out your calls, and in empty lists
+• Optional key tones, and keys that spring back with a light vibration
+• Fixed: phone books changed on the FRITZ!Box itself got in the way of speed dials and handing over contacts
+• Fixed: taps while the app was talking to the box were lost

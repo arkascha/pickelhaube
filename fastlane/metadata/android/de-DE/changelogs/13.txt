@@ -1,0 +1,6 @@
+• Tippfehler mitten in der Nummer: direkt dahinter tippen, ⌫ und die Tasten wirken dort
+• Besetzt oder nicht angenommen? „Nochmal“ ruft erneut an
+• Nummern überall in Gruppen: Listen, Vorschläge, Gesprächsstatus
+• „Nummer kopieren“ im Menü bei langem Drücken
+• Antwortet die Box kurz nicht: ein knapper Hinweis mit „erneut versuchen“ statt einer Meldung im Weg
+• Kurzwahlen: freie Plätze in einer Zeile

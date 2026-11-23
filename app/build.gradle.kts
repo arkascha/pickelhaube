@@ -86,6 +86,13 @@ android {
         buildConfig = true
     }
 
+    // No dependency list in the APK's signing block: only Google can read it (it is encrypted with its key),
+    // and F-Droid accepts no such blob. Google Play gets the same from the bundle uploaded there.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     // The language can be chosen in the app, so an app bundle must keep all translations.
     bundle {
         language {

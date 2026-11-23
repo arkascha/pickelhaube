@@ -1,0 +1,2 @@
+• Fixed: when the widget was placed before setting up a FRITZ!Box, the welcome tour could not connect – now the tour comes first and the widget's setup follows
+• Under the hood: the widget shows its list the way newer Android versions ask for, updated build tools, small corrections

@@ -1,0 +1,3 @@
+• The helmet joins in: puzzled, searching or checking its list in messages, hopping along as you dial, cheering when the call is answered
+• Android 12 and newer: the helmet wobbles as the app starts. Older Android: the app's own colours, the blue and brass of the helmet
+• FRITZ!Box is no longer split at the end of a line; dialog titles are centred

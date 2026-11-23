@@ -1,0 +1,6 @@
+• Fix a typo in the middle of a number: tap right after it, ⌫ and the keys work there
+• Busy or not answered? “Try again” calls once more
+• Numbers grouped everywhere: lists, suggestions, call status
+• “Copy number” in the long-press menu
+• The box not answering for a moment: a short note with “try again”, no message in the way
+• Speed dials: the free slots folded into one row

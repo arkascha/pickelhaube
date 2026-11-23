@@ -1,0 +1,7 @@
+• Suggestions while typing: numbers and names from phone books and recent calls, also by the letters on the keys
+• Extensions and PINs after a pause (long-press *): dials the number, then says what to type
+• Internal calls between the FRITZ!Box' phones (switch on per box)
+• Several own numbers: "From <number>", and shown in Recent
+• Warning when an internet number is not registered
+• Fix: the FRITZ!Box no longer stops answering over HTTPS
+• Language "Auto" shown as a globe

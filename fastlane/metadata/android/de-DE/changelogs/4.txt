@@ -1,0 +1,5 @@
+• Mehrere FRITZ!Boxen: Speichern einer Box aus einem anderen Netz meldet sich nicht mehr an der des aktuellen an – Kennwort und Zertifikat bleiben, wo sie hingehören. Unterwegs Geändertes ist ungeprüft speicherbar
+• Nur ein Benutzer? Er wird eingetragen; die Liste markiert den gewählten und erklärt den von der Box angelegten
+• Kürzere Verbindungsseite: Erklärungen hinter (?), Gerätedaten zugeklappt
+• „Anzeigename“: nur eine Bezeichnung
+• Hinweise, Befunde und Werte sehen verschieden aus

@@ -1,0 +1,3 @@
+• Help one tap away: "Guide on the web" and the privacy policy at the bottom of the settings, and a (?) on every page of the welcome tour
+• After an update, a short note says once what is new – again any time under Settings › What's new
+• A livelier welcome tour

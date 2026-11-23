@@ -1,0 +1,3 @@
+• Der Helm macht mit: ratlos, suchend oder mit Liste in Meldungen, hüpft beim Wählen mit, jubelt, wenn abgenommen wird
+• Ab Android 12 wackelt der Helm beim Start. Älteres Android: eigene Farben der App, Blau und Messing des Helms
+• FRITZ!Box wird am Zeilenende nicht mehr getrennt; Titel in Dialogen stehen mittig

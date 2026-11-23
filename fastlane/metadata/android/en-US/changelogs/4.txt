@@ -1,0 +1,5 @@
+• Several FRITZ!Boxes: saving a box from another network no longer logs in to the box of the current one – its password and certificate stay where they belong. Changes made while away can be saved unchecked
+• A box with only one user gets it filled in; the user list marks the chosen user and explains the one made by the box
+• Shorter connection page: explanations behind (?), device details folded
+• "Display name": only a label in the app
+• Hints, findings and values look different
